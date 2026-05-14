@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>LaborCoin Exchange</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#0d0d0d">
+
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+  <link rel="icon" type="image/png" href="assets/favicon.png">
+  <link rel="icon" sizes="64x64" href="assets/favicon.png">
+  <link rel="apple-touch-icon" href="assets/favicon.png">
+
+  <script src="https://cdn.jsdelivr.net/npm/ethers@6.10.0/dist/ethers.min.js"></script>
+</head>
+
+<body>
+
+<header class="hero">
+  <img src="assets/banner.png" class="hero-img">
+</header>
+
+<section class="exchange-container">
+
+  <!-- LEFT -->
+  <div class="exchange-left">
+
+    <a href="index.html">← Back</a>
+
+    <div class="exchange-intro">
+      <h1>LaborCoin Exchange</h1>
+
+      <p>
+        LaborCoin uses a deterministic bonding curve where price increases as more tokens are purchased.
+        <br><br>
+        <strong>On buys:</strong> 10% of POL is allocated to the DAO treasury. You receive the full LABR amount (no token tax on buys).
+        <br><br>
+        <strong>On sells:</strong> A 10% total token tax applies:<br>
+        • 5% → DAO treasury<br>
+        • 5% → distributed to LABR holders
+      </p>
+
+      <button id="connectBtn" class="cta-button">Connect Wallet</button>
+    </div>
+
+    <div class="wallet-box">
+      <p><strong>Wallet:</strong> <span id="walletAddress">Not connected</span></p>
+      <p><strong>Balance:</strong> <span id="balance">0 LABR</span></p>
+      <p><strong>Exchange Limit (10,000 LABR max per wallet):</strong> <span id="walletPercent">0%</span></p>
+      <p><strong>Current Price:</strong> <span id="currentPrice">0 POL</span></p>
+    </div>
+
+    <canvas id="curveCanvas"></canvas>
+
+    <p id="status" class="status"></p>
+
+  </div>
+
+  <!-- RIGHT -->
+  <div class="exchange-right">
+
+    <div class="trade-box">
+      <h2>Buy LABR</h2>
+
+      <input type="number" id="buyAmount" placeholder="POL amount">
+
+      <p>Estimated LABR (approx): <span id="buyEstimate">0</span></p>
+
+      <p style="color:#aaa;">
+        10% of POL goes to DAO treasury: <span id="buyDaoShare">0</span>
+      </p>
+
+      <button id="buyBtn" class="cta-button">Buy</button>
+    </div>
+
+    <div class="trade-box">
+      <h2>Sell LABR</h2>
+
+      <input type="number" id="sellAmount" placeholder="LABR amount">
+
+      <p>Estimated POL (before tax): <span id="sellEstimate">0</span></p>
+
+      <p style="color:#aaa;">
+        Token Tax (10% total):<br>
+        • 5% → DAO treasury<br>
+        • 5% → distributed to LABR holders
+      </p>
+
+      <small style="color:#666; display:block; margin-top:4px;">
+        Tax is applied by the LABR token contract
+      </small>
+
+      <p style="color:#aaa;">
+        Estimated Tax: <span id="sellTax">0</span>
+      </p>
+
+      <p style="color:#aaa;">
+        You Receive (after tax): <span id="sellNet">0</span>
+      </p>
+
+      <button id="sellBtn" class="cta-button">Sell</button>
+    </div>
+
+    <div class="trade-box">
+      <h2>Cooldown</h2>
+      <p>Next transaction: <span id="cooldown">--</span></p>
+    </div>
+
+  </div>
+
+</section>
+
+<footer>
+  <p>© LaborCoin</p>
+</footer>
+
+<script src="exchange.js"></script>
+
+</body>
+</html>

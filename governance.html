@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+  <meta charset="UTF-8">
+  <title>LaborCoin Governance</title>
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  >
+
+  <meta name="theme-color" content="#0d0d0d">
+
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap"
+    rel="stylesheet"
+  >
+
+  <link rel="stylesheet" href="style.css">
+
+  <link
+    rel="icon"
+    type="image/png"
+    href="assets/favicon.png"
+  >
+
+  <script src="https://cdn.jsdelivr.net/npm/ethers@6.13.1/dist/ethers.umd.min.js"></script>
+
+</head>
+
+<body>
+
+<header class="hero">
+  <img src="assets/banner.png" class="hero-img">
+</header>
+
+<section>
+
+  <a href="index.html">← Back</a>
+
+  <h1>Governance</h1>
+
+  <div class="dao-steps">
+
+    <div class="dao-step" id="gov-step-wallet">
+      Connect Wallet
+    </div>
+
+    <div class="dao-step" id="gov-step-labrv">
+      Verify LABRV
+    </div>
+
+    <div class="dao-step" id="gov-step-identity">
+      Verify Identity
+    </div>
+
+  </div>
+
+  <div class="center-button dao-buttons">
+
+    <button
+      id="govConnectBtn"
+      class="cta-button"
+    >
+      Connect Wallet
+    </button>
+
+    <button
+      id="govVerifyBtn"
+      class="cta-button"
+    >
+      Verify Identity
+    </button>
+
+  </div>
+
+  <p
+    id="govStatus"
+    class="status"
+    style="text-align:center;"
+  ></p>
+
+</section>
+
+<section id="govPanel" class="hidden">
+
+  <h2>Create Proposal</h2>
+
+  <div class="trade-box">
+
+    <label>Proposal Type</label>
+
+    <select id="proposalType">
+      <option value="treasury">
+        Treasury Distribution
+      </option>
+
+      <option value="pause">
+        Pause Exchange
+      </option>
+
+      <option value="resume">
+        Resume Exchange
+      </option>
+    </select>
+
+    <div id="treasuryFields">
+
+      <input
+        id="recipientAddress"
+        placeholder="Recipient Address"
+      >
+
+      <input
+        id="treasuryAmount"
+        placeholder="Amount (POL)"
+      >
+
+    </div>
+
+    <textarea
+      id="proposalDescription"
+      placeholder="Proposal Description"
+      rows="5"
+    ></textarea>
+
+    <button
+      id="submitProposalBtn"
+      class="cta-button"
+    >
+      Submit Proposal
+    </button>
+
+  </div>
+
+</section>
+
+<section id="proposalFeedSection" class="hidden">
+
+  <h2>Proposal Feed</h2>
+
+  <div id="proposalFeed"></div>
+
+</section>
+
+<footer>
+  <p>© LaborCoin</p>
+</footer>
+
+<script src="governance.js"></script>
+
+</body>
+</html>

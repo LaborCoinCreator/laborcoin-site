@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <link rel="icon" type="image/png" href="assets/favicon.png">
+  <link rel="icon" sizes="64x64" href="assets/favicon.png">
+  <link rel="apple-touch-icon" href="assets/favicon.png">
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#0d0d0d">
+<title>LaborCoin Whitepaper</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+
+<style>
+body { background:#0d0d0d; color:#e6e6e6; margin:0; font-family:'Inter', sans-serif; }
+.page { display:flex; max-width:1300px; margin:0 auto; }
+.sidebar { width:260px; padding:20px; border-right:1px solid #1a1a1a; position:sticky; top:0; height:100vh; overflow-y:auto; }
+.sidebar a { display:block; color:#aaa; text-decoration:none; margin:6px 0; font-size:0.9em; }
+.sidebar a:hover { color:#fff; }
+.content { flex:1; padding:50px 40px; max-width:900px; }
+
+h1 { text-align:center; font-size:2.6em; margin-bottom:10px; }
+h2 { color:#ff3b3b; margin-top:60px; text-align:center; }
+p { line-height:1.7; }
+.section { margin-bottom:60px; }
+
+.block { background:#111; padding:12px; border-radius:6px; border:1px solid #222; font-family:monospace; margin:10px 0; }
+
+ul { max-width:650px; margin:0 auto; }
+
+.cta-row { display:flex; gap:10px; justify-content:center; margin:20px 0; }
+.cta-button { padding:10px 18px; background:#ff3b3b; color:white; border-radius:6px; text-decoration:none; }
+.cta-button.secondary { background:#222; border:1px solid #444; }
+</style>
+
+</head>
+
+<body>
+
+<header class="hero">
+<img src="assets/banner.png" class="hero-img">
+</header>
+
+<div class="page">
+
+<div class="sidebar">
+<a href="#abstract">Abstract</a>
+<a href="#intro">1. Introduction</a>
+<a href="#overview">2. System Overview</a>
+<a href="#governance">3. Governance</a>
+<a href="#token">4. Token</a>
+<a href="#bonding">5. Bonding Curve</a>
+<a href="#execution">6. Execution</a>
+<a href="#deployment">7. Deployment</a>
+<a href="#security">8. Security</a>
+<a href="#invariants">9. Invariants</a>
+<a href="#threats">10. Threat Model</a>
+<a href="#economic">11. Economic Attacks</a>
+<a href="#gov">12. Governance Risks</a>
+<a href="#failure">13. Failure Scenarios</a>
+<a href="#assumptions">14. Assumptions</a>
+<a href="#usecases">15. Use Cases</a>
+<a href="#conclusion">16. Conclusion</a>
+</div>
+
+<div class="content">
+
+<a href="index.html">← Back</a>
+
+<h1>LaborCoin Whitepaper</h1>
+
+<div class="cta-row">
+<a href="whitepaper.pdf" target="_blank" class="cta-button">View PDF</a>
+<a href="whitepaper.pdf" download class="cta-button secondary">⬇ Download PDF</a>
+</div>
+
+<div id="abstract" class="section">
+<h2>Abstract</h2>
+<p>LaborCoin is a decentralized governance system designed to enable collective decision-making and resource allocation for the working class. It combines a non-transferable voting token, DAO-based governance, and controlled execution through dedicated smart contracts to create a transparent, accountable, and scalable coordination mechanism.</p>
+<p>The system enforces a one-person, one-vote model and restricts execution to predefined actions, minimizing attack surface while preserving flexibility through governance.</p>
+<p>In addition, LaborCoin integrates a bonding curve exchange mechanism that enables continuous liquidity, deterministic pricing, and treasury accumulation to support striking workers and collective action.</p>
+</div>
+
+<div id="intro" class="section">
+<h2>1. Introduction</h2>
+<p>Modern economic systems concentrate decision-making power in centralized institutions, limiting the ability of workers to coordinate and act collectively. While blockchain technology enables decentralized coordination, many implementations prioritize speculation over governance.</p>
+<p>LaborCoin addresses this gap by providing:</p>
+<ul>
+<li>A governance-first architecture</li>
+<li>Equalized voting power</li>
+<li>Transparent, on-chain decision execution</li>
+<li>Controlled and auditable action pathways</li>
+<li>A treasury-building mechanism tied to real economic participation</li>
+</ul>
+<p>The goal is not to create a speculative asset, but a functional coordination system capable of sustaining worker-led movements.</p>
+</div>
+
+<div id="overview" class="section">
+<h2>2. System Overview</h2>
+<p>LABR (primary token)<br>LABRV (voting token)<br>DAO governance (Aragon)<br>Executor contracts<br>Bonding curve exchange</p>
+<p><strong>Participants → LABR → LABRV → Proposals → DAO → Executors → Treasury → Worker Support</strong></p>
+<p>This architecture ensures decisions are enforced through constrained execution while maintaining economic backing through the bonding curve.</p>
+</div>
+
+<div id="governance" class="section">
+<h2>3. Governance Model</h2>
+<p><strong>Voting Mechanism</strong></p>
+<p>1 LABRV per participant<br>Non-transferable (soulbound)<br>Equal voting weight</p>
+<p>Prevents capital-based governance capture and ensures democratic participation.</p>
+<p><strong>Thresholds</strong></p>
+<p>25% participation<br>67% approval</p>
+<p>High thresholds ensure legitimacy and prevent minority control.</p>
+</div>
+
+<div id="token" class="section">
+<h2>4. Token Design</h2>
+<div class="block">0x460DD873A1D2a41e77410B125cD3027C5FEd2f78</div>
+<p>Total Supply: 1,000,000,000<br>Initial Supply: 100,000,000</p>
+
+<p><strong>Emission Model</strong><br>
+50,000,000 LABR released per tranche<br>
+1:1 release ratio up to 50% of total supply<br>
+1:0.8 release ratio beyond 50%</p>
+
+<p>This structure encourages early participation while gradually introducing scarcity.</p>
+
+<p><strong>Constraints</strong><br>
+Transaction Limit: 5,000 LABR per transaction<br>
+Wallet Limit: 10,000 LABR per wallet<br>
+Cooldown: 12 hours between transactions</p>
+
+<p>These constraints are enforced at the contract level to prevent accumulation of disproportionate influence and reduce volatility.</p>
+</div>
+
+<div id="bonding" class="section">
+<h2>5. Bonding Curve Exchange</h2>
+<div class="block">0xD0692ec758bb852421B702B187b6439f74f8Bf3b</div>
+
+<p><strong>Pricing Model</strong><br>
+Sigmoid-based pricing curve<br>
+Price increases as total tokens sold increases<br>
+Approximate range: $1 → ~$15</p>
+
+<p><strong>Economic Behavior</strong><br>
+Early participants enter at lower prices, incentivizing initial adoption.<br>
+As participation grows, price increases smoothly rather than abruptly.<br>
+This discourages speculation-driven spikes and instead rewards sustained participation.</p>
+
+<p><strong>Treasury Model</strong><br>
+All purchases deposit POL into the contract treasury<br>
+Sales withdraw from treasury liquidity<br>
+10% of each purchase is routed to the DAO treasury</p>
+
+<p>This creates a direct link between participation and available support funds.</p>
+</div>
+
+<div id="execution" class="section">
+<h2>6. Execution Architecture</h2>
+<p>DAO → Executor → Contract</p>
+<p><strong>Executors</strong><br>
+PauseExecutor → controls trading state<br>
+TreasuryExecutor → distributes funds<br>
+MintExecutor → mints voting tokens</p>
+<p>Execution is constrained to prevent arbitrary control and reduce attack surface.</p>
+</div>
+
+<div id="deployment" class="section">
+<h2>7. Deployment</h2>
+<p>Network: Polygon</p>
+
+<p>LaborCoin (LABR):<br>
+0x460DD873A1D2a41e77410B125cD3027C5FEd2f78</p>
+
+<p>LaborCoin Exchange:<br>
+0xD0692ec758bb852421B702B187b6439f74f8Bf3b</p>
+
+<p>LaborCoin DAO:<br>
+0x0C2e5679153593b82a84eAB5CA90895BB291Cec4</p>
+
+<p>LaborCoin Governance:<br>
+0x1C01BD6ccC2C9aCfb59f37f7877A7a2718167aBe</p>
+
+<p>DAO Registration (v2):<br>
+0xFFc3499A71b806C3919f4B54D236b151cFdCB453</p>
+
+<p>LaborVote (LABRV v6):<br>
+0x113579220515cd59b884Ea2379b4C369025246e2</p>
+
+<p>Pause Executor:<br>
+0x5a0C3d5F6A814Dda121Fe174FFD963451E9fCa4f</p>
+
+<p>Treasury Executor:<br>
+0x440A756e16D4b42a015eC61258759037A454Ec79</p>
+
+</div>
+
+<div id="security" class="section">
+<h2>8. Security Model</h2>
+<p>Restricted execution pathways<br>
+Immutable economic parameters<br>
+Non-transferable governance<br>
+High consensus thresholds</p>
+
+<p><strong>Additional Protections</strong><br>
+Oracle-based pricing validation<br>
+Slippage protection<br>
+Circuit breaker (pause mechanism)<br>
+Reentrancy protection</p>
+</div>
+
+<div id="invariants" class="section">
+<h2>9. System Invariants</h2>
+<p>No participant can obtain more than one voting token<br>
+Governance decisions cannot execute arbitrary contract logic<br>
+Treasury withdrawals cannot exceed available balance<br>
+Token supply cannot exceed maximum defined limits<br>
+Pricing remains deterministic and independent of external markets</p>
+<p>These invariants define the core guarantees of the system.</p>
+</div>
+
+<div id="threats" class="section">
+<h2>10. Threat Model</h2>
+<p>LaborCoin assumes adversarial behavior as a baseline condition.</p>
+
+<p><strong>Adversarial Actors</strong><br>
+Wealthy participants attempting to accumulate influence<br>
+Coordinated voting blocs attempting governance capture<br>
+Smart contract exploiters targeting liquidity<br>
+External actors manipulating price inputs</p>
+
+<p><strong>Attack Surfaces</strong><br>
+Bonding curve pricing<br>
+Treasury liquidity<br>
+DAO participation thresholds<br>
+Executor permissions<br>
+Oracle feeds</p>
+</div>
+
+<div id="economic" class="section">
+<h2>11. Economic Attack Vectors</h2>
+<p><strong>Whale Accumulation</strong><br>
+Mitigation: Wallet caps, transaction limits, and non-transferable voting tokens.</p>
+
+<p><strong>Liquidity Drain Attacks</strong><br>
+Mitigation: Increasing price curve, cooldown enforcement, treasury constraints.</p>
+
+<p><strong>Speculative Volatility</strong><br>
+Mitigation: Deterministic pricing independent of external markets.</p>
+</div>
+
+<div id="gov" class="section">
+<h2>12. Governance Risks</h2>
+<p><strong>Low Participation</strong><br>
+Mitigation: High quorum requirements.</p>
+
+<p><strong>Coordination Attacks</strong><br>
+Mitigation: 67% approval threshold.</p>
+
+<p><strong>Voter Apathy</strong><br>
+Acknowledged as a social limitation inherent to democratic systems.</p>
+</div>
+
+<div id="failure" class="section">
+<h2>13. Failure Scenarios</h2>
+<p><strong>Oracle Failure</strong><br>
+If price oracle data becomes invalid, transactions relying on price inputs may fail or pause.</p>
+
+<p><strong>Treasury Depletion</strong><br>
+If treasury liquidity is insufficient, sell transactions may fail until replenished.</p>
+
+<p><strong>Low Participation</strong><br>
+Governance may stall if participation thresholds are not met.</p>
+
+<p><strong>Contract Pause</strong><br>
+The system may enter a paused state under emergency conditions to prevent further damage.</p>
+</div>
+
+<div id="assumptions" class="section">
+<h2>14. System Assumptions</h2>
+<p>Participants engage in governance<br>
+Worker solidarity can be coordinated<br>
+Blockchain infrastructure remains secure<br>
+Oracle pricing remains reliable</p>
+
+<p>LaborCoin minimizes trust in individuals but depends on collective participation.</p>
+</div>
+
+<div id="usecases" class="section">
+<h2>15. Use Cases</h2>
+<p>Strike funding<br>
+Mutual aid<br>
+Collective bargaining<br>
+Resource allocation</p>
+</div>
+
+<div id="conclusion" class="section">
+<h2>16. Conclusion</h2>
+<p>LaborCoin shifts blockchain systems from speculation to coordination infrastructure. It combines governance, economics, and execution into a unified system capable of supporting real-world collective action.</p>
+</div>
+
+</div>
+</div>
+
+</body>
+</html>

@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>LaborCoin DAO</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#0d0d0d">
+
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+  <link rel="icon" type="image/png" href="assets/favicon.png">
+
+  <script src="https://cdn.jsdelivr.net/npm/ethers@6.13.1/dist/ethers.umd.min.js"></script>
+</head>
+
+<body>
+
+<header class="hero">
+  <img src="assets/banner.png" class="hero-img">
+</header>
+
+<section>
+
+  <a href="index.html">← Back</a>
+
+  <h1>Join the DAO</h1>
+
+  <!-- REGISTRATION -->
+  <div class="dao-steps">
+
+  <div class="dao-step" id="step-wallet">
+    Connect Wallet
+  </div>
+
+  <div class="dao-step" id="step-balance">
+    Verify LABR ≥ 1
+  </div>
+
+  <div class="dao-step" id="step-identity">
+    Verify Identity
+  </div>
+
+  <div class="dao-step" id="step-attest">
+    Sign Attestation
+  </div>
+
+  <div class="dao-step" id="step-register">
+    Register
+  </div>
+
+</div>
+
+  <div class="center-button dao-buttons">
+    <button id="connectBtn" class="cta-button">Connect Wallet</button>
+         <button id="verifyBtn" class="cta-button">
+               Verify Identity
+         </button>    
+    <button id="attestBtn" class="cta-button secondary" disabled>Sign Attestation</button>
+    <button id="registerBtn" class="cta-button" disabled>Register</button>
+  </div>
+
+  <p id="daoStatus" class="status" style="text-align:center;"></p>
+<!-- ATTESTATION MODAL -->
+
+<div id="attestationModal" class="modal hidden">
+
+  <div class="modal-content">
+
+    <h2>LaborCoin Attestation</h2>
+
+    <p>
+  I affirm my support for democratic worker organization,
+  transparent collective governance, and mutual aid.
+</p>
+
+<p>
+  I understand that LaborCoin is designed to strengthen
+  collective economic power through shared participation,
+  coordination, and long-term solidarity.
+</p>
+
+<p>
+  I support the principle that shared resources should be
+  used to assist workers engaged in strikes, labor actions,
+  mutual aid efforts, and other forms of collective support.
+</p>
+
+<p>
+  I recognize that proposals involving treasury funds
+  should prioritize legitimate worker-centered initiatives
+  and transparent community accountability.
+</p>
+
+<p>
+  Participation in LaborCoin is voluntary and intended
+  to strengthen cooperation, democratic governance,
+  and collective power.
+
+  Power to the People.
+</p>
+
+    <div class="cta-row">
+
+      <button
+        id="confirmAttestationBtn"
+        class="cta-button"
+      >
+        Sign Attestation
+      </button>
+
+      <button
+        id="cancelAttestationBtn"
+        class="cta-button secondary"
+      >
+        Cancel
+      </button>
+
+    </div>
+
+  </div>
+
+</div>
+
+<!-- CERTIFICATE -->
+<div id="certificateBox" class="trade-box hidden">
+
+  <h2>DAO Membership Certificate</h2>
+
+  <p id="certificateText"></p>
+
+  <button
+    id="downloadCertificateBtn"
+    class="cta-button"
+  >
+    Download Certificate
+  </button>
+
+</div>
+
+</section>
+
+<footer>
+  <p>© LaborCoin</p>
+</footer>
+
+<script src="dao.js"></script>
+
+</body>
+</html>
