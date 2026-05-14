@@ -213,7 +213,8 @@ if (!userAddress || !governance) {
 
           body: JSON.stringify({
             address: userAddress,
-            type: "governance"
+            type: "governance",
+	    action: "propose"
           })
         }
       );
@@ -503,13 +504,38 @@ window.voteProposal = async (
   support
 ) => {
 
+const verifyResponse =
+  await fetch(
+    `${VERIFIER_URL}/verify`,
+    {
+      method: "POST",
+
+      headers: {
+        "Content-Type":
+          "application/json"
+      },
+
+      body: JSON.stringify({
+        address: userAddress,
+        type: "governance",
+        action: "vote"
+      })
+    }
+  );
+
+const verifyData =
+  await verifyResponse.json();
+
+const voteSignature =
+  verifyData.signature;
+
   try {
 
     const tx =
       await governance.vote(
         id,
         support,
-        governanceSignature
+        voteSignature
       );
 
     await tx.wait();
