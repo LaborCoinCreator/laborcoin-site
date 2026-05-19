@@ -1,12 +1,17 @@
 // ===== CONFIG =====
 const GOVERNANCE_CONTRACT =
-  "0x3edfa4BE01e7a244357198260f2432094690aB65";
+  "0x9310f6EcA828FDFF05C16220cbB21EEcA0D6F77D";
 
 const LABRV_TOKEN =
   "0x113579220515cd59b884Ea2379b4C369025246e2";
 
 const VERIFIER_URL =
   "https://laborcoin-verifier.onrender.com";
+
+// ===== PROPOSAL TYPES =====
+const TREASURY_TRANSFER = 0;
+const PAUSE_TRADING = 1;
+const RESUME_TRADING = 2;
 
 // ===== ABI =====
 const GOV_ABI = [
@@ -15,17 +20,15 @@ const GOV_ABI = [
 
   "function nonces(address) view returns (uint256)",
 
-  "function proposeTreasuryTransfer(address,uint256,uint256,bytes) returns (uint256)",
-
-  "function proposePauseTrading(uint256,bytes) returns (uint256)",
-
-  "function proposeResumeTrading(uint256,bytes) returns (uint256)",
+  "function propose(uint8,address,uint256,string,uint256,bytes) returns (uint256)",
 
   "function vote(uint256,bool,uint256,bytes)",
 
   "function execute(uint256)",
 
-  "function proposals(uint256) view returns(uint8 proposalType,address recipient,uint256 amount,uint256 start,uint256 end,uint256 yes,uint256 no,bool executed)"
+  "function aragonProposalIds(uint256) view returns (uint256)",
+
+  "function proposals(uint256) view returns(uint8 proposalType,address recipient,uint256 amount,string description,uint256 start,uint256 end,uint256 yes,uint256 no,bool executed)"
 ];
 
 const LABRV_ABI = [
@@ -64,6 +67,9 @@ const recipientAddress =
 
 const treasuryAmount =
   document.getElementById("treasuryAmount");
+
+const proposalDescription =
+  document.getElementById("proposalDescription");
 
 const submitProposalBtn =
   document.getElementById("submitProposalBtn");
@@ -308,6 +314,9 @@ submitProposalBtn.onclick = async () => {
         treasuryAmount.value
       );
 
+    const description =
+      proposalDescription.value.trim();
+
     if (!recipient) {
 
       setStatus(
@@ -336,13 +345,14 @@ submitProposalBtn.onclick = async () => {
       );
 
     const tx =
-      await governance
-        .proposeTreasuryTransfer(
-          recipient,
-          amount,
-          auth.expiry,
-          auth.signature
-        );
+      await governance.propose(
+        TREASURY_TRANSFER,
+        recipient,
+        amount,
+        description,
+        auth.expiry,
+        auth.signature
+      );
 
     await tx.wait();
 
@@ -353,6 +363,7 @@ submitProposalBtn.onclick = async () => {
 
     recipientAddress.value = "";
     treasuryAmount.value = "";
+    proposalDescription.value = "";
 
     loadProposalFeed();
 
@@ -374,15 +385,18 @@ pauseTradingBtn.onclick = async () => {
 
     const auth =
       await getGovernanceSignature(
-        "pause"
+        "propose"
       );
 
     const tx =
-      await governance
-        .proposePauseTrading(
-          auth.expiry,
-          auth.signature
-        );
+      await governance.propose(
+        PAUSE_TRADING,
+        ethers.ZeroAddress,
+        0,
+        "Pause LABR trading",
+        auth.expiry,
+        auth.signature
+      );
 
     await tx.wait();
 
@@ -411,15 +425,18 @@ resumeTradingBtn.onclick = async () => {
 
     const auth =
       await getGovernanceSignature(
-        "resume"
+        "propose"
       );
 
     const tx =
-      await governance
-        .proposeResumeTrading(
-          auth.expiry,
-          auth.signature
-        );
+      await governance.propose(
+        RESUME_TRADING,
+        ethers.ZeroAddress,
+        0,
+        "Resume LABR trading",
+        auth.expiry,
+        auth.signature
+      );
 
     await tx.wait();
 
@@ -473,6 +490,9 @@ async function loadProposalFeed() {
       const p =
         await governance.proposals(i);
 
+      const aragonId =
+        await governance.aragonProposalIds(i);
+
       const card =
         document.createElement("div");
 
@@ -518,6 +538,11 @@ async function loadProposalFeed() {
           )}
         </p>
 
+        <p>
+          Description:<br>
+          ${p.description}
+        </p>
+
         ${details}
 
         <p>
@@ -533,6 +558,11 @@ async function loadProposalFeed() {
         <p>
           Executed:
           ${p.executed}
+        </p>
+
+        <p>
+          Aragon Proposal ID:
+          ${aragonId}
         </p>
 
         <div class="cta-row">
