@@ -52,6 +52,11 @@ const registerBtn =
 const daoStatus =
   document.getElementById("daoStatus");
 
+const governanceAccessWrapper =
+  document.getElementById(
+    "governanceAccessWrapper"
+  );
+
 const attestationModal =
   document.getElementById(
     "attestationModal"
@@ -423,14 +428,46 @@ registerBtn.onclick = async () => {
 
     completeStep("step-register");
 
+    governanceAccessWrapper
+      .classList
+      .remove("hidden");
+
     setStatus(
-      "DAO registration complete",
+      "DAO registration complete. Redirecting to governance...",
       "success"
     );
+
+    setTimeout(() => {
+
+      window.location.href =
+        "governance.html";
+
+    }, 5000);
 
   } catch (err) {
 
     console.error(err);
+
+    // ===== ALREADY REGISTERED =====
+    if (
+      err.message &&
+      err.message.includes(
+        "Already registered"
+      )
+    ) {
+
+      governanceAccessWrapper
+        .classList
+        .remove("hidden");
+
+      setStatus(
+        "Already registered. Governance access unlocked.",
+        "success"
+      );
+
+      return;
+
+    }
 
     setStatus(
       "Registration failed",
