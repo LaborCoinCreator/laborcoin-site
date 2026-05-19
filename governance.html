@@ -89,22 +89,6 @@
 
   <div class="trade-box">
 
-    <label>Proposal Type</label>
-
-    <select id="proposalType">
-      <option value="treasury">
-        Treasury Distribution
-      </option>
-
-      <option value="pause">
-        Pause Exchange
-      </option>
-
-      <option value="resume">
-        Resume Exchange
-      </option>
-    </select>
-
     <div id="treasuryFields">
 
       <input
@@ -119,17 +103,25 @@
 
     </div>
 
-    <textarea
-      id="proposalDescription"
-      placeholder="Proposal Description"
-      rows="5"
-    ></textarea>
-
     <button
       id="submitProposalBtn"
       class="cta-button"
     >
       Submit Proposal
+    </button>
+
+    <button
+      id="pauseTradingBtn"
+      class="cta-button secondary"
+    >
+      Propose Pause Trading
+    </button>
+
+    <button
+      id="resumeTradingBtn"
+      class="cta-button"
+    >
+      Propose Resume Trading
     </button>
 
   </div>

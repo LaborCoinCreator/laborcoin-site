@@ -1,6 +1,6 @@
 // ===== CONFIG =====
 const GOVERNANCE_CONTRACT =
-  "0x1C01BD6ccC2C9aCfb59f37f7877A7a2718167aBe";
+  "0x3edfa4BE01e7a244357198260f2432094690aB65";
 
 const LABRV_TOKEN =
   "0x113579220515cd59b884Ea2379b4C369025246e2";
@@ -10,15 +10,22 @@ const VERIFIER_URL =
 
 // ===== ABI =====
 const GOV_ABI = [
+
   "function proposalCount() view returns (uint256)",
 
-  "function propose(address,uint256,bytes,bytes)",
+  "function nonces(address) view returns (uint256)",
 
-  "function vote(uint256,bool,bytes)",
+  "function proposeTreasuryTransfer(address,uint256,uint256,bytes) returns (uint256)",
+
+  "function proposePauseTrading(uint256,bytes) returns (uint256)",
+
+  "function proposeResumeTrading(uint256,bytes) returns (uint256)",
+
+  "function vote(uint256,bool,uint256,bytes)",
 
   "function execute(uint256)",
 
-  "function proposals(uint256) view returns(address target,uint256 value,bytes data,uint256 start,uint256 end,uint256 yes,uint256 no,bool executed)"
+  "function proposals(uint256) view returns(uint8 proposalType,address recipient,uint256 amount,uint256 start,uint256 end,uint256 yes,uint256 no,bool executed)"
 ];
 
 const LABRV_ABI = [
@@ -32,8 +39,6 @@ let userAddress;
 
 let governance;
 let labrv;
-
-let governanceSignature;
 
 // ===== ELEMENTS =====
 const govConnectBtn =
@@ -54,23 +59,20 @@ const proposalFeedSection =
 const proposalFeed =
   document.getElementById("proposalFeed");
 
-const proposalType =
-  document.getElementById("proposalType");
-
-const treasuryFields =
-  document.getElementById("treasuryFields");
-
 const recipientAddress =
   document.getElementById("recipientAddress");
 
 const treasuryAmount =
   document.getElementById("treasuryAmount");
 
-const proposalDescription =
-  document.getElementById("proposalDescription");
-
 const submitProposalBtn =
   document.getElementById("submitProposalBtn");
+
+const pauseTradingBtn =
+  document.getElementById("pauseTradingBtn");
+
+const resumeTradingBtn =
+  document.getElementById("resumeTradingBtn");
 
 // ===== HELPERS =====
 function setStatus(msg, type = "") {
@@ -83,7 +85,6 @@ function setStatus(msg, type = "") {
       : type === "success"
       ? "#4dff88"
       : "#ccc";
-
 }
 
 function completeStep(id) {
@@ -94,7 +95,70 @@ function completeStep(id) {
   if (!el) return;
 
   el.classList.add("complete");
+}
 
+async function getGovernanceSignature(action) {
+
+  const nonce =
+    await governance.nonces(
+      userAddress
+    );
+
+  const expiry =
+    Math.floor(
+      Date.now() / 1000
+    ) + 300;
+
+  const response =
+    await fetch(
+      `${VERIFIER_URL}/verify`,
+      {
+        method: "POST",
+
+        headers: {
+          "Content-Type":
+            "application/json"
+        },
+
+        body: JSON.stringify({
+          address: userAddress,
+          type: "governance",
+          action,
+          nonce: nonce.toString(),
+          expiry
+        })
+      }
+    );
+
+  const data =
+    await response.json();
+
+  if (!data.success) {
+
+    throw new Error(
+      data.error ||
+      "Verification failed"
+    );
+  }
+
+  return {
+    expiry,
+    signature: data.signature
+  };
+}
+
+function proposalTypeName(type) {
+
+  if (Number(type) === 0)
+    return "Treasury Transfer";
+
+  if (Number(type) === 1)
+    return "Pause Trading";
+
+  if (Number(type) === 2)
+    return "Resume Trading";
+
+  return "Unknown";
 }
 
 // ===== CONNECT =====
@@ -110,7 +174,6 @@ govConnectBtn.onclick = async () => {
       );
 
       return;
-
     }
 
     provider =
@@ -122,6 +185,21 @@ govConnectBtn.onclick = async () => {
       "eth_requestAccounts",
       []
     );
+
+    const network =
+      await provider.getNetwork();
+
+    if (
+      Number(network.chainId) !== 137
+    ) {
+
+      setStatus(
+        "Switch to Polygon Mainnet",
+        "error"
+      );
+
+      return;
+    }
 
     signer =
       await provider.getSigner();
@@ -160,7 +238,6 @@ govConnectBtn.onclick = async () => {
       );
 
       return;
-
     }
 
     completeStep(
@@ -180,62 +257,13 @@ govConnectBtn.onclick = async () => {
       "Connection failed",
       "error"
     );
-
   }
-
 };
 
 // ===== VERIFY =====
 govVerifyBtn.onclick = async () => {
 
-if (!userAddress || !governance) {
-
-  setStatus(
-    "Connect wallet first",
-    "error"
-  );
-
-  return;
-
-}
   try {
-
-    const response =
-      await fetch(
-        `${VERIFIER_URL}/verify`,
-        {
-          method: "POST",
-
-          headers: {
-            "Content-Type":
-              "application/json"
-          },
-
-          body: JSON.stringify({
-            address: userAddress,
-            type: "governance",
-	    action: "propose"
-          })
-        }
-      );
-
-    const data =
-      await response.json();
-
-    if (!data.success) {
-
-      setStatus(
-        data.error ||
-        "Verification failed",
-        "error"
-      );
-
-      return;
-
-    }
-
-    governanceSignature =
-      data.signature;
 
     completeStep(
       "gov-step-identity"
@@ -264,112 +292,67 @@ if (!userAddress || !governance) {
       "Verification failed",
       "error"
     );
-
   }
-
 };
 
-// ===== PROPOSAL TYPE UI =====
-proposalType.onchange = () => {
-
-  if (
-    proposalType.value ===
-    "treasury"
-  ) {
-
-    treasuryFields.style.display =
-      "block";
-
-  } else {
-
-    treasuryFields.style.display =
-      "none";
-
-  }
-
-};
-
-// ===== CREATE PROPOSAL =====
+// ===== TREASURY PROPOSAL =====
 submitProposalBtn.onclick = async () => {
 
   try {
 
-    if (!governanceSignature) {
+    const recipient =
+      recipientAddress.value.trim();
+
+    const amount =
+      ethers.parseEther(
+        treasuryAmount.value
+      );
+
+    if (!recipient) {
 
       setStatus(
-        "Verify identity first",
+        "Missing recipient",
         "error"
       );
 
       return;
-
     }
 
-    let target;
-    let value = 0;
-    let calldata = "0x";
-
-    // ===== TREASURY =====
     if (
-      proposalType.value ===
-      "treasury"
-    ) {
-
-      target =
-        recipientAddress.value.trim();
-
-      value =
-        ethers.parseEther(
-          treasuryAmount.value
-        );
-
-    }
-
-    // ===== PLACEHOLDER =====
-    if (
-      proposalType.value ===
-      "pause"
+      Number(treasuryAmount.value) <= 0
     ) {
 
       setStatus(
-        "Pause executor not connected yet",
+        "Invalid amount",
         "error"
       );
 
       return;
-
     }
 
-    if (
-      proposalType.value ===
-      "resume"
-    ) {
-
-      setStatus(
-        "Resume executor not connected yet",
-        "error"
+    const auth =
+      await getGovernanceSignature(
+        "propose"
       );
-
-      return;
-
-    }
 
     const tx =
-      await governance.propose(
-        target,
-        value,
-        calldata,
-        governanceSignature
-      );
+      await governance
+        .proposeTreasuryTransfer(
+          recipient,
+          amount,
+          auth.expiry,
+          auth.signature
+        );
 
     await tx.wait();
 
     setStatus(
-      "Proposal submitted",
+      "Treasury proposal submitted",
       "success"
     );
 
-    proposalDescription.value = "";
+    recipientAddress.value = "";
+    treasuryAmount.value = "";
 
     loadProposalFeed();
 
@@ -381,9 +364,81 @@ submitProposalBtn.onclick = async () => {
       "Proposal failed",
       "error"
     );
-
   }
+};
 
+// ===== PAUSE PROPOSAL =====
+pauseTradingBtn.onclick = async () => {
+
+  try {
+
+    const auth =
+      await getGovernanceSignature(
+        "pause"
+      );
+
+    const tx =
+      await governance
+        .proposePauseTrading(
+          auth.expiry,
+          auth.signature
+        );
+
+    await tx.wait();
+
+    setStatus(
+      "Pause proposal submitted",
+      "success"
+    );
+
+    loadProposalFeed();
+
+  } catch (err) {
+
+    console.error(err);
+
+    setStatus(
+      "Pause proposal failed",
+      "error"
+    );
+  }
+};
+
+// ===== RESUME PROPOSAL =====
+resumeTradingBtn.onclick = async () => {
+
+  try {
+
+    const auth =
+      await getGovernanceSignature(
+        "resume"
+      );
+
+    const tx =
+      await governance
+        .proposeResumeTrading(
+          auth.expiry,
+          auth.signature
+        );
+
+    await tx.wait();
+
+    setStatus(
+      "Resume proposal submitted",
+      "success"
+    );
+
+    loadProposalFeed();
+
+  } catch (err) {
+
+    console.error(err);
+
+    setStatus(
+      "Resume proposal failed",
+      "error"
+    );
+  }
 };
 
 // ===== LOAD FEED =====
@@ -407,7 +462,6 @@ async function loadProposalFeed() {
       `;
 
       return;
-
     }
 
     for (
@@ -430,19 +484,41 @@ async function loadProposalFeed() {
           Number(p.end) * 1000
         ).toLocaleString();
 
+      let details = "";
+
+      if (
+        Number(p.proposalType) === 0
+      ) {
+
+        details = `
+          <p>
+            Recipient:<br>
+            ${p.recipient}
+          </p>
+
+          <p>
+            Amount:<br>
+            ${ethers.formatEther(
+              p.amount
+            )} POL
+          </p>
+        `;
+      }
+
       card.innerHTML = `
 
-        <h3>Proposal #${i}</h3>
+        <h3>
+          Proposal #${i}
+        </h3>
 
         <p>
-          Target:<br>
-          ${p.target}
+          Type:<br>
+          ${proposalTypeName(
+            p.proposalType
+          )}
         </p>
 
-        <p>
-          Value:<br>
-          ${ethers.formatEther(p.value)} POL
-        </p>
+        ${details}
 
         <p>
           YES: ${p.yes}<br>
@@ -483,19 +559,15 @@ async function loadProposalFeed() {
           </button>
 
         </div>
-
       `;
 
       proposalFeed.appendChild(card);
-
     }
 
   } catch (err) {
 
     console.error(err);
-
   }
-
 }
 
 // ===== VOTE =====
@@ -504,38 +576,19 @@ window.voteProposal = async (
   support
 ) => {
 
-const verifyResponse =
-  await fetch(
-    `${VERIFIER_URL}/verify`,
-    {
-      method: "POST",
-
-      headers: {
-        "Content-Type":
-          "application/json"
-      },
-
-      body: JSON.stringify({
-        address: userAddress,
-        type: "governance",
-        action: "vote"
-      })
-    }
-  );
-
-const verifyData =
-  await verifyResponse.json();
-
-const voteSignature =
-  verifyData.signature;
-
   try {
+
+    const auth =
+      await getGovernanceSignature(
+        "vote"
+      );
 
     const tx =
       await governance.vote(
         id,
         support,
-        voteSignature
+        auth.expiry,
+        auth.signature
       );
 
     await tx.wait();
@@ -555,9 +608,7 @@ const voteSignature =
       "Vote failed",
       "error"
     );
-
   }
-
 };
 
 // ===== EXECUTE =====
@@ -587,7 +638,5 @@ window.executeProposal = async (
       "Execution failed",
       "error"
     );
-
   }
-
 };

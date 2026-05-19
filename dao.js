@@ -52,6 +52,21 @@ const registerBtn =
 const daoStatus =
   document.getElementById("daoStatus");
 
+const attestationModal =
+  document.getElementById(
+    "attestationModal"
+  );
+
+const confirmAttestationBtn =
+  document.getElementById(
+    "confirmAttestationBtn"
+  );
+
+const cancelAttestationBtn =
+  document.getElementById(
+    "cancelAttestationBtn"
+  );
+
 // ===== HELPERS =====
 function setStatus(msg, type = "") {
 
@@ -250,20 +265,62 @@ verifyBtn.onclick = async () => {
 };
 
 // ===== SIGN ATTESTATION =====
-attestBtn.onclick = async () => {
+
+// ===== OPEN MODAL =====
+attestBtn.onclick = () => {
+
+  if (!signer) {
+
+    setStatus(
+      "Connect wallet first",
+      "error"
+    );
+
+    return;
+  }
+
+  attestationModal.classList.remove(
+    "hidden"
+  );
+
+};
+
+// ===== CANCEL =====
+cancelAttestationBtn.onclick = () => {
+
+  attestationModal.classList.add(
+    "hidden"
+  );
+
+};
+
+// ===== CONFIRM + SIGN =====
+confirmAttestationBtn.onclick =
+  async () => {
 
   try {
 
     const message = `
 LaborCoin DAO Attestation
 
-I acknowledge and agree to the following principles:
+I affirm my support for democratic worker organization,
+transparent collective governance, and mutual aid.
 
-• Buy LABR to strengthen collective resources.
-• Sell LABR primarily to support strikes, mutual aid, or collective worker action.
-• Only support legitimate worker organizations, unions, strike funds, or solidarity efforts.
-• Use governance responsibly and transparently.
-• Recognize that participation in the LaborCoin system contributes to collective worker power.
+I understand that LaborCoin is designed to strengthen
+collective economic power through shared participation,
+coordination, and long-term solidarity.
+
+I support the principle that shared resources should be
+used to assist workers engaged in strikes, labor actions,
+mutual aid efforts, and other forms of collective support.
+
+I recognize that proposals involving treasury funds
+should prioritize legitimate worker-centered initiatives
+and transparent community accountability.
+
+Participation in LaborCoin is voluntary and intended
+to strengthen cooperation, democratic governance,
+and collective power.
 
 Power to the People.
 `;
@@ -272,7 +329,9 @@ Power to the People.
       message
     );
 
-    completeStep("step-attest");
+    completeStep(
+      "step-attest"
+    );
 
     registerBtn.disabled = false;
 
@@ -281,27 +340,25 @@ Power to the People.
       "success"
     );
 
-    // ===== DOWNLOAD CERTIFICATE =====
-    const blob =
-      new Blob(
-        [message],
-        { type: "text/plain" }
-      );
+    attestationModal.classList.add(
+      "hidden"
+    );
 
-    const url =
-      URL.createObjectURL(blob);
-
-    const a =
+    // ===== DOWNLOAD PDF =====
+    const link =
       document.createElement("a");
 
-    a.href = url;
+    link.href =
+      "attestation.pdf";
 
-    a.download =
-      `laborcoin-attestation-${userAddress}.txt`;
+    link.download =
+      "LaborCoin-DAO-Attestation.pdf";
 
-    a.click();
+    document.body.appendChild(link);
 
-    URL.revokeObjectURL(url);
+    link.click();
+
+    document.body.removeChild(link);
 
   } catch (err) {
 
