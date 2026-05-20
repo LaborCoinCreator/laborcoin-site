@@ -1,6 +1,6 @@
 // ===== CONFIG =====
 const GOVERNANCE_CONTRACT =
-  "0x9310f6EcA828FDFF05C16220cbB21EEcA0D6F77D";
+  "0xa0060E934377d3E9d74699D48D46A491aeb976b9";
 
 const LABRV_TOKEN =
   "0x113579220515cd59b884Ea2379b4C369025246e2";
@@ -112,6 +112,8 @@ async function getGovernanceSignature(action) {
     await governance.nonces(
       userAddress
     );
+
+  console.log("FRONTEND NONCE:", nonce.toString());
 
   const expiry =
     Math.floor(
