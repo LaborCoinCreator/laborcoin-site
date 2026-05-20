@@ -86,6 +86,7 @@
   <!-- LEFT -->
   <div class="exchange-left">
 
+    <!-- CURVE -->
     <div class="trade-box">
 
       <h2>
@@ -122,6 +123,36 @@
         </p>
 
       </div>
+
+    </div>
+
+    <!-- LIVE MARKET -->
+    <div class="trade-box">
+
+      <h2>
+        Live Market Metrics
+      </h2>
+
+      <p>
+        <strong>Current Price:</strong><br>
+        <span id="currentPrice">
+          Loading...
+        </span>
+      </p>
+
+      <p>
+        <strong>Wallet Ownership:</strong><br>
+        <span id="walletPercent">
+          0%
+        </span>
+      </p>
+
+      <p>
+        <strong>Cooldown Status:</strong><br>
+        <span id="cooldown">
+          Ready
+        </span>
+      </p>
 
     </div>
 
@@ -166,9 +197,9 @@
       </p>
 
       <p>
-        <strong>Current Price:</strong><br>
-        <span id="currentPrice">
-          Loading...
+        <strong>Total Wallet Value:</strong><br>
+        <span id="balance">
+          0
         </span>
       </p>
 
@@ -185,6 +216,24 @@
         id="buyAmount"
         placeholder="POL Amount"
       >
+
+      <div class="trade-preview">
+
+        <p>
+          <strong>Estimated LABR:</strong><br>
+          <span id="buyEstimate">
+            0
+          </span>
+        </p>
+
+        <p>
+          <strong>DAO Treasury Share:</strong><br>
+          <span id="buyDaoShare">
+            0
+          </span>
+        </p>
+
+      </div>
 
       <div class="center-button">
 
@@ -210,6 +259,31 @@
         id="sellAmount"
         placeholder="LABR Amount"
       >
+
+      <div class="trade-preview">
+
+        <p>
+          <strong>Estimated POL:</strong><br>
+          <span id="sellEstimate">
+            0
+          </span>
+        </p>
+
+        <p>
+          <strong>Sell Tax:</strong><br>
+          <span id="sellTax">
+            0
+          </span>
+        </p>
+
+        <p>
+          <strong>Net POL Received:</strong><br>
+          <span id="sellNet">
+            0
+          </span>
+        </p>
+
+      </div>
 
       <div class="center-button">
 

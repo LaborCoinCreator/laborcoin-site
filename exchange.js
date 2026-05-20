@@ -36,7 +36,7 @@ let provider, signer, exchange, userAddress;
 
 // ===== STATUS UI =====
 function setStatus(msg, type = "") {
-  const el = document.getElementById("status");
+  const el = document.getElementById("statusMessage");
   el.innerText = msg;
 
   el.style.color =
