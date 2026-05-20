@@ -12,13 +12,21 @@ const EXCHANGE_ABI = [
   "function sell(uint256 amount, uint256 minPOL)",
   "function getPrice(uint256 sold) view returns (uint256)",
   "function totalSold() view returns (uint256)",
+  "function daoTreasury() view returns (address)",
+  "function MAX_SUPPLY() view returns (uint256)",
+  "function unlockedSupply() view returns (uint256)",
   "function lastTxTime(address) view returns (uint256)"
 ];
 
 const ERC20_ABI = [
+
   "function balanceOf(address) view returns (uint256)",
+
+  "function totalSupply() view returns (uint256)",
+
   "function approve(address spender, uint256 amount) returns (bool)"
-];
+
+];  
 
 // ===== PROVIDERS =====
 const readProvider = new ethers.JsonRpcProvider(RPC_URL);
@@ -46,7 +54,7 @@ async function initialLoad() {
     document.getElementById("currentPrice").innerText =
       Number(ethers.formatEther(price)).toFixed(6) + " POL";
 
-    drawCurve(Number(sold) / 1e18);
+    await drawCurve();
   } catch (e) {
     console.error(e);
     setStatus("Failed to load data", "error");
@@ -87,6 +95,50 @@ async function updateAll() {
     const price = await readExchange.getPrice(sold);
 
     const bal = Number(ethers.formatEther(balance));
+
+    // ===== TREASURY DEPTH =====
+const treasuryAddress =
+  await readExchange.daoTreasury();
+
+const treasuryBalance =
+  await readProvider.getBalance(
+    treasuryAddress
+  );
+
+document.getElementById(
+  "treasuryDepth"
+).innerText =
+  Number(
+    ethers.formatEther(
+      treasuryBalance
+    )
+  ).toLocaleString() + " POL";
+
+// ===== TOTAL SOLD =====
+const totalSold =
+  await readExchange.totalSold();
+
+document.getElementById(
+  "totalSoldDisplay"
+).innerText =
+  Number(
+    ethers.formatEther(
+      totalSold
+    )
+  ).toLocaleString() + " LABR";
+
+// ===== CIRCULATING SUPPLY =====
+const totalSupply =
+  await labr.totalSupply();
+
+document.getElementById(
+  "circulatingSupply"
+).innerText =
+  Number(
+    ethers.formatEther(
+      totalSupply
+    )
+  ).toLocaleString() + " LABR";
 
     document.getElementById("balance").innerText =
       bal.toFixed(2) + " LABR";
@@ -253,27 +305,58 @@ sellBtn.onclick = async () => {
   }
 };
 
-// ===== CURVE (VISUAL APPROXIMATION ONLY) =====
-function drawCurve(currentSold = 0) {
+// ===== CURVE =====
+async function drawCurve() {
+
   const canvas = curveCanvas;
   const ctx = canvas.getContext("2d");
 
   ctx.clearRect(0, 0, canvas.width, canvas.height);
 
+  const maxSupply = 500_000_000;
+  const steps = canvas.width;
+
+  let prices = [];
+
+  for (let i = 0; i < steps; i++) {
+
+    const sold =
+      ethers.parseEther(
+        (
+          (i / steps) * maxSupply
+        ).toString()
+      );
+
+    const rawPrice =
+      await readExchange.getPrice(sold);
+
+    const price =
+      Number(
+        ethers.formatEther(rawPrice)
+      );
+
+    prices.push(price);
+  }
+
+  const maxPrice =
+    Math.max(...prices);
+
   ctx.beginPath();
 
-  const maxSupply = 500_000_000;
+  for (let x = 0; x < steps; x++) {
 
-  for (let x = 0; x < canvas.width; x++) {
-    let t = x / canvas.width;
-    let sold = t * maxSupply;
+    const normalized =
+      prices[x] / maxPrice;
 
-    // Visual approximation only (not exact contract curve)
-    let price = 1 + 14 * Math.pow(sold / maxSupply, 2);
+    const y =
+      canvas.height -
+      normalized * canvas.height;
 
-    let y = canvas.height - (price / 15) * canvas.height;
-
-    x === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
+    if (x === 0) {
+      ctx.moveTo(x, y);
+    } else {
+      ctx.lineTo(x, y);
+    }
   }
 
   ctx.strokeStyle = "#ff3b3b";
@@ -281,50 +364,17 @@ function drawCurve(currentSold = 0) {
   ctx.stroke();
 }
 
-initialLoad();
-setInterval(updateAll, 8000);
-
 // ===== CONNECT FIX =====
 window.addEventListener("DOMContentLoaded", () => {
-  const connectBtn = document.getElementById("connectBtn");
 
-  connectBtn.onclick = async () => {
-    try {
-      if (!window.ethereum) {
-  setStatus("No wallet detected", "error");
+  const connectBtn =
+    document.getElementById("connectBtn");
 
-  // MOBILE DETECTION
-  const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+  connectBtn.onclick =
+    connectWallet;
 
-  if (isMobile) {
-    alert("Open this site inside the MetaMask app browser.");
-  } else {
-    alert("Install MetaMask extension to continue.");
-  }
+  initialLoad();
 
-  return;
-}
-
-      provider = new ethers.BrowserProvider(window.ethereum);
-      await provider.send("eth_requestAccounts", []);
-
-      signer = await provider.getSigner();
-      userAddress = await signer.getAddress();
-
-      exchange = new ethers.Contract(EXCHANGE_ADDRESS, EXCHANGE_ABI, signer);
-
-      document.getElementById("walletAddress").innerText =
-        userAddress.slice(0, 6) + "..." + userAddress.slice(-4);
-
-      setStatus("Wallet connected", "success");
-
-      updateAll();
-
-    } catch (e) {
-      console.error(e);
-      setStatus("Connection failed", "error");
-    }
-  };
 });
 
 // ===== AUTO RECONNECT =====

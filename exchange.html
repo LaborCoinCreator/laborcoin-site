@@ -1,118 +1,252 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+
   <meta charset="UTF-8">
-  <title>LaborCoin Exchange</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="theme-color" content="#0d0d0d">
 
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="style.css">
-  <link rel="icon" type="image/png" href="assets/favicon.png">
-  <link rel="icon" sizes="64x64" href="assets/favicon.png">
-  <link rel="apple-touch-icon" href="assets/favicon.png">
+  <title>
+    LaborCoin Exchange
+  </title>
 
-  <script src="https://cdn.jsdelivr.net/npm/ethers@6.10.0/dist/ethers.min.js"></script>
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  >
+
+  <meta
+    name="theme-color"
+    content="#0d0d0d"
+  >
+
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap"
+    rel="stylesheet"
+  >
+
+  <link
+    rel="stylesheet"
+    href="style.css"
+  >
+
+  <link
+    rel="icon"
+    type="image/png"
+    href="assets/favicon.png"
+  >
+
+  <link
+    rel="icon"
+    sizes="64x64"
+    href="assets/favicon.png"
+  >
+
+  <link
+    rel="apple-touch-icon"
+    href="assets/favicon.png"
+  >
+
+  <script src="https://cdn.jsdelivr.net/npm/ethers@6.13.1/dist/ethers.umd.min.js"></script>
+
 </head>
 
 <body>
 
 <header class="hero">
-  <img src="assets/banner.png" class="hero-img">
+
+  <img
+    src="assets/banner.png"
+    alt="LaborCoin Banner"
+    class="hero-img"
+  >
+
 </header>
 
-<section class="exchange-container">
+<section class="exchange-intro">
+
+  <a href="index.html">
+    ← Back
+  </a>
+
+  <h1>
+    LaborCoin Exchange
+  </h1>
+
+  <p>
+    Buy and sell LABR directly through the on-chain bonding curve exchange.
+  </p>
+
+  <p>
+    Pricing increases deterministically as participation grows.
+  </p>
+
+</section>
+
+<div class="exchange-container">
 
   <!-- LEFT -->
   <div class="exchange-left">
 
-    <a href="index.html">← Back</a>
+    <div class="trade-box">
 
-    <div class="exchange-intro">
-      <h1>LaborCoin Exchange</h1>
+      <h2>
+        Bonding Curve
+      </h2>
 
-      <p>
-        LaborCoin uses a deterministic bonding curve where price increases as more tokens are purchased.
-        <br><br>
-        <strong>On buys:</strong> 10% of POL is allocated to the DAO treasury. You receive the full LABR amount (no token tax on buys).
-        <br><br>
-        <strong>On sells:</strong> A 10% total token tax applies:<br>
-        • 5% → DAO treasury<br>
-        • 5% → distributed to LABR holders
-      </p>
+      <canvas
+        id="curveCanvas"
+        width="800"
+        height="300"
+      ></canvas>
 
-      <button id="connectBtn" class="cta-button">Connect Wallet</button>
+      <div class="curve-stats">
+
+        <p>
+          <strong>Total Sold:</strong>
+          <span id="totalSoldDisplay">
+            Loading...
+          </span>
+        </p>
+
+        <p>
+          <strong>Treasury Depth:</strong>
+          <span id="treasuryDepth">
+            Loading...
+          </span>
+        </p>
+
+        <p>
+          <strong>Circulating Supply:</strong>
+          <span id="circulatingSupply">
+            Loading...
+          </span>
+        </p>
+
+      </div>
+
     </div>
-
-    <div class="wallet-box">
-      <p><strong>Wallet:</strong> <span id="walletAddress">Not connected</span></p>
-      <p><strong>Balance:</strong> <span id="balance">0 LABR</span></p>
-      <p><strong>Exchange Limit (10,000 LABR max per wallet):</strong> <span id="walletPercent">0%</span></p>
-      <p><strong>Current Price:</strong> <span id="currentPrice">0 POL</span></p>
-    </div>
-
-    <canvas id="curveCanvas"></canvas>
-
-    <p id="status" class="status"></p>
 
   </div>
 
   <!-- RIGHT -->
   <div class="exchange-right">
 
-    <div class="trade-box">
-      <h2>Buy LABR</h2>
+    <!-- WALLET -->
+    <div class="wallet-box">
 
-      <input type="number" id="buyAmount" placeholder="POL amount">
+      <h2>
+        Wallet
+      </h2>
 
-      <p>Estimated LABR (approx): <span id="buyEstimate">0</span></p>
+      <button
+        id="connectBtn"
+        class="cta-button"
+      >
+        Connect Wallet
+      </button>
 
-      <p style="color:#aaa;">
-        10% of POL goes to DAO treasury: <span id="buyDaoShare">0</span>
+      <p>
+        <strong>Address:</strong><br>
+        <span id="walletAddress">
+          Not connected
+        </span>
       </p>
 
-      <button id="buyBtn" class="cta-button">Buy</button>
+      <p>
+        <strong>POL Balance:</strong><br>
+        <span id="polBalance">
+          0
+        </span>
+      </p>
+
+      <p>
+        <strong>LABR Balance:</strong><br>
+        <span id="labrBalance">
+          0
+        </span>
+      </p>
+
+      <p>
+        <strong>Current Price:</strong><br>
+        <span id="currentPrice">
+          Loading...
+        </span>
+      </p>
+
     </div>
 
+    <!-- BUY -->
     <div class="trade-box">
-      <h2>Sell LABR</h2>
 
-      <input type="number" id="sellAmount" placeholder="LABR amount">
+      <h2>
+        Buy LABR
+      </h2>
 
-      <p>Estimated POL (before tax): <span id="sellEstimate">0</span></p>
+      <input
+        id="buyAmount"
+        placeholder="POL Amount"
+      >
 
-      <p style="color:#aaa;">
-        Token Tax (10% total):<br>
-        • 5% → DAO treasury<br>
-        • 5% → distributed to LABR holders
-      </p>
+      <div class="center-button">
 
-      <small style="color:#666; display:block; margin-top:4px;">
-        Tax is applied by the LABR token contract
-      </small>
+        <button
+          id="buyBtn"
+          class="cta-button"
+        >
+          Buy
+        </button>
 
-      <p style="color:#aaa;">
-        Estimated Tax: <span id="sellTax">0</span>
-      </p>
+      </div>
 
-      <p style="color:#aaa;">
-        You Receive (after tax): <span id="sellNet">0</span>
-      </p>
-
-      <button id="sellBtn" class="cta-button">Sell</button>
     </div>
 
+    <!-- SELL -->
     <div class="trade-box">
-      <h2>Cooldown</h2>
-      <p>Next transaction: <span id="cooldown">--</span></p>
+
+      <h2>
+        Sell LABR
+      </h2>
+
+      <input
+        id="sellAmount"
+        placeholder="LABR Amount"
+      >
+
+      <div class="center-button">
+
+        <button
+          id="sellBtn"
+          class="cta-button secondary"
+        >
+          Sell
+        </button>
+
+      </div>
+
+    </div>
+
+    <!-- STATUS -->
+    <div class="trade-box">
+
+      <h2>
+        Status
+      </h2>
+
+      <p id="statusMessage">
+        Ready.
+      </p>
+
     </div>
 
   </div>
 
-</section>
+</div>
 
 <footer>
-  <p>© LaborCoin</p>
+
+  <p>
+    © LaborCoin
+  </p>
+
 </footer>
 
 <script src="exchange.js"></script>

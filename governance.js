@@ -80,6 +80,9 @@ const pauseTradingBtn =
 const resumeTradingBtn =
   document.getElementById("resumeTradingBtn");
 
+// ===== INITIAL UI STATE =====
+govVerifyBtn.disabled = true;
+
 // ===== HELPERS =====
 function setStatus(msg, type = "") {
 
@@ -199,12 +202,22 @@ govConnectBtn.onclick = async () => {
       Number(network.chainId) !== 137
     ) {
 
-      setStatus(
-        "Switch to Polygon Mainnet",
-        "error"
-      );
+      try {
 
-      return;
+        await window.ethereum.request({
+          method: "wallet_switchEthereumChain",
+          params: [{ chainId: "0x89" }]
+        });
+
+      } catch (switchError) {
+
+        setStatus(
+          "Please switch to Polygon Mainnet",
+          "error"
+        );
+
+        return;
+      }
     }
 
     signer =
@@ -250,6 +263,8 @@ govConnectBtn.onclick = async () => {
       "gov-step-labrv"
     );
 
+    govVerifyBtn.disabled = false;
+
     setStatus(
       "Wallet connected",
       "success"
@@ -269,7 +284,49 @@ govConnectBtn.onclick = async () => {
 // ===== VERIFY =====
 govVerifyBtn.onclick = async () => {
 
+  if (!userAddress) {
+
+    setStatus(
+      "Connect wallet first",
+      "error"
+    );
+
+    return;
+  }
+
   try {
+
+    govStatus.textContent =
+      "Verifying identity...";
+
+    const response = await fetch(
+      `${VERIFIER_URL}/verify`,
+      {
+        method: "POST",
+
+        headers: {
+          "Content-Type":
+            "application/json"
+        },
+
+        body: JSON.stringify({
+          address: userAddress,
+          type: "governance"
+        })
+      }
+    );
+
+    const data =
+      await response.json();
+
+    if (!response.ok) {
+
+      throw new Error(
+        data.error ||
+        "Verification failed"
+      );
+
+    }
 
     completeStep(
       "gov-step-identity"
@@ -283,22 +340,21 @@ govVerifyBtn.onclick = async () => {
       "hidden"
     );
 
-    setStatus(
-      "Governance access granted",
-      "success"
-    );
+    govStatus.textContent =
+      `Verified. Passport score: ${data.score}`;
 
-    loadProposalFeed();
+    await loadProposalFeed();
 
   } catch (err) {
 
     console.error(err);
 
-    setStatus(
-      "Verification failed",
-      "error"
-    );
+    govStatus.textContent =
+      err.message ||
+      "Verification failed.";
+
   }
+
 };
 
 // ===== TREASURY PROPOSAL =====

@@ -72,6 +72,11 @@ const cancelAttestationBtn =
     "cancelAttestationBtn"
   );
 
+// ===== INITIAL UI STATE =====
+verifyBtn.disabled = true;
+attestBtn.disabled = true;
+registerBtn.disabled = true;
+
 // ===== HELPERS =====
 function setStatus(msg, type = "") {
 
@@ -114,16 +119,41 @@ connectBtn.onclick = async () => {
     }
 
     provider =
-      new ethers.BrowserProvider(
-        window.ethereum
-      );
+  new ethers.BrowserProvider(
+    window.ethereum
+  );
 
-    await provider.send(
-      "eth_requestAccounts",
-      []
+await provider.send(
+  "eth_requestAccounts",
+  []
+);
+
+const network =
+  await provider.getNetwork();
+
+if (
+  Number(network.chainId) !== 137
+) {
+
+  try {
+
+    await window.ethereum.request({
+      method: "wallet_switchEthereumChain",
+      params: [{ chainId: "0x89" }]
+    });
+
+  } catch (switchError) {
+
+    setStatus(
+      "Please switch to Polygon Mainnet",
+      "error"
     );
 
-    signer =
+    return;
+  }
+}
+ 
+   signer =
       await provider.getSigner();
 
     userAddress =
@@ -177,7 +207,7 @@ connectBtn.onclick = async () => {
 
     completeStep("step-balance");
 
-    attestBtn.disabled = false;
+    verifyBtn.disabled = false;
 
     setStatus(
       "Wallet connected",
@@ -250,6 +280,8 @@ verifyBtn.onclick = async () => {
       data.signature;
 
     completeStep("step-identity");
+
+    attestBtn.disabled = false;
 
     setStatus(
       "Identity verified",
@@ -449,11 +481,11 @@ registerBtn.onclick = async () => {
     console.error(err);
 
     // ===== ALREADY REGISTERED =====
+    const errorText =
+      JSON.stringify(err).toLowerCase();
+
     if (
-      err.message &&
-      err.message.includes(
-        "Already registered"
-      )
+      errorText.includes("already registered")
     ) {
 
       governanceAccessWrapper
