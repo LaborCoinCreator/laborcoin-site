@@ -120,6 +120,13 @@ async function getGovernanceSignature(action) {
       Date.now() / 1000
     ) + 300;
 
+  console.log("VERIFY PAYLOAD", {
+  address: userAddress,
+  type: "governance",
+  action,
+  nonce: nonce.toString(),
+  expiry
+});
   const response =
     await fetch(
       `${VERIFIER_URL}/verify`,
