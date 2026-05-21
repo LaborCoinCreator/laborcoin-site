@@ -264,16 +264,21 @@ verifyBtn.onclick = async () => {
     const data =
       await response.json();
 
-    if (!data.success) {
+    if (response.ok && data.success) {
 
-      setStatus(
-        data.error ||
-        "Verification failed",
-        "error"
-      );
+      daoStatus.innerText =
+        `Verification passed.\nPassport score: ${data.score}`;
 
-      return;
+      daoStatus.style.color =
+        "#4dff88";
 
+    } else {
+
+      daoStatus.innerText =
+        `Verification failed.\nPassport score: ${data.score || 0}\nMinimum required: 15`;
+
+      daoStatus.style.color =
+        "#ff4d4d";
     }
 
     registrationSignature =
