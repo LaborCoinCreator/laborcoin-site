@@ -1,6 +1,6 @@
 // ===== CONFIG =====
 const GOVERNANCE_CONTRACT =
-  "0x8840368d41B93dB9C718e9A9039B625028b23B0B";
+  "0xfE2Ec98952950d25ed98788811B4B64141A2410C";
 
 const LABRV_TOKEN =
   "0x113579220515cd59b884Ea2379b4C369025246e2";
@@ -405,9 +405,7 @@ submitProposalBtn.onclick = async () => {
     }
 
     const auth =
-      await getGovernanceSignature(
-        "propose"
-      );
+      await getGovernanceSignature(0);
 
     const tx =
       await governance.propose(
@@ -449,9 +447,7 @@ pauseTradingBtn.onclick = async () => {
   try {
 
     const auth =
-      await getGovernanceSignature(
-        "propose"
-      );
+      await getGovernanceSignature(0);
 
     const tx =
       await governance.propose(
@@ -489,9 +485,7 @@ resumeTradingBtn.onclick = async () => {
   try {
 
     const auth =
-      await getGovernanceSignature(
-        "propose"
-      );
+      await getGovernanceSignature(0);
 
     const tx =
       await governance.propose(
@@ -674,9 +668,7 @@ window.voteProposal = async (
   try {
 
     const auth =
-      await getGovernanceSignature(
-        "vote"
-      );
+      await getGovernanceSignature(1);
 
     const tx =
       await governance.vote(
