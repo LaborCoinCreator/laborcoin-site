@@ -113,20 +113,34 @@ async function getGovernanceSignature(action) {
       userAddress
     );
 
-  console.log("FRONTEND NONCE:", nonce.toString());
+  console.log(
+    "FRONTEND NONCE:",
+    nonce.toString()
+  );
+
+  console.log(
+    "CHAIN ID:",
+    (
+      await provider.getNetwork()
+    ).chainId.toString()
+  );
 
   const expiry =
     Math.floor(
       Date.now() / 1000
     ) + 300;
 
-  console.log("VERIFY PAYLOAD", {
-  address: userAddress,
-  type: "governance",
-  action,
-  nonce: nonce.toString(),
-  expiry
-});
+  console.log(
+    "VERIFY PAYLOAD",
+    {
+      address: userAddress,
+      type: "governance",
+      action,
+      nonce: nonce.toString(),
+      expiry
+    }
+  );
+
   const response =
     await fetch(
       `${VERIFIER_URL}/verify`,
