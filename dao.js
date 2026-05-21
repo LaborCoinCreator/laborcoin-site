@@ -288,11 +288,6 @@ verifyBtn.onclick = async () => {
 
     attestBtn.disabled = false;
 
-    setStatus(
-      "Identity verified",
-      "success"
-    );
-
   } catch (err) {
 
     console.error(err);
