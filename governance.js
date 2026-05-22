@@ -156,7 +156,7 @@ async function getGovernanceSignature(action) {
         body: JSON.stringify({
           address: userAddress,
           type: "governance",
-          action,
+          action: Number(action),
           nonce: nonce.toString(),
           expiry
         })
@@ -420,7 +420,9 @@ submitProposalBtn.onclick = async () => {
     }
 
     const auth =
-      await getGovernanceSignature(0);
+      await getGovernanceSignature(
+        TREASURY_TRANSFER
+      );
 
     const tx =
       await governance.propose(
@@ -462,7 +464,9 @@ pauseTradingBtn.onclick = async () => {
   try {
 
     const auth =
-      await getGovernanceSignature(1);
+      await getGovernanceSignature(
+        PAUSE_TRADING
+      );
 
     const tx =
       await governance.propose(
@@ -500,7 +504,9 @@ resumeTradingBtn.onclick = async () => {
   try {
 
     const auth =
-      await getGovernanceSignature(2);
+      await getGovernanceSignature(
+        RESUME_TRADING
+      );
 
     const tx =
       await governance.propose(
