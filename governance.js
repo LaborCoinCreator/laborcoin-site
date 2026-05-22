@@ -1,6 +1,6 @@
 // ===== CONFIG =====
 const GOVERNANCE_CONTRACT =
-  "0xd594D97BBeB6A02253613b48c68bf1524be1d5c2";
+  "0x1198607C796fB417cF35Fed088DbFde6DA40b388";
 
 const LABRV_TOKEN =
   "0x113579220515cd59b884Ea2379b4C369025246e2";
@@ -689,7 +689,7 @@ window.voteProposal = async (
   try {
 
     const auth =
-      await getGovernanceSignature(1);
+      await getGovernanceSignature(99);
 
     const tx =
       await governance.vote(
