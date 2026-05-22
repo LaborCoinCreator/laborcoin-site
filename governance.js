@@ -570,8 +570,20 @@ async function loadProposalFeed() {
       const p =
         await governance.proposals(i);
 
-      const aragonId =
-        await governance.aragonProposalIds(i);
+      let aragonId = "Not Synced";
+
+      try {
+
+        aragonId =
+          await governance.aragonProposalIds(i);
+
+      } catch (err) {
+
+        console.log(
+          "No Aragon proposal mapping"
+        );
+
+      }
 
       const card =
         document.createElement("div");
