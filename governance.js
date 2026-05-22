@@ -18,7 +18,7 @@ const GOV_ABI = [
 
   "function proposalCount() view returns (uint256)",
 
-  "function nonces(address) view returns (uint256)",
+  "function noncesPerAction(address,uint8) view returns (uint256)",
 
   "function propose(uint8,address,uint256,string,uint256,bytes) returns (uint256)",
 
@@ -109,8 +109,9 @@ function completeStep(id) {
 async function getGovernanceSignature(action) {
 
   const nonce =
-    await governance.nonces(
-      userAddress
+    await governance.noncesPerAction(
+      userAddress,
+      action
     );
 
   console.log(
