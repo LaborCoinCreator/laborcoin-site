@@ -8,6 +8,9 @@ const LABRV_TOKEN =
 const VERIFIER_URL =
   "https://laborcoin-verifier.onrender.com";
 
+const DAO_TREASURY =
+  "0x0C2e5679153593b82a84eAB5CA90895BB291Cec4";
+
 // ===== PROPOSAL TYPES =====
 const TREASURY_TRANSFER = 0;
 const PAUSE_TRADING = 1;
@@ -27,6 +30,10 @@ const GOV_ABI = [
   "function execute(uint256)",
 
   "function aragonProposalIds(uint256) view returns (uint256)",
+
+  "function totalRegisteredUsers() view returns (uint256)",
+
+  "function registrationNumber(address) view returns (uint256)",
 
   "function proposals(uint256) view returns(uint8 proposalType,address recipient,uint256 amount,string description,uint256 start,uint256 end,uint256 yes,uint256 no,bool executed)"
 ];
@@ -104,6 +111,30 @@ function completeStep(id) {
   if (!el) return;
 
   el.classList.add("complete");
+}
+
+async function displayName(address) {
+
+  try {
+
+    const ens =
+      await provider.lookupAddress(
+        address
+      );
+
+    if (ens) {
+      return ens;
+    }
+
+  } catch (err) {
+
+    console.log(
+      "ENS lookup failed"
+    );
+
+  }
+
+  return address;
 }
 
 async function getGovernanceSignature(action) {
@@ -192,30 +223,6 @@ function proposalTypeName(type) {
     return "Resume Trading";
 
   return "Unknown";
-}
-
-async function displayName(address) {
-
-  try {
-
-    const ens =
-      await provider.lookupAddress(
-        address
-      );
-
-    if (ens) {
-      return ens;
-    }
-
-  } catch (err) {
-
-    console.log(
-      "ENS lookup failed"
-    );
-
-  }
-
-  return address;
 }
 
 // ===== CONNECT =====
@@ -347,22 +354,23 @@ govVerifyBtn.onclick = async () => {
     govStatus.textContent =
       "Verifying identity...";
 
-    const response = await fetch(
-      `${VERIFIER_URL}/verify`,
-      {
-        method: "POST",
+    const response =
+      await fetch(
+        `${VERIFIER_URL}/verify`,
+        {
+          method: "POST",
 
-        headers: {
-          "Content-Type":
-            "application/json"
-        },
+          headers: {
+            "Content-Type":
+              "application/json"
+          },
 
-        body: JSON.stringify({
-          address: userAddress,
-          type: "governance"
-        })
-      }
-    );
+          body: JSON.stringify({
+            address: userAddress,
+            type: "governance"
+          })
+        }
+      );
 
     const data =
       await response.json();
@@ -373,7 +381,6 @@ govVerifyBtn.onclick = async () => {
         data.error ||
         "Verification failed"
       );
-
     }
 
     completeStep(
@@ -400,13 +407,12 @@ govVerifyBtn.onclick = async () => {
     govStatus.textContent =
       err.message ||
       "Verification failed.";
-
   }
-
 };
 
 // ===== TREASURY PROPOSAL =====
-submitProposalBtn.onclick = async () => {
+submitProposalBtn.onclick =
+async () => {
 
   try {
 
@@ -432,7 +438,9 @@ submitProposalBtn.onclick = async () => {
     }
 
     if (
-      Number(treasuryAmount.value) <= 0
+      Number(
+        treasuryAmount.value
+      ) <= 0
     ) {
 
       setStatus(
@@ -483,7 +491,8 @@ submitProposalBtn.onclick = async () => {
 };
 
 // ===== PAUSE PROPOSAL =====
-pauseTradingBtn.onclick = async () => {
+pauseTradingBtn.onclick =
+async () => {
 
   try {
 
@@ -523,7 +532,8 @@ pauseTradingBtn.onclick = async () => {
 };
 
 // ===== RESUME PROPOSAL =====
-resumeTradingBtn.onclick = async () => {
+resumeTradingBtn.onclick =
+async () => {
 
   try {
 
@@ -594,7 +604,8 @@ async function loadProposalFeed() {
       const p =
         await governance.proposals(i);
 
-      let aragonId = "Not Synced";
+      let aragonId =
+        "Not Synced";
 
       try {
 
@@ -643,11 +654,70 @@ async function loadProposalFeed() {
         `;
       }
 
+      const now =
+        Math.floor(
+          Date.now() / 1000
+        );
+
+      let status = "ACTIVE";
+
+      if (p.executed) {
+
+        status = "EXECUTED";
+
+      } else if (
+        now > Number(p.end)
+      ) {
+
+        if (p.yes > p.no) {
+
+          status =
+            "READY TO EXECUTE";
+
+        } else {
+
+          status = "FAILED";
+        }
+      }
+
+      const remaining =
+        Number(p.end) - now;
+
+      let remainingText =
+        "Ended";
+
+      if (remaining > 0) {
+
+        const days =
+          Math.floor(
+            remaining / 86400
+          );
+
+        const hours =
+          Math.floor(
+            (remaining % 86400)
+            / 3600
+          );
+
+        remainingText =
+          `${days}d ${hours}h remaining`;
+      }
+
       card.innerHTML = `
 
         <h3>
           Proposal #${i}
         </h3>
+
+        <p>
+          Status:
+          ${status}
+        </p>
+
+        <p>
+          Remaining:<br>
+          ${remainingText}
+        </p>
 
         <p>
           Type:<br>
@@ -666,13 +736,18 @@ async function loadProposalFeed() {
         <p>
           YES:
           ${Number(
-            ethers.formatEther(p.yes)
+            ethers.formatEther(
+              p.yes
+            )
           ).toFixed(2)}
+
           <br>
 
           NO:
           ${Number(
-            ethers.formatEther(p.no)
+            ethers.formatEther(
+              p.no
+            )
           ).toFixed(2)}
         </p>
 
@@ -707,17 +782,26 @@ async function loadProposalFeed() {
             Vote NO
           </button>
 
-          <button
-            class="cta-button"
-            onclick="executeProposal(${i})"
-          >
-            Execute
-          </button>
+          ${
+            status ===
+            "READY TO EXECUTE"
+            ? `
+              <button
+                class="cta-button"
+                onclick="executeProposal(${i})"
+              >
+                Execute
+              </button>
+            `
+            : ""
+          }
 
         </div>
       `;
 
-      proposalFeed.appendChild(card);
+      proposalFeed.appendChild(
+        card
+      );
     }
 
   } catch (err) {
@@ -727,7 +811,8 @@ async function loadProposalFeed() {
 }
 
 // ===== VOTE =====
-window.voteProposal = async (
+window.voteProposal =
+async (
   id,
   support
 ) => {
@@ -735,7 +820,9 @@ window.voteProposal = async (
   try {
 
     const auth =
-      await getGovernanceSignature(99);
+      await getGovernanceSignature(
+        99
+      );
 
     const tx =
       await governance.vote(
@@ -766,9 +853,8 @@ window.voteProposal = async (
 };
 
 // ===== EXECUTE =====
-window.executeProposal = async (
-  id
-) => {
+window.executeProposal =
+async (id) => {
 
   try {
 
@@ -790,6 +876,59 @@ window.executeProposal = async (
 
     setStatus(
       "Execution failed",
+      "error"
+    );
+  }
+};
+
+// ===== DONATE =====
+window.donateToTreasury =
+async () => {
+
+  try {
+
+    const amount =
+      document.getElementById(
+        "donationAmount"
+      ).value;
+
+    if (
+      !amount ||
+      Number(amount) <= 0
+    ) {
+
+      setStatus(
+        "Invalid donation amount",
+        "error"
+      );
+
+      return;
+    }
+
+    const tx =
+      await signer.sendTransaction({
+
+        to: DAO_TREASURY,
+
+        value:
+          ethers.parseEther(
+            amount
+          )
+      });
+
+    await tx.wait();
+
+    setStatus(
+      "Donation sent",
+      "success"
+    );
+
+  } catch (err) {
+
+    console.error(err);
+
+    setStatus(
+      "Donation failed",
       "error"
     );
   }
