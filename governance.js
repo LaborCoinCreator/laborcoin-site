@@ -31,11 +31,7 @@ const GOV_ABI = [
 
   "function aragonProposalIds(uint256) view returns (uint256)",
 
-  "function totalRegisteredUsers() view returns (uint256)",
-
-  "function registrationNumber(address) view returns (uint256)",
-
-  "function proposals(uint256) view returns(uint8 proposalType,address recipient,uint256 amount,string description,uint256 start,uint256 end,uint256 yes,uint256 no,bool executed)"
+  "function proposals(uint256) view returns(uint8 proposalType,address proposer,address recipient,uint256 amount,string description,uint256 start,uint256 end,uint256 yes,uint256 no,bool executed)"
 ];
 
 const LABRV_ABI = [
@@ -603,6 +599,7 @@ async function loadProposalFeed() {
 
       const p =
         await governance.proposals(i);
+        console.log(p);
 
       let aragonId =
         "Not Synced";
@@ -712,6 +709,13 @@ async function loadProposalFeed() {
         <p>
           Status:
           ${status}
+        </p>
+
+        <p>
+          Proposer:<br>
+          ${await displayName(
+            p.proposer
+          )}
         </p>
 
         <p>
