@@ -194,6 +194,30 @@ function proposalTypeName(type) {
   return "Unknown";
 }
 
+async function displayName(address) {
+
+  try {
+
+    const ens =
+      await provider.lookupAddress(
+        address
+      );
+
+    if (ens) {
+      return ens;
+    }
+
+  } catch (err) {
+
+    console.log(
+      "ENS lookup failed"
+    );
+
+  }
+
+  return address;
+}
+
 // ===== CONNECT =====
 govConnectBtn.onclick = async () => {
 
@@ -605,7 +629,9 @@ async function loadProposalFeed() {
         details = `
           <p>
             Recipient:<br>
-            ${p.recipient}
+            ${await displayName(
+              p.recipient
+            )}
           </p>
 
           <p>
@@ -638,8 +664,16 @@ async function loadProposalFeed() {
         ${details}
 
         <p>
-          YES: ${p.yes}<br>
-          NO: ${p.no}
+          YES:
+          ${Number(
+            ethers.formatEther(p.yes)
+          ).toFixed(2)}
+          <br>
+
+          NO:
+          ${Number(
+            ethers.formatEther(p.no)
+          ).toFixed(2)}
         </p>
 
         <p>
