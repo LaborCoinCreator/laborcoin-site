@@ -125,8 +125,14 @@ function completeStep(id) {
 
 function showLoading(text) {
 
-  loadingText.innerText =
-    text;
+  if (!loadingOverlay || !loadingText) {
+    console.error(
+      "Loading overlay missing"
+    );
+    return;
+  }
+
+  loadingText.innerText = text;
 
   loadingOverlay.classList.remove(
     "hidden"
@@ -134,6 +140,10 @@ function showLoading(text) {
 }
 
 function hideLoading() {
+
+  if (!loadingOverlay) {
+    return;
+  }
 
   loadingOverlay.classList.add(
     "hidden"
