@@ -1,6 +1,6 @@
 // ===== CONFIG =====
 const GOVERNANCE_CONTRACT =
-  "0x05cA5A39a9405f65c4627B6Dd31FBa2dccd33a29";
+  "0xbf06aA27bD4B327ec0B36dcD3d2aa1E72BCAc9e8";
 
 const LABRV_TOKEN =
   "0x113579220515cd59b884Ea2379b4C369025246e2";
@@ -21,17 +21,21 @@ const GOV_ABI = [
 
   "function proposalCount() view returns (uint256)",
 
+  "function getProposalState(uint256) view returns(uint8)",
+
   "function noncesPerAction(address,uint8) view returns (uint256)",
 
-  "function propose(uint8,address,uint256,string,uint256,bytes) returns (uint256)",
+  "function createProposal(uint8,address,uint256,string,uint256,bytes)",
 
   "function vote(uint256,bool,uint256,bytes)",
 
-  "function execute(uint256)",
+  "function canExecute(uint256) view returns(bool)"
+
+  "function executeProposal(uint256)",
 
   "function aragonProposalIds(uint256) view returns (uint256)",
 
-  "function proposals(uint256) view returns(uint8 proposalType,address proposer,address recipient,uint256 amount,string description,uint256 start,uint256 end,uint256 yes,uint256 no,bool executed)"
+  "function proposals(uint256) view returns(uint8 proposalType,address proposer,address recipient,uint256 amount,string description,uint256 start,uint256 end,uint256 yes,uint256 no,bool executed)",
 ];
 
 const LABRV_ABI = [
@@ -453,7 +457,7 @@ async () => {
       );
 
     const tx =
-      await governance.propose(
+      await governance.createProposal(
         TREASURY_TRANSFER,
         recipient,
         amount,
@@ -498,7 +502,7 @@ async () => {
       );
 
     const tx =
-      await governance.propose(
+      await governance.createProposal(
         PAUSE_TRADING,
         ethers.ZeroAddress,
         0,
@@ -539,7 +543,7 @@ async () => {
       );
 
     const tx =
-      await governance.propose(
+      await governance.createProposal(
         RESUME_TRADING,
         ethers.ZeroAddress,
         0,
@@ -592,30 +596,14 @@ async function loadProposalFeed() {
     }
 
     for (
-      let i = total;
-      i >= 1;
+      let i = total - 1;
+      i >= 0;
       i--
     ) {
 
       const p =
         await governance.proposals(i);
         console.log(p);
-
-      let aragonId =
-        "Not Synced";
-
-      try {
-
-        aragonId =
-          await governance.aragonProposalIds(i);
-
-      } catch (err) {
-
-        console.log(
-          "No Aragon proposal mapping"
-        );
-
-      }
 
       const card =
         document.createElement("div");
@@ -656,26 +644,27 @@ async function loadProposalFeed() {
           Date.now() / 1000
         );
 
+      const state =
+        Number(
+          await governance.getProposalState(i)
+        );
+
       let status = "ACTIVE";
 
-      if (p.executed) {
+      if (state === 0)
+        status = "ACTIVE";
 
+      if (state === 1)
+        status = "PASSED";
+
+       if (state === 2)
+        status = "FAILED";
+
+      if (state === 3)
         status = "EXECUTED";
 
-      } else if (
-        now > Number(p.end)
-      ) {
-
-        if (p.yes > p.no) {
-
-          status =
-            "READY TO EXECUTE";
-
-        } else {
-
-          status = "FAILED";
-        }
-      }
+      if (state === 4)
+        status = "EXPIRED";
 
       const remaining =
         Number(p.end) - now;
@@ -740,18 +729,14 @@ async function loadProposalFeed() {
         <p>
           YES:
           ${Number(
-            ethers.formatEther(
-              p.yes
-            )
+            Number(p.yes)
           ).toFixed(2)}
 
           <br>
 
           NO:
           ${Number(
-            ethers.formatEther(
-              p.no
-            )
+            Number(p.no)
           ).toFixed(2)}
         </p>
 
@@ -763,11 +748,6 @@ async function loadProposalFeed() {
         <p>
           Executed:
           ${p.executed}
-        </p>
-
-        <p>
-          Aragon Proposal ID:
-          ${aragonId}
         </p>
 
         <div class="cta-row">
@@ -787,8 +767,7 @@ async function loadProposalFeed() {
           </button>
 
           ${
-            status ===
-            "READY TO EXECUTE"
+            await governance.canExecute(i)
             ? `
               <button
                 class="cta-button"
@@ -863,7 +842,7 @@ async (id) => {
   try {
 
     const tx =
-      await governance.execute(id);
+      await governance.executeProposal(id);
 
     await tx.wait();
 

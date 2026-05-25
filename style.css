@@ -434,3 +434,12 @@ footer {
   margin-bottom: 20px;
   line-height: 1.6;
 }
+
+#certificateBox {
+
+  border:
+    1px solid #4dff88;
+
+  background:
+    rgba(255,255,255,0.03);
+}

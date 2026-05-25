@@ -3,7 +3,7 @@ const LABR_TOKEN =
   "0x460DD873A1D2a41e77410B125cD3027C5FEd2f78";
 
 const REGISTRATION_CONTRACT =
-  "0xFFc3499A71b806C3919f4B54D236b151cFdCB453";
+  "0xa7D0C092C2391379046cACDc56BEbDe5A0CBD113";
 
 const LABRV_TOKEN =
   "0x113579220515cd59b884Ea2379b4C369025246e2";
@@ -17,7 +17,18 @@ const ERC20_ABI = [
 ];
 
 const REGISTRATION_ABI = [
-  "function register(bytes signature)"
+
+  "function register(bytes signature)",
+
+  "function registered(address) view returns (bool)",
+
+  "function memberNumber(address) view returns (uint256)",
+
+  "function registrationTimestamp(address) view returns (uint256)",
+
+  "function getMemberData(address) view returns (bool,uint256,uint256)",
+
+  "function totalMembers() view returns (uint256)"
 ];
 
 const LABRV_ABI = [
@@ -51,6 +62,21 @@ const registerBtn =
 
 const daoStatus =
   document.getElementById("daoStatus");
+
+const certificateBox =
+  document.getElementById(
+    "certificateBox"
+  );
+
+const certificateText =
+  document.getElementById(
+    "certificateText"
+  );
+
+const downloadCertificateBtn =
+  document.getElementById(
+    "downloadCertificateBtn"
+  );
 
 const governanceAccessWrapper =
   document.getElementById(
@@ -100,6 +126,84 @@ function completeStep(id) {
 
   el.classList.add("complete");
 
+}
+
+async function showMembershipData() {
+
+  try {
+
+    const memberData =
+      await registration.getMemberData(
+        userAddress
+      );
+
+    const isRegistered =
+      memberData[0];
+
+    const memberId =
+      Number(memberData[1]);
+
+    const registeredAt =
+      Number(memberData[2]);
+
+    if (!isRegistered) {
+      return;
+    }
+
+    let displayName;
+
+    try {
+
+      const ens =
+        await provider.lookupAddress(
+          userAddress
+        );
+
+      displayName =
+        ens ||
+        (
+          userAddress.slice(0, 6)
+          +
+          "..."
+          +
+          userAddress.slice(-4)
+        );
+
+    } catch {
+
+      displayName =
+        userAddress.slice(0, 6)
+        +
+        "..."
+        +
+        userAddress.slice(-4);
+    }
+
+    const date =
+      new Date(
+        registeredAt * 1000
+      );
+
+    certificateText.innerHTML = `
+      <strong>Member #${memberId}</strong><br><br>
+
+      ${displayName}<br><br>
+
+      Registered:<br>
+      ${date.toLocaleString()}
+    `;
+
+    certificateBox.classList.remove(
+      "hidden"
+    );
+
+  } catch (err) {
+
+    console.error(
+      "Membership display failed",
+      err
+    );
+  }
 }
 
 // ===== CONNECT =====
@@ -208,6 +312,33 @@ if (
     completeStep("step-balance");
 
     verifyBtn.disabled = false;
+
+    const alreadyRegistered =
+  await registration.registered(
+    userAddress
+  );
+
+if (alreadyRegistered) {
+
+  completeStep("step-identity");
+
+  completeStep("step-attest");
+
+  completeStep("step-register");
+
+  governanceAccessWrapper
+    .classList
+    .remove("hidden");
+
+  await showMembershipData();
+
+  setStatus(
+    "Already registered",
+    "success"
+  );
+
+  return;
+}
 
     setStatus(
       "Wallet connected",
@@ -460,6 +591,8 @@ registerBtn.onclick = async () => {
 
     completeStep("step-register");
 
+      await showMembershipData();
+
     governanceAccessWrapper
       .classList
       .remove("hidden");
@@ -508,4 +641,45 @@ registerBtn.onclick = async () => {
 
   }
 
+};
+
+downloadCertificateBtn.onclick =
+  async () => {
+
+  try {
+
+    const element =
+      document.createElement("a");
+
+    const text =
+      certificateText.innerText;
+
+    const blob =
+      new Blob(
+        [text],
+        {
+          type: "text/plain"
+        }
+      );
+
+    element.href =
+      URL.createObjectURL(blob);
+
+    element.download =
+      "LaborCoin-Membership.txt";
+
+    document.body.appendChild(
+      element
+    );
+
+    element.click();
+
+    document.body.removeChild(
+      element
+    );
+
+  } catch (err) {
+
+    console.error(err);
+  }
 };
