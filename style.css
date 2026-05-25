@@ -443,3 +443,13 @@ footer {
   background:
     rgba(255,255,255,0.03);
 }
+
+#certificateBox h2 {
+
+  text-align: center;
+}
+
+#certificateBox {
+
+  text-align: center;
+}

@@ -29,7 +29,7 @@ const GOV_ABI = [
 
   "function vote(uint256,bool,uint256,bytes)",
 
-  "function canExecute(uint256) view returns(bool)"
+  "function canExecute(uint256) view returns(bool)",
 
   "function executeProposal(uint256)",
 

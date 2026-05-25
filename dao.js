@@ -598,16 +598,9 @@ registerBtn.onclick = async () => {
       .remove("hidden");
 
     setStatus(
-      "DAO registration complete. Redirecting to governance...",
+      ""DAO registration complete.",
       "success"
     );
-
-    setTimeout(() => {
-
-      window.location.href =
-        "governance.html";
-
-    }, 5000);
 
   } catch (err) {
 
