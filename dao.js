@@ -598,7 +598,7 @@ registerBtn.onclick = async () => {
       .remove("hidden");
 
     setStatus(
-      ""DAO registration complete.",
+      "DAO registration complete.",
       "success"
     );
 
