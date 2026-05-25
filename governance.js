@@ -784,9 +784,15 @@ async function loadProposalFeed() {
             / 3600
           );
 
+        const minutes =
+          Math.floor(
+            (remaining % 3600)
+            / 60
+          );
+
         remainingText =
-          `${days}d ${hours}h remaining`;
-      }
+          `${days}d ${hours}h ${minutes}m remaining`;
+        }
 
       card.innerHTML = `
 
@@ -827,16 +833,12 @@ async function loadProposalFeed() {
 
         <p>
           YES:
-          ${ethers.formatEther(
-            p.yes
-          )}
+          ${Number(p.yes)}
 
           <br>
 
           NO:
-          ${ethers.formatEther(
-            p.no
-          )}
+          ${Number(p.no)}
         </p>
 
         <p>
