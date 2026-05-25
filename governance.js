@@ -1,6 +1,6 @@
 // ===== CONFIG =====
 const GOVERNANCE_CONTRACT =
-  "0xbf06aA27bD4B327ec0B36dcD3d2aa1E72BCAc9e8";
+  "0x1daF4d6867a85506c020ad1F13CcE517f3cB62cC";
 
 const LABRV_TOKEN =
   "0x113579220515cd59b884Ea2379b4C369025246e2";
@@ -35,7 +35,7 @@ const GOV_ABI = [
 
   "function aragonProposalIds(uint256) view returns (uint256)",
 
-  "function proposals(uint256) view returns(uint8 proposalType,address proposer,address recipient,uint256 amount,string description,uint256 start,uint256 end,uint256 yes,uint256 no,bool executed)",
+  "function proposals(uint256) view returns(uint8 proposalType,address proposer,address recipient,uint256 amount,string description,uint256 start,uint256 end,uint256 yes,uint256 no,bool executed)"
 ];
 
 const LABRV_ABI = [
@@ -87,6 +87,16 @@ const pauseTradingBtn =
 const resumeTradingBtn =
   document.getElementById("resumeTradingBtn");
 
+const loadingOverlay =
+  document.getElementById(
+    "loadingOverlay"
+  );
+
+const loadingText =
+  document.getElementById(
+    "loadingText"
+  );
+
 // ===== INITIAL UI STATE =====
 govVerifyBtn.disabled = true;
 
@@ -113,6 +123,23 @@ function completeStep(id) {
   el.classList.add("complete");
 }
 
+function showLoading(text) {
+
+  loadingText.innerText =
+    text;
+
+  loadingOverlay.classList.remove(
+    "hidden"
+  );
+}
+
+function hideLoading() {
+
+  loadingOverlay.classList.add(
+    "hidden"
+  );
+}
+
 async function displayName(address) {
 
   try {
@@ -126,15 +153,20 @@ async function displayName(address) {
       return ens;
     }
 
-  } catch (err) {
+  } catch {
 
     console.log(
       "ENS lookup failed"
     );
-
   }
 
-  return address;
+  return (
+    address.slice(0, 6)
+    +
+    "..."
+    +
+    address.slice(-4)
+  );
 }
 
 async function getGovernanceSignature(action) {
@@ -148,13 +180,6 @@ async function getGovernanceSignature(action) {
   console.log(
     "FRONTEND NONCE:",
     nonce.toString()
-  );
-
-  console.log(
-    "CHAIN ID:",
-    (
-      await provider.getNetwork()
-    ).chainId.toString()
   );
 
   const expiry =
@@ -260,11 +285,15 @@ govConnectBtn.onclick = async () => {
       try {
 
         await window.ethereum.request({
-          method: "wallet_switchEthereumChain",
-          params: [{ chainId: "0x89" }]
+          method:
+            "wallet_switchEthereumChain",
+
+          params: [
+            { chainId: "0x89" }
+          ]
         });
 
-      } catch (switchError) {
+      } catch {
 
         setStatus(
           "Please switch to Polygon Mainnet",
@@ -351,8 +380,11 @@ govVerifyBtn.onclick = async () => {
 
   try {
 
-    govStatus.textContent =
-      "Verifying identity...";
+    govVerifyBtn.disabled = true;
+
+    showLoading(
+      "Verifying identity..."
+    );
 
     const response =
       await fetch(
@@ -395,8 +427,12 @@ govVerifyBtn.onclick = async () => {
       "hidden"
     );
 
-    govStatus.textContent =
-      `Verified. Passport score: ${data.score}`;
+    setStatus(
+      `Verified. Passport score: ${data.score}`,
+      "success"
+    );
+
+    hideLoading();
 
     await loadProposalFeed();
 
@@ -404,9 +440,15 @@ govVerifyBtn.onclick = async () => {
 
     console.error(err);
 
-    govStatus.textContent =
+    hideLoading();
+
+    govVerifyBtn.disabled = false;
+
+    setStatus(
       err.message ||
-      "Verification failed.";
+      "Verification failed",
+      "error"
+    );
   }
 };
 
@@ -415,6 +457,13 @@ submitProposalBtn.onclick =
 async () => {
 
   try {
+
+    showLoading(
+      "Submitting proposal..."
+    );
+
+    submitProposalBtn.disabled =
+      true;
 
     const recipient =
       recipientAddress.value.trim();
@@ -429,12 +478,9 @@ async () => {
 
     if (!recipient) {
 
-      setStatus(
-        "Missing recipient",
-        "error"
+      throw new Error(
+        "Missing recipient"
       );
-
-      return;
     }
 
     if (
@@ -443,12 +489,9 @@ async () => {
       ) <= 0
     ) {
 
-      setStatus(
-        "Invalid amount",
-        "error"
+      throw new Error(
+        "Invalid amount"
       );
-
-      return;
     }
 
     const auth =
@@ -468,14 +511,19 @@ async () => {
 
     await tx.wait();
 
+    recipientAddress.value = "";
+    treasuryAmount.value = "";
+    proposalDescription.value = "";
+
+    hideLoading();
+
+    submitProposalBtn.disabled =
+      false;
+
     setStatus(
       "Treasury proposal submitted",
       "success"
     );
-
-    recipientAddress.value = "";
-    treasuryAmount.value = "";
-    proposalDescription.value = "";
 
     loadProposalFeed();
 
@@ -483,7 +531,14 @@ async () => {
 
     console.error(err);
 
+    hideLoading();
+
+    submitProposalBtn.disabled =
+      false;
+
     setStatus(
+      err.reason ||
+      err.message ||
       "Proposal failed",
       "error"
     );
@@ -495,6 +550,13 @@ pauseTradingBtn.onclick =
 async () => {
 
   try {
+
+    showLoading(
+      "Submitting pause proposal..."
+    );
+
+    pauseTradingBtn.disabled =
+      true;
 
     const auth =
       await getGovernanceSignature(
@@ -513,6 +575,11 @@ async () => {
 
     await tx.wait();
 
+    hideLoading();
+
+    pauseTradingBtn.disabled =
+      false;
+
     setStatus(
       "Pause proposal submitted",
       "success"
@@ -524,7 +591,14 @@ async () => {
 
     console.error(err);
 
+    hideLoading();
+
+    pauseTradingBtn.disabled =
+      false;
+
     setStatus(
+      err.reason ||
+      err.message ||
       "Pause proposal failed",
       "error"
     );
@@ -536,6 +610,13 @@ resumeTradingBtn.onclick =
 async () => {
 
   try {
+
+    showLoading(
+      "Submitting resume proposal..."
+    );
+
+    resumeTradingBtn.disabled =
+      true;
 
     const auth =
       await getGovernanceSignature(
@@ -554,6 +635,11 @@ async () => {
 
     await tx.wait();
 
+    hideLoading();
+
+    resumeTradingBtn.disabled =
+      false;
+
     setStatus(
       "Resume proposal submitted",
       "success"
@@ -565,7 +651,14 @@ async () => {
 
     console.error(err);
 
+    hideLoading();
+
+    resumeTradingBtn.disabled =
+      false;
+
     setStatus(
+      err.reason ||
+      err.message ||
       "Resume proposal failed",
       "error"
     );
@@ -603,7 +696,6 @@ async function loadProposalFeed() {
 
       const p =
         await governance.proposals(i);
-        console.log(p);
 
       const card =
         document.createElement("div");
@@ -651,13 +743,10 @@ async function loadProposalFeed() {
 
       let status = "ACTIVE";
 
-      if (state === 0)
-        status = "ACTIVE";
-
       if (state === 1)
         status = "PASSED";
 
-       if (state === 2)
+      if (state === 2)
         status = "FAILED";
 
       if (state === 3)
@@ -728,16 +817,16 @@ async function loadProposalFeed() {
 
         <p>
           YES:
-          ${Number(
-            Number(p.yes)
-          ).toFixed(2)}
+          ${ethers.formatEther(
+            p.yes
+          )}
 
           <br>
 
           NO:
-          ${Number(
-            Number(p.no)
-          ).toFixed(2)}
+          ${ethers.formatEther(
+            p.no
+          )}
         </p>
 
         <p>
@@ -802,6 +891,10 @@ async (
 
   try {
 
+    showLoading(
+      "Submitting vote..."
+    );
+
     const auth =
       await getGovernanceSignature(
         99
@@ -817,6 +910,8 @@ async (
 
     await tx.wait();
 
+    hideLoading();
+
     setStatus(
       "Vote submitted",
       "success"
@@ -828,7 +923,11 @@ async (
 
     console.error(err);
 
+    hideLoading();
+
     setStatus(
+      err.reason ||
+      err.message ||
       "Vote failed",
       "error"
     );
@@ -841,10 +940,16 @@ async (id) => {
 
   try {
 
+    showLoading(
+      "Executing proposal..."
+    );
+
     const tx =
       await governance.executeProposal(id);
 
     await tx.wait();
+
+    hideLoading();
 
     setStatus(
       "Proposal executed",
@@ -857,7 +962,11 @@ async (id) => {
 
     console.error(err);
 
+    hideLoading();
+
     setStatus(
+      err.reason ||
+      err.message ||
       "Execution failed",
       "error"
     );
@@ -888,6 +997,10 @@ async () => {
       return;
     }
 
+    showLoading(
+      "Sending donation..."
+    );
+
     const tx =
       await signer.sendTransaction({
 
@@ -901,6 +1014,8 @@ async () => {
 
     await tx.wait();
 
+    hideLoading();
+
     setStatus(
       "Donation sent",
       "success"
@@ -910,7 +1025,11 @@ async () => {
 
     console.error(err);
 
+    hideLoading();
+
     setStatus(
+      err.reason ||
+      err.message ||
       "Donation failed",
       "error"
     );

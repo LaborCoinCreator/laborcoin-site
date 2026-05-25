@@ -206,6 +206,33 @@ async function showMembershipData() {
   }
 }
 
+const loadingOverlay =
+  document.getElementById(
+    "loadingOverlay"
+  );
+
+const loadingText =
+  document.getElementById(
+    "loadingText"
+  );
+
+function showLoading(text) {
+
+  loadingText.innerText =
+    text;
+
+  loadingOverlay.classList.remove(
+    "hidden"
+  );
+}
+
+function hideLoading() {
+
+  loadingOverlay.classList.add(
+    "hidden"
+  );
+}
+
 // ===== CONNECT =====
 connectBtn.onclick = async () => {
 
@@ -363,6 +390,16 @@ verifyBtn.onclick = async () => {
 
   try {
 
+verifyBtn.disabled = true;
+
+setStatus(
+  "Verifying identity..."
+);
+
+showLoading(
+  "Verifying identity..."
+);
+
     if (!userAddress) {
 
       setStatus(
@@ -418,6 +455,8 @@ verifyBtn.onclick = async () => {
     completeStep("step-identity");
 
     attestBtn.disabled = false;
+
+    hideLoading();
 
   } catch (err) {
 
@@ -545,6 +584,12 @@ Power to the People.
 registerBtn.onclick = async () => {
 
   try {
+
+registerBtn.disabled = true;
+
+setStatus(
+  "Registering DAO membership..."
+);
 
     if (!registrationSignature) {
 
