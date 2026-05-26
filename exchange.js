@@ -2,6 +2,11 @@
 const EXCHANGE_ADDRESS = "0xD0692ec758bb852421B702B187b6439f74f8Bf3b";
 const LABR_TOKEN = "0x460DD873A1D2a41e77410B125cD3027C5FEd2f78";
 const RPC_URL = "https://polygon-bor-rpc.publicnode.com";
+const VERIFIER_URL =
+  "https://laborcoin-verifier.onrender.com";
+
+const MAX_WALLET =
+  10000;
 
 // ===== SETTINGS =====
 const SLIPPAGE = 0.95; // 5% protection
@@ -34,6 +39,8 @@ const readExchange = new ethers.Contract(EXCHANGE_ADDRESS, EXCHANGE_ABI, readPro
 
 let provider, signer, exchange, userAddress;
 
+let exchangeVerified = false;
+
 // ===== STATUS UI =====
 function setStatus(msg, type = "") {
   const el = document.getElementById("statusMessage");
@@ -43,6 +50,73 @@ function setStatus(msg, type = "") {
     type === "error" ? "#ff4d4d" :
     type === "success" ? "#4dff88" :
     "#ccc";
+}
+
+const exchangeVerifyBtn =
+  document.getElementById(
+    "exchangeVerifyBtn"
+  );
+
+const exchangeGateStatus =
+  document.getElementById(
+    "exchangeGateStatus"
+  );
+
+const exchangeTradePanel =
+  document.getElementById(
+    "exchangeTradePanel"
+  );
+
+const loadingOverlay =
+  document.getElementById(
+    "loadingOverlay"
+  );
+
+const loadingText =
+  document.getElementById(
+    "loadingText"
+  );
+
+function setGateStatus(
+  msg,
+  type = ""
+) {
+
+  exchangeGateStatus.innerText =
+    msg;
+
+  exchangeGateStatus.style.color =
+    type === "error"
+      ? "#ff4d4d"
+      : type === "success"
+      ? "#4dff88"
+      : "#ccc";
+}
+
+function completeStep(id) {
+
+  const el =
+    document.getElementById(id);
+
+  if (!el) return;
+
+  el.classList.add("complete");
+}
+
+function showLoading(text) {
+
+  loadingText.innerText = text;
+
+  loadingOverlay.classList.remove(
+    "hidden"
+  );
+}
+
+function hideLoading() {
+
+  loadingOverlay.classList.add(
+    "hidden"
+  );
 }
 
 // ===== INITIAL LOAD =====
@@ -74,14 +148,97 @@ async function connectWallet() {
 
   exchange = new ethers.Contract(EXCHANGE_ADDRESS, EXCHANGE_ABI, signer);
 
+  await provider.send(
+    "eth_requestAccounts",
+    []
+  );
+
+  completeStep(
+    "exchange-step-wallet"
+  );
+
   document.getElementById("walletAddress").innerText =
     userAddress.slice(0, 6) + "..." + userAddress.slice(-4);
 
-  setStatus("Wallet connected", "success");
+  setGateStatus(
+    "Wallet connected",
+    "success"
+  );
 
   updateAll();
 }
 
+// ===== VERIFY EXCHANGE ACCESS =====
+exchangeVerifyBtn.onclick =
+async () => {
+
+  try {
+
+    showLoading(
+      "Verifying identity..."
+    );
+
+    const response =
+      await fetch(
+        `${VERIFIER_URL}/verify`,
+        {
+          method: "POST",
+
+          headers: {
+            "Content-Type":
+              "application/json"
+          },
+
+          body: JSON.stringify({
+            address: userAddress,
+            type: "exchange"
+          })
+        }
+      );
+
+    const data =
+      await response.json();
+
+    if (
+      !response.ok ||
+      !data.success
+    ) {
+
+      throw new Error(
+        "Verification failed"
+      );
+    }
+
+    exchangeVerified = true;
+
+    completeStep(
+      "exchange-step-identity"
+    );
+
+    exchangeTradePanel
+      .classList
+      .remove("hidden");
+
+    setGateStatus(
+      `Verified. Passport score: ${data.score}`,
+      "success"
+    );
+
+    hideLoading();
+
+  } catch (err) {
+
+    console.error(err);
+
+    hideLoading();
+
+    setGateStatus(
+      err.message ||
+      "Verification failed",
+      "error"
+    );
+  }
+};
 
 // ===== UPDATE =====
 async function updateAll() {
@@ -91,10 +248,54 @@ async function updateAll() {
     const labr = new ethers.Contract(LABR_TOKEN, ERC20_ABI, provider);
 
     const balance = await labr.balanceOf(userAddress);
+
+    const formattedBalance =
+      Number(
+        ethers.formatEther(balance)
+      );
+
+    if (
+      formattedBalance >= MAX_WALLET
+    ) {
+
+      setGateStatus(
+        "Wallet exceeds exchange limit",
+        "error"
+      );
+
+      return;
+    }
+
+    completeStep(
+      "exchange-step-balance"
+    );
+
+    exchangeVerifyBtn.disabled =
+      false;
+
     const sold = await readExchange.totalSold();
     const price = await readExchange.getPrice(sold);
 
     const bal = Number(ethers.formatEther(balance));
+
+// ===== POL BALANCE =====
+const polBalance =
+  await provider.getBalance(
+    userAddress
+  );
+
+document.getElementById(
+  "polBalance"
+).innerText =
+  Number(
+    ethers.formatEther(polBalance)
+  ).toFixed(4);
+
+// ===== LABR BALANCE =====
+document.getElementById(
+  "labrBalance"
+).innerText =
+  bal.toFixed(2);
 
     // ===== TREASURY DEPTH =====
 const treasuryAddress =
@@ -234,74 +435,211 @@ sellAmount.oninput = async (e) => {
 
 // ===== BUY =====
 buyBtn.onclick = async () => {
+
+  if (!exchangeVerified) {
+
+    setStatus(
+      "Exchange access not verified",
+      "error"
+    );
+
+    return;
+  }
+
   if (!exchange) return;
 
   const val = buyAmount.value;
-  if (!val || val <= 0) return;
+
+  if (!val || val <= 0) {
+    return;
+  }
 
   try {
-    setStatus("Processing buy...");
 
-    const pol = Number(val);
+    showLoading(
+      "Processing buy..."
+    );
 
-    const sold = await readExchange.totalSold();
-    const price = await readExchange.getPrice(sold);
+    setStatus(
+      "Processing buy..."
+    );
 
-    const tokensExpected = pol / Number(ethers.formatEther(price));
-    const minOut = ethers.parseEther((tokensExpected * SLIPPAGE).toString());
+    const pol =
+      Number(val);
 
-    const tx = await exchange.buy(minOut, {
-      value: ethers.parseEther(val)
-    });
+    const sold =
+      await readExchange.totalSold();
+
+    const price =
+      await readExchange.getPrice(
+        sold
+      );
+
+    const tokensExpected =
+      pol /
+      Number(
+        ethers.formatEther(price)
+      );
+
+    const minOut =
+      ethers.parseEther(
+        (
+          tokensExpected * SLIPPAGE
+        ).toString()
+      );
+
+    const tx =
+      await exchange.buy(
+        minOut,
+        {
+          value:
+            ethers.parseEther(val)
+        }
+      );
 
     await tx.wait();
 
-    setStatus("Buy successful", "success");
+    hideLoading();
+
+    buyAmount.value = "";
+
+    buyEstimate.innerText = "0";
+
+    buyDaoShare.innerText = "0";
+
+    setStatus(
+      "Buy successful",
+      "success"
+    );
+
     updateAll();
 
   } catch (e) {
+
     console.error(e);
-    setStatus("Buy failed", "error");
+
+    hideLoading();
+
+    setStatus(
+      "Buy failed",
+      "error"
+    );
   }
 };
 
-// ===== SELL (WITH APPROVAL) =====
+// ===== SELL =====
 sellBtn.onclick = async () => {
+
+  if (!exchangeVerified) {
+
+    setStatus(
+      "Exchange access not verified",
+      "error"
+    );
+
+    return;
+  }
+
   if (!exchange) return;
 
-  const val = sellAmount.value;
-  if (!val || val <= 0) return;
+  const val =
+    sellAmount.value;
+
+  if (!val || val <= 0) {
+    return;
+  }
 
   try {
-    setStatus("Preparing approval...");
 
-    const amt = ethers.parseEther(val);
+    showLoading(
+      "Preparing approval..."
+    );
 
-    const labr = new ethers.Contract(LABR_TOKEN, ERC20_ABI, signer);
+    const amt =
+      ethers.parseEther(val);
 
-    const approveTx = await labr.approve(EXCHANGE_ADDRESS, amt);
+    const labr =
+      new ethers.Contract(
+        LABR_TOKEN,
+        ERC20_ABI,
+        signer
+      );
+
+    const approveTx =
+      await labr.approve(
+        EXCHANGE_ADDRESS,
+        amt
+      );
+
     await approveTx.wait();
 
-    setStatus("Processing sell...");
+    showLoading(
+      "Processing sell..."
+    );
 
-    const sold = await readExchange.totalSold();
-    const price = await readExchange.getPrice(sold);
+    setStatus(
+      "Processing sell..."
+    );
+
+    const sold =
+      await readExchange.totalSold();
+
+    const price =
+      await readExchange.getPrice(
+        sold
+      );
 
     const expectedPOL =
-      Number(val) * Number(ethers.formatEther(price)) * 0.90;
+      Number(val)
+      *
+      Number(
+        ethers.formatEther(price)
+      )
+      *
+      0.90;
 
-    const minPOL = ethers.parseEther((expectedPOL * SLIPPAGE).toString());
+    const minPOL =
+      ethers.parseEther(
+        (
+          expectedPOL * SLIPPAGE
+        ).toString()
+      );
 
-    const tx = await exchange.sell(amt, minPOL);
+    const tx =
+      await exchange.sell(
+        amt,
+        minPOL
+      );
 
     await tx.wait();
 
-    setStatus("Sell successful", "success");
+    hideLoading();
+
+    sellAmount.value = "";
+
+    sellEstimate.innerText = "0";
+
+    sellTax.innerText = "0";
+
+    sellNet.innerText = "0";
+
+    setStatus(
+      "Sell successful",
+      "success"
+    );
+
     updateAll();
 
   } catch (e) {
+
     console.error(e);
-    setStatus("Sell failed", "error");
+
+    hideLoading();
+
+    setStatus(
+      "Sell failed",
+      "error"
+    );
   }
 };
 

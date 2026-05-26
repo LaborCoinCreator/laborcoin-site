@@ -1,6 +1,6 @@
 // ===== CONFIG =====
 const GOVERNANCE_CONTRACT =
-  "0x769D02aaeC96967d9D075EB9e79cAF95E84385ab";
+  "0x7DFB64Cb3602Fff5bc810e9A36CA9f74472Cb2FB";
 
 const LABRV_TOKEN =
   "0x113579220515cd59b884Ea2379b4C369025246e2";
@@ -13,8 +13,6 @@ const DAO_TREASURY =
 
 // ===== PROPOSAL TYPES =====
 const TREASURY_TRANSFER = 0;
-const PAUSE_TRADING = 1;
-const RESUME_TRADING = 2;
 
 // ===== ABI =====
 const GOV_ABI = [
@@ -29,11 +27,11 @@ const GOV_ABI = [
 
   "function vote(uint256,bool,uint256,bytes)",
 
+  "function executionAllowed() view returns(bool)",
+
   "function canExecute(uint256) view returns(bool)",
 
   "function executeProposal(uint256)",
-
-  "function aragonProposalIds(uint256) view returns (uint256)",
 
   "function proposals(uint256) view returns(uint8 proposalType,address proposer,address recipient,uint256 amount,string description,uint256 start,uint256 end,uint256 yes,uint256 no,bool executed)"
 ];
@@ -80,12 +78,6 @@ const proposalDescription =
 
 const submitProposalBtn =
   document.getElementById("submitProposalBtn");
-
-const pauseTradingBtn =
-  document.getElementById("pauseTradingBtn");
-
-const resumeTradingBtn =
-  document.getElementById("resumeTradingBtn");
 
 const loadingOverlay =
   document.getElementById(
@@ -250,12 +242,6 @@ function proposalTypeName(type) {
 
   if (Number(type) === 0)
     return "Treasury Transfer";
-
-  if (Number(type) === 1)
-    return "Pause Trading";
-
-  if (Number(type) === 2)
-    return "Resume Trading";
 
   return "Unknown";
 }
@@ -555,126 +541,6 @@ async () => {
   }
 };
 
-// ===== PAUSE PROPOSAL =====
-pauseTradingBtn.onclick =
-async () => {
-
-  try {
-
-    showLoading(
-      "Submitting pause proposal..."
-    );
-
-    pauseTradingBtn.disabled =
-      true;
-
-    const auth =
-      await getGovernanceSignature(
-        PAUSE_TRADING
-      );
-
-    const tx =
-      await governance.createProposal(
-        PAUSE_TRADING,
-        ethers.ZeroAddress,
-        0,
-        "Pause LABR trading",
-        auth.expiry,
-        auth.signature
-      );
-
-    await tx.wait();
-
-    hideLoading();
-
-    pauseTradingBtn.disabled =
-      false;
-
-    setStatus(
-      "Pause proposal submitted",
-      "success"
-    );
-
-    loadProposalFeed();
-
-  } catch (err) {
-
-    console.error(err);
-
-    hideLoading();
-
-    pauseTradingBtn.disabled =
-      false;
-
-    setStatus(
-      err.reason ||
-      err.message ||
-      "Pause proposal failed",
-      "error"
-    );
-  }
-};
-
-// ===== RESUME PROPOSAL =====
-resumeTradingBtn.onclick =
-async () => {
-
-  try {
-
-    showLoading(
-      "Submitting resume proposal..."
-    );
-
-    resumeTradingBtn.disabled =
-      true;
-
-    const auth =
-      await getGovernanceSignature(
-        RESUME_TRADING
-      );
-
-    const tx =
-      await governance.createProposal(
-        RESUME_TRADING,
-        ethers.ZeroAddress,
-        0,
-        "Resume LABR trading",
-        auth.expiry,
-        auth.signature
-      );
-
-    await tx.wait();
-
-    hideLoading();
-
-    resumeTradingBtn.disabled =
-      false;
-
-    setStatus(
-      "Resume proposal submitted",
-      "success"
-    );
-
-    loadProposalFeed();
-
-  } catch (err) {
-
-    console.error(err);
-
-    hideLoading();
-
-    resumeTradingBtn.disabled =
-      false;
-
-    setStatus(
-      err.reason ||
-      err.message ||
-      "Resume proposal failed",
-      "error"
-    );
-  }
-};
-
 // ===== LOAD FEED =====
 async function loadProposalFeed() {
 
@@ -868,7 +734,9 @@ async function loadProposalFeed() {
           </button>
 
           ${
-            await governance.canExecute(i)
+            (await governance.canExecute(i))
+            &&
+            (await governance.executionAllowed())
             ? `
               <button
                 class="cta-button"

@@ -197,7 +197,7 @@
       </p>
 
       <p>
-        <strong>Total Wallet Value:</strong><br>
+        <strong>Total LABR Held:</strong><br>
         <span id="balance">
           0
         </span>
@@ -205,98 +205,157 @@
 
     </div>
 
-    <!-- BUY -->
-    <div class="trade-box">
+    <!-- EXCHANGE ACCESS -->
+<div class="trade-box">
 
-      <h2>
-        Buy LABR
-      </h2>
+  <h2>
+    Exchange Access
+  </h2>
 
-      <input
-        id="buyAmount"
-        placeholder="POL Amount"
-      >
+  <div class="dao-steps">
 
-      <div class="trade-preview">
+    <div
+      class="dao-step"
+      id="exchange-step-wallet"
+    >
+      Connect Wallet
+    </div>
 
-        <p>
-          <strong>Estimated LABR:</strong><br>
-          <span id="buyEstimate">
-            0
-          </span>
-        </p>
+    <div
+      class="dao-step"
+      id="exchange-step-balance"
+    >
+      Verify Wallet Limit
+    </div>
 
-        <p>
-          <strong>DAO Treasury Share:</strong><br>
-          <span id="buyDaoShare">
-            0
-          </span>
-        </p>
+    <div
+      class="dao-step"
+      id="exchange-step-identity"
+    >
+      Verify Identity
+    </div>
 
-      </div>
+  </div>
 
-      <div class="center-button">
+  <div class="center-button dao-buttons">
 
-        <button
-          id="buyBtn"
-          class="cta-button"
-        >
-          Buy
-        </button>
+    <button
+      id="exchangeVerifyBtn"
+      class="cta-button"
+      disabled
+    >
+      Verify Identity
+    </button>
 
-      </div>
+  </div>
+
+  <p
+    id="exchangeGateStatus"
+    class="status"
+    style="text-align:center;"
+  ></p>
+
+</div>
+
+<div
+  id="exchangeTradePanel"
+  class="hidden"
+>
+
+  <!-- BUY -->
+  <div class="trade-box">
+
+    <h2>
+      Buy LABR
+    </h2>
+
+    <input
+      id="buyAmount"
+      placeholder="POL Amount"
+    >
+
+    <div class="trade-preview">
+
+      <p>
+        <strong>Estimated LABR:</strong><br>
+        <span id="buyEstimate">
+          0
+        </span>
+      </p>
+
+      <p>
+        <strong>DAO Treasury Share:</strong><br>
+        <span id="buyDaoShare">
+          0
+        </span>
+      </p>
 
     </div>
 
-    <!-- SELL -->
-    <div class="trade-box">
+    <div class="center-button">
 
-      <h2>
-        Sell LABR
-      </h2>
-
-      <input
-        id="sellAmount"
-        placeholder="LABR Amount"
+      <button
+        id="buyBtn"
+        class="cta-button"
       >
-
-      <div class="trade-preview">
-
-        <p>
-          <strong>Estimated POL:</strong><br>
-          <span id="sellEstimate">
-            0
-          </span>
-        </p>
-
-        <p>
-          <strong>Sell Tax:</strong><br>
-          <span id="sellTax">
-            0
-          </span>
-        </p>
-
-        <p>
-          <strong>Net POL Received:</strong><br>
-          <span id="sellNet">
-            0
-          </span>
-        </p>
-
-      </div>
-
-      <div class="center-button">
-
-        <button
-          id="sellBtn"
-          class="cta-button secondary"
-        >
-          Sell
-        </button>
-
-      </div>
+        Buy
+      </button>
 
     </div>
+
+  </div>
+
+  <!-- SELL -->
+  <div class="trade-box">
+
+    <h2>
+      Sell LABR
+    </h2>
+
+    <input
+      id="sellAmount"
+      placeholder="LABR Amount"
+    >
+
+    <div class="trade-preview">
+
+      <p>
+        <strong>Estimated POL:</strong><br>
+        <span id="sellEstimate">
+          0
+        </span>
+      </p>
+
+      <p>
+        <strong>Sell Tax:</strong><br>
+        <span id="sellTax">
+          0
+        </span>
+      </p>
+
+      <p>
+        <strong>Net POL Received:</strong><br>
+        <span id="sellNet">
+          0
+        </span>
+      </p>
+
+    </div>
+
+    <div class="center-button">
+
+      <button
+        id="sellBtn"
+        class="cta-button secondary"
+      >
+        Sell
+      </button>
+
+    </div>
+
+  </div>
+
+</div>
 
     <!-- STATUS -->
     <div class="trade-box">
@@ -324,6 +383,16 @@
 </footer>
 
 <script src="exchange.js"></script>
+
+<div id="loadingOverlay" class="hidden">
+
+  <div class="spinner"></div>
+
+  <p id="loadingText">
+    Loading...
+  </p>
+
+</div>
 
 </body>
 </html>

@@ -458,16 +458,20 @@ showLoading(
 
     hideLoading();
 
-  } catch (err) {
+  } } catch (err) {
 
-    console.error(err);
+  console.error(err);
 
-    setStatus(
-      "Verification failed",
-      "error"
-    );
+  hideLoading();
 
-  }
+  verifyBtn.disabled = false;
+
+  setStatus(
+    "Verification failed",
+    "error"
+  );
+
+}
 
 };
 
@@ -591,6 +595,10 @@ setStatus(
   "Registering DAO membership..."
 );
 
+showLoading(
+  "Registering DAO membership..."
+);
+
     if (!registrationSignature) {
 
       setStatus(
@@ -646,6 +654,8 @@ setStatus(
       "DAO registration complete.",
       "success"
     );
+
+  hideLoading();
 
   } catch (err) {
 
@@ -717,7 +727,8 @@ downloadCertificateBtn.onclick =
     );
 
   } catch (err) {
-
+    
+    hideLoading();
     console.error(err);
   }
 };
