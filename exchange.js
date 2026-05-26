@@ -8,6 +8,51 @@ const VERIFIER_URL =
 const MAX_WALLET =
   10000;
 
+const buyBtn =
+  document.getElementById(
+    "buyBtn"
+  );
+
+const sellBtn =
+  document.getElementById(
+    "sellBtn"
+  );
+
+const buyAmount =
+  document.getElementById(
+    "buyAmount"
+  );
+
+const sellAmount =
+  document.getElementById(
+    "sellAmount"
+  );
+
+const buyEstimate =
+  document.getElementById(
+    "buyEstimate"
+  );
+
+const buyDaoShare =
+  document.getElementById(
+    "buyDaoShare"
+  );
+
+const sellEstimate =
+  document.getElementById(
+    "sellEstimate"
+  );
+
+const sellTax =
+  document.getElementById(
+    "sellTax"
+  );
+
+const sellNet =
+  document.getElementById(
+    "sellNet"
+  );
+
 // ===== SETTINGS =====
 const SLIPPAGE = 0.95; // 5% protection
 
@@ -142,15 +187,27 @@ async function connectWallet() {
     return;
   }
 
-  provider = new ethers.BrowserProvider(window.ethereum);
-  signer = await provider.getSigner();
-  userAddress = await signer.getAddress();
+  provider =
+  new ethers.BrowserProvider(
+    window.ethereum
+  );
 
-  exchange = new ethers.Contract(EXCHANGE_ADDRESS, EXCHANGE_ABI, signer);
+await provider.send(
+  "eth_requestAccounts",
+  []
+);
 
-  await provider.send(
-    "eth_requestAccounts",
-    []
+signer =
+  await provider.getSigner();
+
+userAddress =
+  await signer.getAddress();
+
+exchange =
+  new ethers.Contract(
+    EXCHANGE_ADDRESS,
+    EXCHANGE_ABI,
+    signer
   );
 
   completeStep(

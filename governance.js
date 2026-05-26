@@ -892,6 +892,16 @@ async () => {
           )
       });
 
+    if (!signer) {
+
+      setStatus(
+        "Connect wallet first",
+        "error"
+      );
+
+      return;
+    }
+
     await tx.wait();
 
     hideLoading();

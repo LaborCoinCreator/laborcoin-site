@@ -458,11 +458,11 @@ showLoading(
 
     hideLoading();
 
-  } } catch (err) {
-
-  console.error(err);
+  } catch (err) {
 
   hideLoading();
+
+  console.error(err);
 
   verifyBtn.disabled = false;
 
@@ -655,9 +655,9 @@ showLoading(
       "success"
     );
 
-  hideLoading();
-
   } catch (err) {
+
+    hideLoading();
 
     console.error(err);
 
