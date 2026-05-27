@@ -735,16 +735,14 @@ async function loadProposalFeed() {
 
           ${
             (await governance.canExecute(i))
-            &&
-            (await governance.executionAllowed())
             ? `
               <button
                 class="cta-button"
-                onclick="executeProposal(${i})"
-              >
+               onclick="executeProposal(${i})"
+             >
                 Execute
-              </button>
-            `
+             </button>
+           `
             : ""
           }
 

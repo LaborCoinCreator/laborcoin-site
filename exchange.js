@@ -197,6 +197,35 @@ await provider.send(
   []
 );
 
+const network =
+  await provider.getNetwork();
+
+if (
+  Number(network.chainId) !== 137
+) {
+
+  try {
+
+    await window.ethereum.request({
+      method:
+        "wallet_switchEthereumChain",
+
+      params: [
+        { chainId: "0x89" }
+      ]
+    });
+
+  } catch {
+
+    setStatus(
+      "Please switch to Polygon Mainnet",
+      "error"
+    );
+
+    return;
+  }
+}
+
 signer =
   await provider.getSigner();
 

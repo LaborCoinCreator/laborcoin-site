@@ -163,12 +163,9 @@ footer {
   margin-bottom: 20px;
 }
 
-.exchange-left {
-  flex: 1.2;
-}
-
+.exchange-left,
 .exchange-right {
-  flex: 0.8;
+  flex: 1;
   display: flex;
   flex-direction: column;
   gap: 20px;
@@ -512,4 +509,17 @@ footer {
 .hidden {
 
   display: none !important;
+}
+
+#loadingOverlay.hidden {
+  display: none !important;
+  pointer-events: none;
+}
+
+#loadingOverlay {
+  pointer-events: all;
+}
+
+.exchange-container {
+  align-items: flex-start;
 }

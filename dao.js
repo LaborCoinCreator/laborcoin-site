@@ -402,14 +402,17 @@ showLoading(
 
     if (!userAddress) {
 
+      hideLoading();
+
+      verifyBtn.disabled = false;
+
       setStatus(
         "Connect wallet first",
         "error"
       );
 
-      return;
-
-    }
+  return;
+}
 
     const response =
       await fetch(
@@ -650,6 +653,7 @@ showLoading(
       .classList
       .remove("hidden");
 
+    hideLoading();
     setStatus(
       "DAO registration complete.",
       "success"
