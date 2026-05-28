@@ -732,7 +732,7 @@ async (
 
     const auth =
       await getGovernanceSignature(
-        99
+        support ? 1 : 2
       );
 
     const tx =
