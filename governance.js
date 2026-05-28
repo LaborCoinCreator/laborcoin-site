@@ -20,6 +20,8 @@ const GOV_ABI = [
 
   "function executionAllowed() view returns(bool)",
 
+  "function treasuryModule() view returns(address)",
+
   "function proposalPassed(uint256) view returns(bool)",
 
   "function nonces(address) view returns(uint256)",

@@ -550,6 +550,34 @@ buyBtn.onclick = async () => {
       "Processing buy..."
     );
 
+    const balanceCheckContract =
+      new ethers.Contract(
+        LABR_TOKEN,
+        ERC20_ABI,
+        provider
+      );
+
+    const currentBalance =
+      Number(
+        ethers.formatEther(
+          await balanceCheckContract.balanceOf(
+            userAddress
+          )
+        )
+      );
+
+    if (
+      currentBalance >= MAX_WALLET
+    ) {
+
+      setStatus(
+        "Wallet exceeds limit",
+        "error"
+      );
+
+      return;
+    }
+
     const pol =
       Number(val);
 
@@ -640,6 +668,34 @@ sellBtn.onclick = async () => {
     showLoading(
       "Preparing approval..."
     );
+
+    const labr =
+      new ethers.Contract(
+        LABR_TOKEN,
+        ERC20_ABI,
+        provider
+      );
+  
+    const currentBalance =
+      Number(
+        ethers.formatEther(
+          await labr.balanceOf(
+            userAddress
+          )
+        )
+      );
+
+    if (
+      currentBalance >= MAX_WALLET
+    ) {
+
+      setStatus(
+        "Wallet exceeds limit",
+        "error"
+      );
+
+      return;
+    }
 
     const amt =
       ethers.parseEther(val);
