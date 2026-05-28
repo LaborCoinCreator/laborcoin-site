@@ -11,29 +11,26 @@ const VERIFIER_URL =
 const DAO_TREASURY =
   "0x0C2e5679153593b82a84eAB5CA90895BB291Cec4";
 
-// ===== PROPOSAL TYPES =====
-const TREASURY_TRANSFER = 0;
-
 // ===== ABI =====
 const GOV_ABI = [
 
   "function proposalCount() view returns (uint256)",
 
-  "function getProposalState(uint256) view returns(uint8)",
-
-  "function noncesPerAction(address,uint8) view returns (uint256)",
-
-  "function createProposal(uint8,address,uint256,string,uint256,bytes)",
-
-  "function vote(uint256,bool,uint256,bytes)",
+  "function totalRegisteredUsers() view returns (uint256)",
 
   "function executionAllowed() view returns(bool)",
 
-  "function canExecute(uint256) view returns(bool)",
+  "function proposalPassed(uint256) view returns(bool)",
+
+  "function nonces(address) view returns(uint256)",
+
+  "function createProposal(string,string,address,uint256,uint256,uint256,bytes)",
+
+  "function vote(uint256,bool,uint256,uint256,bytes)",
 
   "function executeProposal(uint256)",
 
-  "function proposals(uint256) view returns(uint8 proposalType,address proposer,address recipient,uint256 amount,string description,uint256 start,uint256 end,uint256 yes,uint256 no,bool executed)"
+  "function proposals(uint256) view returns(string title,string description,address recipient,uint256 amount,uint256 yesVotes,uint256 noVotes,uint256 startTime,uint256 endTime,bool executed)"
 ];
 
 const LABRV_ABI = [
@@ -174,31 +171,14 @@ async function displayName(address) {
 async function getGovernanceSignature(action) {
 
   const nonce =
-    await governance.noncesPerAction(
-      userAddress,
-      action
+    await governance.nonces(
+      userAddress
     );
-
-  console.log(
-    "FRONTEND NONCE:",
-    nonce.toString()
-  );
 
   const expiry =
     Math.floor(
       Date.now() / 1000
     ) + 300;
-
-  console.log(
-    "VERIFY PAYLOAD",
-    {
-      address: userAddress,
-      type: "governance",
-      action,
-      nonce: nonce.toString(),
-      expiry
-    }
-  );
 
   const response =
     await fetch(
@@ -214,9 +194,11 @@ async function getGovernanceSignature(action) {
         body: JSON.stringify({
           address: userAddress,
           type: "governance",
-          action: Number(action),
+          action,
           nonce: nonce.toString(),
-          expiry
+          expiry,
+          contract:
+            GOVERNANCE_CONTRACT
         })
       }
     );
@@ -233,17 +215,10 @@ async function getGovernanceSignature(action) {
   }
 
   return {
+    nonce,
     expiry,
     signature: data.signature
   };
-}
-
-function proposalTypeName(type) {
-
-  if (Number(type) === 0)
-    return "Treasury Transfer";
-
-  return "Unknown";
 }
 
 // ===== CONNECT =====
@@ -491,16 +466,15 @@ async () => {
     }
 
     const auth =
-      await getGovernanceSignature(
-        TREASURY_TRANSFER
-      );
+      await getGovernanceSignature(0);
 
     const tx =
       await governance.createProposal(
-        TREASURY_TRANSFER,
+        "Treasury Transfer",
+        description,
         recipient,
         amount,
-        description,
+        auth.nonce,
         auth.expiry,
         auth.signature
       );
@@ -565,8 +539,8 @@ async function loadProposalFeed() {
     }
 
     for (
-      let i = total - 1;
-      i >= 0;
+      let i = total;
+      i >= 1;
       i--
     ) {
 
@@ -581,14 +555,26 @@ async function loadProposalFeed() {
 
       const endDate =
         new Date(
-          Number(p.end) * 1000
+          Number(p.endTime) * 1000
         ).toLocaleString();
 
       let details = "";
 
-      if (
-        Number(p.proposalType) === 0
-      ) {
+      details = `
+        <p>
+          Recipient:<br>
+          ${await displayName(
+            p.recipient
+          )}
+        </p>
+
+        <p>
+          Amount:<br>
+          ${ethers.formatEther(
+            p.amount
+          )} POL
+        </p>
+      `;
 
         details = `
           <p>
@@ -612,27 +598,27 @@ async function loadProposalFeed() {
           Date.now() / 1000
         );
 
-      const state =
-        Number(
-          await governance.getProposalState(i)
-        );
-
       let status = "ACTIVE";
 
-      if (state === 1)
-        status = "PASSED";
+      if (p.executed) {
 
-      if (state === 2)
-        status = "FAILED";
-
-      if (state === 3)
         status = "EXECUTED";
 
-      if (state === 4)
-        status = "EXPIRED";
+      } else if (
+        now >= Number(p.endTime)
+      ) {
+
+        const passed =
+          await governance.proposalPassed(i);
+
+        status =
+          passed
+            ? "PASSED"
+            : "FAILED";
+      }
 
       const remaining =
-        Number(p.end) - now;
+        Number(p.endTime) - now;
 
       let remainingText =
         "Ended";
@@ -672,22 +658,8 @@ async function loadProposalFeed() {
         </p>
 
         <p>
-          Proposer:<br>
-          ${await displayName(
-            p.proposer
-          )}
-        </p>
-
-        <p>
           Remaining:<br>
           ${remainingText}
-        </p>
-
-        <p>
-          Type:<br>
-          ${proposalTypeName(
-            p.proposalType
-          )}
         </p>
 
         <p>
@@ -699,12 +671,12 @@ async function loadProposalFeed() {
 
         <p>
           YES:
-          ${Number(p.yes)}
+          ${Number(p.yesVotes)}
 
           <br>
 
           NO:
-          ${Number(p.no)}
+          ${Number(p.noVotes)}
         </p>
 
         <p>
@@ -734,16 +706,20 @@ async function loadProposalFeed() {
           </button>
 
           ${
-            (await governance.canExecute(i))
-            ? `
-              <button
-                class="cta-button"
-               onclick="executeProposal(${i})"
-             >
-                Execute
-             </button>
-           `
-            : ""
+            (
+              !p.executed &&
+              now >= Number(p.endTime) &&
+              await governance.proposalPassed(i)
+            )
+              ? `
+                <button
+                  class="cta-button"
+                  onclick="executeProposal(${i})"
+                >
+                  Execute
+                </button>
+              `
+              : ""
           }
 
         </div>
@@ -782,6 +758,7 @@ async (
       await governance.vote(
         id,
         support,
+        auth.nonce,
         auth.expiry,
         auth.signature
       );
