@@ -558,9 +558,7 @@ async function loadProposalFeed() {
           Number(p.endTime) * 1000
         ).toLocaleString();
 
-      let details = "";
-
-      details = `
+      const details = `
         <p>
           Recipient:<br>
           ${await displayName(
@@ -575,23 +573,6 @@ async function loadProposalFeed() {
           )} POL
         </p>
       `;
-
-        details = `
-          <p>
-            Recipient:<br>
-            ${await displayName(
-              p.recipient
-            )}
-          </p>
-
-          <p>
-            Amount:<br>
-            ${ethers.formatEther(
-              p.amount
-            )} POL
-          </p>
-        `;
-      }
 
       const now =
         Math.floor(
@@ -834,6 +815,16 @@ async () => {
 
   try {
 
+    if (!signer) {
+
+      setStatus(
+        "Connect wallet first",
+        "error"
+      );
+
+      return;
+    }
+
     const amount =
       document.getElementById(
         "donationAmount"
@@ -866,16 +857,6 @@ async () => {
             amount
           )
       });
-
-    if (!signer) {
-
-      setStatus(
-        "Connect wallet first",
-        "error"
-      );
-
-      return;
-    }
 
     await tx.wait();
 
