@@ -600,6 +600,27 @@ Power to the People.
 
 };
 
+const downloadAttestationBtn =
+  document.getElementById(
+    "downloadAttestationBtn"
+  );
+
+downloadAttestationBtn.onclick =
+() => {
+
+  const link =
+    document.createElement("a");
+
+  link.href =
+    "attestation.pdf";
+
+  link.download =
+    "LaborCoin-DAO-Attestation.pdf";
+
+  link.click();
+
+};
+
 // ===== MEMBERSHIP CERTIFICATE =====
 
 async function generateMembershipCertificate() {

@@ -165,7 +165,6 @@ footer {
 
 /* WALLET BOX */
 .wallet-box,
-  flex: 1;
 .trade-box {
   background: #111;
   border: 1px solid #222;
@@ -525,22 +524,22 @@ footer {
 .exchange-left,
 .exchange-right {
   flex: 1;
-  min-width: 0;
   display: flex;
   flex-direction: column;
   gap: 20px;
 }
 
-.exchange-left > .trade-box:first-child,
-.exchange-right > .wallet-box:first-child {
-  flex: 1;
+.exchange-left {
+  justify-content: stretch;
 }
 
-.exchange-container {
-  align-items: stretch;
+.exchange-right {
+  justify-content: stretch;
 }
 
-.exchange-left > .trade-box:first-child,
-.exchange-right > .wallet-box:first-child {
-  flex: 1;
+.wallet-box {
+  background: #111;
+  border: 1px solid #222;
+  border-radius: 8px;
+  padding: 20px;
 }

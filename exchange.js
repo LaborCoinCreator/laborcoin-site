@@ -675,13 +675,6 @@ sellBtn.onclick = async () => {
     showLoading(
       "Preparing approval..."
     );
-
-    const labrWrite =
-      new ethers.Contract(
-        LABR_TOKEN,
-        ERC20_ABI,
-        provider
-      );
   
     const labr =
       new ethers.Contract(
