@@ -658,11 +658,15 @@ async function generateMembershipCertificate() {
   );
 
   // Logo
-  const logo =
-    new Image();
+  const logo = new Image();
+
+  logo.crossOrigin = "anonymous";
 
   logo.src =
-    "assets/logo.png";
+    "assets/logo.png?v=2";
+
+    logo.src =
+      "assets/logo.png";
 
   await new Promise(
     resolve => {
@@ -746,32 +750,11 @@ pdf.setFontSize(12);
 pdf.text(
   `Registered: ${date.toLocaleDateString()}`,
   105,
-  178,
+  180,
   { align: "center" }
 );
 
-// ===== QR =====
-
-const qrContainer =
-  document.createElement("div");
-
-new QRCode(
-  qrContainer,
-  {
-    text:
-      `https://laborcoin.tech`,
-    width: 120,
-    height: 120
-  }
-);
-
-await new Promise(
-  resolve =>
-    setTimeout(resolve, 300)
-);
-
-const qrImage =
-  qrContainer.querySelector("img");
+// QR
 
 pdf.addImage(
   qrImage.src,
@@ -780,6 +763,35 @@ pdf.addImage(
   190,
   50,
   50
+);
+
+// Principles
+
+pdf.setFontSize(10);
+
+pdf.text(
+  "One Verified Identity",
+  105,
+  248,
+  { align: "center" }
+);
+
+pdf.text(
+  "One Vote",
+  105,
+  255,
+  { align: "center" }
+);
+
+// Logo
+
+pdf.addImage(
+  logo,
+  "PNG",
+  85,
+  260,
+  40,
+  40
 );
 
 // ===== PRINCIPLES =====
@@ -798,15 +810,6 @@ pdf.text(
   105,
   243,
   { align: "center" }
-);
-
-pdf.addImage(
-  logo,
-  "PNG",
-  90,
-  252,
-  25,
-  25
 );
 
 // ===== LOGO =====
