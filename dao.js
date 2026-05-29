@@ -676,15 +676,6 @@ async function generateMembershipCertificate() {
     }
   );
 
-  pdf.addImage(
-    logo,
-    "PNG",
-    85,
-    235,
-    40,
-    40
-  );
-
 // ===== TITLE =====
 
 pdf.setFontSize(24);
@@ -798,15 +789,24 @@ pdf.setFontSize(10);
 pdf.text(
   "One Verified Identity",
   105,
-  250,
+  235,
   { align: "center" }
 );
 
 pdf.text(
   "One Vote",
   105,
-  258,
+  243,
   { align: "center" }
+);
+
+pdf.addImage(
+  logo,
+  "PNG",
+  90,
+  252,
+  25,
+  25
 );
 
 // ===== LOGO =====
@@ -819,6 +819,11 @@ pdf.addImage(
   25,
   25
 );
+
+pdf.save(
+  `LaborCoin-Member-${memberId}.pdf`
+);
+
 }
 
 // ===== REGISTER =====
