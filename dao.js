@@ -685,102 +685,140 @@ async function generateMembershipCertificate() {
     40
   );
 
-  // Title
-  pdf.setFontSize(24);
+// ===== TITLE =====
 
-  pdf.text(
-    "LABORCOIN DAO",
-    105,
-    85,
-    { align: "center" }
-  );
+pdf.setFontSize(24);
 
-  pdf.setFontSize(18);
+pdf.text(
+  "LABORCOIN DAO",
+  105,
+  40,
+  { align: "center" }
+);
 
-  pdf.text(
-    "Membership Certificate",
-    105,
-    100,
-    { align: "center" }
-  );
+pdf.setFontSize(18);
 
-  pdf.setFontSize(14);
+pdf.text(
+  "Membership Certificate",
+  105,
+  55,
+  { align: "center" }
+);
 
-  pdf.text(
-    `Member #${memberId}`,
-    105,
-    125,
-    { align: "center" }
-  );
+// ===== BODY =====
 
-  pdf.text(
-    date.toLocaleDateString(),
-    105,
-    140,
-    { align: "center" }
-  );
+pdf.setFontSize(14);
 
-  // QR
-  const qrContainer =
-    document.createElement("div");
+pdf.text(
+  "This certifies that",
+  105,
+  90,
+  { align: "center" }
+);
 
-  new QRCode(
-    qrContainer,
-    {
-      text:
-        `https://laborcoin.tech`,
-      width: 120,
-      height: 120
-    }
-  );
+pdf.setFontSize(10);
 
-  await new Promise(
-    resolve =>
-      setTimeout(resolve, 300)
-  );
+pdf.text(
+  userAddress,
+  105,
+  105,
+  { align: "center" }
+);
 
-  const qrImage =
-    qrContainer.querySelector(
-      "img"
-    );
+pdf.setFontSize(14);
 
-  pdf.addImage(
-    qrImage.src,
-    "PNG",
-    80,
-    155,
-    50,
-    50
-  );
+pdf.text(
+  "is a verified member of the",
+  105,
+  125,
+  { align: "center" }
+);
 
-  pdf.setFontSize(10);
+pdf.text(
+  "LaborCoin DAO",
+  105,
+  138,
+  { align: "center" }
+);
 
-  pdf.text(
-    "One Verified Identity",
-    105,
-    225,
-    { align: "center" }
-  );
+pdf.setFontSize(16);
 
-  pdf.text(
-    "One Vote",
-    105,
-    235,
-    { align: "center" }
-  );
+pdf.text(
+  `Member #${memberId}`,
+  105,
+  165,
+  { align: "center" }
+);
 
-  pdf.setFontSize(8);
+pdf.setFontSize(12);
 
-  pdf.text(
-    userAddress,
-    105,
-    255,
-    { align: "center" }
-  );
+pdf.text(
+  `Registered: ${date.toLocaleDateString()}`,
+  105,
+  178,
+  { align: "center" }
+);
 
-  pdf.save(
-    `LaborCoin-Member-${memberId}.pdf`
-  );
+// ===== QR =====
+
+const qrContainer =
+  document.createElement("div");
+
+new QRCode(
+  qrContainer,
+  {
+    text:
+      `https://laborcoin.tech`,
+    width: 120,
+    height: 120
+  }
+);
+
+await new Promise(
+  resolve =>
+    setTimeout(resolve, 300)
+);
+
+const qrImage =
+  qrContainer.querySelector("img");
+
+pdf.addImage(
+  qrImage.src,
+  "PNG",
+  80,
+  190,
+  50,
+  50
+);
+
+// ===== PRINCIPLES =====
+
+pdf.setFontSize(10);
+
+pdf.text(
+  "One Verified Identity",
+  105,
+  250,
+  { align: "center" }
+);
+
+pdf.text(
+  "One Vote",
+  105,
+  258,
+  { align: "center" }
+);
+
+// ===== LOGO =====
+
+pdf.addImage(
+  logo,
+  "PNG",
+  90,
+  265,
+  25,
+  25
+);
 }
 
 // ===== REGISTER =====
