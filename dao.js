@@ -600,6 +600,168 @@ Power to the People.
 
 };
 
+// ===== MEMBERSHIP CERTIFICATE =====
+
+async function generateMembershipCertificate() {
+
+  const memberData =
+    await registration.getMemberData(
+      userAddress
+    );
+
+  const memberId =
+    Number(memberData[1]);
+
+  const registeredAt =
+    Number(memberData[2]);
+
+  const date =
+    new Date(
+      registeredAt * 1000
+    );
+
+  const { jsPDF } =
+    window.jspdf;
+
+  const pdf =
+    new jsPDF();
+
+  // Border
+  pdf.setLineWidth(1);
+
+  pdf.rect(
+    10,
+    10,
+    190,
+    277
+  );
+
+  // Logo
+  const logo =
+    new Image();
+
+  logo.src =
+    "assets/favicon.png";
+
+  await new Promise(
+    resolve => {
+
+      logo.onload =
+        resolve;
+
+      logo.onerror =
+        resolve;
+
+    }
+  );
+
+  pdf.addImage(
+    logo,
+    "PNG",
+    80,
+    18,
+    50,
+    50
+  );
+
+  // Title
+  pdf.setFontSize(24);
+
+  pdf.text(
+    "LABORCOIN DAO",
+    105,
+    85,
+    { align: "center" }
+  );
+
+  pdf.setFontSize(18);
+
+  pdf.text(
+    "Membership Certificate",
+    105,
+    100,
+    { align: "center" }
+  );
+
+  pdf.setFontSize(14);
+
+  pdf.text(
+    `Member #${memberId}`,
+    105,
+    125,
+    { align: "center" }
+  );
+
+  pdf.text(
+    date.toLocaleDateString(),
+    105,
+    140,
+    { align: "center" }
+  );
+
+  // QR
+  const qrContainer =
+    document.createElement("div");
+
+  new QRCode(
+    qrContainer,
+    {
+      text:
+        `https://laborcoin.tech`,
+      width: 120,
+      height: 120
+    }
+  );
+
+  await new Promise(
+    resolve =>
+      setTimeout(resolve, 300)
+  );
+
+  const qrImage =
+    qrContainer.querySelector(
+      "img"
+    );
+
+  pdf.addImage(
+    qrImage.src,
+    "PNG",
+    80,
+    155,
+    50,
+    50
+  );
+
+  pdf.setFontSize(10);
+
+  pdf.text(
+    "One Verified Identity",
+    105,
+    225,
+    { align: "center" }
+  );
+
+  pdf.text(
+    "One Vote",
+    105,
+    235,
+    { align: "center" }
+  );
+
+  pdf.setFontSize(8);
+
+  pdf.text(
+    userAddress,
+    105,
+    255,
+    { align: "center" }
+  );
+
+  pdf.save(
+    `LaborCoin-Member-${memberId}.pdf`
+  );
+}
+
 // ===== REGISTER =====
 registerBtn.onclick = async () => {
 
@@ -662,6 +824,8 @@ showLoading(
 
       await showMembershipData();
 
+      await generateMembershipCertificate();
+
     governanceAccessWrapper
       .classList
       .remove("hidden");
@@ -711,57 +875,38 @@ showLoading(
 downloadCertificateBtn.onclick =
 async () => {
 
-  const memberData =
-    await registration.getMemberData(
-      userAddress
-    );
+  await generateMembershipCertificate();
 
-  const memberId =
-    Number(memberData[1]);
-
-  const registeredAt =
-    Number(memberData[2]);
-
-  const date =
-    new Date(
-      registeredAt * 1000
-    );
-
-  const { jsPDF } =
-    window.jspdf;
-
-  const pdf =
-    new jsPDF();
-
-  pdf.setFontSize(22);
-
-  pdf.text(
-    "LaborCoin DAO Membership Certificate",
-    20,
-    30
-  );
-
-  pdf.setFontSize(14);
-
-  pdf.text(
-    `Member #${memberId}`,
-    20,
-    60
-  );
-
-  pdf.text(
-    `Wallet: ${userAddress}`,
-    20,
-    80
-  );
-
-  pdf.text(
-    `Registered: ${date.toLocaleString()}`,
-    20,
-    100
-  );
-
-  pdf.save(
-    `LaborCoin-Member-${memberId}.pdf`
-  );
 };
+
+window.addEventListener(
+  "load",
+  async () => {
+
+    try {
+
+      if (!window.ethereum)
+        return;
+
+      const accounts =
+        await window.ethereum.request({
+          method:
+            "eth_accounts"
+        });
+
+      if (
+        accounts.length > 0
+      ) {
+
+        connectBtn.click();
+
+      }
+
+    } catch (err) {
+
+      console.error(err);
+
+    }
+
+  }
+);

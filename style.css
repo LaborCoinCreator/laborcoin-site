@@ -163,22 +163,14 @@ footer {
   margin-bottom: 20px;
 }
 
-.exchange-left,
-.exchange-right {
-  flex: 1;
-  min-width: 0;
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
-}
-
 /* WALLET BOX */
-.wallet-box {
-  margin-top: 10px;
-  padding: 15px;
+.wallet-box,
+  flex: 1;
+.trade-box {
   background: #111;
   border: 1px solid #222;
   border-radius: 8px;
+  padding: 20px;
 }
 
 /* TRADE BOX */
@@ -528,4 +520,27 @@ footer {
   margin: 40px auto;
   padding: 0 20px;
   align-items: stretch;
+}
+
+.exchange-left,
+.exchange-right {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.exchange-left > .trade-box:first-child,
+.exchange-right > .wallet-box:first-child {
+  flex: 1;
+}
+
+.exchange-container {
+  align-items: stretch;
+}
+
+.exchange-left > .trade-box:first-child,
+.exchange-right > .wallet-box:first-child {
+  flex: 1;
 }

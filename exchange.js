@@ -232,6 +232,10 @@ signer =
 userAddress =
   await signer.getAddress();
 
+document.getElementById(
+  "connectBtn"
+).style.display = "none";
+
 exchange =
   new ethers.Contract(
     EXCHANGE_ADDRESS,
