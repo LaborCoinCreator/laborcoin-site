@@ -228,6 +228,10 @@ function showLoading(text) {
 
 function hideLoading() {
 
+  if (!loadingOverlay) {
+    return;
+  }
+
   loadingOverlay.classList.add(
     "hidden"
   );
@@ -450,6 +454,15 @@ showLoading(
 
       daoStatus.style.color =
         "#ff4d4d";
+    }
+
+    if (!response.ok || !data.success) {
+
+      hideLoading();
+
+      verifyBtn.disabled = false;
+
+      return;
     }
 
     registrationSignature =
@@ -696,43 +709,59 @@ showLoading(
 };
 
 downloadCertificateBtn.onclick =
-  async () => {
+async () => {
 
-  try {
-
-    const element =
-      document.createElement("a");
-
-    const text =
-      certificateText.innerText;
-
-    const blob =
-      new Blob(
-        [text],
-        {
-          type: "text/plain"
-        }
-      );
-
-    element.href =
-      URL.createObjectURL(blob);
-
-    element.download =
-      "LaborCoin-Membership.txt";
-
-    document.body.appendChild(
-      element
+  const memberData =
+    await registration.getMemberData(
+      userAddress
     );
 
-    element.click();
+  const memberId =
+    Number(memberData[1]);
 
-    document.body.removeChild(
-      element
+  const registeredAt =
+    Number(memberData[2]);
+
+  const date =
+    new Date(
+      registeredAt * 1000
     );
 
-  } catch (err) {
-    
-    hideLoading();
-    console.error(err);
-  }
+  const { jsPDF } =
+    window.jspdf;
+
+  const pdf =
+    new jsPDF();
+
+  pdf.setFontSize(22);
+
+  pdf.text(
+    "LaborCoin DAO Membership Certificate",
+    20,
+    30
+  );
+
+  pdf.setFontSize(14);
+
+  pdf.text(
+    `Member #${memberId}`,
+    20,
+    60
+  );
+
+  pdf.text(
+    `Wallet: ${userAddress}`,
+    20,
+    80
+  );
+
+  pdf.text(
+    `Registered: ${date.toLocaleString()}`,
+    20,
+    100
+  );
+
+  pdf.save(
+    `LaborCoin-Member-${memberId}.pdf`
+  );
 };

@@ -331,9 +331,12 @@ async function updateAll() {
   if (!userAddress) return;
 
   try {
-    const labr = new ethers.Contract(LABR_TOKEN, ERC20_ABI, provider);
+    const labrRead = new ethers.Contract(LABR_TOKEN, ERC20_ABI, provider);
 
-    const balance = await labr.balanceOf(userAddress);
+    const balance =
+      await labrRead.balanceOf(
+        userAddress
+      );
 
     const formattedBalance =
       Number(
@@ -416,7 +419,7 @@ document.getElementById(
 
 // ===== CIRCULATING SUPPLY =====
 const totalSupply =
-  await labr.totalSupply();
+  await labrRead.totalSupply();
 
 document.getElementById(
   "circulatingSupply"
@@ -669,13 +672,20 @@ sellBtn.onclick = async () => {
       "Preparing approval..."
     );
 
-    const labr =
+    const labrWrite =
       new ethers.Contract(
         LABR_TOKEN,
         ERC20_ABI,
         provider
       );
   
+    const labr =
+      new ethers.Contract(
+        LABR_TOKEN,
+        ERC20_ABI,
+        signer
+      );
+
     const currentBalance =
       Number(
         ethers.formatEther(
@@ -699,13 +709,6 @@ sellBtn.onclick = async () => {
 
     const amt =
       ethers.parseEther(val);
-
-    const labr =
-      new ethers.Contract(
-        LABR_TOKEN,
-        ERC20_ABI,
-        signer
-      );
 
     const approveTx =
       await labr.approve(
@@ -794,7 +797,7 @@ async function drawCurve() {
   ctx.clearRect(0, 0, canvas.width, canvas.height);
 
   const maxSupply = 500_000_000;
-  const steps = canvas.width;
+  const steps = 120;
 
   let prices = [];
 
@@ -823,7 +826,7 @@ async function drawCurve() {
 
   ctx.beginPath();
 
-  for (let x = 0; x < steps; x++) {
+  for (let x = 0; x < prices.length; x++) {
 
     const normalized =
       prices[x] / maxPrice;
@@ -835,7 +838,11 @@ async function drawCurve() {
     if (x === 0) {
       ctx.moveTo(x, y);
     } else {
-      ctx.lineTo(x, y);
+      const drawX =
+        (x / (prices.length - 1))
+        * canvas.width;
+
+      ctx.lineTo(drawX, y);
     }
   }
 

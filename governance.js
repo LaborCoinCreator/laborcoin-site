@@ -335,7 +335,8 @@ govConnectBtn.onclick = async () => {
       "Connection failed",
       "error"
     );
-  }
+  }  
+
 };
 
 // ===== VERIFY =====
@@ -882,4 +883,15 @@ async () => {
       "error"
     );
   }
+
 };
+
+window.ethereum.on(
+    "accountsChanged",
+    () => location.reload()
+  );
+
+  window.ethereum.on(
+    "chainChanged",
+    () => location.reload()
+  );
