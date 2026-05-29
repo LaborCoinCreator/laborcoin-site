@@ -662,7 +662,7 @@ async function generateMembershipCertificate() {
     new Image();
 
   logo.src =
-    "assets/favicon.png";
+    "assets/logo.png";
 
   await new Promise(
     resolve => {
@@ -679,10 +679,10 @@ async function generateMembershipCertificate() {
   pdf.addImage(
     logo,
     "PNG",
-    80,
-    18,
-    50,
-    50
+    85,
+    235,
+    40,
+    40
   );
 
   // Title

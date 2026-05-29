@@ -529,6 +529,10 @@ footer {
   gap: 20px;
 }
 
+.exchange-left .trade-box:last-child {
+  flex: 1;
+}
+
 .exchange-left {
   justify-content: stretch;
 }
