@@ -184,6 +184,24 @@ async function showMembershipData() {
         registeredAt * 1000
       );
 
+    let displayName;
+
+    try {
+
+      const ens =
+        await provider.lookupAddress(
+          userAddress
+        );
+
+      displayName =
+        ens || null;
+
+    } catch {
+
+      displayName = null;
+
+    }
+
     certificateText.innerHTML = `
       <strong>Member #${memberId}</strong><br><br>
 
@@ -695,7 +713,7 @@ async function generateMembershipCertificate() {
   // TITLE
   // =====================================
 
-  pdf.setFontSize(26);
+  pdf.setFontSize(30);
 
   pdf.text(
     "CERTIFICATE OF MEMBERSHIP",
@@ -706,7 +724,7 @@ async function generateMembershipCertificate() {
     }
   );
 
-  pdf.setFontSize(18);
+  pdf.setFontSize(22);
 
   pdf.text(
     "LaborCoin DAO",
@@ -721,7 +739,7 @@ async function generateMembershipCertificate() {
   // BODY
   // =====================================
 
-  pdf.setFontSize(12);
+  pdf.setFontSize(14);
 
   pdf.text(
     "This certifies that",
@@ -732,16 +750,44 @@ async function generateMembershipCertificate() {
     }
   );
 
-  pdf.setFontSize(9);
+  if (displayName) {
 
-  pdf.text(
-    userAddress,
-    105,
-    143,
-    {
-      align: "center"
-    }
-  );
+    pdf.setFontSize(14);
+
+    pdf.text(
+      displayName,
+      105,
+      142,
+      {
+        align: "center"
+      }
+    );
+
+    pdf.setFontSize(8);
+
+    pdf.text(
+      userAddress,
+      105,
+      150,
+      {
+        align: "center"
+      }
+    );
+
+  } else {
+
+    pdf.setFontSize(8);
+
+    pdf.text(
+      userAddress,
+      105,
+      145,
+      {
+        align: "center"
+      }
+    );
+
+  }
 
   pdf.setFontSize(12);
 
@@ -767,27 +813,38 @@ async function generateMembershipCertificate() {
   // MEMBER INFO
   // =====================================
 
-  pdf.setFontSize(14);
+  pdf.setFontSize(18);
 
-  pdf.text(
-    `Member #${memberId}`,
-    105,
-    188,
-    {
-      align: "center"
-    }
-  );
+pdf.text(
+  `Member #${memberId}`,
+  105,
+  188,
+  {
+    align: "center"
+  }
+);
 
-  pdf.setFontSize(11);
+pdf.setFontSize(10);
 
-  pdf.text(
-    `Registered: ${date.toLocaleDateString()}`,
-    105,
-    200,
-    {
-      align: "center"
-    }
-  );
+pdf.text(
+  `Certificate No. LC-${memberId}`,
+  105,
+  198,
+  {
+    align: "center"
+  }
+);
+
+pdf.setFontSize(11);
+
+pdf.text(
+  `Registered: ${date.toLocaleDateString()}`,
+  105,
+  208,
+  {
+    align: "center"
+  }
+);
 
   // =====================================
   // QR CODE
@@ -824,10 +881,10 @@ async function generateMembershipCertificate() {
     pdf.addImage(
       qrImage.src,
       "PNG",
-      80,
-      208,
-      50,
-      50
+      87,
+      220,
+      36,
+      36
     );
 
   }
@@ -839,22 +896,33 @@ async function generateMembershipCertificate() {
   pdf.setFontSize(10);
 
   pdf.text(
-    "One Verified Identity",
-    105,
-    266,
-    {
-      align: "center"
-    }
-  );
+  "One Verified Identity",
+  105,
+  265,
+  {
+    align: "center"
+  }
+);
 
-  pdf.text(
-    "One Vote",
-    105,
-    273,
-    {
-      align: "center"
-    }
-  );
+pdf.text(
+  "One Vote",
+  105,
+  272,
+  {
+    align: "center"
+  }
+);
+
+pdf.setFontSize(8);
+
+pdf.text(
+  "laborcoin.tech",
+  105,
+  282,
+  {
+    align: "center"
+  }
+);
 
   // =====================================
   // SAVE
