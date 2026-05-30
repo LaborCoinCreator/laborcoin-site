@@ -830,7 +830,7 @@ try {
     "bold"
   );
 
-  pdf.setFontSize(16);
+  pdf.setFontSize(18);
 
   if (
     displayName &&
@@ -847,7 +847,7 @@ try {
   );
 
   pdf.text(
-    userAddress,
+    `${userAddress.slice(0,6)}...${userAddress.slice(-4)}`,
     105,
     158,
     {
@@ -978,10 +978,10 @@ pdf.text(
     pdf.addImage(
       qrImage.src,
       "PNG",
-      87,
+      90,
       235,
-      36,
-      36
+      30,
+      30
     );
 
   }
@@ -1000,7 +1000,7 @@ pdf.text(
   pdf.text(
   "One Verified Identity",
   105,
-  272,
+  268,
   {
     align: "center"
   }
@@ -1009,7 +1009,7 @@ pdf.text(
 pdf.text(
   "One Vote",
   105,
-  280,
+  276,
   {
     align: "center"
   }
@@ -1025,7 +1025,7 @@ pdf.setFontSize(14);
 pdf.text(
   "laborcoin.tech",
   105,
-  290,
+  286,
   {
     align: "center"
   }
