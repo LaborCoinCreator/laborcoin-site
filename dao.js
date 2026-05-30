@@ -165,6 +165,16 @@ async function showMembershipData() {
         userAddress
       );
 
+console.log(
+  "Address:",
+  userAddress
+);
+
+console.log(
+  "ENS:",
+  ens
+);
+
     console.log(
       "ENS:",
       ens
