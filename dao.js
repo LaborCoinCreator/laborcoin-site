@@ -871,7 +871,7 @@ try {
   pdf.text(
     "is a verified member of the",
     105,
-    160,
+    164,
     {
       align: "center"
     }
@@ -880,7 +880,7 @@ try {
   pdf.text(
     "LaborCoin DAO",
     105,
-    168,
+    164,
     {
       align: "center"
     }
