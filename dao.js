@@ -688,6 +688,18 @@ async function generateMembershipCertificate() {
 let displayName =
   userAddress;
 
+const overrideName =
+  ENS_OVERRIDES[
+    userAddress
+  ];
+
+if (overrideName) {
+
+  displayName =
+    overrideName;
+
+}
+
 try {
 
   const ethProvider =
