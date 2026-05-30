@@ -154,10 +154,40 @@ async function showMembershipData() {
 
     try {
 
-      const ens =
-        await provider.lookupAddress(
-          userAddress
+      const ethProvider =
+        new ethers.JsonRpcProvider(
+          "https://ethereum-rpc.publicnode.com"
         );
+
+      let displayName =
+        userAddress;
+
+      try {
+
+        const ethProvider =
+          new ethers.JsonRpcProvider(
+            "https://ethereum-rpc.publicnode.com"
+          );
+
+        const ens =
+          await ethProvider.lookupAddress(
+            userAddress
+          );
+
+        if (ens) {
+
+          displayName = ens;
+
+        }
+
+      } catch (err) {
+
+        console.log(
+          "ENS lookup failed",
+          err
+        );
+
+      }
 
       console.log(
         "ENS:",
@@ -669,10 +699,15 @@ async function generateMembershipCertificate() {
 
   try {
 
-    const ens =
-      await provider.lookupAddress(
-        userAddress
-      );
+    const ethProvider =
+        new ethers.JsonRpcProvider(
+          "https://ethereum-rpc.publicnode.com"
+        );
+
+      const ens =
+        await ethProvider.lookupAddress(
+          userAddress
+        );
 
     displayName = ens;
 
@@ -787,56 +822,40 @@ async function generateMembershipCertificate() {
     "normal"
   );
 
-    if (displayName) {
+  if (displayName !== userAddress) {
 
-      pdf.setFont(
-        "helvetica",
-        "bold"
-      );
+  pdf.text(
+    displayName,
+    105,
+    142,
+    {
+      align: "center"
+    }
+  );
 
-      pdf.setFontSize(22);
+  pdf.text(
+    userAddress,
+    105,
+    152,
+    {
+      align: "center"
+    }
+  );
 
-    pdf.text(
-      displayName,
-      105,
-      142,
-      {
-        align: "center"
-      }
-    );
+} else {
 
-    pdf.setFont(
-      "helvetica",
-      "normal"
-    );
+  pdf.text(
+    userAddress,
+    105,
+    147,
+    {
+      align: "center"
+    }
+  );
 
-    pdf.setFontSize(11);
+}
 
-    pdf.text(
-      userAddress,
-      105,
-      150,
-      {
-        align: "center"
-      }
-    );
-
-  } else {
-
-    pdf.setFontSize(11);
-
-    pdf.text(
-      userAddress,
-      105,
-      145,
-      {
-        align: "center"
-      }
-    );
-
-  }
-
-  pdf.setFontSize(12);
+  pdf.setFontSize(16);
 
   pdf.text(
     "is a verified member of the",
@@ -983,6 +1002,11 @@ pdf.text(
   {
     align: "center"
   }
+);
+
+pdf.setFont(
+  "helvetica",
+  "normal"
 );
 
 pdf.setFontSize(15);
