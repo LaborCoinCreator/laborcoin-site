@@ -960,7 +960,7 @@ pdf.text(
   // PRINCIPLES
   // =====================================
 
-  pdf.setFontSize(13);
+  pdf.setFontSize(19);
 
   pdf.text(
   "One Verified Identity",
@@ -980,7 +980,7 @@ pdf.text(
   }
 );
 
-pdf.setFontSize(11);
+pdf.setFontSize(15);
 
 pdf.text(
   "laborcoin.tech",
