@@ -751,7 +751,7 @@ async function generateMembershipCertificate() {
     }
   );
 
-  pdf.setFontSize(26);
+  pdf.setFontSize(28);
 
   pdf.text(
     "LaborCoin DAO",
@@ -960,7 +960,7 @@ pdf.text(
   // PRINCIPLES
   // =====================================
 
-  pdf.setFontSize(10);
+  pdf.setFontSize(13);
 
   pdf.text(
   "One Verified Identity",
@@ -980,7 +980,7 @@ pdf.text(
   }
 );
 
-pdf.setFontSize(8);
+pdf.setFontSize(11);
 
 pdf.text(
   "laborcoin.tech",
