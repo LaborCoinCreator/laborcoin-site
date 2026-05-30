@@ -880,7 +880,7 @@ try {
   pdf.text(
     "LaborCoin DAO",
     105,
-    164,
+    175,
     {
       align: "center"
     }
