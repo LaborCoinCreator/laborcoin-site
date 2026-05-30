@@ -729,20 +729,30 @@ try {
     window.jspdf;
 
   const pdf =
-    new jsPDF();
+    new jsPDF({
+      orientation: "portrait",
+      unit: "mm",
+      format: "letter"
+    });
+
+  const pageWidth =
+    pdf.internal.pageSize.getWidth();
+
+  const pageHeight =
+    pdf.internal.pageSize.getHeight();
+
+  pdf.rect(
+    10,
+    10,
+    pageWidth - 20,
+    pageHeight - 20
+  );
 
   // =====================================
   // BORDER
   // =====================================
 
   pdf.setLineWidth(1);
-
-  pdf.rect(
-    10,
-    10,
-    190,
-    277
-  );
 
   // =====================================
   // LOGO
@@ -830,7 +840,7 @@ try {
     "bold"
   );
 
-  pdf.setFontSize(18);
+  pdf.setFontSize(20);
 
   if (
     displayName &&
@@ -880,6 +890,8 @@ pdf.text(
 );
 
 pdf.text(
+
+pdf.setFontSize(20);  
   "LaborCoin DAO",
   105,
   183,
