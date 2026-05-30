@@ -768,7 +768,7 @@ try {
   pdf.text(
     "LaborCoin DAO",
     105,
-    108,
+    115,
     {
       align: "center"
     }
@@ -783,7 +783,7 @@ try {
     "italic"
   );
 
-  pdf.setFontSize(16);
+  pdf.setFontSize(18);
 
   pdf.text(
     "This certifies that",
@@ -796,7 +796,7 @@ try {
 
   pdf.setFont(
     "helvetica",
-    "normal"
+    "bold"
   );
 
   if (
@@ -835,7 +835,7 @@ try {
 
 }
 
-  pdf.setFontSize(16);
+  pdf.setFontSize(18);
 
   pdf.text(
     "is a verified member of the",
@@ -880,7 +880,7 @@ pdf.setFont(
   "italic"
 );
 
-pdf.setFontSize(12);
+pdf.setFontSize(14);
 
 pdf.text(
   `Certificate No. LC-${memberId}`,
@@ -896,7 +896,7 @@ pdf.setFont(
   "normal"
 );
 
-pdf.setFontSize(13);
+pdf.setFontSize(14);
 
 pdf.text(
   `Registered: ${date.toLocaleDateString()}`,
@@ -959,7 +959,7 @@ pdf.text(
     "bold"
   );
 
-  pdf.setFontSize(19);
+  pdf.setFontSize(20);
 
   pdf.text(
   "One Verified Identity",
@@ -984,12 +984,12 @@ pdf.setFont(
   "normal"
 );
 
-pdf.setFontSize(15);
+pdf.setFontSize(14);
 
 pdf.text(
   "laborcoin.tech",
   105,
-  278,
+  282,
   {
     align: "center"
   }
