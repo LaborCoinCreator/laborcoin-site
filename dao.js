@@ -11,6 +11,13 @@ const LABRV_TOKEN =
 const VERIFIER_URL =
   "https://laborcoin-verifier.onrender.com";
 
+const ENS_OVERRIDES = {
+
+  "0x015b6D0990E56D908c876474C6A30eBa2b8A0CFB":
+    "laborcoin.eth"
+
+};
+
 // ===== ABIS =====
 const ERC20_ABI = [
   "function balanceOf(address) view returns (uint256)"
@@ -153,6 +160,20 @@ async function showMembershipData() {
   let displayName =
     userAddress;
 
+const overrideName =
+  ENS_OVERRIDES[
+    userAddress
+  ];
+
+if (overrideName) {
+
+  displayName =
+    ens ||
+    ENS_OVERRIDES[userAddress] ||
+    userAddress;
+
+}
+
   try {
 
     const ethProvider =
@@ -164,16 +185,6 @@ async function showMembershipData() {
       await ethProvider.lookupAddress(
         userAddress
       );
-
-console.log(
-  "Address:",
-  userAddress
-);
-
-console.log(
-  "ENS:",
-  ens
-);
 
     console.log(
       "ENS:",
