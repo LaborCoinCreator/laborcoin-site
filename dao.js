@@ -184,8 +184,6 @@ async function showMembershipData() {
         registeredAt * 1000
       );
 
-    }
-
     certificateText.innerHTML = `
       <strong>Member #${memberId}</strong><br><br>
 
