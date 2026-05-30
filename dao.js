@@ -168,9 +168,7 @@ const overrideName =
 if (overrideName) {
 
   displayName =
-    ens ||
-    ENS_OVERRIDES[userAddress] ||
-    userAddress;
+    overrideName;
 
 }
 
