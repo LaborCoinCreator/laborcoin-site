@@ -871,7 +871,7 @@ try {
   pdf.text(
     "is a verified member of the",
     105,
-    158,
+    168,
     {
       align: "center"
     }
