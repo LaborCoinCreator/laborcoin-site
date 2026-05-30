@@ -979,7 +979,7 @@ pdf.text(
       qrImage.src,
       "PNG",
       90,
-      235,
+      230,
       30,
       30
     );
