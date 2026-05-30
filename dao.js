@@ -830,6 +830,8 @@ try {
     "bold"
   );
 
+  pdf.setFontSize(12);
+
   if (
     displayName &&
     displayName !== userAddress
@@ -838,7 +840,7 @@ try {
   pdf.text(
     displayName,
     105,
-    142,
+    145,
     {
       align: "center"
     }
@@ -847,7 +849,7 @@ try {
   pdf.text(
     userAddress,
     105,
-    152,
+    158,
     {
       align: "center"
     }
@@ -866,12 +868,12 @@ try {
 
 }
 
-  pdf.setFontSize(18);
+  pdf.setFontSize(16);
 
   pdf.text(
     "is a verified member of the",
     105,
-    164,
+    172,
     {
       align: "center"
     }
@@ -880,7 +882,15 @@ try {
   pdf.text(
     "LaborCoin DAO",
     105,
-    175,
+    183,
+    
+  pdf.line(
+    70,
+    190,
+    140,
+    190
+  );
+
     {
       align: "center"
     }
@@ -974,7 +984,7 @@ pdf.text(
       qrImage.src,
       "PNG",
       87,
-      220,
+      225,
       36,
       36
     );
@@ -995,7 +1005,7 @@ pdf.text(
   pdf.text(
   "One Verified Identity",
   105,
-  265,
+  260,
   {
     align: "center"
   }
@@ -1004,7 +1014,7 @@ pdf.text(
 pdf.text(
   "One Vote",
   105,
-  272,
+  268,
   {
     align: "center"
   }
@@ -1020,7 +1030,7 @@ pdf.setFontSize(14);
 pdf.text(
   "laborcoin.tech",
   105,
-  282,
+  285,
   {
     align: "center"
   }
