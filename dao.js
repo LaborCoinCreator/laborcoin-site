@@ -150,69 +150,40 @@ async function showMembershipData() {
       return;
     }
 
-    let displayName;
+  let displayName =
+    userAddress;
 
-    try {
+  try {
 
-      const ethProvider =
-        new ethers.JsonRpcProvider(
-          "https://ethereum-rpc.publicnode.com"
-        );
-
-      let displayName =
-        userAddress;
-
-      try {
-
-        const ethProvider =
-          new ethers.JsonRpcProvider(
-            "https://ethereum-rpc.publicnode.com"
-          );
-
-        const ens =
-          await ethProvider.lookupAddress(
-            userAddress
-          );
-
-        if (ens) {
-
-          displayName = ens;
-
-        }
-
-      } catch (err) {
-
-        console.log(
-          "ENS lookup failed",
-          err
-        );
-
-      }
-
-      console.log(
-        "ENS:",
-        ens
+    const ethProvider =
+      new ethers.JsonRpcProvider(
+        "https://ethereum-rpc.publicnode.com"
       );
 
-      displayName =
-        ens ||
-        (
-          userAddress.slice(0, 6)
-          +
-          "..."
-          +
-          userAddress.slice(-4)
-        );
+    const ens =
+      await ethProvider.lookupAddress(
+        userAddress
+      );
 
-    } catch {
+    console.log(
+      "ENS:",
+      ens
+    );
 
-      displayName =
-        userAddress.slice(0, 6)
-        +
-        "..."
-        +
-        userAddress.slice(-4);
+    if (ens) {
+
+      displayName = ens;
+
     }
+
+  } catch (err) {
+
+    console.log(
+      "ENS lookup failed",
+      err
+    );
+
+  }
 
     const date =
       new Date(
@@ -233,7 +204,7 @@ async function showMembershipData() {
     <br>
 
     <div style="font-size:14px;color:#aaa;">
-      ${userAddress}
+      ${userAddress.slice(0,6)}...${userAddress.slice(-4)}
     </div>
 
     <br>
@@ -695,27 +666,33 @@ async function generateMembershipCertificate() {
       registeredAt * 1000
     );
 
-  let displayName = null;
+let displayName =
+  userAddress;
 
-  try {
+try {
 
-    const ethProvider =
-        new ethers.JsonRpcProvider(
-          "https://ethereum-rpc.publicnode.com"
-        );
+  const ethProvider =
+    new ethers.JsonRpcProvider(
+      "https://ethereum-rpc.publicnode.com"
+    );
 
-      const ens =
-        await ethProvider.lookupAddress(
-          userAddress
-        );
+  const ens =
+    await ethProvider.lookupAddress(
+      userAddress
+    );
+
+  if (ens) {
 
     displayName = ens;
 
-  } catch {
-
-    displayName = null;
-
   }
+
+} catch {
+
+  displayName =
+    userAddress;
+
+}
 
   const { jsPDF } =
     window.jspdf;
@@ -822,7 +799,10 @@ async function generateMembershipCertificate() {
     "normal"
   );
 
-  if (displayName !== userAddress) {
+  if (
+    displayName &&
+    displayName !== userAddress
+  ) {
 
   pdf.text(
     displayName,
@@ -909,11 +889,6 @@ pdf.text(
   {
     align: "center"
   }
-);
-
-pdf.setFont(
-  "helvetica",
-  "normal"
 );
 
 pdf.setFont(
