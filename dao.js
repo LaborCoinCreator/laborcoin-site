@@ -960,6 +960,11 @@ pdf.text(
   // PRINCIPLES
   // =====================================
 
+  pdf.setFont(
+    "helvetica",
+    "bold"
+  );
+
   pdf.setFontSize(19);
 
   pdf.text(
