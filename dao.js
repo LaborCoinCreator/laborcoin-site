@@ -13,7 +13,7 @@ const VERIFIER_URL =
 
 const ENS_OVERRIDES = {
 
-  "0x015b6D0990E56D908c876474C6A30eBa2b8A0CFB":
+  "0x015b6d0990e56d908c876474c6a30eba2b8a0cfb":
     "laborcoin.eth"
 
 };
@@ -162,7 +162,7 @@ async function showMembershipData() {
 
 const overrideName =
   ENS_OVERRIDES[
-    userAddress
+    userAddress.toLowerCase()
   ];
 
 if (overrideName) {
@@ -690,7 +690,7 @@ let displayName =
 
 const overrideName =
   ENS_OVERRIDES[
-    userAddress
+    userAddress.toLowerCase()
   ];
 
 if (overrideName) {
@@ -883,17 +883,16 @@ try {
     "LaborCoin DAO",
     105,
     183,
-    
-  pdf.line(
-    70,
-    190,
-    140,
-    190
-  );
-
     {
       align: "center"
     }
+  );
+
+  pdf.line(
+    70,
+    186,
+    140,
+    186
   );
 
   // =====================================
