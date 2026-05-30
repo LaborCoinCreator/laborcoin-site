@@ -856,6 +856,8 @@ try {
     }
   );
 
+  pdf.setFontSize(14);
+
   pdf.text(
     `${userAddress.slice(0,6)}...${userAddress.slice(-4)}`,
     105,
@@ -889,9 +891,9 @@ pdf.text(
   }
 );
 
-pdf.text(
+pdf.setFontSize(20);
 
-pdf.setFontSize(20);  
+pdf.text(  
   "LaborCoin DAO",
   105,
   183,
