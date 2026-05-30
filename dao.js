@@ -184,22 +184,6 @@ async function showMembershipData() {
         registeredAt * 1000
       );
 
-    let displayName;
-
-    try {
-
-      const ens =
-        await provider.lookupAddress(
-          userAddress
-        );
-
-      displayName =
-        ens || null;
-
-    } catch {
-
-      displayName = null;
-
     }
 
     certificateText.innerHTML = `
@@ -659,6 +643,23 @@ async function generateMembershipCertificate() {
       registeredAt * 1000
     );
 
+  let displayName = null;
+
+  try {
+
+    const ens =
+      await provider.lookupAddress(
+        userAddress
+      );
+
+    displayName = ens;
+
+  } catch {
+
+    displayName = null;
+
+  }
+
   const { jsPDF } =
     window.jspdf;
 
@@ -918,7 +919,7 @@ pdf.setFontSize(8);
 pdf.text(
   "laborcoin.tech",
   105,
-  282,
+  278,
   {
     align: "center"
   }
