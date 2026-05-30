@@ -1000,7 +1000,7 @@ pdf.text(
   pdf.text(
   "One Verified Identity",
   105,
-  272,
+  271,
   {
     align: "center"
   }
@@ -1025,7 +1025,7 @@ pdf.setFontSize(14);
 pdf.text(
   "laborcoin.tech",
   105,
-  286,
+  285,
   {
     align: "center"
   }
