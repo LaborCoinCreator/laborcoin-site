@@ -814,7 +814,7 @@ try {
     "italic"
   );
 
-  pdf.setFontSize(18);
+  pdf.setFontSize(20);
 
   pdf.text(
     "This certifies that",
@@ -830,7 +830,7 @@ try {
     "bold"
   );
 
-  pdf.setFontSize(12);
+  pdf.setFontSize(16);
 
   if (
     displayName &&
@@ -870,46 +870,42 @@ try {
 
   pdf.setFontSize(16);
 
-  pdf.text(
-    "is a verified member of the",
-    105,
-    172,
-    {
-      align: "center"
-    }
-  );
-
-  pdf.text(
-    "LaborCoin DAO",
-    105,
-    183,
-    {
-      align: "center"
-    }
-  );
-
-  pdf.line(
-    70,
-    186,
-    140,
-    186
-  );
-
-  // =====================================
-  // MEMBER INFO
-  // =====================================
-
-  pdf.setFont(
-    "helvetica",
-    "bold"
-  );
-
-  pdf.setFontSize(24);
-
-  pdf.text(
-    `Member #${memberId}`,
+pdf.text(
+  "is a verified member of the",
   105,
-  188,
+  172,
+  {
+    align: "center"
+  }
+);
+
+pdf.text(
+  "LaborCoin DAO",
+  105,
+  183,
+  {
+    align: "center"
+  }
+);
+
+pdf.line(
+  70,
+  190,
+  140,
+  190
+);
+
+pdf.setFont(
+  "helvetica",
+  "bold"
+);
+
+pdf.setFontSize(24);
+
+pdf.text(
+  `Member #${memberId}`,
+  105,
+  203,
   {
     align: "center"
   }
@@ -925,7 +921,7 @@ pdf.setFontSize(14);
 pdf.text(
   `Certificate No. LC-${memberId}`,
   105,
-  198,
+  214,
   {
     align: "center"
   }
@@ -941,11 +937,11 @@ pdf.setFontSize(14);
 pdf.text(
   `Registered: ${date.toLocaleDateString()}`,
   105,
-  208,
+  224,
   {
     align: "center"
   }
-);
+);  
 
   // =====================================
   // QR CODE
@@ -983,7 +979,7 @@ pdf.text(
       qrImage.src,
       "PNG",
       87,
-      225,
+      235,
       36,
       36
     );
@@ -1004,7 +1000,7 @@ pdf.text(
   pdf.text(
   "One Verified Identity",
   105,
-  260,
+  272,
   {
     align: "center"
   }
@@ -1013,7 +1009,7 @@ pdf.text(
 pdf.text(
   "One Vote",
   105,
-  268,
+  280,
   {
     align: "center"
   }
@@ -1029,7 +1025,7 @@ pdf.setFontSize(14);
 pdf.text(
   "laborcoin.tech",
   105,
-  285,
+  290,
   {
     align: "center"
   }
