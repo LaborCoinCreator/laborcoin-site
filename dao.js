@@ -1000,7 +1000,7 @@ pdf.text(
   pdf.text(
   "One Verified Identity",
   105,
-  268,
+  272,
   {
     align: "center"
   }
@@ -1009,7 +1009,7 @@ pdf.text(
 pdf.text(
   "One Vote",
   105,
-  276,
+  279,
   {
     align: "center"
   }
