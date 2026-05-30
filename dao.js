@@ -159,6 +159,11 @@ async function showMembershipData() {
           userAddress
         );
 
+      console.log(
+        "ENS:",
+        ens
+      );
+
       displayName =
         ens ||
         (
@@ -185,13 +190,32 @@ async function showMembershipData() {
       );
 
     certificateText.innerHTML = `
-      <strong>Member #${memberId}</strong><br><br>
+    <div style="font-size:28px;font-weight:bold;">
+      Member #${memberId}
+    </div>
 
-      ${displayName}<br><br>
+    <br>
 
-      Registered:<br>
+    <div style="font-size:22px;">
+      ${displayName}
+    </div>
+
+    <br>
+
+    <div style="font-size:14px;color:#aaa;">
+      ${userAddress}
+    </div>
+
+    <br>
+
+    <div style="font-size:16px;">
+      Registered
+    </div>
+
+    <div style="font-size:18px;">
       ${date.toLocaleString()}
-    `;
+    </div>
+  `;
 
     certificateBox.classList.remove(
       "hidden"
@@ -712,7 +736,11 @@ async function generateMembershipCertificate() {
   // TITLE
   // =====================================
 
-  pdf.setFontSize(30);
+  pdf.setFontSize(34);
+  pdf.setFont(
+    "helvetica",
+    "bold"
+  );
 
   pdf.text(
     "CERTIFICATE OF MEMBERSHIP",
@@ -723,7 +751,7 @@ async function generateMembershipCertificate() {
     }
   );
 
-  pdf.setFontSize(22);
+  pdf.setFontSize(26);
 
   pdf.text(
     "LaborCoin DAO",
@@ -738,7 +766,12 @@ async function generateMembershipCertificate() {
   // BODY
   // =====================================
 
-  pdf.setFontSize(14);
+  pdf.setFont(
+    "helvetica",
+    "italic"
+  );
+
+  pdf.setFontSize(16);
 
   pdf.text(
     "This certifies that",
@@ -749,9 +782,19 @@ async function generateMembershipCertificate() {
     }
   );
 
-  if (displayName) {
+  pdf.setFont(
+    "helvetica",
+    "normal"
+  );
 
-    pdf.setFontSize(14);
+    if (displayName) {
+
+      pdf.setFont(
+        "helvetica",
+        "bold"
+      );
+
+      pdf.setFontSize(22);
 
     pdf.text(
       displayName,
@@ -762,7 +805,12 @@ async function generateMembershipCertificate() {
       }
     );
 
-    pdf.setFontSize(8);
+    pdf.setFont(
+      "helvetica",
+      "normal"
+    );
+
+    pdf.setFontSize(11);
 
     pdf.text(
       userAddress,
@@ -775,7 +823,7 @@ async function generateMembershipCertificate() {
 
   } else {
 
-    pdf.setFontSize(8);
+    pdf.setFontSize(11);
 
     pdf.text(
       userAddress,
@@ -812,10 +860,15 @@ async function generateMembershipCertificate() {
   // MEMBER INFO
   // =====================================
 
-  pdf.setFontSize(18);
+  pdf.setFont(
+    "helvetica",
+    "bold"
+  );
 
-pdf.text(
-  `Member #${memberId}`,
+  pdf.setFontSize(24);
+
+  pdf.text(
+    `Member #${memberId}`,
   105,
   188,
   {
@@ -823,7 +876,12 @@ pdf.text(
   }
 );
 
-pdf.setFontSize(10);
+pdf.setFont(
+  "helvetica",
+  "italic"
+);
+
+pdf.setFontSize(12);
 
 pdf.text(
   `Certificate No. LC-${memberId}`,
@@ -834,7 +892,17 @@ pdf.text(
   }
 );
 
-pdf.setFontSize(11);
+pdf.setFont(
+  "helvetica",
+  "normal"
+);
+
+pdf.setFont(
+  "helvetica",
+  "normal"
+);
+
+pdf.setFontSize(13);
 
 pdf.text(
   `Registered: ${date.toLocaleDateString()}`,
