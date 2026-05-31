@@ -685,9 +685,6 @@ async function generateMembershipCertificate() {
       registeredAt * 1000
     );
 
-  const centerX =
-    pageWidth / 2;
-
 let displayName =
   userAddress;
 
@@ -744,6 +741,9 @@ try {
   const pageHeight =
     pdf.internal.pageSize.getHeight();
 
+  const centerX =
+    pageWidth / 2;
+
   // =====================================
   // BORDER
   // =====================================
@@ -779,13 +779,15 @@ try {
     }
   );
 
+  const logoSize = 45;
+
   pdf.addImage(
     logo,
     "PNG",
-    80,
+    centerX - (logoSize / 2),
     18,
-    45,
-    45
+    logoSize,
+    logoSize
   );
 
   // =====================================
