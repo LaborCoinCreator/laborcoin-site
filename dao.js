@@ -861,7 +861,7 @@ try {
   pdf.text(
     `${userAddress.slice(0,6)}...${userAddress.slice(-4)}`,
     105,
-    158,
+    160,
     {
       align: "center"
     }
@@ -885,18 +885,18 @@ try {
 pdf.text(
   "is a verified member of the",
   105,
-  172,
+  176,
   {
     align: "center"
   }
 );
 
-pdf.setFontSize(20);
+pdf.setFontSize(18);
 
 pdf.text(  
   "LaborCoin DAO",
   105,
-  183,
+  186,
   {
     align: "center"
   }
@@ -906,7 +906,7 @@ pdf.line(
   70,
   190,
   140,
-  190
+  194
 );
 
 pdf.setFont(
@@ -919,7 +919,7 @@ pdf.setFontSize(24);
 pdf.text(
   `Member #${memberId}`,
   105,
-  203,
+  208,
   {
     align: "center"
   }
@@ -935,7 +935,7 @@ pdf.setFontSize(14);
 pdf.text(
   `Certificate No. LC-${memberId}`,
   105,
-  214,
+  220,
   {
     align: "center"
   }
@@ -951,7 +951,7 @@ pdf.setFontSize(14);
 pdf.text(
   `Registered: ${date.toLocaleDateString()}`,
   105,
-  224,
+  230,
   {
     align: "center"
   }
@@ -993,9 +993,9 @@ pdf.text(
       qrImage.src,
       "PNG",
       90,
-      230,
-      30,
-      30
+      238,
+      28,
+      28
     );
 
   }
@@ -1014,7 +1014,7 @@ pdf.text(
   pdf.text(
   "One Verified Identity",
   105,
-  271,
+  272,
   {
     align: "center"
   }
@@ -1023,7 +1023,7 @@ pdf.text(
 pdf.text(
   "One Vote",
   105,
-  279,
+  280,
   {
     align: "center"
   }
@@ -1039,7 +1039,7 @@ pdf.setFontSize(14);
 pdf.text(
   "laborcoin.tech",
   105,
-  285,
+  288,
   {
     align: "center"
   }
