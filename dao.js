@@ -904,7 +904,7 @@ pdf.text(
 
 pdf.line(
   70,
-  190,
+  194,
   140,
   194
 );
@@ -1039,7 +1039,7 @@ pdf.setFontSize(14);
 pdf.text(
   "laborcoin.tech",
   105,
-  288,
+  286,
   {
     align: "center"
   }
