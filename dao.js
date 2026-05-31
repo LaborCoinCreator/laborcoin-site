@@ -685,6 +685,9 @@ async function generateMembershipCertificate() {
       registeredAt * 1000
     );
 
+  const centerX =
+    pageWidth / 2;
+
 let displayName =
   userAddress;
 
@@ -797,7 +800,7 @@ try {
 
   pdf.text(
     "CERTIFICATE OF MEMBERSHIP",
-    105,
+    centerX,
     82,
     {
       align: "center"
@@ -808,7 +811,7 @@ try {
 
   pdf.text(
     "LaborCoin DAO",
-    105,
+    centerX,
     100,
     {
       align: "center"
@@ -828,7 +831,7 @@ try {
 
   pdf.text(
     "This certifies that",
-    105,
+    centerX,
     115,
     {
       align: "center"
@@ -849,7 +852,7 @@ try {
 
   pdf.text(
     displayName,
-    105,
+    centerX,
     130,
     {
       align: "center"
@@ -860,7 +863,7 @@ try {
 
   pdf.text(
     `${userAddress.slice(0,6)}...${userAddress.slice(-4)}`,
-    105,
+    centerX,
     143,
     {
       align: "center"
@@ -871,7 +874,7 @@ try {
 
   pdf.text(
     userAddress,
-    105,
+    centerX,
     147,
     {
       align: "center"
@@ -884,7 +887,7 @@ try {
 
 pdf.text(
   "is a verified member of the",
-  105,
+  centerX,
   158,
   {
     align: "center"
@@ -895,7 +898,7 @@ pdf.setFontSize(18);
 
 pdf.text(  
   "LaborCoin DAO",
-  105,
+  centerX,
   168,
   {
     align: "center"
@@ -922,7 +925,7 @@ pdf.setFontSize(24);
 
 pdf.text(
   `Member #${memberId}`,
-  105,
+  centerX,
   190,
   {
     align: "center"
@@ -938,7 +941,7 @@ pdf.setFontSize(14);
 
 pdf.text(
   `Certificate No. LC-${memberId}`,
-  105,
+  centerX,
   198,
   {
     align: "center"
@@ -954,7 +957,7 @@ pdf.setFontSize(14);
 
 pdf.text(
   `Registered: ${date.toLocaleDateString()}`,
-  105,
+  centerX,
   206,
   {
     align: "center"
@@ -999,7 +1002,7 @@ pdf.text(
     qrImage.src,
     "PNG",
     (pageWidth / 2) - (qrSize / 2),
-    212,
+    216,
     qrSize,
     qrSize
   );
@@ -1019,7 +1022,7 @@ pdf.text(
 
   pdf.text(
   "One Verified Identity",
-  105,
+  centerX,
   248,
   {
     align: "center"
@@ -1028,7 +1031,7 @@ pdf.text(
 
 pdf.text(
   "One Vote",
-  105,
+  centerX,
   255,
   {
     align: "center"
@@ -1044,7 +1047,7 @@ pdf.setFontSize(14);
 
 pdf.text(
   "laborcoin.tech",
-  105,
+  centerX,
   263,
   {
     align: "center"
