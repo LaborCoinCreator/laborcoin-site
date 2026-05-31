@@ -779,17 +779,17 @@ try {
   pdf.addImage(
     logo,
     "PNG",
-    75,
-    20,
-    55,
-    55
+    80,
+    18,
+    45,
+    45
   );
 
   // =====================================
   // TITLE
   // =====================================
 
-  pdf.setFontSize(34);
+  pdf.setFontSize(30);
   pdf.setFont(
     "helvetica",
     "bold"
@@ -804,7 +804,7 @@ try {
     }
   );
 
-  pdf.setFontSize(28);
+  pdf.setFontSize(24);
 
   pdf.text(
     "LaborCoin DAO",
@@ -993,9 +993,9 @@ pdf.text(
       qrImage.src,
       "PNG",
       90,
-      234,
-      28,
-      28
+      225,
+      22,
+      22
     );
 
   }
@@ -1014,7 +1014,7 @@ pdf.text(
   pdf.text(
   "One Verified Identity",
   105,
-  270,
+  252,
   {
     align: "center"
   }
@@ -1023,7 +1023,7 @@ pdf.text(
 pdf.text(
   "One Vote",
   105,
-  278,
+  260,
   {
     align: "center"
   }
@@ -1039,7 +1039,7 @@ pdf.setFontSize(14);
 pdf.text(
   "laborcoin.tech",
   105,
-  286,
+  267,
   {
     align: "center"
   }
