@@ -752,7 +752,14 @@ try {
   // BORDER
   // =====================================
 
-  pdf.setLineWidth(1);
+  pdf.setLineWidth(1.5);
+
+  pdf.rect(
+    10,
+    10,
+    pageWidth - 20,
+    pageHeight - 20
+  );
 
   // =====================================
   // LOGO
@@ -780,9 +787,9 @@ try {
     logo,
     "PNG",
     75,
-    18,
-    60,
-    60
+    20,
+    55,
+    55
   );
 
   // =====================================
@@ -919,7 +926,7 @@ pdf.setFontSize(24);
 pdf.text(
   `Member #${memberId}`,
   105,
-  208,
+  206,
   {
     align: "center"
   }
@@ -935,7 +942,7 @@ pdf.setFontSize(14);
 pdf.text(
   `Certificate No. LC-${memberId}`,
   105,
-  220,
+  216,
   {
     align: "center"
   }
@@ -951,7 +958,7 @@ pdf.setFontSize(14);
 pdf.text(
   `Registered: ${date.toLocaleDateString()}`,
   105,
-  230,
+  226,
   {
     align: "center"
   }
@@ -993,7 +1000,7 @@ pdf.text(
       qrImage.src,
       "PNG",
       90,
-      238,
+      232,
       28,
       28
     );
@@ -1014,7 +1021,7 @@ pdf.text(
   pdf.text(
   "One Verified Identity",
   105,
-  272,
+  266,
   {
     align: "center"
   }
@@ -1023,7 +1030,7 @@ pdf.text(
 pdf.text(
   "One Vote",
   105,
-  280,
+  274,
   {
     align: "center"
   }
@@ -1039,7 +1046,7 @@ pdf.setFontSize(14);
 pdf.text(
   "laborcoin.tech",
   105,
-  286,
+  282,
   {
     align: "center"
   }
