@@ -861,7 +861,7 @@ try {
     }
   );
 
-  pdf.setFontSize(14);
+  pdf.setFontSize(12);
 
   pdf.text(
     `${userAddress.slice(0,6)}...${userAddress.slice(-4)}`,
@@ -907,7 +907,7 @@ pdf.text(
   }
 );
 
-pdf.setLineWidth(0.6);
+pdf.setLineWidth(0.8);
 
 const dividerWidth = 120;
 
@@ -998,7 +998,7 @@ pdf.text(
 
   if (qrImage) {
 
-  const qrSize = 20;
+  const qrSize = 22;
 
   pdf.addImage(
     qrImage.src,
