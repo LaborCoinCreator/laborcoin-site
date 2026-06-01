@@ -832,7 +832,7 @@ try {
   pdf.setFontSize(20);
 
   pdf.text(
-    "This certifies that",
+    "hereby certifies that",
     centerX,
     115,
     {
