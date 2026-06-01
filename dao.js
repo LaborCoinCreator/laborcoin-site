@@ -1004,7 +1004,7 @@ pdf.text(
     qrImage.src,
     "PNG",
     (pageWidth / 2) - (qrSize / 2),
-    216,
+    214,
     qrSize,
     qrSize
   );
