@@ -845,7 +845,7 @@ try {
     "bold"
   );
 
-  pdf.setFontSize(20);
+  pdf.setFontSize(22);
 
   if (
     displayName &&
