@@ -812,7 +812,7 @@ try {
   pdf.setFontSize(24);
 
   pdf.text(
-    "LaborCoin DAO",
+    "The LaborCoin DAO",
     centerX,
     100,
     {
@@ -900,6 +900,11 @@ pdf.text(
     align: "center"
   }
 );
+
+pdf.setFont(
+    "times",
+    "bold"
+  );
 
 pdf.setFontSize(18);
 
