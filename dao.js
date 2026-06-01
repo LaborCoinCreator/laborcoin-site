@@ -796,7 +796,7 @@ try {
 
   pdf.setFontSize(30);
   pdf.setFont(
-    "helvetica",
+    "times",
     "bold"
   );
 
@@ -825,7 +825,7 @@ try {
   // =====================================
 
   pdf.setFont(
-    "helvetica",
+    "times",
     "italic"
   );
 
@@ -841,7 +841,7 @@ try {
   );
 
   pdf.setFont(
-    "helvetica",
+    "times",
     "bold"
   );
 
