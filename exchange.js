@@ -8,6 +8,9 @@ const VERIFIER_URL =
 const MAX_WALLET =
   10000;
 
+const MAX_TRANSACTION =
+  5000;
+
 const buyBtn =
   document.getElementById(
     "buyBtn"
@@ -602,6 +605,36 @@ buyBtn.onclick = async () => {
         ethers.formatEther(price)
       );
 
+    if (
+      tokensExpected > MAX_TRANSACTION
+    ) {
+
+      setStatus(
+        "Buy exceeds 5,000 LABR limit",
+        "error"
+      );
+
+      hideLoading();
+
+      return;
+    }
+
+    if (
+      currentBalance +
+      tokensExpected >
+      MAX_WALLET
+    ) {
+
+      setStatus(
+        "Purchase would exceed 10,000 LABR wallet limit",
+        "error"
+      );
+
+      hideLoading();
+
+      return;
+    }
+
     const minOut =
       ethers.parseEther(
         (
@@ -697,9 +730,24 @@ sellBtn.onclick = async () => {
     ) {
 
       setStatus(
-        "Wallet exceeds limit",
+        "Wallet exceeds 10,000 LABR exchange limit",
         "error"
       );
+
+      return;
+    }
+
+    if (
+      Number(val) >
+      MAX_TRANSACTION
+    ) {
+
+      setStatus(
+        "Sell exceeds 5,000 LABR limit",
+        "error"
+      );
+
+      hideLoading();
 
       return;
     }
