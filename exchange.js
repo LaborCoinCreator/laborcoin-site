@@ -581,7 +581,7 @@ buyBtn.onclick = async () => {
     ) {
 
       setStatus(
-        "Wallet exceeds limit",
+        "Wallet exceeds 10,000 LABR exchange limit",
         "error"
       );
 

@@ -547,3 +547,31 @@ footer {
   border-radius: 8px;
   padding: 20px;
 }
+
+.wallet-box p {
+  text-align: center;
+}
+
+.wallet-box h2 {
+  text-align: center;
+}
+
+.center-content {
+  text-align: center;
+}
+
+.center-content p {
+  text-align: center;
+}
+
+.center-status {
+  text-align: center;
+}
+
+.center-status h2 {
+  text-align: center;
+}
+
+.center-status p {
+  text-align: center;
+}
