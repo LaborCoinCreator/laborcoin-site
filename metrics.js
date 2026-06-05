@@ -11,11 +11,11 @@ const provider =
 const REGISTRATION_CONTRACT =
   "0xa7D0C092C2391379046cACDc56BEbDe5A0CBD113";
 
-const GOVERNANCE_CONTRACT =
+const METRICS_GOVERNANCE_CONTRACT =
   "0x52419b9977f50918eb98558F39bb40AbAFb4Ed2A";
 
-const DAO_TREASURY =
-  "0x0C2e5679153593b82a84eAB5CA90895BB291Cec4";
+const TREASURY_MODULE =
+  "0xCAf66C6F4F168625E732032B88E903b39cc8ECde";
 
 // ===== ABIs =====
 
@@ -46,14 +46,14 @@ async function loadNetworkMetrics() {
 
     const governance =
       new ethers.Contract(
-        GOVERNANCE_CONTRACT,
+        METRICS_GOVERNANCE_CONTRACT,
         GOVERNANCE_ABI,
         provider
       );
 
     const treasury =
       new ethers.Contract(
-        DAO_TREASURY,
+        TREASURY_MODULE,
         TREASURY_ABI,
         provider
       );
