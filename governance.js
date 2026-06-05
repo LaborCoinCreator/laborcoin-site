@@ -8,9 +8,6 @@ const LABRV_TOKEN =
 const VERIFIER_URL =
   "https://laborcoin-verifier.onrender.com";
 
-const DAO_TREASURY =
-  "0x0C2e5679153593b82a84eAB5CA90895BB291Cec4";
-
 // ===== ABI =====
 const GOV_ABI = [
 
