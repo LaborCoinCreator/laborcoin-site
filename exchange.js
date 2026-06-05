@@ -909,12 +909,20 @@ async function drawCurve() {
   const maxPrice =
     Math.max(...prices);
 
+  const minPrice =
+    Math.min(...prices);
+
   ctx.beginPath();
 
   for (let x = 0; x < prices.length; x++) {
 
     const normalized =
-      prices[x] / maxPrice;
+      (
+        prices[x] - minPrice
+      ) /
+      (
+        maxPrice - minPrice
+      );
 
     const y =
       canvas.height -
@@ -934,25 +942,6 @@ async function drawCurve() {
   ctx.strokeStyle = "#ff3b3b";
   ctx.lineWidth = 2;
   ctx.stroke();
-  
-  // ===== CURVE LABELS =====
-
-ctx.fillStyle = "#ffffff";
-ctx.font = "bold 15px Inter";
-
-// $1 start label
-ctx.fillText(
-  "$1",
-  5,
-  canvas.height - 15
-);
-
-// $15 end label
-ctx.fillText(
-  "$15",
-  canvas.width - 40,
-  8
-);
   
   const currentSold =
   Number(
@@ -979,8 +968,9 @@ const currentPrice =
 const markerY =
   canvas.height -
   (
-    currentPrice /
-    maxPrice
+    (currentPrice - minPrice)
+    /
+    (maxPrice - minPrice)
   ) * canvas.height;
 
 ctx.beginPath();
