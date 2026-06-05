@@ -269,6 +269,11 @@ document.getElementById(
   "connectBtn"
 ).style.display = "none";
 
+setGateStatus(
+  "Wallet connected",
+  "success"
+);
+
 exchange =
   new ethers.Contract(
     EXCHANGE_ADDRESS,
@@ -964,7 +969,7 @@ ctx.fillText(
 ctx.fillText(
   "$15",
   canvas.width - 40,
-  12
+  8
 );
   
   const currentSold =
