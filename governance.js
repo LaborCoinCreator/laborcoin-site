@@ -12,6 +12,10 @@ const DAO_TREASURY =
   "0x0C2e5679153593b82a84eAB5CA90895BB291Cec4";
 
 // ===== ABI =====
+const TREASURY_ABI = [
+  "function getTreasuryBalance() view returns(uint256)"
+];
+
 const GOV_ABI = [
 
   "function proposalCount() view returns (uint256)",
@@ -86,6 +90,11 @@ const loadingOverlay =
 const loadingText =
   document.getElementById(
     "loadingText"
+  );
+
+const treasuryDepth =
+  document.getElementById(
+    "treasuryDepth"
   );
 
 // ===== INITIAL UI STATE =====
@@ -410,6 +419,8 @@ govVerifyBtn.onclick = async () => {
 
     await loadProposalFeed();
 
+    await loadTreasuryDepth();
+
   } catch (err) {
 
     console.error(err);
@@ -517,6 +528,36 @@ async () => {
     );
   }
 };
+
+async function loadTreasuryDepth() {
+
+  try {
+
+    const treasury =
+      new ethers.Contract(
+        DAO_TREASURY,
+        TREASURY_ABI,
+        provider
+      );
+
+    const balance =
+      await treasury.getTreasuryBalance();
+
+    treasuryDepth.innerText =
+      Number(
+        ethers.formatEther(balance)
+      ).toLocaleString() + " POL";
+
+  } catch (err) {
+
+    console.error(err);
+
+    treasuryDepth.innerText =
+      "Unavailable";
+
+  }
+
+}
 
 // ===== LOAD FEED =====
 async function loadProposalFeed() {
