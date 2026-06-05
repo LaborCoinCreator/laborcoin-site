@@ -8,6 +8,11 @@ const LABRV_TOKEN =
 const VERIFIER_URL =
   "https://laborcoin-verifier.onrender.com";
 
+const MAX_TRANSFER_PERCENT = 5;
+
+const DAO_TREASURY =
+  "0x0C2e5679153593b82a84eAB5CA90895BB291Cec4";
+
 // ===== ABI =====
 const GOV_ABI = [
 
@@ -68,6 +73,21 @@ const recipientAddress =
 
 const treasuryAmount =
   document.getElementById("treasuryAmount");
+
+const proposalTreasuryInfo =
+  document.getElementById(
+    "proposalTreasuryInfo"
+  );
+
+const proposalObligationsInfo =
+  document.getElementById(
+    "proposalObligationsInfo"
+  );
+
+const maxProposalBtn =
+  document.getElementById(
+    "maxProposalBtn"
+  );
 
 const proposalDescription =
   document.getElementById("proposalDescription");
@@ -405,6 +425,8 @@ govVerifyBtn.onclick = async () => {
 
     hideLoading();
 
+    await loadProposalLimit();
+
     await loadProposalFeed();
 
   } catch (err) {
@@ -516,6 +538,167 @@ async () => {
 };
 
 // ===== LOAD FEED =====
+async function loadProposalLimit() {
+
+  try {
+
+    const balance =
+      await provider.getBalance(
+        DAO_TREASURY
+      );
+
+    const treasuryPOL =
+      Number(
+        ethers.formatEther(balance)
+      );
+
+    const maxProposal =
+      treasuryPOL *
+      (
+        MAX_TRANSFER_PERCENT
+        / 100
+      );
+
+    let pendingObligations = 0;
+
+    const count =
+      Number(
+        await governance.proposalCount()
+      );
+
+    const now =
+      Math.floor(
+        Date.now() / 1000
+      );
+
+    for (
+      let i = 1;
+      i <= count;
+      i++
+    ) {
+
+      const proposal =
+        await governance.proposals(i);
+
+      const executed =
+        proposal.executed;
+
+      const ended =
+        Number(
+          proposal.endTime
+        ) < now;
+
+      const passed =
+        Number(
+          proposal.yesVotes
+        ) >
+        Number(
+          proposal.noVotes
+        );
+
+      if (
+        !executed &&
+        ended &&
+        passed
+      ) {
+
+        pendingObligations +=
+          Number(
+            ethers.formatEther(
+              proposal.amount
+            )
+          );
+      }
+    }
+
+    const difference =
+      treasuryPOL -
+      pendingObligations;
+
+    proposalTreasuryInfo.innerHTML =
+
+      "<strong>Treasury:</strong> "
+      + treasuryPOL.toLocaleString(
+          undefined,
+          {
+            maximumFractionDigits: 2
+          }
+        )
+      + " POL"
+      + "<br>"
+      + "<strong>Maximum Proposal (5%):</strong> "
+      + maxProposal.toLocaleString(
+          undefined,
+          {
+            maximumFractionDigits: 2
+          }
+        )
+      + " POL";
+
+    if (
+      difference >= 0
+    ) {
+
+      proposalObligationsInfo.innerHTML =
+
+        "<strong>Pending Obligations:</strong> "
+        + pendingObligations.toLocaleString(
+            undefined,
+            {
+              maximumFractionDigits: 2
+            }
+          )
+        + " POL"
+        + "<br>"
+        + "<strong>Funding Surplus:</strong> "
+        + difference.toLocaleString(
+            undefined,
+            {
+              maximumFractionDigits: 2
+            }
+          )
+        + " POL";
+
+    } else {
+
+      proposalObligationsInfo.innerHTML =
+
+        "<strong>Pending Obligations:</strong> "
+        + pendingObligations.toLocaleString(
+            undefined,
+            {
+              maximumFractionDigits: 2
+            }
+          )
+        + " POL"
+        + "<br>"
+        + "<strong>Funding Gap:</strong> "
+        + Math.abs(
+            difference
+          ).toLocaleString(
+            undefined,
+            {
+              maximumFractionDigits: 2
+            }
+          )
+        + " POL";
+    }
+
+    maxProposalBtn.onclick =
+      () => {
+
+        document.getElementById(
+          "treasuryAmount"
+        ).value =
+          maxProposal.toFixed(2);
+      };
+
+  } catch (err) {
+
+    console.error(err);
+  }
+}
+
 async function loadProposalFeed() {
 
   try {

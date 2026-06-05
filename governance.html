@@ -129,10 +129,57 @@
         placeholder="Recipient Address"
       >
 
-      <input
-        id="treasuryAmount"
-        placeholder="Amount (POL)"
+      <div id="proposalAmountSection">
+
+        <p
+          id="proposalTreasuryInfo"
+          class="status"
+          style="text-align:center;"
+        >
+          Loading Treasury Data...
+        </p>
+
+        <p
+          id="proposalObligationsInfo"
+          class="status"
+          style="text-align:center;"
+        >
+        </p>
+  
+        <div class="amount-row">
+
+          <input
+            id="treasuryAmount"
+            placeholder="Amount (POL)"
+          >
+
+    <button
+      id="maxProposalBtn"
+      class="cta-button secondary"
+      type="button"
+    >
+      Max
+    </button>
+
+  </div>
+
+      <p
+        class="status"
+        style="
+          text-align:center;
+          font-size:0.9rem;
+        "
       >
+
+        Proposal execution is limited
+        to 5% of the DAO treasury at
+        execution time. Treasury
+        balances may change while a
+        proposal is active.
+
+      </p>
+
+</div>
       
       <textarea
         id="proposalDescription"

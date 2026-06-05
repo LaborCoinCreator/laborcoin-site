@@ -185,6 +185,25 @@ footer {
   text-align: left;
 }
 
+.amount-row {
+
+  display: flex;
+
+  gap: 10px;
+
+  align-items: center;
+}
+
+.amount-row input {
+
+  flex: 1;
+}
+
+#maxProposalBtn {
+
+  min-width: 90px;
+}
+
 /* CANVAS */
 #curveCanvas {
   width: 100%;
