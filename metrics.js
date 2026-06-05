@@ -3,7 +3,7 @@
 const RPC_URL =
   "https://polygon-bor-rpc.publicnode.com";
 
-const provider =
+const metricsProvider =
   new ethers.JsonRpcProvider(
     RPC_URL
   );
@@ -14,8 +14,8 @@ const REGISTRATION_CONTRACT =
 const METRICS_GOVERNANCE_CONTRACT =
   "0x52419b9977f50918eb98558F39bb40AbAFb4Ed2A";
 
-const TREASURY_MODULE =
-  "0xCAf66C6F4F168625E732032B88E903b39cc8ECde";
+const DAO_TREASURY =
+  "0x0C2e5679153593b82a84eAB5CA90895BB291Cec4";
 
 // ===== ABIs =====
 
@@ -27,9 +27,7 @@ const GOVERNANCE_ABI = [
   "function proposalCount() view returns(uint256)"
 ];
 
-const TREASURY_ABI = [
-  "function getTreasuryBalance() view returns(uint256)"
-];
+const TREASURY_ABI = [];
 
 // ===== LOAD METRICS =====
 
@@ -41,21 +39,14 @@ async function loadNetworkMetrics() {
       new ethers.Contract(
         REGISTRATION_CONTRACT,
         REGISTRATION_ABI,
-        provider
+        metricsProvider
       );
 
     const governance =
       new ethers.Contract(
         METRICS_GOVERNANCE_CONTRACT,
         GOVERNANCE_ABI,
-        provider
-      );
-
-    const treasury =
-      new ethers.Contract(
-        TREASURY_MODULE,
-        TREASURY_ABI,
-        provider
+        metricsProvider
       );
 
     const members =
@@ -65,7 +56,9 @@ async function loadNetworkMetrics() {
       await governance.proposalCount();
 
     const treasuryBalance =
-      await treasury.getTreasuryBalance();
+      await metricsProvider.getBalance(
+        DAO_TREASURY
+      );
 
     // HOME PAGE
 

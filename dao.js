@@ -1093,13 +1093,14 @@ showLoading(
 
     if (!registrationSignature) {
 
+      hideLoading();
+
       setStatus(
         "Verify identity first",
         "error"
       );
 
       return;
-
     }
 
     const tx =
