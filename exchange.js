@@ -428,24 +428,6 @@ document.getElementById(
 ).innerText =
   bal.toFixed(2);
 
-    // ===== TREASURY DEPTH =====
-const treasuryAddress =
-  await readExchange.daoTreasury();
-
-const treasuryBalance =
-  await readProvider.getBalance(
-    treasuryAddress
-  );
-
-document.getElementById(
-  "treasuryDepth"
-).innerText =
-  Number(
-    ethers.formatEther(
-      treasuryBalance
-    )
-  ).toLocaleString() + " POL";
-
 // ===== TOTAL SOLD =====
 const totalSold =
   await readExchange.totalSold();
