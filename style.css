@@ -575,3 +575,7 @@ footer {
 .center-status p {
   text-align: center;
 }
+
+.status-box {
+  flex-grow: 1;
+}
