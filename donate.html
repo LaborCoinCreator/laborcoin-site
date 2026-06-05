@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+  <meta charset="UTF-8">
+
+  <title>
+    Support the LaborCoin Treasury
+  </title>
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  >
+
+  <meta
+    name="theme-color"
+    content="#0d0d0d"
+  >
+
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap"
+    rel="stylesheet"
+  >
+
+  <link
+    rel="stylesheet"
+    href="style.css"
+  >
+
+  <link
+    rel="icon"
+    type="image/png"
+    href="assets/favicon.png"
+  >
+
+</head>
+
+<body>
+
+<header class="hero">
+
+  <img
+    src="assets/banner.png"
+    alt="LaborCoin Banner"
+    class="hero-img"
+  >
+
+</header>
+
+<section>
+
+  <a href="index.html">
+    ← Back
+  </a>
+
+  <h1>
+    Support the Treasury
+  </h1>
+
+  <p style="text-align:center;">
+
+    Donations go directly to the
+    LaborCoin DAO Treasury.
+
+    Funds may be distributed through
+    governance-approved worker aid,
+    strike support, mutual aid,
+    and other democratically approved
+    initiatives.
+
+  </p>
+
+</section>
+
+<section>
+
+  <div class="trade-box center-status">
+
+    <h2>
+      LaborCoin Network
+    </h2>
+
+    <p>
+      <strong>
+        DAO Treasury:
+      </strong>
+      <br>
+      <span id="homeTreasuryDepth">
+        Loading...
+      </span>
+    </p>
+
+    <p>
+      <strong>
+        Registered Members:
+      </strong>
+      <br>
+      <span id="homeMemberCount">
+        Loading...
+      </span>
+    </p>
+
+    <p>
+      <strong>
+        Total Proposals:
+      </strong>
+      <br>
+      <span id="homeProposalCount">
+        Loading...
+      </span>
+    </p>
+
+  </div>
+
+</section>
+
+<section>
+
+  <div class="trade-box center-status">
+
+    <h2>
+      Donate POL
+    </h2>
+
+    <div class="center-button">
+
+      <button
+        id="connectBtn"
+        class="cta-button"
+      >
+        Connect Wallet
+      </button>
+
+    </div>
+
+    <br>
+
+    <input
+      id="donationAmount"
+      placeholder="POL Amount"
+      type="number"
+      min="0"
+      step="0.01"
+    >
+
+    <br>
+    <br>
+
+    <div class="center-button">
+
+      <button
+        id="donateBtn"
+        class="cta-button"
+      >
+        Donate
+      </button>
+
+    </div>
+
+    <p
+      id="donationStatus"
+      style="text-align:center;"
+    >
+    </p>
+
+  </div>
+
+</section>
+
+<section>
+
+  <div class="trade-box center-status">
+
+    <h2>
+      Treasury Address
+    </h2>
+
+    <p>
+
+      0x0C2e5679153593b82a84eAB5CA90895BB291Cec4
+
+    </p>
+
+    <p>
+
+      Donations sent through this page
+      are transferred directly to the
+      LaborCoin DAO Treasury.
+
+    </p>
+
+  </div>
+
+</section>
+
+<footer>
+
+  <p>
+    © LaborCoin
+  </p>
+
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/ethers@6.13.1/dist/ethers.umd.min.js"></script>
+
+<script src="metrics.js"></script>
+
+<script src="donate.js"></script>
+
+</body>
+</html>
