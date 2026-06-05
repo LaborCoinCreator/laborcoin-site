@@ -950,21 +950,21 @@ async function drawCurve() {
   
   // ===== CURVE LABELS =====
 
-ctx.fillStyle = "#888";
-ctx.font = "14px Inter";
+ctx.fillStyle = "#ffffff";
+ctx.font = "bold 15px Inter";
 
 // $1 start label
 ctx.fillText(
   "$1",
-  10,
-  canvas.height - 10
+  5,
+  canvas.height - 15
 );
 
 // $15 end label
 ctx.fillText(
   "$15",
-  canvas.width - 35,
-  20
+  canvas.width - 40,
+  12
 );
   
   const currentSold =
@@ -1007,6 +1007,8 @@ ctx.arc(
 );
 
 ctx.fillStyle = "#4dff88";
+ctx.shadowColor = "#4dff88";
+ctx.shadowBlur = 10;
 
 ctx.fill();
 }
