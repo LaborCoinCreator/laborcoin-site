@@ -454,9 +454,6 @@ document.getElementById(
     )
   ).toLocaleString() + " LABR";
 
-    document.getElementById("balance").innerText =
-      bal.toFixed(2) + " LABR";
-
     document.getElementById("walletPercent").innerText =
       ((bal / 10000) * 100).toFixed(1) + "% of limit";
 
