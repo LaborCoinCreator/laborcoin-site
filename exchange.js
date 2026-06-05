@@ -5,6 +5,9 @@ const RPC_URL = "https://polygon-bor-rpc.publicnode.com";
 const VERIFIER_URL =
   "https://laborcoin-verifier.onrender.com";
 
+const POL_ORACLE =
+  "0xAB594600376Ec9fD91F8e885dADF0CE036862dE0";
+
 const MAX_WALLET =
   10000;
 
@@ -69,6 +72,10 @@ const EXCHANGE_ABI = [
   "function MAX_SUPPLY() view returns (uint256)",
   "function unlockedSupply() view returns (uint256)",
   "function lastTxTime(address) view returns (uint256)"
+];
+
+const ORACLE_ABI = [
+  "function latestRoundData() view returns (uint80,int256,uint256,uint256,uint80)"
 ];
 
 const ERC20_ABI = [
@@ -173,8 +180,31 @@ async function initialLoad() {
     const sold = await readExchange.totalSold();
     const price = await readExchange.getPrice(sold);
 
-    document.getElementById("currentPrice").innerText =
-      Number(ethers.formatEther(price)).toFixed(6) + " POL";
+    const oracle =
+      new ethers.Contract(
+        POL_ORACLE,
+        ORACLE_ABI,
+        readProvider
+      );
+
+    const round =
+      await oracle.latestRoundData();
+
+    const polUsd =
+      Number(round[1]) / 1e8;
+
+    const pricePOL =
+      Number(
+        ethers.formatEther(price)
+      );
+
+    const priceUSD =
+      pricePOL * polUsd;
+
+    document.getElementById(
+      "currentPrice"
+    ).innerText =
+      `$${priceUSD.toFixed(2)} USD (${pricePOL.toFixed(6)} POL)`;
 
     await drawCurve();
   } catch (e) {
@@ -443,8 +473,31 @@ document.getElementById(
     document.getElementById("walletPercent").innerText =
       ((bal / 10000) * 100).toFixed(1) + "% of limit";
 
-    document.getElementById("currentPrice").innerText =
-      Number(ethers.formatEther(price)).toFixed(6) + " POL";
+    const oracle =
+      new ethers.Contract(
+        POL_ORACLE,
+        ORACLE_ABI,
+        readProvider
+      );
+
+    const round =
+      await oracle.latestRoundData();
+
+    const polUsd =
+      Number(round[1]) / 1e8;
+
+    const pricePOL =
+      Number(
+        ethers.formatEther(price)
+      );
+
+    const priceUSD =
+      pricePOL * polUsd;
+
+    document.getElementById(
+      "currentPrice"
+    ).innerText =
+      `$${priceUSD.toFixed(2)} USD (${pricePOL.toFixed(6)} POL)`;
 
     updateCooldown();
 
@@ -894,6 +947,68 @@ async function drawCurve() {
   ctx.strokeStyle = "#ff3b3b";
   ctx.lineWidth = 2;
   ctx.stroke();
+  
+  // ===== CURVE LABELS =====
+
+ctx.fillStyle = "#888";
+ctx.font = "14px Inter";
+
+// $1 start label
+ctx.fillText(
+  "$1",
+  10,
+  canvas.height - 10
+);
+
+// $15 end label
+ctx.fillText(
+  "$15",
+  canvas.width - 35,
+  20
+);
+  
+  const currentSold =
+  Number(
+    ethers.formatEther(
+      await readExchange.totalSold()
+    )
+  );
+
+const progress =
+  currentSold / maxSupply;
+
+const markerX =
+  progress * canvas.width;
+
+const currentPrice =
+  Number(
+    ethers.formatEther(
+      await readExchange.getPrice(
+        await readExchange.totalSold()
+      )
+    )
+  );
+
+const markerY =
+  canvas.height -
+  (
+    currentPrice /
+    maxPrice
+  ) * canvas.height;
+
+ctx.beginPath();
+
+ctx.arc(
+  markerX,
+  markerY,
+  6,
+  0,
+  Math.PI * 2
+);
+
+ctx.fillStyle = "#4dff88";
+
+ctx.fill();
 }
 
 // ===== CONNECT FIX =====
