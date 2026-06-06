@@ -950,8 +950,12 @@ async function drawCurve() {
 const progress =
   currentSold / maxSupply;
 
+const markerRadius = 6;
+
 const markerX =
-  progress * canvas.width;
+  markerRadius +
+  progress *
+  (canvas.width - markerRadius * 2);
 
 const currentPrice =
   Number(
