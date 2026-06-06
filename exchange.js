@@ -882,6 +882,7 @@ async function drawCurve() {
   const steps = 120;
 
   const markerPadding = 14;
+  const verticalPadding = 12;
 
   let prices = [];
 
@@ -922,8 +923,6 @@ async function drawCurve() {
       (
         maxPrice - minPrice
       );
-
-    const verticalPadding = 12;
 
     const y =
       canvas.height -
@@ -979,7 +978,7 @@ const currentSold =
 const progress =
   currentSold / maxSupply;
 
-const markerRadius = 5;
+const markerRadius = 7;
 
 const markerX =
   markerPadding +
@@ -997,8 +996,6 @@ const currentPrice =
       )
     )
   );
-
-const verticalPadding = 12;
 
 const markerY =
   canvas.height -
@@ -1025,9 +1022,16 @@ ctx.arc(
 
 ctx.fillStyle = "#4dff88";
 ctx.shadowColor = "#4dff88";
-ctx.shadowBlur = 10;
+ctx.shadowBlur = 6;
 
 ctx.fill();
+
+ctx.strokeStyle = "#ffffff";
+ctx.lineWidth = 1;
+ctx.stroke();
+
+ctx.shadowBlur = 0;
+
 }
 
 // ===== CONNECT FIX =====
