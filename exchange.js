@@ -978,7 +978,7 @@ const currentSold =
 const progress =
   currentSold / maxSupply;
 
-const markerRadius = 7;
+const markerRadius = 6;
 
 const markerX =
   markerPadding +
