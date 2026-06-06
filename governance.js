@@ -20,6 +20,8 @@ const GOV_ABI = [
 
   "function executionAllowed() view returns(bool)",
 
+  "function executionWindow() view returns(uint256)",
+
   "function treasuryModule() view returns(address)",
 
   "function proposalPassed(uint256) view returns(bool)",
@@ -844,32 +846,39 @@ async function loadProposalFeed() {
           Date.now() / 1000
         );
 
+      const executionWindow =
+        Number(
+          await governance.executionWindow()
+        );
+
+      const executionDeadline =
+        Number(p.endTime)
+        + executionWindow;
+
       let status = "ACTIVE";
-
-      if (p.executed) {
-
-        status = "EXECUTED";
-
-      } else if (
-        now >= Number(p.endTime)
-      ) {
-
-        const passed =
-          await governance.proposalPassed(i);
-
-        status =
-          passed
-            ? "PASSED"
-            : "FAILED";
-      }
-
-      const remaining =
-        Number(p.endTime) - now;
 
       let remainingText =
         "Ended";
 
-      if (remaining > 0) {
+      let timerLabel =
+        "Voting Remaining";
+
+      if (p.executed) {
+
+        timerLabel =
+          "Execution Status";
+
+        remainingText =
+          "Completed";        
+
+        status = "EXECUTED";
+
+      } else if (
+        now < Number(p.endTime)
+      ) {
+
+        const remaining =
+          Number(p.endTime) - now;
 
         const days =
           Math.floor(
@@ -889,8 +898,61 @@ async function loadProposalFeed() {
           );
 
         remainingText =
-          `${days}d ${hours}h ${minutes}m remaining`;
+          `${days}d ${hours}h ${minutes}m`;
+
+      } else {
+
+        const passed =
+          await governance.proposalPassed(i);
+
+        if (!passed) {
+
+          status = "FAILED";
+
+        } else if (
+          now <= executionDeadline
+        ) {
+
+          status =
+            "EXECUTION WINDOW OPEN";
+
+          timerLabel =
+            "Execution Remaining";
+
+          const remaining =
+            executionDeadline - now;
+
+          const days =
+            Math.floor(
+              remaining / 86400
+            );
+
+          const hours =
+            Math.floor(
+              (remaining % 86400)
+              / 3600
+            );
+
+          const minutes =
+            Math.floor(
+              (remaining % 3600)
+              / 60
+            );
+
+          remainingText =
+            `${days}d ${hours}h ${minutes}m`;
+
+        } else {
+
+          status = "EXPIRED";
+
+          timerLabel =
+            "Execution Remaining";
+
+          remainingText =
+            "Expired";
         }
+      }
 
       card.innerHTML = `
 
@@ -904,7 +966,7 @@ async function loadProposalFeed() {
         </p>
 
         <p>
-          Remaining:<br>
+          ${timerLabel}:<br>
           ${remainingText}
         </p>
 
@@ -929,6 +991,25 @@ async function loadProposalFeed() {
           Ends:<br>
           ${endDate}
         </p>
+
+          ${
+            (
+              !p.executed &&
+              status ===
+                "EXECUTION WINDOW OPEN"
+            )
+              ? `
+                <p>
+                  Execution Deadline:<br>
+                  ${
+                    new Date(
+                      executionDeadline * 1000
+                    ).toLocaleString()
+                  }
+                </p>
+              `
+              : ""
+          }
 
         <p>
           Executed:
@@ -963,8 +1044,8 @@ async function loadProposalFeed() {
           ${
             (
               !p.executed &&
-              now >= Number(p.endTime) &&
-              await governance.proposalPassed(i)
+              status ===
+                "EXECUTION WINDOW OPEN"
             )
               ? `
                 <button
