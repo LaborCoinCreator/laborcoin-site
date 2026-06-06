@@ -606,3 +606,28 @@ footer {
 #statusMessage {
   text-align: center;
 }
+
+#proposalDescription {
+  width: 100%;
+  box-sizing: border-box;
+
+  background: #111;
+  color: #fff;
+
+  border: 1px solid #222;
+  border-radius: 8px;
+
+  padding: 12px;
+
+  font-family: inherit;
+  font-size: 1rem;
+
+  resize: none;
+
+  min-height: 140px;
+}
+
+#proposalDescription:focus {
+  outline: none;
+  border-color: #ff3b3b;
+}

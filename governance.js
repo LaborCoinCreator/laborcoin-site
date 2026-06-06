@@ -90,6 +90,11 @@ const maxProposalBtn =
 const proposalDescription =
   document.getElementById("proposalDescription");
 
+const descriptionCounter =
+  document.getElementById(
+    "descriptionCounter"
+  );
+
 const submitProposalBtn =
   document.getElementById("submitProposalBtn");
 
@@ -102,6 +107,19 @@ const loadingText =
   document.getElementById(
     "loadingText"
   );
+
+proposalDescription.addEventListener(
+  "input",
+  () => {
+
+    const count =
+      proposalDescription.value.length;
+
+    descriptionCounter.innerText =
+      `${count.toLocaleString()} / 1,000 characters`
+
+  }
+);
 
 // ===== INITIAL UI STATE =====
 govVerifyBtn.disabled = true;
@@ -547,6 +565,9 @@ async () => {
     recipientAddress.value = "";
     treasuryAmount.value = "";
     proposalDescription.value = "";
+    
+    descriptionCounter.innerText =
+      "0 / 1000 characters";
 
     hideLoading();
 
