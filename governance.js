@@ -589,11 +589,8 @@ async function loadProposalLimit() {
         ) < now;
 
       const passed =
-        Number(
-          proposal.yesVotes
-        ) >
-        Number(
-          proposal.noVotes
+        await governance.proposalPassed(
+          i
         );
 
       if (
@@ -687,10 +684,13 @@ async function loadProposalLimit() {
     maxProposalBtn.onclick =
       () => {
 
+        const safeMax =
+          maxProposal * 0.99;
+
         document.getElementById(
           "treasuryAmount"
         ).value =
-          maxProposal.toFixed(2);
+          safeMax.toFixed(6);
       };
 
   } catch (err) {
