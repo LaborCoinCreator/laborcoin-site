@@ -923,9 +923,16 @@ async function drawCurve() {
         maxPrice - minPrice
       );
 
+    const verticalPadding = 12;
+
     const y =
       canvas.height -
-      normalized * canvas.height;
+      verticalPadding -
+      normalized *
+      (
+        canvas.height -
+        verticalPadding * 2
+      );
 
     const drawX =
       markerPadding +
@@ -972,12 +979,14 @@ const currentSold =
 const progress =
   currentSold / maxSupply;
 
+const markerRadius = 5;
+
 const markerX =
-  markerRadius +
+  markerPadding +
   progress *
   (
     canvas.width -
-    markerRadius * 2
+    markerPadding * 2
   );
 
 const currentPrice =
@@ -989,20 +998,27 @@ const currentPrice =
     )
   );
 
+const verticalPadding = 12;
+
 const markerY =
-  (canvas.height - 6) -
+  canvas.height -
+  verticalPadding -
   (
     (currentPrice - minPrice)
     /
     (maxPrice - minPrice)
-  ) * (canvas.height - 12);
+  ) *
+  (
+    canvas.height -
+    verticalPadding * 2
+  );
 
 ctx.beginPath();
 
 ctx.arc(
   markerX,
   markerY,
-  5,
+  markerRadius,
   0,
   Math.PI * 2
 );
