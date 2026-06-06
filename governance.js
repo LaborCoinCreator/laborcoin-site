@@ -986,7 +986,7 @@ async function loadProposalFeed() {
         </p>
 
         <p>
-          Ends:<br>
+          Voting Ends:<br>
           ${endDate}
         </p>
 
