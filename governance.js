@@ -896,19 +896,28 @@ async function loadProposalFeed() {
 
         <div class="cta-row">
 
-          <button
-            class="cta-button"
-            onclick="voteProposal(${i}, true)"
-          >
-            Vote YES
-          </button>
+          ${
+            (
+              !p.executed &&
+              now < Number(p.endTime)
+            )
+              ? `
+                <button
+                  class="cta-button"
+                  onclick="voteProposal(${i}, true)"
+                >
+                  Vote YES
+                </button>
 
-          <button
-            class="cta-button secondary"
-            onclick="voteProposal(${i}, false)"
-          >
-            Vote NO
-          </button>
+                <button
+                  class="cta-button secondary"
+                  onclick="voteProposal(${i}, false)"
+                >
+                  Vote NO
+                </button>
+              `
+              : ""
+          }
 
           ${
             (
@@ -928,18 +937,6 @@ async function loadProposalFeed() {
           }
 
         </div>
-      `;
-
-      proposalFeed.appendChild(
-        card
-      );
-    }
-
-  } catch (err) {
-
-    console.error(err);
-  }
-}
 
 // ===== VOTE =====
 window.voteProposal =

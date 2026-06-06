@@ -19,6 +19,9 @@ const METRICS_GOVERNANCE_CONTRACT =
 const METRICS_DAO_TREASURY =
   "0x0C2e5679153593b82a84eAB5CA90895BB291Cec4";
 
+const METRICS_TREASURY_MODULE =
+  "0x286292f67a6AC9a6eA1c894CF64f6DD8cDD76436";
+
 // ===== ABIs =====
 
 const REGISTRATION_ABI = [
@@ -27,6 +30,10 @@ const REGISTRATION_ABI = [
 
 const GOVERNANCE_ABI = [
   "function proposalCount() view returns(uint256)"
+];
+
+const TREASURY_ABI = [
+  "function totalDistributed() view returns(uint256)"
 ];
 
 // ===== LOAD METRICS =====
@@ -49,6 +56,13 @@ async function loadNetworkMetrics() {
         metricsProvider
       );
 
+    const treasuryModule =
+      new ethers.Contract(
+        METRICS_TREASURY_MODULE,
+        TREASURY_ABI,
+        metricsProvider
+      );
+
     const members =
       await registration.totalMembers();
 
@@ -59,6 +73,9 @@ async function loadNetworkMetrics() {
       await metricsProvider.getBalance(
         METRICS_DAO_TREASURY
       );
+
+    const totalDistributed =
+      await treasuryModule.totalDistributed();
 
     const homeMembers =
       document.getElementById(
@@ -88,6 +105,22 @@ async function loadNetworkMetrics() {
       document.getElementById(
         "homeTreasuryDepth"
       );
+
+  const homeDistributed =
+    document.getElementById(
+      "homeTotalDistributed"
+    );
+
+  if (homeDistributed) {
+
+    homeDistributed.innerText =
+      Number(
+        ethers.formatEther(
+          totalDistributed
+        )
+      ).toLocaleString()
+      + " POL";
+  }
 
     if (homeTreasury) {
 
