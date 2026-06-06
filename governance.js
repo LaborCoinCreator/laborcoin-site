@@ -18,8 +18,6 @@ const GOV_ABI = [
 
   "function proposalCount() view returns (uint256)",
 
-  "function totalRegisteredUsers() view returns (uint256)",
-
   "function executionAllowed() view returns(bool)",
 
   "function treasuryModule() view returns(address)",
@@ -240,6 +238,57 @@ async function getGovernanceSignature(action) {
   };
 }
 
+async function refreshGovernanceConnection() {
+
+  if (!provider) return;
+
+  try {
+
+    signer =
+      await provider.getSigner();
+
+    userAddress =
+      await signer.getAddress();
+
+    governance =
+      new ethers.Contract(
+        GOVERNANCE_CONTRACT,
+        GOV_ABI,
+        signer
+      );
+
+    labrv =
+      new ethers.Contract(
+        LABRV_TOKEN,
+        LABRV_ABI,
+        provider
+      );
+
+    completeStep(
+      "gov-step-wallet"
+    );
+
+    const bal =
+      await labrv.balanceOf(
+        userAddress
+      );
+
+    if (Number(bal) > 0) {
+
+      completeStep(
+        "gov-step-labrv"
+      );
+
+      govVerifyBtn.disabled =
+        false;
+    }
+
+  } catch (err) {
+
+    console.error(err);
+  }
+}
+
 // ===== CONNECT =====
 govConnectBtn.onclick = async () => {
 
@@ -314,9 +363,7 @@ govConnectBtn.onclick = async () => {
         provider
       );
 
-    completeStep(
-      "gov-step-wallet"
-    );
+    await refreshGovernanceConnection();
 
     const bal =
       await labrv.balanceOf(
@@ -332,12 +379,6 @@ govConnectBtn.onclick = async () => {
 
       return;
     }
-
-    completeStep(
-      "gov-step-labrv"
-    );
-
-    govVerifyBtn.disabled = false;
 
     setStatus(
       "Wallet connected",
@@ -991,6 +1032,42 @@ async (id) => {
     );
   }
 };
+
+window.addEventListener(
+  "DOMContentLoaded",
+  async () => {
+
+    if (!window.ethereum) {
+      return;
+    }
+
+    try {
+
+      provider =
+        new ethers.BrowserProvider(
+          window.ethereum
+        );
+
+      const accounts =
+        await provider.send(
+          "eth_accounts",
+          []
+        );
+
+      if (
+        accounts &&
+        accounts.length > 0
+      ) {
+
+        await refreshGovernanceConnection();
+      }
+
+    } catch (err) {
+
+      console.error(err);
+    }
+  }
+);
 
 if (window.ethereum) {
 
