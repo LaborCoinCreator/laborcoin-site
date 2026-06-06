@@ -881,7 +881,7 @@ async function drawCurve() {
   const maxSupply = 500_000_000;
   const steps = 120;
 
-  const markerPadding = 14;
+  const markerPadding = 18;
   const verticalPadding = 12;
 
   let prices = [];
@@ -1021,16 +1021,13 @@ ctx.arc(
 );
 
 ctx.fillStyle = "#4dff88";
-ctx.shadowColor = "#4dff88";
-ctx.shadowBlur = 6;
-
 ctx.fill();
 
-ctx.strokeStyle = "#ffffff";
-ctx.lineWidth = 1;
-ctx.stroke();
-
 ctx.shadowBlur = 0;
+
+ctx.strokeStyle = "#ffffff";
+ctx.lineWidth = 2;
+ctx.stroke();
 
 }
 
