@@ -847,9 +847,7 @@ async function loadProposalFeed() {
         );
 
       const executionWindow =
-        Number(
-          await governance.executionWindow()
-        );
+        7 * 24 * 60 * 60;
 
       const executionDeadline =
         Number(p.endTime)
