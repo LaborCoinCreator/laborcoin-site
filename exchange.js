@@ -952,6 +952,8 @@ async function drawCurve() {
       );
     }
   
+  }
+
 
   ctx.strokeStyle = "#ff3b3b";
   ctx.lineWidth = 2;
