@@ -881,6 +881,8 @@ async function drawCurve() {
   const maxSupply = 500_000_000;
   const steps = 120;
 
+  const markerRadius = 6;
+
   let prices = [];
 
   for (let i = 0; i < steps; i++) {
@@ -925,16 +927,31 @@ async function drawCurve() {
       canvas.height -
       normalized * canvas.height;
 
-    if (x === 0) {
-      ctx.moveTo(x, y);
-    } else {
-      const drawX =
-        (x / (prices.length - 1))
-        * canvas.width;
+    const drawX =
+      markerRadius +
+      (
+        x / (prices.length - 1)
+      ) *
+      (
+        canvas.width -
+        markerRadius * 2
+      );
 
-      ctx.lineTo(drawX, y);
+    if (x === 0) {
+
+      ctx.moveTo(
+        drawX,
+        y
+     );
+
+    } else {
+
+      ctx.lineTo(
+        drawX,
+        y
+      );
     }
-  }
+  
 
   ctx.strokeStyle = "#ff3b3b";
   ctx.lineWidth = 2;
@@ -949,8 +966,6 @@ async function drawCurve() {
 
 const progress =
   currentSold / maxSupply;
-
-const markerRadius = 6;
 
 const markerX =
   markerRadius +

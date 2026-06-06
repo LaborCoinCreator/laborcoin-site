@@ -98,6 +98,11 @@ const descriptionCounter =
 const submitProposalBtn =
   document.getElementById("submitProposalBtn");
 
+const proposalStatus =
+  document.getElementById(
+    "proposalStatus"
+  );
+
 const loadingOverlay =
   document.getElementById(
     "loadingOverlay"
@@ -125,16 +130,31 @@ proposalDescription.addEventListener(
 govVerifyBtn.disabled = true;
 
 // ===== HELPERS =====
-function setStatus(msg, type = "") {
+function setStatus(
+  msg,
+  type = ""
+) {
 
   govStatus.innerText = msg;
 
-  govStatus.style.color =
+  if (proposalStatus) {
+    proposalStatus.innerText = msg;
+  }
+
+  const color =
     type === "error"
       ? "#ff4d4d"
       : type === "success"
       ? "#4dff88"
       : "#ccc";
+
+  govStatus.style.color =
+    color;
+
+  if (proposalStatus) {
+    proposalStatus.style.color =
+      color;
+  }
 }
 
 function completeStep(id) {
