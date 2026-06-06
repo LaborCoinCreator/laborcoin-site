@@ -881,7 +881,7 @@ async function drawCurve() {
   const maxSupply = 500_000_000;
   const steps = 120;
 
-  const markerRadius = 6;
+  const markerRadius = 8;
 
   let prices = [];
 
@@ -984,12 +984,19 @@ const currentPrice =
   );
 
 const markerY =
-  canvas.height -
+  (
+    canvas.height - markerRadius
+  )
+  -
   (
     (currentPrice - minPrice)
     /
     (maxPrice - minPrice)
-  ) * canvas.height;
+  )
+  *
+  (
+    canvas.height - markerRadius * 2
+  );
 
 ctx.beginPath();
 
