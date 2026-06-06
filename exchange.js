@@ -881,7 +881,7 @@ async function drawCurve() {
   const maxSupply = 500_000_000;
   const steps = 120;
 
-  const markerRadius = 14;
+  const markerPadding = 14;
 
   let prices = [];
 
@@ -928,13 +928,13 @@ async function drawCurve() {
       normalized * canvas.height;
 
     const drawX =
-      markerRadius +
+      markerPadding +
       (
         x / (prices.length - 1)
       ) *
       (
         canvas.width -
-        markerRadius * 2
+        markerPadding * 2
       );
 
     if (x === 0) {
@@ -959,10 +959,13 @@ async function drawCurve() {
   ctx.lineWidth = 2;
   ctx.stroke();
   
-  const currentSold =
+const totalSoldBN =
+  await readExchange.totalSold();
+
+const currentSold =
   Number(
     ethers.formatEther(
-      await readExchange.totalSold()
+      totalSoldBN
     )
   );
 
@@ -972,31 +975,34 @@ const progress =
 const markerX =
   markerRadius +
   progress *
-  (canvas.width - markerRadius * 2);
+  (
+    canvas.width -
+    markerRadius * 2
+  );
 
 const currentPrice =
   Number(
     ethers.formatEther(
       await readExchange.getPrice(
-        await readExchange.totalSold()
+        totalSoldBN
       )
     )
   );
 
 const markerY =
-  canvas.height -
+  (canvas.height - 6) -
   (
     (currentPrice - minPrice)
     /
     (maxPrice - minPrice)
-  ) * canvas.height;
+  ) * (canvas.height - 12);
 
 ctx.beginPath();
 
 ctx.arc(
   markerX,
   markerY,
-  6,
+  5,
   0,
   Math.PI * 2
 );
