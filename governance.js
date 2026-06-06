@@ -937,6 +937,25 @@ async function loadProposalFeed() {
           }
 
         </div>
+      `;
+
+      proposalFeed.appendChild(
+        card
+      );
+    }
+  } catch (err) {
+
+    console.error(err);
+
+    proposalFeed.innerHTML = `
+      <div class="trade-box">
+        Failed to load proposals.
+      </div>
+    `;
+  }
+}
+
+// ===== VOTE =====        
 
 // ===== VOTE =====
 window.voteProposal =
