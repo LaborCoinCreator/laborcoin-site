@@ -214,7 +214,11 @@
   class="modal hidden"
 >
 
-  <div class="modal-content">
+<div class="modal-content">
+
+  <!-- SCREEN 1 -->
+
+  <div id="modalScreen1">
 
     <h2>
       Welcome to LaborCoin
@@ -222,106 +226,36 @@
 
     <p>
 
-      LaborCoin uses three
-      separate keys to access
-      the exchange, DAO registration, 
-      and governance:
+      LaborCoin uses three separate credentials
+      that serve different purposes.
 
     </p>
 
-<div class="warning-box">
+    <div class="warning-box">
 
-  <strong>LABR</strong>
-  = Transferable token
+      <p>
+        <strong>Gitcoin Passport</strong><br>
+        Identity verification used to access LaborCoin systems.
+      </p>
 
-  <br><br>
+      <p>
+        <strong>LABR</strong><br>
+        Transferable token used within the LaborCoin ecosystem.
+      </p>
 
-  <strong>LABRV</strong>
-  = Governance voting rights
+      <p>
+        <strong>LABRV</strong><br>
+        Non-transferable governance voting rights received through DAO registration.
+      </p>
 
-  <br><br>
-
-  <strong>Gitcoin Passport</strong>
-  = Identity verification
-
-</div>
+    </div>
 
     <p>
 
-      Before using LaborCoin, users will 
-      need to complete Gitcoin Passport
-      verification by connecting a wallet there.
+      Before using LaborCoin, users must
+      complete Gitcoin Passport verification.
 
     </p>
-
-    <p>
-
-      LaborCoin uses Passport verification
-      to help support one verified identity
-      per participant and reduce abuse of
-      governance and registration systems.
-
-    </p>
-
-    <div class="info-box">
-
-  <h3>
-    How LaborCoin Works
-  </h3>
-
-  <div class="onboarding-step">
-
-    <h3>
-      Buy LABR
-    </h3>
-
-    <p>
-      Complete Passport verification.
-    </p>
-
-    <p>
-      DAO registration is not required.
-    </p>
-
-  </div>
-
-  <div class="onboarding-step">
-
-    <h3>
-      Join the DAO
-    </h3>
-
-    <p>
-      Hold at least 1 LABR.
-    </p>
-
-    <p>
-      Register to receive LABRV voting rights.
-    </p>
-
-  </div>
-
-  <div class="onboarding-step">
-
-    <h3>
-      Participate in Governance
-    </h3>
-
-    <p>
-      Create proposals.
-    </p>
-
-    <p>
-      Vote on treasury allocations.
-    </p>
-
-    <p>
-      Execute approved proposals.
-    </p>
-
-  </div>
-
-</div>  
 
     <div class="cta-row">
 
@@ -343,9 +277,90 @@
 
     </div>
 
-    <br>
-
     <div class="center-button">
+
+      <button
+        id="nextModalScreen"
+        class="cta-button"
+      >
+        Next →
+      </button>
+
+    </div>
+
+  </div>
+
+  <!-- SCREEN 2 -->
+
+  <div
+    id="modalScreen2"
+    class="hidden"
+  >
+
+    <h2>
+      How LaborCoin Works
+    </h2>
+
+    <div class="onboarding-step">
+
+      <h3>
+        1. Buy LABR
+      </h3>
+
+      <p>
+        Complete Passport verification.
+      </p>
+
+      <p>
+        DAO registration is not required.
+      </p>
+
+    </div>
+
+    <div class="onboarding-step">
+
+      <h3>
+        2. Join the DAO
+      </h3>
+
+      <p>
+        Hold at least 1 LABR.
+      </p>
+
+      <p>
+        Register to receive LABRV voting rights.
+      </p>
+
+    </div>
+
+    <div class="onboarding-step">
+
+      <h3>
+        3. Participate in Governance
+      </h3>
+
+      <p>
+        Create proposals.
+      </p>
+
+      <p>
+        Vote on treasury allocations.
+      </p>
+
+      <p>
+        Execute approved proposals.
+      </p>
+
+    </div>
+
+    <div class="cta-row">
+
+      <button
+        id="backModalScreen"
+        class="cta-button secondary"
+      >
+        ← Back
+      </button>
 
       <button
         id="closeWelcomeModal"
@@ -396,6 +411,8 @@
 
 <script>
 
+<script>
+
 document.addEventListener(
   "DOMContentLoaded",
   () => {
@@ -403,6 +420,26 @@ document.addEventListener(
     const modal =
       document.getElementById(
         "welcomeModal"
+      );
+
+    const screen1 =
+      document.getElementById(
+        "modalScreen1"
+      );
+
+    const screen2 =
+      document.getElementById(
+        "modalScreen2"
+      );
+
+    const nextBtn =
+      document.getElementById(
+        "nextModalScreen"
+      );
+
+    const backBtn =
+      document.getElementById(
+        "backModalScreen"
       );
 
     const closeBtn =
@@ -421,6 +458,36 @@ document.addEventListener(
       );
 
     }
+
+    nextBtn.addEventListener(
+      "click",
+      () => {
+
+        screen1.classList.add(
+          "hidden"
+        );
+
+        screen2.classList.remove(
+          "hidden"
+        );
+
+      }
+    );
+
+    backBtn.addEventListener(
+      "click",
+      () => {
+
+        screen2.classList.add(
+          "hidden"
+        );
+
+        screen1.classList.remove(
+          "hidden"
+        );
+
+      }
+    );
 
     closeBtn.addEventListener(
       "click",
