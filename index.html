@@ -24,6 +24,11 @@
   </p>
 
   <div class="cta-row">
+
+    <a href="onboarding.html" class="cta-button">
+      Get Started
+    </a>
+
     <a href="exchange.html" class="cta-button">
       Buy LABR
     </a>
@@ -35,6 +40,7 @@
     <a href="donate.html" class="cta-button secondary">
       Donate
     </a>
+
   </div>
 </section>
 
@@ -161,23 +167,180 @@
   <h2>Get Started</h2>
 
   <div class="cta-row">
-    <a href="exchange.html" class="cta-button">Exchange</a>
-    <a href="dao.html" class="cta-button secondary">DAO</a>
-    <a href="governance.html" class="cta-button secondary">Governance</a>
-    <a href="whitepaper.html" class="cta-button">Whitepaper</a>
-    <a href="donate.html" class="cta-button secondary">
-      Donate
-    </a>
+
+    ...
+
   </div>
+
 </section>
 
+<!-- FIRST VISIT MODAL -->
+
+<div
+  id="welcomeModal"
+  class="modal hidden"
+>
+
+  <div class="modal-content">
+
+    <h2>
+      Welcome to LaborCoin
+    </h2>
+
+    <p>
+
+      Before using LaborCoin, most users
+      should complete Gitcoin Passport
+      verification.
+
+    </p>
+
+    <p>
+
+      LaborCoin uses Passport verification
+      to help support one verified identity
+      per participant and reduce abuse of
+      governance and registration systems.
+
+    </p>
+
+    <div class="info-box">
+
+      <h3>
+        Quick Start
+      </h3>
+
+      <ol>
+
+        <li>Install MetaMask</li>
+
+        <li>Switch to Polygon</li>
+
+        <li>Create a Gitcoin Passport</li>
+
+        <li>Increase your Passport score</li>
+
+        <li>Buy LABR</li>
+
+        <li>Register for governance (optional)</li>
+
+      </ol>
+
+    </div>
+
+    <div class="cta-row">
+
+      <a
+        href="https://passport.gitcoin.co/"
+        target="_blank"
+        rel="noopener noreferrer"
+        class="cta-button"
+      >
+        Gitcoin Passport
+      </a>
+
+      <a
+        href="onboarding.html"
+        class="cta-button secondary"
+      >
+        Onboarding Guide
+      </a>
+
+    </div>
+
+    <br>
+
+    <div class="center-button">
+
+      <button
+        id="closeWelcomeModal"
+        class="cta-button"
+      >
+        Continue to LaborCoin
+      </button>
+
+    </div>
+
+  </div>
+
+</div>
+
 <footer>
-  <p>© LaborCoin</p>
+
+  <div class="cta-row">
+
+    <a href="onboarding.html">
+      Onboarding
+    </a>
+
+    <a href="faq.html">
+      FAQ
+    </a>
+
+    <a href="disclaimer.html">
+      Disclaimer
+    </a>
+
+    <a href="whitepaper.html">
+      Whitepaper
+    </a>
+
+  </div>
+
+  <p>
+    © LaborCoin
+  </p>
+
 </footer>
 
-<script src="https://cdn.jsdelivr.net/npm/ethers@6.13.1/dist/ethers.umd.min.js"></script>
+<script>
 
-<script src="metrics.js"></script>
+document.addEventListener(
+  "DOMContentLoaded",
+  () => {
+
+    const modal =
+      document.getElementById(
+        "welcomeModal"
+      );
+
+    const closeBtn =
+      document.getElementById(
+        "closeWelcomeModal"
+      );
+
+    if (
+      !localStorage.getItem(
+        "laborcoinWelcomeSeen"
+      )
+    ) {
+
+      modal.classList.remove(
+        "hidden"
+      );
+
+    }
+
+    closeBtn.addEventListener(
+      "click",
+      () => {
+
+        localStorage.setItem(
+          "laborcoinWelcomeSeen",
+          "true"
+        );
+
+        modal.classList.add(
+          "hidden"
+        );
+
+      }
+    );
+
+  }
+);
+
+</script>
 
 </body>
 </html>

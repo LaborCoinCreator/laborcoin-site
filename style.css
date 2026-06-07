@@ -631,3 +631,83 @@ footer {
   outline: none;
   border-color: #ff3b3b;
 }
+
+/* ===== INFO PANELS ===== */
+
+.info-box {
+  background: #111;
+  border: 1px solid #333;
+  border-left: 4px solid #ff3b3b;
+  border-radius: 8px;
+  padding: 20px;
+  margin: 25px 0;
+}
+
+.info-box h3 {
+  margin-top: 0;
+  color: #ff3b3b;
+}
+
+.info-box p:last-child {
+  margin-bottom: 0;
+}
+
+.info-box ul {
+  margin-bottom: 0;
+}
+
+/* ===== WARNING BOX ===== */
+
+.warning-box {
+  background: rgba(255,59,59,0.08);
+  border: 1px solid #ff3b3b;
+  border-radius: 8px;
+  padding: 20px;
+  margin: 25px 0;
+}
+
+.warning-box h3 {
+  margin-top: 0;
+  color: #ff3b3b;
+}
+
+/* ===== SUCCESS BOX ===== */
+
+.success-box {
+  background: rgba(77,255,136,0.08);
+  border: 1px solid #4dff88;
+  border-radius: 8px;
+  padding: 20px;
+  margin: 25px 0;
+}
+
+.success-box h3 {
+  margin-top: 0;
+  color: #4dff88;
+}
+
+/* ===== FAQ ===== */
+
+.faq-item {
+  margin-bottom: 35px;
+}
+
+.faq-item h3 {
+  color: #ff3b3b;
+  margin-bottom: 10px;
+}
+
+/* ===== ONBOARDING STEPS ===== */
+
+.onboarding-step {
+  background: #111;
+  border: 1px solid #222;
+  border-radius: 8px;
+  padding: 20px;
+  margin-bottom: 20px;
+}
+
+.onboarding-step h3 {
+  margin-top: 0;
+  color: #ff3b3b;
+}
