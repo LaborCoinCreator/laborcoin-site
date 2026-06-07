@@ -20,8 +20,6 @@ const GOV_ABI = [
 
   "function executionAllowed() view returns(bool)",
 
-  "function executionWindow() view returns(uint256)",
-
   "function treasuryModule() view returns(address)",
 
   "function proposalPassed(uint256) view returns(bool)",
@@ -794,6 +792,9 @@ async function loadProposalFeed() {
         await governance.proposalCount()
       );
 
+    const executionWindow =
+        7 * 24 * 60 * 60;
+
     if (total === 0) {
 
       proposalFeed.innerHTML = `
@@ -845,9 +846,6 @@ async function loadProposalFeed() {
         Math.floor(
           Date.now() / 1000
         );
-
-      const executionWindow =
-        7 * 24 * 60 * 60;
 
       const executionDeadline =
         Number(p.endTime)
