@@ -878,7 +878,7 @@ async function drawCurve() {
 
   ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-  const maxSupply = 500_000_000;
+  const MAX_SUPPLY = 1_000_000_000;
   const steps = 120;
 
   const markerPadding = 18;
@@ -891,7 +891,7 @@ async function drawCurve() {
     const sold =
       ethers.parseEther(
         (
-          (i / steps) * maxSupply
+          (i / steps) * MAX_SUPPLY
         ).toString()
       );
 
@@ -976,7 +976,7 @@ const currentSold =
   );
 
 const progress =
-  currentSold / maxSupply;
+  currentSold / MAX_SUPPLY;
 
 const markerRadius = 6;
 
