@@ -179,6 +179,31 @@ async function initialLoad() {
   try {
     const sold = await readExchange.totalSold();
     const price = await readExchange.getPrice(sold);
+    document.getElementById(
+      "totalSoldDisplay"
+    ).innerText =
+      Number(
+        ethers.formatEther(sold)
+      ).toLocaleString() + " LABR";
+
+    const labrRead =
+      new ethers.Contract(
+        LABR_TOKEN,
+        ERC20_ABI,
+        readProvider
+      );
+
+    const totalSupply =
+      await labrRead.totalSupply();
+
+    document.getElementById(
+      "circulatingSupply"
+    ).innerText =
+      Number(
+        ethers.formatEther(
+          totalSupply
+        )
+      ).toLocaleString() + " LABR";
 
     const oracle =
       new ethers.Contract(
