@@ -901,30 +901,35 @@ async function drawCurve() {
         ).toString()
       );
 
-    const rawPrice =
-      await readExchange.getPrice(sold);
+    try {
 
-    const price =
-      Number(
-        ethers.formatEther(rawPrice)
+      const rawPrice =
+        await readExchange.getPrice(
+          sold
+        );
+
+      const price =
+        Number(
+          ethers.formatEther(
+            rawPrice
+          )
+        );
+
+      prices.push(price);
+
+    } catch (err) {
+
+      console.error(
+        "FAILED AT STEP",
+        i,
+        "SOLD",
+        (i / steps) * MAX_SUPPLY,
+        err
       );
 
-    prices.push(price);
+      throw err;
+    }
   }
-
-  } catch (err) {
-
-    console.error(
-      "FAILED AT STEP",
-      i,
-      "SOLD",
-      (i / steps) * MAX_SUPPLY,
-      err
-    );
-
-    throw err;
-  }
-}
 
   const maxPrice =
     Math.max(...prices);
