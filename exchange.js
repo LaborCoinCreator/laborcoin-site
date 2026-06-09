@@ -878,7 +878,13 @@ async function drawCurve() {
 
   ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-  const MAX_SUPPLY = 1_000_000_000;
+  const unlocked =
+    await readExchange.unlockedSupply();
+
+  const MAX_SUPPLY =
+    Number(
+      ethers.formatEther(unlocked)
+    );
   const steps = 120;
 
   const markerPadding = 18;
@@ -905,6 +911,20 @@ async function drawCurve() {
 
     prices.push(price);
   }
+
+  } catch (err) {
+
+    console.error(
+      "FAILED AT STEP",
+      i,
+      "SOLD",
+      (i / steps) * MAX_SUPPLY,
+      err
+    );
+
+    throw err;
+  }
+}
 
   const maxPrice =
     Math.max(...prices);
