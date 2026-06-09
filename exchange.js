@@ -881,7 +881,7 @@ async function drawCurve() {
   const unlocked =
     await readExchange.unlockedSupply();
 
-  const MAX_SUPPLY =
+  const unlockedSupply =
     Number(
       ethers.formatEther(unlocked)
     );
@@ -892,43 +892,28 @@ async function drawCurve() {
 
   let prices = [];
 
-  for (let i = 0; i < steps; i++) {
+  for (let i = 0; i <= steps; i++) {
 
     const sold =
       ethers.parseEther(
         (
-          (i / steps) * MAX_SUPPLY
+          (i / steps) * unlockedSupply
         ).toString()
       );
 
-    try {
-
-      const rawPrice =
-        await readExchange.getPrice(
-          sold
-        );
-
-      const price =
-        Number(
-          ethers.formatEther(
-            rawPrice
-          )
-        );
-
-      prices.push(price);
-
-    } catch (err) {
-
-      console.error(
-        "FAILED AT STEP",
-        i,
-        "SOLD",
-        (i / steps) * MAX_SUPPLY,
-        err
+    const rawPrice =
+      await readExchange.getPrice(
+        sold
       );
 
-      throw err;
-    }
+    const price =
+      Number(
+        ethers.formatEther(
+          rawPrice
+        )
+      );
+
+    prices.push(price);
   }
 
   const maxPrice =
@@ -1001,7 +986,7 @@ const currentSold =
   );
 
 const progress =
-  currentSold / MAX_SUPPLY;
+  currentSold / unlockedSupply;
 
 const markerRadius = 6;
 
