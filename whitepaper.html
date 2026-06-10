@@ -16,7 +16,7 @@ html {
 
 <style type='text/css' id="style-mermaid">
 :root {
-  --mermaid-theme: default;
+  --mermaid-theme: dark;
   --mermaid-sequence-numbers: off;
   --mermaid-flowchart-curve: linear;
   --mermaid--gantt-left-padding: 75;
@@ -727,41 +727,65 @@ header, .context-menu, .megamenu-content, footer{
 <title>LaborCoin-Technical-Whitepaper-v1.0 - Copy</title>
 
 <style>
-/* LaborCoin Whitepaper Overrides */
 
-body,
-#write,
-#write p,
-#write li,
-#write td,
-#write th,
-#write blockquote,
-#write span,
-#write div {
-    color: #e6e6e6 !important;
+/* ===== LABORCOIN WHITEPAPER OVERRIDES ===== */
+
+#write {
+    max-width: 1100px;
+    margin: 0 auto;
 }
 
-table {
-    background: #111 !important;
+.mermaid text {
+    fill: #fff !important;
 }
 
-thead {
-    background: #111 !important;
+.mermaid .node rect,
+.mermaid .node polygon,
+.mermaid .node circle {
+    fill: #151515 !important;
+    stroke: #ff3b3b !important;
 }
 
-th {
-    background: #111 !important;
-    color: #ffffff !important;
+/* Layout */
+
+#write {
+    max-width: 1100px !important;
+    padding: 40px !important;
 }
 
-td {
-    background: #111 !important;
-    color: #e6e6e6 !important;
+p {
+    margin: 1rem 0 !important;
 }
+
+h1 {
+    margin-top: 2rem !important;
+    margin-bottom: 1rem !important;
+}
+
+h2 {
+    margin-top: 3rem !important;
+    margin-bottom: 1rem !important;
+}
+
+h3 {
+    margin-top: 2rem !important;
+    margin-bottom: .75rem !important;
+}
+
+/* Links */
 
 a {
     color: #ff3b3b !important;
 }
+
+.cta-row {
+    display: flex;
+    gap: 16px;
+    justify-content: center;
+    margin: 30px 0;
+}
+
+/* Headings */
 
 h1 {
     color: #ffffff !important;
@@ -775,9 +799,67 @@ h6 {
     color: #ff3b3b !important;
 }
 
+/* Horizontal rules */
+
 hr {
     border-color: #333 !important;
 }
+
+/* Tables */
+
+table {
+    background: #111 !important;
+}
+
+thead {
+    background: #111 !important;
+}
+
+th {
+    background: #151515 !important;
+    color: #ffffff !important;
+}
+
+td {
+    background: #111 !important;
+    color: #e6e6e6 !important;
+}
+
+/* Mermaid */
+
+.mermaid svg {
+    background: transparent !important;
+}
+
+.mermaid .node rect,
+.mermaid .node polygon,
+.mermaid .node circle {
+    fill: #151515 !important;
+    stroke: #ff3b3b !important;
+    stroke-width: 2px !important;
+}
+
+.mermaid .nodeLabel,
+.mermaid .label,
+.mermaid text {
+    fill: #ffffff !important;
+    color: #ffffff !important;
+}
+
+.mermaid .edgePath path {
+    stroke: #ffffff !important;
+    stroke-width: 2px !important;
+}
+
+.mermaid marker path {
+    fill: #ffffff !important;
+}
+
+.mermaid .cluster rect {
+    fill: #101010 !important;
+    stroke: #ff3b3b !important;
+}
+
 </style>
 
 </head>

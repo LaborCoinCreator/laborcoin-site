@@ -103,6 +103,13 @@ section li {
   transition: 0.2s ease;
 }
 
+.cta-button,
+.cta-button:visited,
+.cta-button:hover,
+.cta-button:active {
+  color: #fff !important;
+}
+
 .cta-button:hover {
   background: #cc2f2f;
 }
