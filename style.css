@@ -740,3 +740,16 @@ footer {
 .content {
     max-width: 900px;
 }
+
+body {
+    background:
+        radial-gradient(circle at top,
+            rgba(198,40,40,.12),
+            transparent 40%),
+        #0b0b0b;
+}
+
+h2 {
+    color: #c62828;
+    border-bottom: 2px solid #c62828;
+}
