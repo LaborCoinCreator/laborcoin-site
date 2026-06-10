@@ -730,6 +730,25 @@ header, .context-menu, .megamenu-content, footer{
 
 /* ===== LABORCOIN WHITEPAPER OVERRIDES ===== */
 
+/* Force white text everywhere */
+
+body,
+#write,
+#write p,
+#write li,
+#write span,
+#write div,
+#write td,
+#write th,
+#write blockquote {
+    color: #e6e6e6 !important;
+}
+
+body {
+    background: #0d0d0d !important;
+    color: #e6e6e6 !important;
+}
+
 #write {
     max-width: 1100px;
     margin: 0 auto;
@@ -827,44 +846,29 @@ td {
 
 /* Mermaid */
 
-.mermaid svg {
-    background: transparent !important;
+.mermaid svg text {
+    fill: #ffffff !important;
 }
 
-.mermaid .node rect,
-.mermaid .node polygon,
-.mermaid .node circle {
+.mermaid rect,
+.mermaid polygon,
+.mermaid circle {
     fill: #151515 !important;
     stroke: #ff3b3b !important;
     stroke-width: 2px !important;
 }
 
-.mermaid .nodeLabel,
-.mermaid .label,
-.mermaid text {
-    fill: #ffffff !important;
-    color: #ffffff !important;
-}
-
-.mermaid .edgePath path {
+.mermaid path {
     stroke: #ffffff !important;
-    stroke-width: 2px !important;
-}
-
-.mermaid marker path {
-    fill: #ffffff !important;
-}
-
-.mermaid .cluster rect {
-    fill: #101010 !important;
-    stroke: #ff3b3b !important;
 }
 
 </style>
 
 </head>
 <body class='typora-export os-windows'><div class='typora-export-content'>
-<div id='write'  class=''><p><span>Version: 1.0</span></p><p><span>Status: Pre-Launch Final Draft</span> </p><p><span>Network: Polygon Mainnet</span></p><p><span>Last Updated: June 2026</span></p><h1 id='laborcoin-technical-whitepaper-v10'><span>LaborCoin Technical Whitepaper v1.0</span></h1><p><span>Pre-Launch Final Draft</span> <div class="cta-row">
+<div id='write'  class=''><p><span>Version: 1.0</span></p><p><span>Status: Pre-Launch Final Draft</span> </p><p><span>Network: Polygon Mainnet</span></p><p><span>Last Updated: June 2026</span></p><h1 id='laborcoin-technical-whitepaper-v10'><span>LaborCoin Technical Whitepaper v1.0</span></h1><p><span>Pre-Launch Final Draft</span>
+
+<div class="cta-row">
 
   <a
     href="whitepaper.pdf"
