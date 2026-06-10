@@ -433,10 +433,19 @@ h1 {
     line-height: 1.2;
     border-bottom: 1px solid #eee;
 }
+
 h2 {
     font-size: 1.75em;
     line-height: 1.225;
-    border-bottom: 1px solid #eee;
+    border-bottom: none !important;
+    text-align: center !important;
+    margin: 4rem 0 1.5rem !important;
+    padding: 0 !important;
+}
+
+body.typora-export {
+    padding-left: 0 !important;
+    padding-right: 0 !important;
 }
 
 /*@media print {
@@ -482,14 +491,15 @@ li>ol,
 li>ul {
     margin: 0 0;
 }
+
 hr {
-    height: 2px;
-    padding: 0;
-    margin: 16px 0;
-    background-color: #e7e7e7;
-    border: 0 none;
-    overflow: hidden;
-    box-sizing: content-box;
+    margin: 4rem 0 !important;
+    border: none !important;
+    border-top: 1px solid #333 !important;
+}
+
+hr + h2 {
+    margin-top: -1rem !important;
 }
 
 li p.first {
@@ -750,7 +760,7 @@ body {
 }
 
 #write {
-    max-width: 1100px;
+    max-width: 800px;
     margin: 0 auto;
 }
 
@@ -768,8 +778,9 @@ body {
 /* Layout */
 
 #write {
-    max-width: 1100px !important;
-    padding: 40px !important;
+    max-width: 800px !important;
+    margin: 0 auto !important;
+    padding: 30px 20px !important;
 }
 
 p {
@@ -779,29 +790,6 @@ p {
 h1 {
     margin-top: 2rem !important;
     margin-bottom: 1rem !important;
-}
-
-h2 {
-    margin-top: 4rem !important;
-    margin-bottom: 1.5rem !important;
-    text-align: center !important;
-}
-
-/* Center section headings */
-
-h2 {
-    text-align: center !important;
-    margin-top: 4rem !important;
-    margin-bottom: 1.5rem !important;
-}
-
-h3 {
-    text-align: center !important;
-}
-
-h3 {
-    margin-top: 2rem !important;
-    margin-bottom: .75rem !important;
 }
 
 /* Links */
@@ -817,17 +805,19 @@ a {
     margin: 30px 0;
 }
 
-/* Center section headings */
-
+/* Headings */
 h2 {
+    color: #ff3b3b !important;
     text-align: center !important;
+    border-bottom: none !important;
+    margin: 4rem 0 1.5rem !important;
 }
 
 h3 {
+    color: #ff3b3b !important;
     text-align: center !important;
+    margin: 2rem 0 1rem !important;
 }
-
-/* Headings */
 
 h1 {
     color: #ffffff !important;
@@ -880,12 +870,25 @@ td {
     stroke-width: 2px !important;
 }
 
+.mermaid .node rect,
+.mermaid .node polygon,
+.mermaid .node ellipse {
+    rx: 6;
+    ry: 6;
+}
+
 .mermaid polygon,
 .mermaid circle,
 .mermaid ellipse {
     fill: #111111 !important;
     stroke: #666666 !important;
     stroke-width: 2px !important;
+}
+
+.mermaid text,
+.mermaid tspan {
+    font-size: 16px !important;
+    font-family: Inter, sans-serif !important;
 }
 
 .mermaid text,
