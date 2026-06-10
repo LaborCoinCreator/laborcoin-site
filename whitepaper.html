@@ -782,8 +782,21 @@ h1 {
 }
 
 h2 {
-    margin-top: 3rem !important;
-    margin-bottom: 1rem !important;
+    margin-top: 4rem !important;
+    margin-bottom: 1.5rem !important;
+    text-align: center !important;
+}
+
+/* Center section headings */
+
+h2 {
+    text-align: center !important;
+    margin-top: 4rem !important;
+    margin-bottom: 1.5rem !important;
+}
+
+h3 {
+    text-align: center !important;
 }
 
 h3 {
@@ -804,6 +817,16 @@ a {
     margin: 30px 0;
 }
 
+/* Center section headings */
+
+h2 {
+    text-align: center !important;
+}
+
+h3 {
+    text-align: center !important;
+}
+
 /* Headings */
 
 h1 {
@@ -821,6 +844,7 @@ h6 {
 /* Horizontal rules */
 
 hr {
+    margin: 4rem 0 !important;
     border-color: #333 !important;
 }
 
@@ -844,25 +868,44 @@ td {
     color: #e6e6e6 !important;
 }
 
-/* Mermaid */
+/* ===== MERMAID ===== */
 
-.mermaid svg text {
-    fill: #ffffff !important;
+.mermaid svg {
+    background: transparent !important;
 }
 
-.mermaid rect,
-.mermaid polygon,
-.mermaid circle {
-    fill: #151515 !important;
-    stroke: #ff3b3b !important;
+.mermaid rect {
+    fill: #111111 !important;
+    stroke: #666666 !important;
     stroke-width: 2px !important;
 }
 
-.mermaid path {
-    stroke: #ffffff !important;
+.mermaid polygon,
+.mermaid circle,
+.mermaid ellipse {
+    fill: #111111 !important;
+    stroke: #666666 !important;
+    stroke-width: 2px !important;
 }
 
-</style>
+.mermaid text,
+.mermaid tspan {
+    fill: #ffffff !important;
+    color: #ffffff !important;
+}
+
+.mermaid .edgePath path {
+    stroke: #cccccc !important;
+    stroke-width: 2px !important;
+}
+
+.mermaid marker path {
+    fill: #cccccc !important;
+}
+
+svg text {
+    fill: #ffffff !important;
+}
 
 </head>
 <body class='typora-export os-windows'><div class='typora-export-content'>
