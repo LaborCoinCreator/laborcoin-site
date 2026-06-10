@@ -155,198 +155,40 @@ td {
     font-size: 16px !important;
 }
 
+.mermaid .node rect,
+.mermaid .node polygon,
+.mermaid .node ellipse,
+.mermaid .node circle {
+    fill: #111111 !important;
+    stroke: #666666 !important;
+    stroke-width: 2px !important;
+}
+
+.mermaid .edgePath path {
+    stroke: #cccccc !important;
+    stroke-width: 2px !important;
+}
+
+.mermaid marker path {
+    fill: #cccccc !important;
+}
+
+.md-diagram-panel {
+    display: flex !important;
+    justify-content: center !important;
+    margin: 3rem auto !important;
+}
+
+.md-diagram-panel svg {
+    margin-left: auto !important;
+    margin-right: auto !important;
+}
+
 </style>
 </head>
+<body>
 
-.mermaid .node rect,
-.mermaid .node polygon,
-.mermaid .node ellipse {
-    fill: #111111 !important;
-    stroke: #666666 !important;
-    stroke-width: 2px !important;
-}
-
-.mermaid .edgePath path {
-    stroke: #cccccc !important;
-    stroke-width: 2px !important;
-}
-
-.mermaid marker path {
-    fill: #cccccc !important;
-}
-
-/* Force white text everywhere */
-
-body,
-#write,
-#write p,
-#write li,
-#write span,
-#write div,
-#write td,
-#write th,
-#write blockquote {
-    color: #e6e6e6 !important;
-}
-
-body {
-    background: #0d0d0d !important;
-    color: #e6e6e6 !important;
-}
-
-#write {
-    max-width: 800px;
-    margin: 0 auto;
-}
-
-.mermaid text {
-    fill: #fff !important;
-}
-
-.mermaid .node rect,
-.mermaid .node polygon,
-.mermaid .node circle {
-    fill: #151515 !important;
-    stroke: #ff3b3b !important;
-}
-
-/* Layout */
-
-#write {
-    max-width: 800px !important;
-    margin: 0 auto !important;
-    padding: 30px 20px !important;
-}
-
-p {
-    margin: 1rem 0 !important;
-}
-
-h1 {
-    margin-top: 2rem !important;
-    margin-bottom: 1rem !important;
-}
-
-/* Links */
-
-a {
-    color: #ff3b3b !important;
-}
-
-.cta-row {
-    display: flex;
-    gap: 16px;
-    justify-content: center;
-    margin: 30px 0;
-}
-
-/* Headings */
-h2 {
-    color: #ff3b3b !important;
-    text-align: center !important;
-    border-bottom: none !important;
-    margin: 4rem 0 1.5rem !important;
-}
-
-h3 {
-    color: #ff3b3b !important;
-    text-align: center !important;
-    margin: 2rem 0 1rem !important;
-}
-
-h1 {
-    color: #ffffff !important;
-}
-
-h2,
-h3,
-h4,
-h5,
-h6 {
-    color: #ff3b3b !important;
-}
-
-/* Horizontal rules */
-
-hr {
-    margin: 4rem 0 !important;
-    border-color: #333 !important;
-}
-
-/* Tables */
-
-table {
-    background: #111 !important;
-}
-
-thead {
-    background: #111 !important;
-}
-
-th {
-    background: #151515 !important;
-    color: #ffffff !important;
-}
-
-td {
-    background: #111 !important;
-    color: #e6e6e6 !important;
-}
-
-/* ===== MERMAID ===== */
-
-.mermaid svg {
-    background: transparent !important;
-}
-
-.mermaid rect {
-    fill: #111111 !important;
-    stroke: #666666 !important;
-    stroke-width: 2px !important;
-}
-
-.mermaid .node rect,
-.mermaid .node polygon,
-.mermaid .node ellipse {
-    rx: 6;
-    ry: 6;
-}
-
-.mermaid polygon,
-.mermaid circle,
-.mermaid ellipse {
-    fill: #111111 !important;
-    stroke: #666666 !important;
-    stroke-width: 2px !important;
-}
-
-.mermaid text,
-.mermaid tspan {
-    font-size: 16px !important;
-    font-family: Inter, sans-serif !important;
-}
-
-.mermaid text,
-.mermaid tspan {
-    fill: #ffffff !important;
-    color: #ffffff !important;
-}
-
-.mermaid .edgePath path {
-    stroke: #cccccc !important;
-    stroke-width: 2px !important;
-}
-
-.mermaid marker path {
-    fill: #cccccc !important;
-}
-
-svg text {
-    fill: #ffffff !important;
-}
-
-</head>
-<body class='typora-export os-windows'><div class='typora-export-content'>
+<div class='typora-export-content'>
 <div id='write'  class=''><p><span>Version: 1.0</span></p><p><span>Status: Pre-Launch Final Draft</span> </p><p><span>Network: Polygon Mainnet</span></p><p><span>Last Updated: June 2026</span></p><h1 id='laborcoin-technical-whitepaper-v10'><span>LaborCoin Technical Whitepaper v1.0</span></h1><p><span>Pre-Launch Final Draft</span>
 
 <div class="cta-row">
@@ -650,5 +492,6 @@ svg text {
 <span>]</span></p><hr /><h2 id='execution-window-5'><span>Execution Window</span></h2><p><span>Period during which approved proposals may be executed.</span></p><p><span>Current value:</span></p><p><span>[</span>
 <span>7\ Days</span>
 <span>]</span></p><hr /><h1 id='appendix-l-protocol-constants-reference'><span>Appendix L: Protocol Constants Reference</span></h1><h2 id='l1-purpose'><span>L.1 Purpose</span></h2><p><span>This appendix consolidates the immutable operational parameters of the LaborCoin protocol into a single technical reference.</span></p><p><span>The purpose is to provide auditors, developers, governance participants, and future researchers with a concise registry of protocol constants.</span></p><hr /><h2 id='l2-labr-token-constants'><span>L.2 LABR Token Constants</span></h2><p><span>Table 8. LABR Token Constants.</span></p><p><span>Core immutable parameters governing the LABR token contract.</span></p><figure class='table-figure'><table><thead><tr><th><span>Parameter</span></th><th style='text-align:right;' ><span>Value</span></th></tr></thead><tbody><tr><td><span>Name</span></td><td style='text-align:right;' ><span>LaborCoin</span></td></tr><tr><td><span>Symbol</span></td><td style='text-align:right;' ><span>LABR</span></td></tr><tr><td><span>Maximum Supply</span></td><td style='text-align:right;' ><span>1,000,000,000</span></td></tr><tr><td><span>Initial Exchange Tranche</span></td><td style='text-align:right;' ><span>100,000,000</span></td></tr><tr><td><span>Subsequent Tranche Size</span></td><td style='text-align:right;' ><span>50,000,000</span></td></tr><tr><td><span>Maximum Wallet (Token)</span></td><td style='text-align:right;' ><span>1,000,000</span></td></tr><tr><td><span>Max. Transaction (Token)</span></td><td style='text-align:right;' ><span>500,000</span></td></tr></tbody></table></figure><hr /><h2 id='l3-exchange-constants'><span>L.3 Exchange Constants</span></h2><p><span>Table 9. Exchange Constants.</span></p><p><span>Immutable operational parameters governing Exchange V2.</span></p><figure class='table-figure'><table><thead><tr><th><span>Parameter</span></th><th style='text-align:right;' ><span>Value</span></th></tr></thead><tbody><tr><td><span>Minimum Price</span></td><td style='text-align:right;' ><span>$1</span></td></tr><tr><td><span>Maximum Price</span></td><td style='text-align:right;' ><span>$15</span></td></tr><tr><td><span>Curve Type</span></td><td style='text-align:right;' ><span>Quadratic</span></td></tr><tr><td><span>Cooldown</span></td><td style='text-align:right;' ><span>12 Hours</span></td></tr><tr><td><span>Oracle Freshness Window</span></td><td style='text-align:right;' ><span>30 Minutes</span></td></tr><tr><td><span>Maximum Oracle Price Check</span></td><td style='text-align:right;' ><span>100 POL</span></td></tr><tr><td><span>Maximum Exchange Wallet</span></td><td style='text-align:right;' ><span>10,000</span></td></tr><tr><td><span>Max. Exchange Transaction</span></td><td style='text-align:right;' ><span>5,000</span></td></tr></tbody></table></figure><hr /><h2 id='l4-treasury-constants'><span>L.4 Treasury Constants</span></h2><p><span>Table 10. Treasury Constants.</span></p><p><span>Treasury accumulation and allocation constraints enforced by protocol rules.</span></p><figure class='table-figure'><table><thead><tr><th><span>Parameter</span></th><th style='text-align:right;' ><span>Value</span></th></tr></thead><tbody><tr><td><span>Buy Treasury Contribution</span></td><td style='text-align:right;' ><span>10%</span></td></tr><tr><td><span>Treasury Tax</span></td><td style='text-align:right;' ><span>5%</span></td></tr><tr><td><span>Dividend Tax</span></td><td style='text-align:right;' ><span>5%</span></td></tr><tr><td><span>Burn Tax</span></td><td style='text-align:right;' ><span>0%</span></td></tr><tr><td><span>Maximum Proposal Allocation</span></td><td style='text-align:right;' ><span>5%</span></td></tr></tbody></table></figure><hr /><h2 id='l5-governance-constants'><span>L.5 Governance Constants</span></h2><p><span>Table 11. Governance Constants.</span></p><p><span>Voting thresholds and proposal execution requirements.</span></p><figure class='table-figure'><table><thead><tr><th><span>Parameter</span></th><th style='text-align:right;' ><span>Value</span></th></tr></thead><tbody><tr><td><span>Voting Duration</span></td><td style='text-align:right;' ><span>14 Days</span></td></tr><tr><td><span>Participation Threshold</span></td><td style='text-align:right;' ><span>25%</span></td></tr><tr><td><span>Approval Threshold</span></td><td style='text-align:right;' ><span>67%</span></td></tr><tr><td><span>Execution Window</span></td><td style='text-align:right;' ><span>7 Days</span></td></tr></tbody></table></figure><hr /><h2 id='l6-registration-constants'><span>L.6 Registration Constants</span></h2><p><span>Table 12. Registration Constants.</span></p><p><span>Identity verification and LABRV issuance requirements.</span></p><figure class='table-figure'><table><thead><tr><th><span>Parameter</span></th><th style='text-align:right;' ><span>Value</span></th></tr></thead><tbody><tr><td><span>Minimum LABR Required</span></td><td style='text-align:right;' ><span>1</span></td></tr><tr><td><span>Passport Threshold</span></td><td style='text-align:right;' ><span>15</span></td></tr><tr><td><span>LABRV Issued</span></td><td style='text-align:right;' ><span>1</span></td></tr><tr><td><span>Duplicate Registration</span></td><td style='text-align:right;' ><span>Prohibited</span></td></tr></tbody></table></figure><hr /><h2 id='l7-governance-token-constants'><span>L.7 Governance Token Constants</span></h2><p><span>Table 13. Governance Token (LABRV) Constants.</span></p><p><span>Core immutable parameters governing the LABRV governance token.</span></p><figure class='table-figure'><table><thead><tr><th><span>Parameter</span></th><th style='text-align:right;' ><span>Value</span></th></tr></thead><tbody><tr><td><span>Name</span></td><td style='text-align:right;' ><span>LaborVote</span></td></tr><tr><td><span>Symbol</span></td><td style='text-align:right;' ><span>LABRV</span></td></tr><tr><td><span>Transferability</span></td><td style='text-align:right;' ><span>Disabled</span></td></tr><tr><td><span>Governance Weight</span></td><td style='text-align:right;' ><span>1 Vote</span></td></tr><tr><td><span>Tradable</span></td><td style='text-align:right;' ><span>No</span></td></tr><tr><td><span>Soulbound</span></td><td style='text-align:right;' ><span>Yes</span></td></tr></tbody></table></figure><hr /><h1 id='appendix-m-security-controls-matrix'><span>Appendix M: Security Controls Matrix</span></h1><h2 id='m1-purpose'><span>M.1 Purpose</span></h2><p><span>Table 14. Security Controls Matrix.</span></p><p><span>This appendix summarizes protocol security controls in a format commonly used by auditors and reviewers.</span></p><hr /><figure class='table-figure'><table><thead><tr><th><span>Threat</span></th><th><span>Security Control</span></th><th><span>Layer</span></th></tr></thead><tbody><tr><td><span>Duplicate Identities</span></td><td><span>Passport Threshold</span></td><td><span>Registration</span></td></tr><tr><td><span>Duplicate Registration</span></td><td><span>LABRV Ownership Check</span></td><td><span>Registration</span></td></tr><tr><td><span>Unauthorized Registration</span></td><td><span>Verifier Signature</span></td><td><span>Registration</span></td></tr><tr><td><span>Replay Attack</span></td><td><span>Nonce Tracking</span></td><td><span>Registration</span></td></tr><tr><td><span>Signature Reuse</span></td><td><span>Expiration Validation</span></td><td><span>Registration</span></td></tr><tr><td><span>Governance Capture</span></td><td><span>Soulbound LABRV</span></td><td><span>Governance</span></td></tr><tr><td><span>Low Participation</span></td><td><span>25% Threshold</span></td><td><span>Governance</span></td></tr><tr><td><span>Minority Control</span></td><td><span>67% Approval Requirement</span></td><td><span>Governance</span></td></tr><tr><td><span>Treasury Extraction</span></td><td><span>5% Cap</span></td><td><span>Treasury</span></td></tr><tr><td><span>Stale Proposal Execution</span></td><td><span>7-Day Window</span></td><td><span>Treasury</span></td></tr><tr><td><span>Double Execution</span></td><td><span>Execution Tracking</span></td><td><span>Governance</span></td></tr><tr><td><span>Flash Trading</span></td><td><span>12-Hour Cooldown</span></td><td><span>Exchange</span></td></tr><tr><td><span>Reentrancy</span></td><td><span>ReentrancyGuard</span></td><td><span>Exchange</span></td></tr><tr><td><span>Oracle Failure</span></td><td><span>Freshness Validation</span></td><td><span>Exchange</span></td></tr><tr><td><span>Oracle Anomaly</span></td><td><span>Maximum Price Validation</span></td><td><span>Exchange</span></td></tr><tr><td><span>Founder Abuse</span></td><td><span>Ownership Renouncement</span></td><td><span>Protocol</span></td></tr><tr><td><span>Governance Overreach</span></td><td><span>Fixed Constitutional Parameters</span></td><td><span>Protocol</span></td></tr></tbody></table></figure><hr /><h2 id='m2-defense-in-depth-philosophy'><span>M.2 Defense-in-Depth Philosophy</span></h2><p><span>LaborCoin intentionally utilizes overlapping protections.</span></p><p><span>For example:</span></p><p><span>Governance legitimacy depends simultaneously upon:</span></p><ul><li><p><span>Passport verification</span></p></li><li><p><span>Registration</span></p></li><li><p><span>LABRV issuance</span></p></li><li><p><span>Participation thresholds</span></p></li><li><p><span>Approval thresholds</span></p></li></ul><p><span>No individual control is expected to provide complete security.</span></p><p><span>The protocol instead relies upon multiple independent safeguards.</span></p><hr /><h1 id='appendix-n-decentralization-and-renouncement-report-template'><span>Appendix N: Decentralization and Renouncement Report Template</span></h1><h2 id='n1-purpose'><span>N.1 Purpose</span></h2><p><span>This appendix provides the structure of the final decentralization report to be published following launch.</span></p><hr /><h2 id='n2-protocol-information'><span>N.2 Protocol Information</span></h2><p><span>Protocol:</span></p><p><span>LaborCoin</span></p><p><span>Network:</span></p><p><span>Polygon Mainnet</span></p><p><span>Launch Date:</span></p><p><span>[TBD]</span></p><hr /><h2 id='n3-contract-registry'><span>N.3 Contract Registry</span></h2><p><span>Include:</span></p><ul><li><p><span>LABR</span></p></li><li><p><span>Exchange</span></p></li><li><p><span>Registration</span></p></li><li><p><span>LABRV</span></p></li><li><p><span>Governance</span></p></li><li><p><span>Treasury</span></p></li><li><p><span>Treasury Module</span></p></li></ul><p><span>Addresses should be copied directly from Polygon Mainnet deployment records.</span></p><hr /><h2 id='n4-ownership-verification'><span>N.4 Ownership Verification</span></h2><p><span>Document:</span></p><h3 id='exchange-6'><span>Exchange</span></h3><p><span>Ownership Renounced:</span></p><p><span>□ Yes</span></p><p><span>Transaction:</span></p><p><span>[TX HASH]</span></p><hr /><h3 id='labrv-6'><span>LABRV</span></h3><p><span>Minter Locked:</span></p><p><span>□ Yes</span></p><p><span>Transaction:</span></p><p><span>[TX HASH]</span></p><p><span>Ownership Renounced:</span></p><p><span>□ Yes</span></p><p><span>Transaction:</span></p><p><span>[TX HASH]</span></p><hr /><h3 id='governance-7'><span>Governance</span></h3><p><span>Ownership Status:</span></p><p><span>[Document]</span></p><hr /><h3 id='registration-4'><span>Registration</span></h3><p><span>Ownership Status:</span></p><p><span>[Document]</span></p><hr /><h2 id='n5-final-authority-diagram'><span>N.5 Final Authority Diagram</span></h2><p><span>Figure 14. Post-Renouncement Authority Structure.</span></p><p><span>Illustrates the intended authority model following ownership renouncement. Administrative authority is eliminated, governance retains authority only to approve treasury allocations, and protocol behavior is governed by immutable smart contract rules.</span></p><div class="md-diagram-panel md-fences-adv-panel" lang="mermaid"><svg id="mermaidChart21" width="100%" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" class="flowchart mermaid-svg" style="max-width: 1660.671875px;" viewBox="0 0 1660.671875 174" role="graphics-document document" aria-roledescription="flowchart-v2"><style>#mermaidChart21{font-family:sans-serif;font-size:16px;fill:#333;}@keyframes edge-animation-frame{from{stroke-dashoffset:0;}}@keyframes dash{to{stroke-dashoffset:0;}}#mermaidChart21 .edge-animation-slow{stroke-dasharray:9,5!important;stroke-dashoffset:900;animation:dash 50s linear infinite;stroke-linecap:round;}#mermaidChart21 .edge-animation-fast{stroke-dasharray:9,5!important;stroke-dashoffset:900;animation:dash 20s linear infinite;stroke-linecap:round;}#mermaidChart21 .error-icon{fill:#552222;}#mermaidChart21 .error-text{fill:#552222;stroke:#552222;}#mermaidChart21 .edge-thickness-normal{stroke-width:1px;}#mermaidChart21 .edge-thickness-thick{stroke-width:3.5px;}#mermaidChart21 .edge-pattern-solid{stroke-dasharray:0;}#mermaidChart21 .edge-thickness-invisible{stroke-width:0;fill:none;}#mermaidChart21 .edge-pattern-dashed{stroke-dasharray:3;}#mermaidChart21 .edge-pattern-dotted{stroke-dasharray:2;}#mermaidChart21 .marker{fill:#333333;stroke:#333333;}#mermaidChart21 .marker.cross{stroke:#333333;}#mermaidChart21 svg{font-family:sans-serif;font-size:16px;}#mermaidChart21 p{margin:0;}#mermaidChart21 .label{font-family:sans-serif;color:#333;}#mermaidChart21 .cluster-label text{fill:#333;}#mermaidChart21 .cluster-label span{color:#333;}#mermaidChart21 .cluster-label span p{background-color:transparent;}#mermaidChart21 .label text,#mermaidChart21 span{fill:#333;color:#333;}#mermaidChart21 .node rect,#mermaidChart21 .node circle,#mermaidChart21 .node ellipse,#mermaidChart21 .node polygon,#mermaidChart21 .node path{fill:#ECECFF;stroke:#9370DB;stroke-width:1px;}#mermaidChart21 .rough-node .label text,#mermaidChart21 .node .label text,#mermaidChart21 .image-shape .label,#mermaidChart21 .icon-shape .label{text-anchor:middle;}#mermaidChart21 .node .katex path{fill:#000;stroke:#000;stroke-width:1px;}#mermaidChart21 .rough-node .label,#mermaidChart21 .node .label,#mermaidChart21 .image-shape .label,#mermaidChart21 .icon-shape .label{text-align:center;}#mermaidChart21 .node.clickable{cursor:pointer;}#mermaidChart21 .root .anchor path{fill:#333333!important;stroke-width:0;stroke:#333333;}#mermaidChart21 .arrowheadPath{fill:#333333;}#mermaidChart21 .edgePath .path{stroke:#333333;stroke-width:2.0px;}#mermaidChart21 .flowchart-link{stroke:#333333;fill:none;}#mermaidChart21 .edgeLabel{background-color:rgba(232,232,232, 0.8);text-align:center;}#mermaidChart21 .edgeLabel p{background-color:rgba(232,232,232, 0.8);}#mermaidChart21 .edgeLabel rect{opacity:0.5;background-color:rgba(232,232,232, 0.8);fill:rgba(232,232,232, 0.8);}#mermaidChart21 .labelBkg{background-color:rgba(232, 232, 232, 0.5);}#mermaidChart21 .cluster rect{fill:#ffffde;stroke:#aaaa33;stroke-width:1px;}#mermaidChart21 .cluster text{fill:#333;}#mermaidChart21 .cluster span{color:#333;}#mermaidChart21 div.mermaidTooltip{position:absolute;text-align:center;max-width:200px;padding:2px;font-family:sans-serif;font-size:12px;background:hsl(80, 100%, 96.2745098039%);border:1px solid #aaaa33;border-radius:2px;pointer-events:none;z-index:100;}#mermaidChart21 .flowchartTitleText{text-anchor:middle;font-size:18px;fill:#333;}#mermaidChart21 rect.text{fill:none;stroke-width:0;}#mermaidChart21 .icon-shape,#mermaidChart21 .image-shape{background-color:rgba(232,232,232, 0.8);text-align:center;}#mermaidChart21 .icon-shape p,#mermaidChart21 .image-shape p{background-color:rgba(232,232,232, 0.8);padding:2px;}#mermaidChart21 .icon-shape .label rect,#mermaidChart21 .image-shape .label rect{opacity:0.5;background-color:rgba(232,232,232, 0.8);fill:rgba(232,232,232, 0.8);}#mermaidChart21 .label-icon{display:inline-block;height:1em;overflow:visible;vertical-align:-0.125em;}#mermaidChart21 .node .label-icon path{fill:currentColor;stroke:revert;stroke-width:revert;}#mermaidChart21 :root{--mermaid-alt-font-family:sans-serif;}</style><g><marker id="mermaidChart21_flowchart-v2-pointEnd" class="marker flowchart-v2" viewBox="0 0 10 10" refX="5" refY="5" markerUnits="userSpaceOnUse" markerWidth="8" markerHeight="8" orient="auto"><path d="M 0 0 L 10 5 L 0 10 z" class="arrowMarkerPath" style="stroke-width: 1; stroke-dasharray: 1, 0;"></path></marker><marker id="mermaidChart21_flowchart-v2-pointStart" class="marker flowchart-v2" viewBox="0 0 10 10" refX="4.5" refY="5" markerUnits="userSpaceOnUse" markerWidth="8" markerHeight="8" orient="auto"><path d="M 0 5 L 10 10 L 10 0 z" class="arrowMarkerPath" style="stroke-width: 1; stroke-dasharray: 1, 0;"></path></marker><marker id="mermaidChart21_flowchart-v2-circleEnd" class="marker flowchart-v2" viewBox="0 0 10 10" refX="11" refY="5" markerUnits="userSpaceOnUse" markerWidth="11" markerHeight="11" orient="auto"><circle cx="5" cy="5" r="5" class="arrowMarkerPath" style="stroke-width: 1; stroke-dasharray: 1, 0;"></circle></marker><marker id="mermaidChart21_flowchart-v2-circleStart" class="marker flowchart-v2" viewBox="0 0 10 10" refX="-1" refY="5" markerUnits="userSpaceOnUse" markerWidth="11" markerHeight="11" orient="auto"><circle cx="5" cy="5" r="5" class="arrowMarkerPath" style="stroke-width: 1; stroke-dasharray: 1, 0;"></circle></marker><marker id="mermaidChart21_flowchart-v2-crossEnd" class="marker cross flowchart-v2" viewBox="0 0 11 11" refX="12" refY="5.2" markerUnits="userSpaceOnUse" markerWidth="11" markerHeight="11" orient="auto"><path d="M 1,1 l 9,9 M 10,1 l -9,9" class="arrowMarkerPath" style="stroke-width: 2; stroke-dasharray: 1, 0;"></path></marker><marker id="mermaidChart21_flowchart-v2-crossStart" class="marker cross flowchart-v2" viewBox="0 0 11 11" refX="-1" refY="5.2" markerUnits="userSpaceOnUse" markerWidth="11" markerHeight="11" orient="auto"><path d="M 1,1 l 9,9 M 10,1 l -9,9" class="arrowMarkerPath" style="stroke-width: 2; stroke-dasharray: 1, 0;"></path></marker><g class="root"><g class="clusters"></g><g class="edgePaths"><path d="M108.031,62L108.031,87L108.031,108" id="L_Creator_Removed_0" class=" edge-thickness-normal edge-pattern-solid edge-thickness-normal edge-pattern-solid flowchart-link" style=";" data-edge="true" data-et="edge" data-id="L_Creator_Removed_0" data-points="W3sieCI6MTA4LjAzMTI1LCJ5Ijo2Mn0seyJ4IjoxMDguMDMxMjUsInkiOjg3fSx7IngiOjEwOC4wMzEyNSwieSI6MTEyfV0=" marker-end="url(#mermaidChart21_flowchart-v2-pointEnd)"></path><path d="M376.469,62L376.469,87L376.469,108" id="L_Governance_TreasuryOnly_0" class=" edge-thickness-normal edge-pattern-solid edge-thickness-normal edge-pattern-solid flowchart-link" style=";" data-edge="true" data-et="edge" data-id="L_Governance_TreasuryOnly_0" data-points="W3sieCI6Mzc2LjQ2ODc1LCJ5Ijo2Mn0seyJ4IjozNzYuNDY4NzUsInkiOjg3fSx7IngiOjM3Ni40Njg3NSwieSI6MTEyfV0=" marker-end="url(#mermaidChart21_flowchart-v2-pointEnd)"></path><path d="M630.68,62L630.68,87L630.68,108" id="L_TreasuryModule_ExecutionOnly_0" class=" edge-thickness-normal edge-pattern-solid edge-thickness-normal edge-pattern-solid flowchart-link" style=";" data-edge="true" data-et="edge" data-id="L_TreasuryModule_ExecutionOnly_0" data-points="W3sieCI6NjMwLjY3OTY4NzUsInkiOjYyfSx7IngiOjYzMC42Nzk2ODc1LCJ5Ijo4N30seyJ4Ijo2MzAuNjc5Njg3NSwieSI6MTEyfV0=" marker-end="url(#mermaidChart21_flowchart-v2-pointEnd)"></path><path d="M858.508,62L858.508,87L858.508,108" id="L_Exchange_ImmutableExchange_0" class=" edge-thickness-normal edge-pattern-solid edge-thickness-normal edge-pattern-solid flowchart-link" style=";" data-edge="true" data-et="edge" data-id="L_Exchange_ImmutableExchange_0" data-points="W3sieCI6ODU4LjUwNzgxMjUsInkiOjYyfSx7IngiOjg1OC41MDc4MTI1LCJ5Ijo4N30seyJ4Ijo4NTguNTA3ODEyNSwieSI6MTEyfV0=" marker-end="url(#mermaidChart21_flowchart-v2-pointEnd)"></path><path d="M1092.555,62L1092.555,87L1092.555,108" id="L_Registration_ImmutableRegistration_0" class=" edge-thickness-normal edge-pattern-solid edge-thickness-normal edge-pattern-solid flowchart-link" style=";" data-edge="true" data-et="edge" data-id="L_Registration_ImmutableRegistration_0" data-points="W3sieCI6MTA5Mi41NTQ2ODc1LCJ5Ijo2Mn0seyJ4IjoxMDkyLjU1NDY4NzUsInkiOjg3fSx7IngiOjEwOTIuNTU0Njg3NSwieSI6MTEyfV0=" marker-end="url(#mermaidChart21_flowchart-v2-pointEnd)"></path><path d="M1326.602,62L1326.602,87L1326.602,108" id="L_LABRV_ImmutableLABRV_0" class=" edge-thickness-normal edge-pattern-solid edge-thickness-normal edge-pattern-solid flowchart-link" style=";" data-edge="true" data-et="edge" data-id="L_LABRV_ImmutableLABRV_0" data-points="W3sieCI6MTMyNi42MDE1NjI1LCJ5Ijo2Mn0seyJ4IjoxMzI2LjYwMTU2MjUsInkiOjg3fSx7IngiOjEzMjYuNjAxNTYyNSwieSI6MTEyfV0=" marker-end="url(#mermaidChart21_flowchart-v2-pointEnd)"></path><path d="M1560.648,62L1560.648,87L1560.648,108" id="L_LABR_ImmutableLABR_0" class=" edge-thickness-normal edge-pattern-solid edge-thickness-normal edge-pattern-solid flowchart-link" style=";" data-edge="true" data-et="edge" data-id="L_LABR_ImmutableLABR_0" data-points="W3sieCI6MTU2MC42NDg0Mzc1LCJ5Ijo2Mn0seyJ4IjoxNTYwLjY0ODQzNzUsInkiOjg3fSx7IngiOjE1NjAuNjQ4NDM3NSwieSI6MTEyfV0=" marker-end="url(#mermaidChart21_flowchart-v2-pointEnd)"></path></g><g class="edgeLabels"><g class="edgeLabel"><g class="label" data-id="L_Creator_Removed_0" transform="translate(0, 0)"><foreignObject width="0" height="0"><div xmlns="http://www.w3.org/1999/xhtml" class="labelBkg" style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;"><span class="edgeLabel "></span></div></foreignObject></g></g><g class="edgeLabel"><g class="label" data-id="L_Governance_TreasuryOnly_0" transform="translate(0, 0)"><foreignObject width="0" height="0"><div xmlns="http://www.w3.org/1999/xhtml" class="labelBkg" style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;"><span class="edgeLabel "></span></div></foreignObject></g></g><g class="edgeLabel"><g class="label" data-id="L_TreasuryModule_ExecutionOnly_0" transform="translate(0, 0)"><foreignObject width="0" height="0"><div xmlns="http://www.w3.org/1999/xhtml" class="labelBkg" style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;"><span class="edgeLabel "></span></div></foreignObject></g></g><g class="edgeLabel"><g class="label" data-id="L_Exchange_ImmutableExchange_0" transform="translate(0, 0)"><foreignObject width="0" height="0"><div xmlns="http://www.w3.org/1999/xhtml" class="labelBkg" style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;"><span class="edgeLabel "></span></div></foreignObject></g></g><g class="edgeLabel"><g class="label" data-id="L_Registration_ImmutableRegistration_0" transform="translate(0, 0)"><foreignObject width="0" height="0"><div xmlns="http://www.w3.org/1999/xhtml" class="labelBkg" style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;"><span class="edgeLabel "></span></div></foreignObject></g></g><g class="edgeLabel"><g class="label" data-id="L_LABRV_ImmutableLABRV_0" transform="translate(0, 0)"><foreignObject width="0" height="0"><div xmlns="http://www.w3.org/1999/xhtml" class="labelBkg" style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;"><span class="edgeLabel "></span></div></foreignObject></g></g><g class="edgeLabel"><g class="label" data-id="L_LABR_ImmutableLABR_0" transform="translate(0, 0)"><foreignObject width="0" height="0"><div xmlns="http://www.w3.org/1999/xhtml" class="labelBkg" style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;"><span class="edgeLabel "></span></div></foreignObject></g></g></g><g class="nodes"><g class="node default  " id="flowchart-Creator-0" transform="translate(108.03125, 35)"><rect class="basic label-container" style="" x="-58.6796875" y="-27" width="117.359375" height="54"></rect><g class="label" style="" transform="translate(-28.6796875, -12)"><rect></rect><foreignObject width="57.359375" height="24"><div xmlns="http://www.w3.org/1999/xhtml" style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;"><span class="nodeLabel "><p>Creator</p></span></div></foreignObject></g></g><g class="node default  " id="flowchart-Removed-1" transform="translate(108.03125, 139)"><rect class="basic label-container" style="" x="-100.03125" y="-27" width="200.0625" height="54"></rect><g class="label" style="" transform="translate(-70.03125, -12)"><rect></rect><foreignObject width="140.0625" height="24"><div xmlns="http://www.w3.org/1999/xhtml" style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;"><span class="nodeLabel "><p>Authority Removed</p></span></div></foreignObject></g></g><g class="node default  " id="flowchart-Governance-2" transform="translate(376.46875, 35)"><rect class="basic label-container" style="" x="-75.5859375" y="-27" width="151.171875" height="54"></rect><g class="label" style="" transform="translate(-45.5859375, -12)"><rect></rect><foreignObject width="91.171875" height="24"><div xmlns="http://www.w3.org/1999/xhtml" style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;"><span class="nodeLabel "><p>Governance</p></span></div></foreignObject></g></g><g class="node default  " id="flowchart-TreasuryOnly-3" transform="translate(376.46875, 139)"><rect class="basic label-container" style="" x="-118.40625" y="-27" width="236.8125" height="54"></rect><g class="label" style="" transform="translate(-88.40625, -12)"><rect></rect><foreignObject width="176.8125" height="24"><div xmlns="http://www.w3.org/1999/xhtml" style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;"><span class="nodeLabel "><p>Treasury Allocation Only</p></span></div></foreignObject></g></g><g class="node default  " id="flowchart-TreasuryModule-4" transform="translate(630.6796875, 35)"><rect class="basic label-container" style="" x="-91.7265625" y="-27" width="183.453125" height="54"></rect><g class="label" style="" transform="translate(-61.7265625, -12)"><rect></rect><foreignObject width="123.453125" height="24"><div xmlns="http://www.w3.org/1999/xhtml" style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;"><span class="nodeLabel "><p>Treasury Module</p></span></div></foreignObject></g></g><g class="node default  " id="flowchart-ExecutionOnly-5" transform="translate(630.6796875, 139)"><rect class="basic label-container" style="" x="-85.8046875" y="-27" width="171.609375" height="54"></rect><g class="label" style="" transform="translate(-55.8046875, -12)"><rect></rect><foreignObject width="111.609375" height="24"><div xmlns="http://www.w3.org/1999/xhtml" style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;"><span class="nodeLabel "><p>Execution Only</p></span></div></foreignObject></g></g><g class="node default  " id="flowchart-Exchange-6" transform="translate(858.5078125, 35)"><rect class="basic label-container" style="" x="-79.59375" y="-27" width="159.1875" height="54"></rect><g class="label" style="" transform="translate(-49.59375, -12)"><rect></rect><foreignObject width="99.1875" height="24"><div xmlns="http://www.w3.org/1999/xhtml" style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;"><span class="nodeLabel "><p>Exchange V2</p></span></div></foreignObject></g></g><g class="node default  " id="flowchart-ImmutableExchange-7" transform="translate(858.5078125, 139)"><rect class="basic label-container" style="" x="-92.0234375" y="-27" width="184.046875" height="54"></rect><g class="label" style="" transform="translate(-62.0234375, -12)"><rect></rect><foreignObject width="124.046875" height="24"><div xmlns="http://www.w3.org/1999/xhtml" style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;"><span class="nodeLabel "><p>Immutable Rules</p></span></div></foreignObject></g></g><g class="node default  " id="flowchart-Registration-8" transform="translate(1092.5546875, 35)"><rect class="basic label-container" style="" x="-86.6953125" y="-27" width="173.390625" height="54"></rect><g class="label" style="" transform="translate(-56.6953125, -12)"><rect></rect><foreignObject width="113.390625" height="24"><div xmlns="http://www.w3.org/1999/xhtml" style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;"><span class="nodeLabel "><p>Registration V3</p></span></div></foreignObject></g></g><g class="node default  " id="flowchart-ImmutableRegistration-9" transform="translate(1092.5546875, 139)"><rect class="basic label-container" style="" x="-92.0234375" y="-27" width="184.046875" height="54"></rect><g class="label" style="" transform="translate(-62.0234375, -12)"><rect></rect><foreignObject width="124.046875" height="24"><div xmlns="http://www.w3.org/1999/xhtml" style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;"><span class="nodeLabel "><p>Immutable Rules</p></span></div></foreignObject></g></g><g class="node default  " id="flowchart-LABRV-10" transform="translate(1326.6015625, 35)"><rect class="basic label-container" style="" x="-58.09375" y="-27" width="116.1875" height="54"></rect><g class="label" style="" transform="translate(-28.09375, -12)"><rect></rect><foreignObject width="56.1875" height="24"><div xmlns="http://www.w3.org/1999/xhtml" style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;"><span class="nodeLabel "><p>LABRV</p></span></div></foreignObject></g></g><g class="node default  " id="flowchart-ImmutableLABRV-11" transform="translate(1326.6015625, 139)"><rect class="basic label-container" style="" x="-92.0234375" y="-27" width="184.046875" height="54"></rect><g class="label" style="" transform="translate(-62.0234375, -12)"><rect></rect><foreignObject width="124.046875" height="24"><div xmlns="http://www.w3.org/1999/xhtml" style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;"><span class="nodeLabel "><p>Immutable Rules</p></span></div></foreignObject></g></g><g class="node default  " id="flowchart-LABR-12" transform="translate(1560.6484375, 35)"><rect class="basic label-container" style="" x="-52.8984375" y="-27" width="105.796875" height="54"></rect><g class="label" style="" transform="translate(-22.8984375, -12)"><rect></rect><foreignObject width="45.796875" height="24"><div xmlns="http://www.w3.org/1999/xhtml" style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;"><span class="nodeLabel "><p>LABR</p></span></div></foreignObject></g></g><g class="node default  " id="flowchart-ImmutableLABR-13" transform="translate(1560.6484375, 139)"><rect class="basic label-container" style="" x="-92.0234375" y="-27" width="184.046875" height="54"></rect><g class="label" style="" transform="translate(-62.0234375, -12)"><rect></rect><foreignObject width="124.046875" height="24"><div xmlns="http://www.w3.org/1999/xhtml" style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;"><span class="nodeLabel "><p>Immutable Rules</p></span></div></foreignObject></g></g></g></g></g></svg></div><p><span>This represents the protocol&#39;s intended autonomous operating state.</span></p><p><span>Following ownership renouncement, creator authority is eliminated. Governance retains authority only to approve treasury allocations. The Treasury Module retains execution authority only. LABR, LABRV, Registration V3, and Exchange V2 operate according to immutable protocol rules.</span></p><hr /><h2 id='n6-public-declaration'><span>N.6 Public Declaration</span></h2><p><span>A short statement should accompany the report confirming:</span></p><ul><li><p><span>Validation completed</span></p></li><li><p><span>Ownership removed</span></p></li><li><p><span>Documentation published</span></p></li><li><p><span>Governance operational</span></p></li></ul><hr /><h1 id='appendix-o-launch-validation-report-template'><span>Appendix O: Launch Validation Report Template</span></h1><h2 id='o1-purpose'><span>O.1 Purpose</span></h2><p><span>This appendix defines the structure of the launch validation report.</span></p><p><span>The report serves as evidence that protocol functionality was tested prior to decentralization.</span></p><hr /><h2 id='o2-exchange-validation'><span>O.2 Exchange Validation</span></h2><figure class='table-figure'><table><thead><tr><th><span>Test</span></th><th><span>Result</span></th></tr></thead><tbody><tr><td><span>Buy</span></td><td><span>Pass</span></td></tr><tr><td><span>Sell</span></td><td><span>Pass</span></td></tr><tr><td><span>Treasury Routing</span></td><td><span>Pass</span></td></tr><tr><td><span>Oracle Pricing</span></td><td><span>Pass</span></td></tr><tr><td><span>Cooldown</span></td><td><span>Pass</span></td></tr><tr><td><span>Tranche Unlocking</span></td><td><span>Pass</span></td></tr></tbody></table></figure><hr /><h2 id='o3-registration-validation'><span>O.3 Registration Validation</span></h2><figure class='table-figure'><table><thead><tr><th><span>Test</span></th><th><span>Result</span></th></tr></thead><tbody><tr><td><span>Passport Verification</span></td><td><span>Pass</span></td></tr><tr><td><span>Signature Validation</span></td><td><span>Pass</span></td></tr><tr><td><span>LABRV Mint</span></td><td><span>Pass</span></td></tr><tr><td><span>Duplicate Prevention</span></td><td><span>Pass</span></td></tr></tbody></table></figure><hr /><h2 id='o4-governance-validation'><span>O.4 Governance Validation</span></h2><figure class='table-figure'><table><thead><tr><th><span>Test</span></th><th><span>Result</span></th></tr></thead><tbody><tr><td><span>Proposal Creation</span></td><td><span>Pass</span></td></tr><tr><td><span>Voting</span></td><td><span>Pass</span></td></tr><tr><td><span>Threshold Enforcement</span></td><td><span>Pass</span></td></tr><tr><td><span>Execution</span></td><td><span>Pass</span></td></tr></tbody></table></figure><hr /><h2 id='o5-treasury-validation'><span>O.5 Treasury Validation</span></h2><figure class='table-figure'><table><thead><tr><th><span>Test</span></th><th><span>Result</span></th></tr></thead><tbody><tr><td><span>Transfer Execution</span></td><td><span>Pass</span></td></tr><tr><td><span>Accounting</span></td><td><span>Pass</span></td></tr><tr><td><span>Treasury Cap</span></td><td><span>Pass</span></td></tr></tbody></table></figure><hr /><h2 id='o6-security-validation'><span>O.6 Security Validation</span></h2><figure class='table-figure'><table><thead><tr><th><span>Test</span></th><th><span>Result</span></th></tr></thead><tbody><tr><td><span>Access Controls</span></td><td><span>Pass</span></td></tr><tr><td><span>Replay Protection</span></td><td><span>Pass</span></td></tr><tr><td><span>Signature Validation</span></td><td><span>Pass</span></td></tr><tr><td><span>Ownership Procedures</span></td><td><span>Pass</span></td></tr></tbody></table></figure><hr /><h2 id='o7-sign-off'><span>O.7 Sign-Off</span></h2><p><span>Validation Date:</span></p><p><span>[TBD]</span></p><p><span>Version:</span></p><p><span>LaborCoin Protocol v1.0</span></p><p><span>Status:</span></p><p><span>Launch Ready</span></p><hr /><h1 id='references'><span>References</span></h1><ul><li><p><span>Polygon Mainnet</span></p></li><li><p><span>Chainlink Oracle Documentation</span></p></li><li><p><span>Gitcoin Passport Documentation</span></p></li><li><p><span>OpenZeppelin Contracts</span></p></li><li><p><span>OpenZeppelin Ownable</span></p></li><li><p><span>OpenZeppelin ERC20</span></p></li><li><p><span>OpenZeppelin ERC20Votes (if applicable)</span></p></li><li><p><span>LaborCoin Smart Contracts</span></p></li></ul><hr /><h1 id='end-of-document'><span>End of Document</span></h1></div></div>
+</div>
 </body>
 </html>
