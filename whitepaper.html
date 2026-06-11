@@ -155,6 +155,45 @@ td {
     font-size: 16px !important;
 }
 
+/* Force Mermaid node appearance */
+
+svg[id^="mermaidChart"] .node rect,
+svg[id^="mermaidChart"] .node polygon,
+svg[id^="mermaidChart"] .node ellipse,
+svg[id^="mermaidChart"] .node circle,
+svg[id^="mermaidChart"] .node path {
+    fill: #111111 !important;
+    stroke: #ff3b3b !important;
+    stroke-width: 2px !important;
+}
+
+/* Force Mermaid text */
+
+svg[id^="mermaidChart"] .label,
+svg[id^="mermaidChart"] .label text,
+svg[id^="mermaidChart"] .nodeLabel,
+svg[id^="mermaidChart"] span {
+    fill: #ffffff !important;
+    color: #ffffff !important;
+}
+
+/* Force Mermaid arrows */
+
+svg[id^="mermaidChart"] .flowchart-link,
+svg[id^="mermaidChart"] .edgePath .path {
+    stroke: #cccccc !important;
+    stroke-width: 2px !important;
+}
+
+/* Force Mermaid arrowheads */
+
+svg[id^="mermaidChart"] .arrowheadPath,
+svg[id^="mermaidChart"] .marker,
+svg[id^="mermaidChart"] marker path {
+    fill: #cccccc !important;
+    stroke: #cccccc !important;
+}
+
 .mermaid .node rect,
 .mermaid .node polygon,
 .mermaid .node ellipse,
