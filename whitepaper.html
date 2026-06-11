@@ -5,7 +5,6 @@
 <meta charset='UTF-8'>
 <meta name='viewport' content='width=device-width initial-scale=1'>
 
-<link rel="stylesheet" href="github-markdown.css">
 <link rel="stylesheet" href="style.css">
 
 <style type='text/css'>
@@ -30,6 +29,8 @@ html {
 </style>
 
 <link rel='stylesheet' href='https://fonts.googleapis.com/css?family=Open+Sans:400italic,700italic,700,400&amp;subset=latin,latin-ext' type='text/css' />
+
+<link rel="icon" type="image/png" href="/assets/favicon.png">
 
 <title>LaborCoin-Technical-Whitepaper-v1.0 - Copy</title>
 
@@ -158,13 +159,27 @@ td {
 /* Force Mermaid node appearance */
 
 svg[id^="mermaidChart"] .node rect,
-svg[id^="mermaidChart"] .node polygon,
-svg[id^="mermaidChart"] .node ellipse,
 svg[id^="mermaidChart"] .node circle,
-svg[id^="mermaidChart"] .node path {
+svg[id^="mermaidChart"] .node ellipse,
+svg[id^="mermaidChart"] .node polygon,
+svg[id^="mermaidChart"] .node path,
+svg[id^="mermaidChart"] rect.basic,
+svg[id^="mermaidChart"] .label-container {
     fill: #111111 !important;
-    stroke: #ff3b3b !important;
+    stroke: #666666 !important;
     stroke-width: 2px !important;
+}
+
+svg[id^="mermaidChart"] * {
+    color: #ffffff !important;
+}
+
+svg[id^="mermaidChart"] text,
+svg[id^="mermaidChart"] tspan,
+svg[id^="mermaidChart"] .nodeLabel,
+svg[id^="mermaidChart"] .label {
+    fill: #ffffff !important;
+    color: #ffffff !important;
 }
 
 /* Force Mermaid text */
