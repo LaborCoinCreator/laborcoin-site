@@ -786,18 +786,23 @@ footer {
     margin-bottom: 20px;
 }
 
+.subtitle {
+    text-align: center;
+    color: #aaa;
+    font-size: 1.1rem;
+    margin-top: -10px;
+    margin-bottom: 30px;
+}
+
 /* =====================================================
    DOCUMENT META
    ===================================================== */
 
 .document-meta {
+    max-width: 75ch;
+    margin: 40px auto;
     text-align: center;
     color: #bbb;
-    margin: 40px 0;
-}
-
-.document-meta p {
-    margin: 6px 0;
 }
 
 /* =====================================================
