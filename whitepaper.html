@@ -221,24 +221,24 @@ body {
     stroke: #ffffff !important;
 }
 
-/* Economic Scale Chart */
+/* ===== BONDING CURVE CHART ===== */
 
-#mermaidChart13 .background {
+.mermaid .background {
     fill: #111111 !important;
 }
 
-#mermaidChart13 text {
-    fill: #ffffff !important;
-}
-
-#mermaidChart13 .line-plot-0 path {
+.mermaid .line-plot-0 path {
     stroke: #e53935 !important;
     stroke-width: 4px !important;
 }
 
-#mermaidChart13 .tick line,
-#mermaidChart13 .domain {
+.mermaid .tick line,
+.mermaid .domain {
     stroke: #ffffff !important;
+}
+
+.mermaid text {
+    fill: #ffffff !important;
 }
 
 /* =====================================================
@@ -6200,22 +6200,32 @@ $15
 <p>The curve is denominated in USD, converted to POL through the Chainlink POL/USD oracle, and implemented directly within the Exchange V2 smart contract.</p>
 <p>Its purpose is to support transparent distribution, progressive scarcity, treasury growth, and long-term protocol sustainability while remaining simple enough to be independently audited and understood by participants.</p>
 <hr />
-<p>This corrected version now matches the deployed Exchange V2 code exactly and is appropriate for inclusion in the final whitepaper.</p>
-<p>LaborCoin bonding curve</p>
+
+<h4>LaborCoin Bonding Curve</h4>
 <p>USD-denominated LABR price progression derived from the deployed Exchange V2 contract.</p>
-<p>supply	price
-0%	1
-10%	1.14
-20%	1.56
-30%	2.26
-40%	3.24
-50%	4.5
-60%	6.04
-70%	7.86
-80%	9.96
-90%	12.34
-100%	15</p>
-<hr />
+
+<table>
+<thead>
+<tr>
+<th>Supply Sold</th>
+<th>Price (USD)</th>
+</tr>
+</thead>
+<tbody>
+<tr><td>0%</td><td>$1.00</td></tr>
+<tr><td>10%</td><td>$1.14</td></tr>
+<tr><td>20%</td><td>$1.56</td></tr>
+<tr><td>30%</td><td>$2.26</td></tr>
+<tr><td>40%</td><td>$3.24</td></tr>
+<tr><td>50%</td><td>$4.50</td></tr>
+<tr><td>60%</td><td>$6.04</td></tr>
+<tr><td>70%</td><td>$7.86</td></tr>
+<tr><td>80%</td><td>$9.96</td></tr>
+<tr><td>90%</td><td>$12.34</td></tr>
+<tr><td>100%</td><td>$15.00</td></tr>
+</tbody>
+</table>
+
 <h1 id='appendix-h-economic-flows-and-treasury-architecture'>Appendix H: Economic Flows and Treasury Architecture</h1>
 <h2 id='h1-introduction'>H.1 Introduction</h2>
 <p>The LaborCoin protocol consists of four interconnected economic systems:</p>
