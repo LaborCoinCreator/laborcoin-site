@@ -6104,7 +6104,7 @@ P&#39;&#39;(x)&gt;0
 <p>Illustrates the deterministic LABR pricing curve implemented by the deployed Exchange V2 contract. Prices increase quadratically from $1 to $15 as distribution progresses from 0% to 100% of maximum supply.</p>
 <pre><code class='language-mermaid' lang='mermaid'>xychart-beta
     title &quot;LaborCoin Bonding Curve&quot;
-    x-axis [0,10,20,30,40,50,60,70,80,90,100]
+    x-axis "Supply Distributed (%)" [0,10,20,30,40,50,60,70,80,90,100]
     y-axis &quot;Price (USD)&quot; 0 --&gt; 15
     line [1.00,1.14,1.56,2.26,3.24,4.50,6.04,7.86,9.96,12.34,15.00]
 </code></pre>
@@ -6201,38 +6201,10 @@ $15
 <p>Its purpose is to support transparent distribution, progressive scarcity, treasury growth, and long-term protocol sustainability while remaining simple enough to be independently audited and understood by participants.</p>
 <hr />
 
-<h3 style="text-align:center;">LaborCoin Bonding Curve</h3>
-
-<p style="text-align:center;">
-USD-denominated LABR price progression derived from the deployed Exchange V2 contract.
-</p>
-
-<table>
-<thead>
-<tr>
-<th>Supply Sold</th>
-<th>Price (USD)</th>
-</tr>
-</thead>
-<tbody>
-<tr><td>0%</td><td>$1.00</td></tr>
-<tr><td>10%</td><td>$1.14</td></tr>
-<tr><td>20%</td><td>$1.56</td></tr>
-<tr><td>30%</td><td>$2.26</td></tr>
-<tr><td>40%</td><td>$3.24</td></tr>
-<tr><td>50%</td><td>$4.50</td></tr>
-<tr><td>60%</td><td>$6.04</td></tr>
-<tr><td>70%</td><td>$7.86</td></tr>
-<tr><td>80%</td><td>$9.96</td></tr>
-<tr><td>90%</td><td>$12.34</td></tr>
-<tr><td>100%</td><td>$15.00</td></tr>
-</tbody>
-</table>
-
 <h1 id='appendix-h-economic-flows-and-treasury-architecture'>Appendix H: Economic Flows and Treasury Architecture</h1>
 <h2 id='h1-introduction'>H.1 Introduction</h2>
 <p>The LaborCoin protocol consists of four interconnected economic systems:</p>
-<ol start='' >
+<ol>
 <li>LABR Distribution</li>
 <li>Treasury Accumulation</li>
 <li>Governance Allocation</li>
