@@ -736,6 +736,10 @@ footer {
 
 }
 
+/* =====================================================
+   WHITEPAPER LAYOUT
+   ===================================================== */
+
 .page {
     display: flex;
     justify-content: center;
@@ -748,22 +752,17 @@ footer {
 
 .content {
     width: 100%;
-    max-width: 900px;
+    max-width: 850px;
     margin: 0 auto;
-    padding: 0 40px;
+    padding: 0 20px;
     box-sizing: border-box;
 }
 
 .whitepaper-container {
-    max-width: 900px;
+    max-width: 850px;
     margin: 0 auto;
     padding: 0 20px 80px;
     box-sizing: border-box;
-}
-
-.whitepaper-container p,
-.whitepaper-container li {
-    line-height: 1.8;
 }
 
 .whitepaper-container h1 {
@@ -778,43 +777,9 @@ footer {
     margin-top: 35px;
 }
 
-/* ===== WHITEPAPER MERMAID ===== */
-
-.mermaid {
-    text-align: center;
-    margin: 40px auto;
-    overflow-x: auto;
-}
-
-.mermaid svg {
-    max-width: 100%;
-    height: auto;
-}
-
-/* ===== WHITEPAPER TABLES ===== */
-
-.content table {
-    width: 100%;
-    border-collapse: collapse;
-    margin: 30px 0;
-}
-
-.content th,
-.content td {
-    border: 1px solid #333;
-    padding: 10px;
-    text-align: left;
-}
-
-.content th {
-    background: #161616;
-}
-
-.content tr:nth-child(even) {
-    background: #111;
-}
-
-/* ===== DOCUMENT META ===== */
+/* =====================================================
+   DOCUMENT META
+   ===================================================== */
 
 .document-meta {
     text-align: center;
@@ -824,4 +789,72 @@ footer {
 
 .document-meta p {
     margin: 6px 0;
+}
+
+/* =====================================================
+   READABILITY
+   ===================================================== */
+
+p,
+li {
+    max-width: 75ch;
+    margin-left: auto;
+    margin-right: auto;
+    line-height: 1.8;
+}
+
+p:empty {
+    display: none;
+}
+
+/* =====================================================
+   MERMAID
+   ===================================================== */
+
+.mermaid {
+    text-align: center;
+    margin: 40px auto;
+    overflow-x: auto;
+}
+
+.mermaid svg {
+    display: block;
+    max-width: 100%;
+    height: auto;
+    margin: 0 auto;
+}
+
+/* =====================================================
+   TABLES
+   ===================================================== */
+
+figure.table-figure {
+    margin: 2rem auto;
+    overflow-x: auto;
+}
+
+figure.table-figure table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 0 auto;
+}
+
+figure.table-figure th,
+figure.table-figure td {
+    border: 1px solid #333;
+    padding: 12px;
+    text-align: left;
+}
+
+figure.table-figure th {
+    background: #151515;
+    color: #ffffff;
+}
+
+figure.table-figure td {
+    background: #111111;
+}
+
+figure.table-figure tr:nth-child(even) td {
+    background: #161616;
 }
