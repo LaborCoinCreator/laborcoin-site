@@ -264,12 +264,23 @@ body {
 </style>
 
 </head>
-<body><p>Version: 1.0</p>
-<p>Status: Pre-Launch Final Draft</p>
-<p>Network: Polygon Mainnet</p>
-<p>Document SHA-256:
-[TBD at publication]</p>
-<p>Last Updated: June 2026</p>
+
+<body>
+
+<div class="document-meta">
+
+<p><strong>Version:</strong> 1.0</p>
+
+<p><strong>Status:</strong> Pre-Launch Final Draft</p>
+
+<p><strong>Network:</strong> Polygon Mainnet</p>
+
+<p><strong>Document SHA-256:</strong> [TBD at publication]</p>
+
+<p><strong>Last Updated:</strong> June 2026</p>
+
+</div>
+
 <h1 id='laborcoin-technical-whitepaper-v10'>LaborCoin Technical Whitepaper v1.0</h1>
 
 <div class="cta-row">
@@ -6732,5 +6743,50 @@ LABR[LABR]
 </ul>
 <hr />
 <h1 id='end-of-document'>End of Document</h1>
+
+<script src="https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.min.js"></script>
+
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+
+    mermaid.initialize({
+        startOnLoad: true,
+        theme: "dark",
+        securityLevel: "loose"
+    });
+
+});
+</script>
+
+<script src="https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.min.js"></script>
+
+<script>
+document.addEventListener("DOMContentLoaded", async () => {
+
+  const blocks = document.querySelectorAll(
+    'pre code.language-mermaid'
+  );
+
+  blocks.forEach((block) => {
+
+    const div = document.createElement("div");
+    div.className = "mermaid";
+    div.textContent = block.textContent;
+
+    block.parentElement.replaceWith(div);
+
+  });
+
+  mermaid.initialize({
+    startOnLoad: true,
+    theme: "dark",
+    securityLevel: "loose"
+  });
+
+  await mermaid.run();
+
+});
+</script>
+
 </body>
 </html>

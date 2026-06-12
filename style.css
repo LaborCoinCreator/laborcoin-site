@@ -738,12 +738,90 @@ footer {
 
 .page {
     display: flex;
+    justify-content: center;
 }
 
 .sidebar {
     width: 280px;
+    flex-shrink: 0;
 }
 
 .content {
+    width: 100%;
     max-width: 900px;
+    margin: 0 auto;
+    padding: 0 40px;
+    box-sizing: border-box;
+}
+
+.whitepaper-container {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 0 20px 80px;
+    box-sizing: border-box;
+}
+
+.whitepaper-container p,
+.whitepaper-container li {
+    line-height: 1.8;
+}
+
+.whitepaper-container h1 {
+    margin-top: 60px;
+}
+
+.whitepaper-container h2 {
+    margin-top: 50px;
+}
+
+.whitepaper-container h3 {
+    margin-top: 35px;
+}
+
+/* ===== WHITEPAPER MERMAID ===== */
+
+.mermaid {
+    text-align: center;
+    margin: 40px auto;
+    overflow-x: auto;
+}
+
+.mermaid svg {
+    max-width: 100%;
+    height: auto;
+}
+
+/* ===== WHITEPAPER TABLES ===== */
+
+.content table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 30px 0;
+}
+
+.content th,
+.content td {
+    border: 1px solid #333;
+    padding: 10px;
+    text-align: left;
+}
+
+.content th {
+    background: #161616;
+}
+
+.content tr:nth-child(even) {
+    background: #111;
+}
+
+/* ===== DOCUMENT META ===== */
+
+.document-meta {
+    text-align: center;
+    color: #bbb;
+    margin: 40px 0;
+}
+
+.document-meta p {
+    margin: 6px 0;
 }
