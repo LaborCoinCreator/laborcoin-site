@@ -140,7 +140,7 @@ td {
     flex-wrap: wrap;
 }
 
-/* Mermaid */
+/* ===== Mermaid ===== */
 
 .mermaid {
     text-align: center;
@@ -155,25 +155,54 @@ td {
     background: transparent;
 }
 
-.mermaid text,
-.mermaid tspan {
+/* Text */
+
+svg[id^="mermaidChart"] text,
+svg[id^="mermaidChart"] tspan,
+svg[id^="mermaidChart"] .nodeLabel,
+svg[id^="mermaidChart"] .nodeLabel p,
+svg[id^="mermaidChart"] .label,
+svg[id^="mermaidChart"] .label text,
+svg[id^="mermaidChart"] span {
     fill: #ffffff !important;
-    font-size: 16px !important;
+    color: #ffffff !important;
 }
 
-/* Force Mermaid node appearance */
+/* Nodes */
 
 svg[id^="mermaidChart"] .node rect,
-svg[id^="mermaidChart"] .node circle,
-svg[id^="mermaidChart"] .node ellipse,
 svg[id^="mermaidChart"] .node polygon,
-svg[id^="mermaidChart"] .node path,
+svg[id^="mermaidChart"] .node ellipse,
+svg[id^="mermaidChart"] .node circle,
 svg[id^="mermaidChart"] rect.basic,
 svg[id^="mermaidChart"] .label-container {
     fill: #111111 !important;
     stroke: #e53935 !important;
     stroke-width: 2px !important;
 }
+
+/* Force state-diagram nodes to match flowcharts */
+
+svg[id^="mermaidChart"] .statediagram-state rect.basic {
+    fill: #111111 !important;
+    stroke: #e53935 !important;
+    stroke-width: 2px !important;
+    rx: 0 !important;
+    ry: 0 !important;
+}
+
+svg[id^="mermaidChart"] .node circle.state-start {
+    fill: #111111 !important;
+    stroke: #e53935 !important;
+}
+
+svg[id^="mermaidChart"] .node circle.state-end,
+svg[id^="mermaidChart"] .end-state-inner {
+    fill: #111111 !important;
+    stroke: #e53935 !important;
+}
+
+/* Edge labels */
 
 svg[id^="mermaidChart"] .edgeLabel,
 svg[id^="mermaidChart"] .labelBkg,
@@ -189,89 +218,46 @@ svg[id^="mermaidChart"] .edgeLabel span {
     color: #ffffff !important;
 }
 
-svg[id^="mermaidChart"] * {
-    color: #ffffff !important;
-}
-
-svg[id^="mermaidChart"] text,
-svg[id^="mermaidChart"] tspan,
-svg[id^="mermaidChart"] .nodeLabel,
-svg[id^="mermaidChart"] .label {
-    fill: #ffffff !important;
-    color: #ffffff !important;
-}
-
-/* Force Mermaid text */
-
-svg[id^="mermaidChart"] .label,
-svg[id^="mermaidChart"] .label text,
-svg[id^="mermaidChart"] .nodeLabel,
-svg[id^="mermaidChart"] span {
-    fill: #ffffff !important;
-    color: #ffffff !important;
-}
-
-/* Force Mermaid arrows */
+/* Lines */
 
 svg[id^="mermaidChart"] .flowchart-link,
-svg[id^="mermaidChart"] .edgePath .path {
+svg[id^="mermaidChart"] .edgePath .path,
+svg[id^="mermaidChart"] .transition {
     stroke: #cccccc !important;
     stroke-width: 2px !important;
 }
 
-/* Force Mermaid arrowheads */
+/* Arrowheads */
 
 svg[id^="mermaidChart"] .arrowheadPath,
+svg[id^="mermaidChart"] .arrowMarkerPath,
 svg[id^="mermaidChart"] .marker,
 svg[id^="mermaidChart"] marker path {
     fill: #cccccc !important;
     stroke: #cccccc !important;
 }
 
-#mermaidChart13 .background{fill:#111111!important;}#mermaidChart13 text{fill:#ffffff!important;}#mermaidChart13 .line-plot-0 path{stroke:#ff3b3b!important;stroke-width:4px!important;}#mermaidChart13 .tick line,#mermaidChart13 .domain{stroke:#ffffff!important;}
+/* Figure 9 chart override */
 
-svg[id^="mermaidChart"] rect.basic,
-svg[id^="mermaidChart"] .label-container{
-    fill:#111111 !important;
-    stroke:#e53935 !important;
-    stroke-width:2px !important;
-}
-
-svg[id^="mermaidChart"] .nodeLabel,
-svg[id^="mermaidChart"] .nodeLabel p,
-svg[id^="mermaidChart"] .label text{
-    color:#ffffff !important;
-    fill:#ffffff !important;
-}
-
-svg[id^="mermaidChart"] .flowchart-link,
-svg[id^="mermaidChart"] .edgePath .path{
-    stroke:#cccccc !important;
-    stroke-width:2px !important;
-}
-
-svg[id^="mermaidChart"] .arrowMarkerPath{
-    fill:#cccccc !important;
-    stroke:#cccccc !important;
-}
-
-.mermaid .node rect,
-.mermaid .node polygon,
-.mermaid .node ellipse,
-.mermaid .node circle {
+#mermaidChart13 .background {
     fill: #111111 !important;
-    stroke: #e53935 !important;
-    stroke-width: 2px !important;
 }
 
-.mermaid .edgePath path {
-    stroke: #cccccc !important;
-    stroke-width: 2px !important;
+#mermaidChart13 text {
+    fill: #ffffff !important;
 }
 
-.mermaid marker path {
-    fill: #cccccc !important;
+#mermaidChart13 .line-plot-0 path {
+    stroke: #ff3b3b !important;
+    stroke-width: 4px !important;
 }
+
+#mermaidChart13 .tick line,
+#mermaidChart13 .domain {
+    stroke: #ffffff !important;
+}
+
+/* Center diagrams */
 
 .md-diagram-panel {
     display: flex !important;
