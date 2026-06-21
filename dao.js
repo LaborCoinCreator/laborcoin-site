@@ -25,7 +25,7 @@ const ERC20_ABI = [
 
 const REGISTRATION_ABI = [
 
-  "function register(bytes signature)",
+  "function register(uint256 expiry, bytes signature)",
 
   "function registered(address) view returns (bool)",
 
@@ -53,6 +53,7 @@ let labr;
 let labrv;
 
 let registrationSignature;
+let registrationExpiry;
 
 // ===== ELEMENTS =====
 const connectBtn =
@@ -511,6 +512,9 @@ showLoading(
 
     registrationSignature =
       data.signature;
+
+    registrationExpiry =
+      data.expiry;
 
     completeStep("step-identity");
 
@@ -1091,7 +1095,10 @@ showLoading(
   "Registering DAO membership..."
 );
 
-    if (!registrationSignature) {
+    if (
+      !registrationSignature ||
+      !registrationExpiry
+    ) {
 
       hideLoading();
 
@@ -1105,6 +1112,7 @@ showLoading(
 
     const tx =
       await registration.register(
+        registrationExpiry,
         registrationSignature
       );
 
