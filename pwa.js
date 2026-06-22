@@ -1,58 +1,76 @@
 let deferredInstallPrompt = null;
 
+function getInstallButtons() {
+  return document.querySelectorAll(
+    "#installAppBtn, .installAppBtn"
+  );
+}
+
+function showInstallButtons() {
+  getInstallButtons().forEach(button => {
+    button.classList.remove("hidden");
+  });
+}
+
+function hideInstallButtons() {
+  getInstallButtons().forEach(button => {
+    button.classList.add("hidden");
+  });
+}
+
 if ("serviceWorker" in navigator) {
   window.addEventListener("load", () => {
     navigator.serviceWorker
       .register("/service-worker.js")
       .catch(err => {
-        console.error("Service worker registration failed:", err);
+        console.error(
+          "Service worker registration failed:",
+          err
+        );
       });
   });
 }
 
-window.addEventListener("beforeinstallprompt", event => {
-  event.preventDefault();
+window.addEventListener(
+  "beforeinstallprompt",
+  event => {
+    event.preventDefault();
 
-  deferredInstallPrompt = event;
+    deferredInstallPrompt = event;
 
-  const installBtn =
-    document.getElementById("installAppBtn");
-
-  if (installBtn) {
-    installBtn.classList.remove("hidden");
+    showInstallButtons();
   }
-});
+);
 
-document.addEventListener("DOMContentLoaded", () => {
-  const installBtn =
-    document.getElementById("installAppBtn");
+document.addEventListener(
+  "DOMContentLoaded",
+  () => {
+    getInstallButtons().forEach(button => {
+      button.addEventListener(
+        "click",
+        async () => {
+          if (!deferredInstallPrompt) {
+            return;
+          }
 
-  if (!installBtn) {
-    return;
+          deferredInstallPrompt.prompt();
+
+          await deferredInstallPrompt.userChoice;
+
+          deferredInstallPrompt = null;
+
+          hideInstallButtons();
+        }
+      );
+    });
   }
+);
 
-  installBtn.addEventListener("click", async () => {
-    if (!deferredInstallPrompt) {
-      return;
-    }
-
-    deferredInstallPrompt.prompt();
-
-    await deferredInstallPrompt.userChoice;
-
+window.addEventListener(
+  "appinstalled",
+  () => {
     deferredInstallPrompt = null;
 
-    installBtn.classList.add("hidden");
-  });
-});
-
-window.addEventListener("appinstalled", () => {
-  const installBtn =
-    document.getElementById("installAppBtn");
-
-  if (installBtn) {
-    installBtn.classList.add("hidden");
+    hideInstallButtons();
   }
-
-  deferredInstallPrompt = null;
-});
+);
