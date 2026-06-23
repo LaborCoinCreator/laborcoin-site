@@ -561,7 +561,7 @@ buyAmount.oninput = async (e) => {
 
   const tokens = pol / p;
 
-  buyEstimate.innerText = tokens.toFixed(2);
+  buyEstimate.innerText = tokens.toFixed(8);
   buyDaoShare.innerText = (pol * 0.10).toFixed(4) + " POL";
 };
 
