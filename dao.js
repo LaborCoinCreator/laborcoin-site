@@ -263,12 +263,18 @@ const loadingText =
 
 function showLoading(text) {
 
-  loadingText.innerText =
-    text;
+  if (loadingText) {
 
-  loadingOverlay.classList.remove(
-    "hidden"
-  );
+    loadingText.innerText =
+      text;
+  }
+
+  if (loadingOverlay) {
+
+    loadingOverlay.classList.remove(
+      "hidden"
+    );
+  }
 }
 
 function hideLoading() {
