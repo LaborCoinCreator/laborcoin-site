@@ -516,11 +516,40 @@ showLoading(
       return;
     }
 
+    console.log("VERIFY RESPONSE:", data);
+
+    if (
+      !data.signature ||
+      !data.expiry
+    ) {
+
+      hideLoading();
+
+      verifyBtn.disabled = false;
+
+      setStatus(
+        "Verification response missing signature or expiry",
+        "error"
+      );
+
+      return;
+    }
+
     registrationSignature =
       data.signature;
 
     registrationExpiry =
       data.expiry;
+
+    sessionStorage.setItem(
+      "registrationSignature",
+      registrationSignature
+    );
+
+    sessionStorage.setItem(
+      "registrationExpiry",
+      String(registrationExpiry)
+    );
 
     completeStep("step-identity");
 
@@ -1100,6 +1129,18 @@ setStatus(
 showLoading(
   "Registering DAO membership..."
 );
+
+    registrationSignature =
+      registrationSignature ||
+      sessionStorage.getItem(
+        "registrationSignature"
+      );
+
+    registrationExpiry =
+      registrationExpiry ||
+      sessionStorage.getItem(
+        "registrationExpiry"
+      );
 
     if (
       !registrationSignature ||
