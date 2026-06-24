@@ -132,14 +132,9 @@ govVerifyBtn.disabled = true;
 // ===== HELPERS =====
 function setStatus(
   msg,
-  type = ""
+  type = "",
+  target = "gate"
 ) {
-
-  govStatus.innerText = msg;
-
-  if (proposalStatus) {
-    proposalStatus.innerText = msg;
-  }
 
   const color =
     type === "error"
@@ -148,13 +143,17 @@ function setStatus(
       ? "#4dff88"
       : "#ccc";
 
-  govStatus.style.color =
-    color;
+  const el =
+    target === "proposal"
+      ? proposalStatus
+      : govStatus;
 
-  if (proposalStatus) {
-    proposalStatus.style.color =
-      color;
+  if (!el) {
+    return;
   }
+
+  el.innerText = msg;
+  el.style.color = color;
 }
 
 function completeStep(id) {
@@ -596,7 +595,8 @@ async () => {
 
     setStatus(
       "Treasury proposal submitted",
-      "success"
+      "success",
+      "proposal"
     );
 
     loadProposalFeed();
@@ -614,7 +614,8 @@ async () => {
       err.reason ||
       err.message ||
       "Proposal failed",
-      "error"
+      "error",
+      "proposal"
     );
   }
 };
@@ -1012,6 +1013,15 @@ async function loadProposalFeed() {
           ${p.executed}
         </p>
 
+        <p
+          id="proposalActionStatus-${i}"
+          class="status"
+          style="
+            text-align:center;
+            min-height:24px;
+          "
+        ></p>
+
         <div class="cta-row">
 
           ${
@@ -1071,11 +1081,34 @@ async function loadProposalFeed() {
       </div>
     `;
   }
-}
-
-// ===== VOTE =====        
+}        
 
 // ===== VOTE =====
+function setProposalActionStatus(
+  id,
+  msg,
+  type = ""
+) {
+
+  const el =
+    document.getElementById(
+      `proposalActionStatus-${id}`
+    );
+
+  if (!el) {
+    return;
+  }
+
+  el.innerText = msg;
+
+  el.style.color =
+    type === "error"
+      ? "#ff4d4d"
+      : type === "success"
+      ? "#4dff88"
+      : "#ccc";
+}
+
 window.voteProposal =
 async (
   id,
@@ -1085,6 +1118,11 @@ async (
   try {
 
     showLoading(
+      "Submitting vote..."
+    );
+
+    setProposalActionStatus(
+      id,
       "Submitting vote..."
     );
 
@@ -1106,7 +1144,8 @@ async (
 
     hideLoading();
 
-    setStatus(
+    setProposalActionStatus(
+      id,
       "Vote submitted",
       "success"
     );
@@ -1119,7 +1158,8 @@ async (
 
     hideLoading();
 
-    setStatus(
+    setProposalActionStatus(
+      id,
       err.reason ||
       err.message ||
       "Vote failed",
@@ -1138,6 +1178,11 @@ async (id) => {
       "Executing proposal..."
     );
 
+    setProposalActionStatus(
+      id,
+      "Executing proposal..."
+    );
+
     const tx =
       await governance.executeProposal(id);
 
@@ -1145,7 +1190,8 @@ async (id) => {
 
     hideLoading();
 
-    setStatus(
+    setProposalActionStatus(
+      id,
       "Proposal executed",
       "success"
     );
@@ -1158,7 +1204,8 @@ async (id) => {
 
     hideLoading();
 
-    setStatus(
+    setProposalActionStatus(
+      id,
       err.reason ||
       err.message ||
       "Execution failed",
