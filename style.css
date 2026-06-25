@@ -435,10 +435,6 @@ footer {
   line-height: 1.7;
 }
 
-.hidden {
-  display: none;
-}
-
 /* ===== CERTIFICATE ===== */
 
 #certificateBox {
@@ -871,4 +867,30 @@ figure.table-figure td {
 
 figure.table-figure tr:nth-child(even) td {
     background: #161616;
+}
+
+.certificate-actions {
+  margin-top: 20px;
+}
+
+@media (max-width: 768px) {
+
+  .amount-row {
+    flex-direction: row;
+    align-items: center;
+  }
+
+  .amount-row input {
+    min-width: 0;
+    flex: 1;
+  }
+
+  #maxProposalBtn {
+    width: auto !important;
+    min-width: 64px;
+    flex: 0 0 auto;
+    padding-left: 14px;
+    padding-right: 14px;
+  }
+
 }

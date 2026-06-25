@@ -210,19 +210,25 @@
 
   <p id="certificateText"></p>
 
-  <button
-    id="downloadCertificateBtn"
-    class="cta-button"
-  >
-    Download Certificate
-  </button>
+  <div class="cta-row certificate-actions">
 
-  <button
-            id="downloadAttestationBtn"
-            class="cta-button secondary"
-          >
-            Download Attestation
-          </button>
+    <button
+      id="downloadCertificateBtn"
+      class="cta-button"
+      type="button"
+    >
+      Download Certificate
+    </button>
+
+    <button
+      id="downloadAttestationBtn"
+      class="cta-button secondary"
+      type="button"
+    >
+      Download Attestation
+    </button>
+
+  </div>
 
 </div>
 
@@ -266,6 +272,8 @@
     <p id="loadingText">Loading...</p>
   </div>
 </div>
+
+<script type="module" src="wallet.js"></script>
 
 <script src="dao.js"></script>
 

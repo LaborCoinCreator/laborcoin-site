@@ -293,59 +293,18 @@ connectBtn.onclick = async () => {
 
   try {
 
-    if (!window.ethereum) {
-
-      setStatus(
-        "MetaMask not detected",
-        "error"
-      );
-
-      return;
-
-    }
+    const wallet =
+      await window.LaborWallet.connect();
 
     provider =
-  new ethers.BrowserProvider(
-    window.ethereum
-  );
+      wallet.provider;
 
-await provider.send(
-  "eth_requestAccounts",
-  []
-);
-
-const network =
-  await provider.getNetwork();
-
-if (
-  Number(network.chainId) !== 137
-) {
-
-  try {
-
-    await window.ethereum.request({
-      method: "wallet_switchEthereumChain",
-      params: [{ chainId: "0x89" }]
-    });
-
-  } catch (switchError) {
-
-    setStatus(
-      "Please switch to Polygon Mainnet",
-      "error"
-    );
-
-    return;
-  }
-}
- 
-   signer =
-      await provider.getSigner();
+    signer =
+      wallet.signer;
 
     userAddress =
-      await signer.getAddress();
+      wallet.address;
 
-    // ===== CONTRACTS =====
     registration =
       new ethers.Contract(
         REGISTRATION_CONTRACT,
@@ -369,7 +328,6 @@ if (
 
     completeStep("step-wallet");
 
-    // ===== VERIFY LABR =====
     const balance =
       await labr.balanceOf(
         userAddress
@@ -388,7 +346,6 @@ if (
       );
 
       return;
-
     }
 
     completeStep("step-balance");
@@ -396,31 +353,29 @@ if (
     verifyBtn.disabled = false;
 
     const alreadyRegistered =
-  await registration.registered(
-    userAddress
-  );
+      await registration.registered(
+        userAddress
+      );
 
-if (alreadyRegistered) {
+    if (alreadyRegistered) {
 
-  completeStep("step-identity");
+      completeStep("step-identity");
+      completeStep("step-attest");
+      completeStep("step-register");
 
-  completeStep("step-attest");
+      governanceAccessWrapper
+        .classList
+        .remove("hidden");
 
-  completeStep("step-register");
+      await showMembershipData();
 
-  governanceAccessWrapper
-    .classList
-    .remove("hidden");
+      setStatus(
+        "Already registered",
+        "success"
+      );
 
-  await showMembershipData();
-
-  setStatus(
-    "Already registered",
-    "success"
-  );
-
-  return;
-}
+      return;
+    }
 
     setStatus(
       "Wallet connected",
@@ -432,12 +387,11 @@ if (alreadyRegistered) {
     console.error(err);
 
     setStatus(
+      err.message ||
       "Connection failed",
       "error"
     );
-
   }
-
 };
 
 // ===== VERIFY IDENTITY =====
@@ -1109,9 +1063,33 @@ pdf.text(
   // SAVE
   // =====================================
 
-  pdf.save(
-    `LaborCoin-Member-${memberId}.pdf`
-  );
+    const fileName =
+      `LaborCoin-Member-${memberId}.pdf`;
+
+    const pdfBlob =
+      pdf.output("blob");
+
+    const pdfUrl =
+      URL.createObjectURL(pdfBlob);
+
+    const link =
+      document.createElement("a");
+
+    link.href = pdfUrl;
+    link.download = fileName;
+    link.target = "_blank";
+    link.rel = "noopener";
+
+    document.body.appendChild(link);
+
+    link.click();
+
+    document.body.removeChild(link);
+
+    setTimeout(
+      () => URL.revokeObjectURL(pdfUrl),
+      1000
+    );
 
 }
 
@@ -1255,28 +1233,22 @@ window.addEventListener(
 
     try {
 
-      if (!window.ethereum)
+      if (!window.LaborWallet) {
         return;
-
-      const accounts =
-        await window.ethereum.request({
-          method:
-            "eth_accounts"
-        });
-
-      if (
-        accounts.length > 0
-      ) {
-
-        connectBtn.click();
-
       }
+
+      const wallet =
+        await window.LaborWallet.reconnectInjected();
+
+      if (!wallet) {
+        return;
+      }
+
+      connectBtn.click();
 
     } catch (err) {
 
       console.error(err);
-
     }
-
   }
 );

@@ -240,85 +240,62 @@ async function initialLoad() {
 
 // ===== CONNECT =====
 async function connectWallet() {
-  if (!window.ethereum) {
-    setStatus("No wallet detected", "error");
-    return;
-  }
-
-  provider =
-  new ethers.BrowserProvider(
-    window.ethereum
-  );
-
-await provider.send(
-  "eth_requestAccounts",
-  []
-);
-
-const network =
-  await provider.getNetwork();
-
-if (
-  Number(network.chainId) !== 137
-) {
 
   try {
 
-    await window.ethereum.request({
-      method:
-        "wallet_switchEthereumChain",
+    const wallet =
+      await window.LaborWallet.connect();
 
-      params: [
-        { chainId: "0x89" }
-      ]
-    });
+    provider =
+      wallet.provider;
 
-  } catch {
+    signer =
+      wallet.signer;
 
-    setStatus(
-      "Please switch to Polygon Mainnet",
-      "error"
+    userAddress =
+      wallet.address;
+
+    document.getElementById(
+      "connectBtn"
+    ).style.display = "none";
+
+    setGateStatus(
+      "Wallet connected",
+      "success"
     );
 
-    return;
+    exchange =
+      new ethers.Contract(
+        EXCHANGE_ADDRESS,
+        EXCHANGE_ABI,
+        signer
+      );
+
+    completeStep(
+      "exchange-step-wallet"
+    );
+
+    document.getElementById(
+      "walletAddress"
+    ).innerText =
+      userAddress.slice(0, 6)
+      +
+      "..."
+      +
+      userAddress.slice(-4);
+
+    updateAll();
+
+  } catch (err) {
+
+    console.error(err);
+
+    setStatus(
+      err.message ||
+      "Connection failed",
+      "error"
+    );
   }
-}
-
-signer =
-  await provider.getSigner();
-
-userAddress =
-  await signer.getAddress();
-
-document.getElementById(
-  "connectBtn"
-).style.display = "none";
-
-setGateStatus(
-  "Wallet connected",
-  "success"
-);
-
-exchange =
-  new ethers.Contract(
-    EXCHANGE_ADDRESS,
-    EXCHANGE_ABI,
-    signer
-  );
-
-  completeStep(
-    "exchange-step-wallet"
-  );
-
-  document.getElementById("walletAddress").innerText =
-    userAddress.slice(0, 6) + "..." + userAddress.slice(-4);
-
-  setGateStatus(
-    "Wallet connected",
-    "success"
-  );
-
-  updateAll();
 }
 
 // ===== VERIFY EXCHANGE ACCESS =====
@@ -1080,27 +1057,28 @@ window.addEventListener("DOMContentLoaded", () => {
 });
 
 // ===== AUTO RECONNECT =====
-window.addEventListener("load", async () => {
+window.addEventListener(
+  "load",
+  async () => {
 
-  try {
+    try {
 
-    if (!window.ethereum) return;
+      if (!window.LaborWallet) {
+        return;
+      }
 
-    const accounts =
-      await window.ethereum.request({
-        method: "eth_accounts"
-      });
+      const wallet =
+        await window.LaborWallet.reconnectInjected();
 
-    if (accounts.length > 0) {
+      if (!wallet) {
+        return;
+      }
 
       connectWallet();
 
+    } catch (err) {
+
+      console.error(err);
     }
-
-  } catch (err) {
-
-    console.error(err);
-
   }
-
-});
+);

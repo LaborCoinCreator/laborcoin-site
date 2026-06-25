@@ -47,65 +47,19 @@ function setStatus(
 }
 
 // ===== CONNECT =====
-
 connectBtn.onclick =
 async () => {
 
   try {
 
-    if (!window.ethereum) {
-
-      setStatus(
-        "MetaMask not detected",
-        "error"
-      );
-
-      return;
-    }
+    const wallet =
+      await window.LaborWallet.connect();
 
     provider =
-      new ethers.BrowserProvider(
-        window.ethereum
-      );
-
-    await provider.send(
-      "eth_requestAccounts",
-      []
-    );
-
-    const network =
-      await provider.getNetwork();
-
-    if (
-      Number(network.chainId) !== 137
-    ) {
-
-      try {
-
-        await window.ethereum.request({
-          method:
-            "wallet_switchEthereumChain",
-
-          params: [
-            {
-              chainId: "0x89"
-            }
-          ]
-        });
-
-      } catch {
-
-        setStatus(
-          "Please switch to Polygon Mainnet",
-          "error"
-        );
-
-        return;
-      }
-    }
+      wallet.provider;
 
     signer =
-      await provider.getSigner();
+      wallet.signer;
 
     connectBtn.innerText =
       "Wallet Connected";
@@ -120,6 +74,7 @@ async () => {
     console.error(err);
 
     setStatus(
+      err.message ||
       "Connection failed",
       "error"
     );
