@@ -118,11 +118,15 @@ function waitForAppKitProvider() {
   return new Promise(
     (resolve, reject) => {
 
+      let unsubscribe = null;
+
       const timeout =
         setTimeout(
           () => {
 
-            unsubscribe();
+            if (unsubscribe) {
+              unsubscribe();
+            }
 
             reject(
               new Error(
@@ -134,25 +138,36 @@ function waitForAppKitProvider() {
           120000
         );
 
-      const unsubscribe =
-        appKit.subscribeProvider(
+      function finish(rawProvider) {
+
+        if (!rawProvider) {
+          return;
+        }
+
+        clearTimeout(timeout);
+
+        if (unsubscribe) {
+          unsubscribe();
+        }
+
+        resolve(rawProvider);
+      }
+
+      const existingProvider =
+        appKit.getWalletProvider
+          ? appKit.getWalletProvider()
+          : null;
+
+      finish(existingProvider);
+
+      unsubscribe =
+        appKit.subscribeProviders(
           state => {
 
             const rawProvider =
-              state.walletProvider ||
-              state.provider;
+              state?.eip155;
 
-            if (
-              state.isConnected &&
-              rawProvider
-            ) {
-
-              clearTimeout(timeout);
-
-              unsubscribe();
-
-              resolve(rawProvider);
-            }
+            finish(rawProvider);
           }
         );
     }
@@ -168,7 +183,10 @@ window.LaborWallet = {
       const providerPromise =
         waitForAppKitProvider();
 
-      await appKit.open();
+      await appKit.open({
+        view: "Connect",
+        namespace: "eip155"
+      });
 
       const rawProvider =
         await providerPromise;
