@@ -1066,8 +1066,22 @@ pdf.text(
     const fileName =
       `LaborCoin-Member-${memberId}.pdf`;
 
-    pdf.save(fileName);
+    const pdfBlob =
+      pdf.output("blob");
 
+    const pdfUrl =
+      URL.createObjectURL(pdfBlob);
+
+    downloadCertificateBtn.href =
+      pdfUrl;
+
+    downloadCertificateBtn.download =
+      fileName;
+
+    return {
+      pdfUrl,
+      fileName
+    };
 }
 
 // ===== REGISTER =====
@@ -1198,11 +1212,22 @@ showLoading(
 };
 
 downloadCertificateBtn.onclick =
-async () => {
+async event => {
+
+  if (
+    downloadCertificateBtn.href &&
+    downloadCertificateBtn.href !== "#"
+  ) {
+    return;
+  }
+
+  event.preventDefault();
 
   try {
 
     await generateMembershipCertificate();
+
+    downloadCertificateBtn.click();
 
   } catch (err) {
 
