@@ -82,8 +82,6 @@ const ERC20_ABI = [
 
   "function balanceOf(address) view returns (uint256)",
 
-  "function totalSupply() view returns (uint256)",
-
   "function approve(address spender, uint256 amount) returns (bool)"
 
 ];  
@@ -95,6 +93,34 @@ const readExchange = new ethers.Contract(EXCHANGE_ADDRESS, EXCHANGE_ABI, readPro
 let provider, signer, exchange, userAddress;
 
 let exchangeVerified = false;
+
+function updateBondingCurveProgress(
+  sold
+) {
+
+  const soldLABR =
+    Number(
+      ethers.formatEther(sold)
+    );
+
+  const progress =
+    (
+      soldLABR /
+      1_000_000_000
+    ) * 100;
+
+  const el =
+    document.getElementById(
+      "bondingCurveProgress"
+    );
+
+  if (!el) {
+    return;
+  }
+
+  el.innerText =
+    `${progress.toFixed(6)}%`;
+}
 
 function updateBondingCurveValue(
   sold,
@@ -238,15 +264,17 @@ async function initialLoad() {
         readProvider
       );
 
-    const totalSupply =
-      await labrRead.totalSupply();
+    const available =
+      await labrRead.balanceOf(
+        EXCHANGE_ADDRESS
+      );
 
     document.getElementById(
-      "circulatingSupply"
+      "availableSupply"
     ).innerText =
       Number(
         ethers.formatEther(
-          totalSupply
+          available
         )
       ).toLocaleString() + " LABR";
 
@@ -282,8 +310,12 @@ async function initialLoad() {
       polUsd
     );
 
+    updateBondingCurveProgress(
+      sold
+    );
+
     await drawCurve();
-  } catch (e) {
+    } catch (e) {
     console.error(e);
     setStatus("Failed to load data", "error");
   }
@@ -495,15 +527,17 @@ document.getElementById(
   ).toLocaleString() + " LABR";
 
 // ===== CIRCULATING SUPPLY =====
-const totalSupply =
-  await labrRead.totalSupply();
+const available =
+  await labrRead.balanceOf(
+    EXCHANGE_ADDRESS
+  );
 
 document.getElementById(
-  "circulatingSupply"
+  "availableSupply"
 ).innerText =
   Number(
     ethers.formatEther(
-      totalSupply
+      available
     )
   ).toLocaleString() + " LABR";
 
@@ -540,6 +574,10 @@ document.getElementById(
       sold,
       price,
       polUsd
+    );
+
+    updateBondingCurveProgress(
+      sold
     );
 
     updateCooldown();
