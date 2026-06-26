@@ -55,6 +55,8 @@ let labrv;
 let registrationSignature;
 let registrationExpiry;
 
+let walletInitialized = false;
+
 // ===== ELEMENTS =====
 const connectBtn =
   document.getElementById("connectBtn");
@@ -1291,6 +1293,12 @@ window.addEventListener(
         return;
       }
 
+      if (walletInitialized) {
+        return;
+      }
+
+      walletInitialized = true;
+
       connectBtn.click();
 
     } catch (err) {
@@ -1303,6 +1311,12 @@ window.addEventListener(
 window.addEventListener(
   "laborWalletConnected",
   () => {
+
+    if (walletInitialized) {
+      return;
+    }
+
+    walletInitialized = true;
 
     connectBtn.click();
 

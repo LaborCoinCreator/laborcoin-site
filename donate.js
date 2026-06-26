@@ -6,6 +6,8 @@ const DAO_TREASURY =
 let provider;
 let signer;
 
+let walletInitialized = false;
+
 // ===== ELEMENTS =====
 
 const connectBtn =
@@ -152,50 +154,48 @@ async () => {
 };
 
 window.addEventListener(
+  "load",
+  async () => {
+
+    try {
+
+      if (!window.LaborWallet) {
+        return;
+      }
+
+      const wallet =
+        await window.LaborWallet.reconnectInjected();
+
+      if (!wallet) {
+        return;
+      }
+
+      if (walletInitialized) {
+        return;
+      }
+
+      walletInitialized = true;
+
+      connectBtn.click();
+
+    } catch (err) {
+
+      console.error(err);
+    }
+  }
+);
+
+window.addEventListener(
   "laborWalletConnected",
-  async event => {
+  () => {
 
-    const wallet =
-      event.detail;
+    if (walletInitialized) {
+      return;
+    }
 
-    provider =
-      wallet.provider;
+    walletInitialized = true;
 
-    signer =
-      wallet.signer;
+    connectBtn.click();
 
-    userAddress =
-      wallet.address;
-
-    exchange =
-      new ethers.Contract(
-        EXCHANGE_ADDRESS,
-        EXCHANGE_ABI,
-        signer
-      );
-
-    completeStep(
-      "exchange-step-wallet"
-    );
-
-    document.getElementById(
-      "connectBtn"
-    ).style.display = "none";
-
-    document.getElementById(
-      "walletAddress"
-    ).innerText =
-      userAddress.slice(0, 6)
-      +
-      "..."
-      +
-      userAddress.slice(-4);
-
-    setGateStatus(
-      "Wallet connected",
-      "success"
-    );
-
-    updateAll();
   }
 );
