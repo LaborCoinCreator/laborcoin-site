@@ -894,3 +894,35 @@ figure.table-figure tr:nth-child(even) td {
   }
 
 }
+
+.global-wallet-button {
+  position: fixed;
+  top: 14px;
+  right: 14px;
+  z-index: 10000;
+  padding: 9px 14px;
+  border-radius: 999px;
+  border: 1px solid #444;
+  background: #ff3b3b;
+  color: #fff;
+  font-weight: 700;
+  cursor: pointer;
+  box-shadow: 0 4px 18px rgba(0,0,0,0.45);
+}
+
+.global-wallet-button:hover {
+  background: #cc2f2f;
+}
+
+@media (max-width: 768px) {
+
+  .global-wallet-button {
+    top: 10px;
+    right: 10px;
+    width: auto !important;
+    max-width: 160px;
+    font-size: 0.85rem;
+    padding: 8px 12px;
+  }
+
+}

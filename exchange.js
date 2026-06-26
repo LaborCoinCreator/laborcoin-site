@@ -1,5 +1,5 @@
 // ===== CONFIG =====
-const EXCHANGE_ADDRESS = "0xE57ba76AED1B7B4142E3DfaBd6cf3E94970b86eA";
+const EXCHANGE_ADDRESS = "0x4Cf18cB39203B678f5C26f2338a10a79f9684749";
 const LABR_TOKEN = "0x460DD873A1D2a41e77410B125cD3027C5FEd2f78";
 const RPC_URL = "https://polygon-bor-rpc.publicnode.com";
 const VERIFIER_URL =
@@ -1080,5 +1080,54 @@ window.addEventListener(
 
       console.error(err);
     }
+  }
+);
+
+window.addEventListener(
+  "laborWalletConnected",
+  async event => {
+
+    const wallet =
+      event.detail;
+
+    provider =
+      wallet.provider;
+
+    signer =
+      wallet.signer;
+
+    userAddress =
+      wallet.address;
+
+    exchange =
+      new ethers.Contract(
+        EXCHANGE_ADDRESS,
+        EXCHANGE_ABI,
+        signer
+      );
+
+    completeStep(
+      "exchange-step-wallet"
+    );
+
+    document.getElementById(
+      "connectBtn"
+    ).style.display = "none";
+
+    document.getElementById(
+      "walletAddress"
+    ).innerText =
+      userAddress.slice(0, 6)
+      +
+      "..."
+      +
+      userAddress.slice(-4);
+
+    setGateStatus(
+      "Wallet connected",
+      "success"
+    );
+
+    updateAll();
   }
 );

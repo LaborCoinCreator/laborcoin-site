@@ -245,3 +245,135 @@ window.LaborWallet = {
   }
 
 };
+
+function shortAddress(address) {
+
+  return (
+    address.slice(0, 6)
+    +
+    "..."
+    +
+    address.slice(-4)
+  );
+}
+
+function ensureGlobalWalletButton() {
+
+  if (
+    document.getElementById(
+      "globalWalletBtn"
+    )
+  ) {
+    return;
+  }
+
+  const btn =
+    document.createElement("button");
+
+  btn.id =
+    "globalWalletBtn";
+
+  btn.className =
+    "global-wallet-button";
+
+  btn.innerText =
+    "Connect Wallet";
+
+  btn.onclick =
+    async () => {
+
+      try {
+
+        const wallet =
+          await window.LaborWallet.connect();
+
+        window.LaborWallet.current =
+          wallet;
+
+        localStorage.setItem(
+          "laborWalletConnected",
+          "true"
+        );
+
+        btn.innerText =
+          shortAddress(
+            wallet.address
+          );
+
+        window.dispatchEvent(
+          new CustomEvent(
+            "laborWalletConnected",
+            {
+              detail: wallet
+            }
+          )
+        );
+
+      } catch (err) {
+
+        console.error(err);
+      }
+    };
+
+  document.body.appendChild(btn);
+}
+
+async function autoGlobalReconnect() {
+
+  try {
+
+    if (
+      localStorage.getItem(
+        "laborWalletConnected"
+      ) !== "true"
+    ) {
+      return;
+    }
+
+    const wallet =
+      await window.LaborWallet.reconnectInjected();
+
+    if (!wallet) {
+      return;
+    }
+
+    window.LaborWallet.current =
+      wallet;
+
+    const btn =
+      document.getElementById(
+        "globalWalletBtn"
+      );
+
+    if (btn) {
+
+      btn.innerText =
+        shortAddress(
+          wallet.address
+        );
+    }
+
+    window.dispatchEvent(
+      new CustomEvent(
+        "laborWalletConnected",
+        {
+          detail: wallet
+        }
+      )
+    );
+
+  } catch (err) {
+
+    console.error(err);
+  }
+}
+
+document.addEventListener(
+  "DOMContentLoaded",
+  () => {
+
+    ensureGlobalWalletButton();
+
+    autoGlobalReconnect();
+  }
+);
