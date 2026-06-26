@@ -1302,49 +1302,9 @@ window.addEventListener(
 
 window.addEventListener(
   "laborWalletConnected",
-  async event => {
+  () => {
 
-    const wallet =
-      event.detail;
+    connectBtn.click();
 
-    provider =
-      wallet.provider;
-
-    signer =
-      wallet.signer;
-
-    userAddress =
-      wallet.address;
-
-    exchange =
-      new ethers.Contract(
-        EXCHANGE_ADDRESS,
-        EXCHANGE_ABI,
-        signer
-      );
-
-    completeStep(
-      "exchange-step-wallet"
-    );
-
-    document.getElementById(
-      "connectBtn"
-    ).style.display = "none";
-
-    document.getElementById(
-      "walletAddress"
-    ).innerText =
-      userAddress.slice(0, 6)
-      +
-      "..."
-      +
-      userAddress.slice(-4);
-
-    setGateStatus(
-      "Wallet connected",
-      "success"
-    );
-
-    updateAll();
   }
 );
