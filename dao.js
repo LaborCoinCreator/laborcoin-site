@@ -1247,22 +1247,14 @@ showLoading(
 };
 
 downloadCertificateBtn.onclick =
-async event => {
-
-  if (
-    downloadCertificateBtn.href &&
-    downloadCertificateBtn.href !== "#"
-  ) {
-    return;
-  }
-
-  event.preventDefault();
+async () => {
 
   try {
 
-    await generateMembershipCertificate();
+    downloadCertificateBtn.disabled =
+      true;
 
-    downloadCertificateBtn.click();
+    await generateMembershipCertificate();
 
   } catch (err) {
 
@@ -1272,6 +1264,11 @@ async event => {
       "Certificate download failed",
       "error"
     );
+
+  } finally {
+
+    downloadCertificateBtn.disabled =
+      false;
 
   }
 
