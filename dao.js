@@ -1117,22 +1117,6 @@ pdf.text(
       30000
     );
 
-    const pdfBlob =
-      pdf.output("blob");
-
-    const pdfUrl =
-      URL.createObjectURL(pdfBlob);
-
-    downloadCertificateBtn.href =
-      pdfUrl;
-
-    downloadCertificateBtn.download =
-      fileName;
-
-    return {
-      pdfUrl,
-      fileName
-    };
 }
 
 // ===== REGISTER =====
