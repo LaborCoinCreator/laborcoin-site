@@ -660,7 +660,7 @@ downloadAttestationBtn.onclick =
 
 // ===== MEMBERSHIP CERTIFICATE =====
 
-async function generateMembershipCertificate() {
+async function generateMembershipCertificate(downloadWindow = null) {
 
   const memberData =
     await registration.getMemberData(
@@ -1072,13 +1072,24 @@ pdf.text(
     const pdfUrl =
       URL.createObjectURL(pdfBlob);
 
+    if (downloadWindow) {
+
+      downloadWindow.location.href =
+        pdfUrl;
+
+      setTimeout(
+        () => URL.revokeObjectURL(pdfUrl),
+        30000
+      );
+
+      return;
+    }
+
     const link =
       document.createElement("a");
 
     link.href = pdfUrl;
     link.download = fileName;
-    link.target = "_blank";
-    link.rel = "noopener";
 
     document.body.appendChild(link);
 
@@ -1088,7 +1099,7 @@ pdf.text(
 
     setTimeout(
       () => URL.revokeObjectURL(pdfUrl),
-      1000
+      30000
     );
 
 }
@@ -1223,7 +1234,29 @@ showLoading(
 downloadCertificateBtn.onclick =
 async () => {
 
-  await generateMembershipCertificate();
+  const downloadWindow =
+    window.open("", "_blank");
+
+  try {
+
+    await generateMembershipCertificate(
+      downloadWindow
+    );
+
+  } catch (err) {
+
+    if (downloadWindow) {
+      downloadWindow.close();
+    }
+
+    console.error(err);
+
+    setStatus(
+      "Certificate download failed",
+      "error"
+    );
+
+  }
 
 };
 
