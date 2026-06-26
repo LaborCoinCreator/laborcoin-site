@@ -1066,6 +1066,57 @@ pdf.text(
     const fileName =
       `LaborCoin-Member-${memberId}.pdf`;
 
+    const isMobile =
+      /Android|iPhone|iPad|iPod/i.test(
+        navigator.userAgent
+      );
+
+    if (!isMobile) {
+
+      pdf.save(fileName);
+
+      return;
+    }
+
+    const pdfBlob =
+      pdf.output("blob");
+
+    const pdfFile =
+      new File(
+        [pdfBlob],
+        fileName,
+        {
+          type: "application/pdf"
+        }
+      );
+
+    if (
+      navigator.canShare &&
+      navigator.canShare({
+        files: [pdfFile]
+      })
+    ) {
+
+      await navigator.share({
+        files: [pdfFile],
+        title: "LaborCoin Membership Certificate",
+        text: "LaborCoin DAO membership certificate"
+      });
+
+      return;
+    }
+
+    const pdfUrl =
+      URL.createObjectURL(pdfBlob);
+
+    window.location.href =
+      pdfUrl;
+
+    setTimeout(
+      () => URL.revokeObjectURL(pdfUrl),
+      30000
+    );
+
     const pdfBlob =
       pdf.output("blob");
 
