@@ -660,7 +660,7 @@ downloadAttestationBtn.onclick =
 
 // ===== MEMBERSHIP CERTIFICATE =====
 
-async function generateMembershipCertificate(downloadWindow = null) {
+async function generateMembershipCertificate() {
 
   const memberData =
     await registration.getMemberData(
@@ -1066,41 +1066,7 @@ pdf.text(
     const fileName =
       `LaborCoin-Member-${memberId}.pdf`;
 
-    const pdfBlob =
-      pdf.output("blob");
-
-    const pdfUrl =
-      URL.createObjectURL(pdfBlob);
-
-    if (downloadWindow) {
-
-      downloadWindow.location.href =
-        pdfUrl;
-
-      setTimeout(
-        () => URL.revokeObjectURL(pdfUrl),
-        30000
-      );
-
-      return;
-    }
-
-    const link =
-      document.createElement("a");
-
-    link.href = pdfUrl;
-    link.download = fileName;
-
-    document.body.appendChild(link);
-
-    link.click();
-
-    document.body.removeChild(link);
-
-    setTimeout(
-      () => URL.revokeObjectURL(pdfUrl),
-      30000
-    );
+    pdf.save(fileName);
 
 }
 
@@ -1234,20 +1200,11 @@ showLoading(
 downloadCertificateBtn.onclick =
 async () => {
 
-  const downloadWindow =
-    window.open("", "_blank");
-
   try {
 
-    await generateMembershipCertificate(
-      downloadWindow
-    );
+    await generateMembershipCertificate();
 
   } catch (err) {
-
-    if (downloadWindow) {
-      downloadWindow.close();
-    }
 
     console.error(err);
 
