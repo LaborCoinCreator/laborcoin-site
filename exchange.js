@@ -96,6 +96,51 @@ let provider, signer, exchange, userAddress;
 
 let exchangeVerified = false;
 
+function updateBondingCurveValue(
+  sold,
+  price,
+  polUsd
+) {
+
+  const soldLABR =
+    Number(
+      ethers.formatEther(sold)
+    );
+
+  const pricePOL =
+    Number(
+      ethers.formatEther(price)
+    );
+
+  const valuePOL =
+    soldLABR * pricePOL;
+
+  const valueUSD =
+    valuePOL * polUsd;
+
+  const el =
+    document.getElementById(
+      "bondingCurveValue"
+    );
+
+  if (!el) {
+    return;
+  }
+
+  el.innerText =
+    `${valuePOL.toLocaleString(
+      undefined,
+      {
+        maximumFractionDigits: 2
+      }
+    )} POL / $${valueUSD.toLocaleString(
+      undefined,
+      {
+        maximumFractionDigits: 2
+      }
+    )} USD`;
+}
+
 // ===== STATUS UI =====
 function setStatus(msg, type = "") {
   const el = document.getElementById("statusMessage");
@@ -230,6 +275,12 @@ async function initialLoad() {
       "currentPrice"
     ).innerText =
       `$${priceUSD.toFixed(2)} USD (${pricePOL.toFixed(6)} POL)`;
+
+    updateBondingCurveValue(
+      sold,
+      price,
+      polUsd
+    );
 
     await drawCurve();
   } catch (e) {
@@ -484,6 +535,12 @@ document.getElementById(
       "currentPrice"
     ).innerText =
       `$${priceUSD.toFixed(2)} USD (${pricePOL.toFixed(6)} POL)`;
+
+    updateBondingCurveValue(
+      sold,
+      price,
+      polUsd
+    );
 
     updateCooldown();
 
