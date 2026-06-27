@@ -1,4 +1,4 @@
-const CACHE_NAME = "laborcoin-pwa-v28";
+const CACHE_NAME = "laborcoin-pwa-v29";
 
 const APP_SHELL = [
   "/",
