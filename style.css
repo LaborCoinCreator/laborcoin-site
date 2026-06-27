@@ -149,14 +149,7 @@ footer {
   font-size: 0.9em;
 }
 
-/* EXCHANGE LAYOUT */
-.exchange-container {
-  display: flex;
-  gap: 40px;
-  max-width: 1100px;
-  margin: 40px auto;
-  padding: 0 20px;
-}
+/* ===== EXCHANGE, WALLET, AND TRADE LAYOUT ===== */
 
 .exchange-intro {
   text-align: center;
@@ -170,7 +163,28 @@ footer {
   margin-bottom: 20px;
 }
 
-/* WALLET BOX */
+.exchange-container {
+  display: flex;
+  gap: 40px;
+  max-width: 1100px;
+  margin: 40px auto;
+  padding: 0 20px;
+  align-items: stretch;
+}
+
+.exchange-left,
+.exchange-right {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  justify-content: stretch;
+}
+
+.exchange-left .trade-box:last-child {
+  flex: 1;
+}
+
 .wallet-box,
 .trade-box {
   background: #111;
@@ -179,17 +193,36 @@ footer {
   padding: 20px;
 }
 
-/* TRADE BOX */
-.trade-box {
-  background: #111;
-  border: 1px solid #222;
-  padding: 20px;
-  border-radius: 8px;
-}
-
 .trade-box h2 {
   margin-top: 0;
   text-align: left;
+}
+
+.wallet-box h2,
+.wallet-box p {
+  text-align: center;
+}
+
+.center-content,
+.center-content p {
+  text-align: center;
+}
+
+.center-status,
+.center-status h2,
+.center-status p {
+  text-align: center;
+}
+
+.status-box {
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+#statusMessage {
+  text-align: center;
 }
 
 .amount-row {
@@ -440,31 +473,18 @@ footer {
 #certificateBox {
   margin-top: 30px;
   text-align: center;
+  border: 1px solid #4dff88;
+  background: rgba(255,255,255,0.03);
+}
+
+#certificateBox h2 {
+  text-align: center;
 }
 
 #certificateText {
   color: #ccc;
   margin-bottom: 20px;
   line-height: 1.6;
-}
-
-#certificateBox {
-
-  border:
-    1px solid #4dff88;
-
-  background:
-    rgba(255,255,255,0.03);
-}
-
-#certificateBox h2 {
-
-  text-align: center;
-}
-
-#certificateBox {
-
-  text-align: center;
 }
 
 /* ===== GLOBAL LOADING OVERLAY ===== */
@@ -553,82 +573,6 @@ footer {
 #loadingOverlay.hidden {
   display: none !important;
   pointer-events: none;
-}
-
-.exchange-container {
-  display: flex;
-  gap: 40px;
-  max-width: 1100px;
-  margin: 40px auto;
-  padding: 0 20px;
-  align-items: stretch;
-}
-
-.exchange-left,
-.exchange-right {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
-}
-
-.exchange-left .trade-box:last-child {
-  flex: 1;
-}
-
-.exchange-left {
-  justify-content: stretch;
-}
-
-.exchange-right {
-  justify-content: stretch;
-}
-
-.wallet-box {
-  background: #111;
-  border: 1px solid #222;
-  border-radius: 8px;
-  padding: 20px;
-}
-
-.wallet-box p {
-  text-align: center;
-}
-
-.wallet-box h2 {
-  text-align: center;
-}
-
-.center-content {
-  text-align: center;
-}
-
-.center-content p {
-  text-align: center;
-}
-
-.center-status {
-  text-align: center;
-}
-
-.center-status h2 {
-  text-align: center;
-}
-
-.center-status p {
-  text-align: center;
-}
-
-.status-box {
-  flex-grow: 1;
-
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-}
-
-#statusMessage {
-  text-align: center;
 }
 
 #proposalDescription {

@@ -754,6 +754,20 @@ async function loadProposalLimit() {
   }
 }
 
+function escapeHtml(value) {
+
+  return String(value).replace(
+    /[&<>"']/g,
+    character => ({
+      "&": "&amp;",
+      "<": "&lt;",
+      ">": "&gt;",
+      '"': "&quot;",
+      "'": "&#039;"
+    })[character]
+  );
+}
+
 async function loadProposalFeed() {
 
   try {
@@ -785,11 +799,26 @@ async function loadProposalFeed() {
       i--
     ) {
 
-      const p =
-        await governance.proposals(i);
+const p =
+  await governance.proposals(i);
 
-      const card =
-        document.createElement("div");
+const recipientName =
+  await displayName(
+    p.recipient
+  );
+
+const safeRecipientName =
+  escapeHtml(
+    recipientName
+  );
+
+const safeDescription =
+  escapeHtml(
+    p.description
+  );
+
+const card =
+  document.createElement("div");
 
       card.className =
         "trade-box";
@@ -802,9 +831,7 @@ async function loadProposalFeed() {
       const details = `
         <p>
           Recipient:<br>
-          ${await displayName(
-            p.recipient
-          )}
+          ${safeRecipientName}
         </p>
 
         <p>
@@ -941,7 +968,7 @@ async function loadProposalFeed() {
 
         <p>
           Description:<br>
-          ${p.description}
+          ${safeDescription}
         </p>
 
         ${details}
