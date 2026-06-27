@@ -121,7 +121,7 @@ function updateBondingCurveProgress(
   }
 
   el.innerText =
-    `${progress.toFixed(6)}%`;
+    `${Math.round(progress)}%`;
 }
 
 function updateBondingCurveValue(
@@ -395,7 +395,7 @@ async function connectWallet() {
     connectBtn.disabled = false;
     connectBtn.innerText = "Connect Wallet";
 
-    setStatus(
+    setGateStatus(
       err.message ||
       "Connection failed",
       "error"
@@ -736,12 +736,14 @@ buyBtn.onclick = async () => {
       currentBalance >= MAX_WALLET
     ) {
 
-      setStatus(
-        "Wallet exceeds 10,000 LABR exchange limit",
-        "error"
-      );
+    setStatus(
+      "Wallet exceeds 10,000 LABR exchange limit",
+      "error"
+    );
 
-      return;
+    hideLoading();
+
+    return;
     }
 
     const pol =
@@ -889,6 +891,8 @@ sellBtn.onclick = async () => {
         "Wallet exceeds 10,000 LABR exchange limit",
         "error"
       );
+
+      hideLoading();
 
       return;
     }

@@ -92,6 +92,11 @@ const downloadCertificateBtn =
     "downloadCertificateBtn"
   );
 
+const certificateStatus =
+  document.getElementById(
+    "certificateStatus"
+  );
+
 const governanceAccessWrapper =
   document.getElementById(
     "governanceAccessWrapper"
@@ -384,6 +389,17 @@ connectBtn.onclick = async () => {
         .remove("hidden");
 
       await showMembershipData();
+
+      setCertificateStatus(
+        "Preparing certificate..."
+      );
+
+      await buildMembershipCertificate();
+
+      setCertificateStatus(
+        "Certificate prepared.",
+        "success"
+      );
 
       setStatus(
         "Already registered",
@@ -1125,11 +1141,16 @@ async function downloadMembershipCertificate() {
 
   if (!cachedCertificateFile) {
 
-    setStatus(
+    setCertificateStatus(
       "Preparing certificate..."
     );
 
     await buildMembershipCertificate();
+
+    setCertificateStatus(
+      "Certificate prepared.",
+      "success"
+    );
   }
 
   const isMobile =
@@ -1145,13 +1166,28 @@ async function downloadMembershipCertificate() {
     })
   ) {
 
-    await navigator.share({
-      files: [cachedCertificateFile],
-      title: "LaborCoin Membership Certificate",
-      text: "LaborCoin DAO membership certificate"
-    });
+    try {
 
-    return;
+      await navigator.share({
+        files: [cachedCertificateFile],
+        title: "LaborCoin Membership Certificate",
+        text: "LaborCoin DAO membership certificate"
+      });
+
+      setCertificateStatus(
+        "Certificate shared.",
+        "success"
+      );
+
+      return;
+
+    } catch (err) {
+
+      console.error(
+        "Mobile share failed, using download fallback",
+        err
+      );
+    }
   }
 
   const link =
@@ -1169,6 +1205,29 @@ async function downloadMembershipCertificate() {
   link.click();
 
   document.body.removeChild(link);
+
+  setCertificateStatus(
+    isMobile
+      ? "Certificate opened. Use your browser share or save option if needed."
+      : "Certificate downloaded.",
+    "success"
+  );
+}
+
+function setCertificateStatus(msg, type = "") {
+
+  if (!certificateStatus) {
+    return;
+  }
+
+  certificateStatus.innerText = msg;
+
+  certificateStatus.style.color =
+    type === "error"
+      ? "#ff4d4d"
+      : type === "success"
+      ? "#4dff88"
+      : "#ccc";
 }
 
 // ===== REGISTER =====
@@ -1252,6 +1311,11 @@ showLoading(
 
       await buildMembershipCertificate();
 
+      setCertificateStatus(
+        "Certificate prepared.",
+        "success"
+      );
+
     governanceAccessWrapper
       .classList
       .remove("hidden");
@@ -1312,7 +1376,7 @@ async () => {
 
     console.error(err);
 
-    setStatus(
+    setCertificateStatus(
       "Certificate download failed",
       "error"
     );
