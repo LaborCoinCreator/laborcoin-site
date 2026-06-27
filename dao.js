@@ -397,7 +397,7 @@ connectBtn.onclick = async () => {
       await buildMembershipCertificate();
 
       setCertificateStatus(
-        "Certificate prepared.",
+        "Certificate prepared. Tap Download Certificate to save or share.",
         "success"
       );
 
@@ -695,6 +695,65 @@ downloadAttestationBtn.onclick =
 
 // ===== MEMBERSHIP CERTIFICATE =====
 
+async function imageToJpegDataUrl(
+  src,
+  width,
+  height
+) {
+
+  const img =
+    new Image();
+
+  img.src =
+    src;
+
+  await new Promise(
+    (resolve, reject) => {
+
+      img.onload =
+        resolve;
+
+      img.onerror =
+        reject;
+    }
+  );
+
+  const canvas =
+    document.createElement("canvas");
+
+  canvas.width =
+    width;
+
+  canvas.height =
+    height;
+
+  const ctx =
+    canvas.getContext("2d");
+
+  ctx.fillStyle =
+    "#ffffff";
+
+  ctx.fillRect(
+    0,
+    0,
+    width,
+    height
+  );
+
+  ctx.drawImage(
+    img,
+    0,
+    0,
+    width,
+    height
+  );
+
+  return canvas.toDataURL(
+    "image/jpeg",
+    0.95
+  );
+}
+
 async function buildMembershipCertificate() {
 
   const memberData =
@@ -789,29 +848,18 @@ try {
   // LOGO
   // =====================================
 
-  const logo =
-    new Image();
-
-  logo.src =
-    "assets/logo.png";
-
-  await new Promise(
-    resolve => {
-
-      logo.onload =
-        resolve;
-
-      logo.onerror =
-        resolve;
-
-    }
-  );
-
   const logoSize = 45;
 
+  const logoData =
+    await imageToJpegDataUrl(
+      "assets/logo.png",
+      512,
+      512
+    );
+
   pdf.addImage(
-    logo,
-    "PNG",
+    logoData,
+    "JPEG",
     centerX - (logoSize / 2),
     18,
     logoSize,
@@ -1029,23 +1077,52 @@ pdf.text(
       )
   );
 
+  const qrCanvas =
+    qrContainer.querySelector(
+      "canvas"
+    );
+
   const qrImage =
     qrContainer.querySelector(
       "img"
     );
 
-  if (qrImage) {
-
   const qrSize = 22;
 
-  pdf.addImage(
-    qrImage.src,
-    "PNG",
-    (pageWidth / 2) - (qrSize / 2),
-    215,
-    qrSize,
-    qrSize
-  );
+  if (qrCanvas) {
+
+    const qrData =
+      qrCanvas.toDataURL(
+        "image/jpeg",
+        0.95
+      );
+
+    pdf.addImage(
+      qrData,
+      "JPEG",
+      (pageWidth / 2) - (qrSize / 2),
+      215,
+      qrSize,
+      qrSize
+    );
+
+  } else if (qrImage) {
+
+    const qrData =
+      await imageToJpegDataUrl(
+        qrImage.src,
+        120,
+        120
+      );
+
+    pdf.addImage(
+      qrData,
+      "JPEG",
+      (pageWidth / 2) - (qrSize / 2),
+      215,
+      qrSize,
+      qrSize
+    );
 
   }
 
@@ -1148,7 +1225,7 @@ async function downloadMembershipCertificate() {
     await buildMembershipCertificate();
 
     setCertificateStatus(
-      "Certificate prepared.",
+      "Certificate prepared. Tap Download Certificate to save or share.",
       "success"
     );
   }
@@ -1312,9 +1389,9 @@ showLoading(
       await buildMembershipCertificate();
 
       setCertificateStatus(
-        "Certificate prepared.",
-        "success"
-      );
+       "Certificate prepared. Tap Download Certificate to save or share.",
+       "success"
+     );
 
     governanceAccessWrapper
       .classList
