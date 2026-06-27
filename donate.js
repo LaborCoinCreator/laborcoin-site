@@ -54,6 +54,13 @@ async () => {
 
   try {
 
+    setStatus(
+      "Opening wallet connection..."
+    );
+
+    connectBtn.disabled = true;
+    connectBtn.innerText = "Connecting...";
+
     const wallet =
       await window.LaborWallet.connect();
 
@@ -63,8 +70,8 @@ async () => {
     signer =
       wallet.signer;
 
-    connectBtn.innerText =
-      "Wallet Connected";
+    connectBtn.style.display =
+      "none";
 
     setStatus(
       "Ready to donate",
@@ -74,6 +81,9 @@ async () => {
   } catch (err) {
 
     console.error(err);
+
+    connectBtn.disabled = false;
+    connectBtn.innerText = "Connect Wallet";
 
     setStatus(
       err.message ||
@@ -164,7 +174,7 @@ window.addEventListener(
       }
 
       const wallet =
-        await window.LaborWallet.reconnectInjected();
+        await window.LaborWallet.reconnect();
 
       if (!wallet) {
         return;

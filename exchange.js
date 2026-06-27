@@ -328,6 +328,18 @@ async function connectWallet() {
 
   try {
 
+    setGateStatus(
+      "Opening wallet connection..."
+    );
+
+    const connectBtn =
+      document.getElementById(
+        "connectBtn"
+      );
+
+    connectBtn.disabled = true;
+    connectBtn.innerText = "Connecting...";
+
     const wallet =
       await window.LaborWallet.connect();
 
@@ -374,6 +386,14 @@ async function connectWallet() {
   } catch (err) {
 
     console.error(err);
+
+    const connectBtn =
+      document.getElementById(
+        "connectBtn"
+      );
+
+    connectBtn.disabled = false;
+    connectBtn.innerText = "Connect Wallet";
 
     setStatus(
       err.message ||
@@ -1165,7 +1185,7 @@ window.addEventListener(
       }
 
       const wallet =
-        await window.LaborWallet.reconnectInjected();
+        await window.LaborWallet.reconnect();
 
       if (!wallet) {
         return;

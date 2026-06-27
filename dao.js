@@ -57,6 +57,10 @@ let registrationExpiry;
 
 let walletInitialized = false;
 
+let cachedCertificateFile = null;
+let cachedCertificateUrl = null;
+let cachedCertificateName = null;
+
 // ===== ELEMENTS =====
 const connectBtn =
   document.getElementById("connectBtn");
@@ -293,10 +297,17 @@ function hideLoading() {
 // ===== CONNECT =====
 connectBtn.onclick = async () => {
 
-  try {
+    try {
 
-    const wallet =
-      await window.LaborWallet.connect();
+      setStatus(
+        "Opening wallet connection..."
+      );
+
+      connectBtn.disabled = true;
+      connectBtn.innerText = "Connecting...";
+
+      const wallet =
+        await window.LaborWallet.connect();
 
     provider =
       wallet.provider;
@@ -327,6 +338,9 @@ connectBtn.onclick = async () => {
         LABRV_ABI,
         signer
       );
+
+    connectBtn.style.display =
+      "none";
 
     completeStep("step-wallet");
 
@@ -630,6 +644,9 @@ Power to the People.
 
     console.error(err);
 
+    connectBtn.disabled = false;
+    connectBtn.innerText = "Connect Wallet";
+
     setStatus(
       "Attestation cancelled",
       "error"
@@ -662,7 +679,7 @@ downloadAttestationBtn.onclick =
 
 // ===== MEMBERSHIP CERTIFICATE =====
 
-async function generateMembershipCertificate() {
+async function buildMembershipCertificate() {
 
   const memberData =
     await registration.getMemberData(
@@ -1068,18 +1085,6 @@ pdf.text(
     const fileName =
       `LaborCoin-Member-${memberId}.pdf`;
 
-    const isMobile =
-      /Android|iPhone|iPad|iPod/i.test(
-        navigator.userAgent
-      );
-
-    if (!isMobile) {
-
-      pdf.save(fileName);
-
-      return;
-    }
-
     const pdfBlob =
       pdf.output("blob");
 
@@ -1092,33 +1097,78 @@ pdf.text(
         }
       );
 
-    if (
-      navigator.canShare &&
-      navigator.canShare({
-        files: [pdfFile]
-      })
-    ) {
+    if (cachedCertificateUrl) {
 
-      await navigator.share({
-        files: [pdfFile],
-        title: "LaborCoin Membership Certificate",
-        text: "LaborCoin DAO membership certificate"
-      });
-
-      return;
+      URL.revokeObjectURL(
+        cachedCertificateUrl
+      );
     }
 
-    const pdfUrl =
+    cachedCertificateFile =
+      pdfFile;
+
+    cachedCertificateUrl =
       URL.createObjectURL(pdfBlob);
 
-    window.location.href =
-      pdfUrl;
+    cachedCertificateName =
+      fileName;
 
-    setTimeout(
-      () => URL.revokeObjectURL(pdfUrl),
-      30000
+    return {
+      file: pdfFile,
+      url: cachedCertificateUrl,
+      name: fileName
+    };
+
+}
+
+async function downloadMembershipCertificate() {
+
+  if (!cachedCertificateFile) {
+
+    setStatus(
+      "Preparing certificate..."
     );
 
+    await buildMembershipCertificate();
+  }
+
+  const isMobile =
+    /Android|iPhone|iPad|iPod/i.test(
+      navigator.userAgent
+    );
+
+  if (
+    isMobile &&
+    navigator.canShare &&
+    navigator.canShare({
+      files: [cachedCertificateFile]
+    })
+  ) {
+
+    await navigator.share({
+      files: [cachedCertificateFile],
+      title: "LaborCoin Membership Certificate",
+      text: "LaborCoin DAO membership certificate"
+    });
+
+    return;
+  }
+
+  const link =
+    document.createElement("a");
+
+  link.href =
+    cachedCertificateUrl;
+
+  link.download =
+    cachedCertificateName ||
+    "LaborCoin-Membership-Certificate.pdf";
+
+  document.body.appendChild(link);
+
+  link.click();
+
+  document.body.removeChild(link);
 }
 
 // ===== REGISTER =====
@@ -1200,7 +1250,7 @@ showLoading(
 
       await showMembershipData();
 
-      await generateMembershipCertificate();
+      await buildMembershipCertificate();
 
     governanceAccessWrapper
       .classList
@@ -1256,7 +1306,7 @@ async () => {
     downloadCertificateBtn.disabled =
       true;
 
-    await generateMembershipCertificate();
+    await downloadMembershipCertificate();
 
   } catch (err) {
 
@@ -1287,7 +1337,7 @@ window.addEventListener(
       }
 
       const wallet =
-        await window.LaborWallet.reconnectInjected();
+        await window.LaborWallet.reconnect();
 
       if (!wallet) {
         return;

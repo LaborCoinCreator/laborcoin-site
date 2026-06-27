@@ -333,6 +333,13 @@ govConnectBtn.onclick = async () => {
 
   try {
 
+    setStatus(
+      "Opening wallet connection..."
+    );
+
+    govConnectBtn.disabled = true;
+    govConnectBtn.innerText = "Connecting...";
+
     const wallet =
       await window.LaborWallet.connect();
 
@@ -376,6 +383,9 @@ govConnectBtn.onclick = async () => {
       return;
     }
 
+    govConnectBtn.style.display =
+      "none";
+
     setStatus(
       "Wallet connected",
       "success"
@@ -384,6 +394,9 @@ govConnectBtn.onclick = async () => {
   } catch (err) {
 
     console.error(err);
+
+    govConnectBtn.disabled = false;
+    govConnectBtn.innerText = "Connect Wallet";
 
     setStatus(
       err.message ||
@@ -1184,7 +1197,7 @@ window.addEventListener(
       }
 
       const wallet =
-        await window.LaborWallet.reconnectInjected();
+        await window.LaborWallet.reconnect();
 
       if (!wallet) {
         return;

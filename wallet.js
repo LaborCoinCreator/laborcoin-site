@@ -242,6 +242,33 @@ window.LaborWallet = {
     return await buildWallet(
       window.ethereum
     );
+  },
+
+  reconnect: async function () {
+
+    try {
+
+      const rawProvider =
+        appKit.getWalletProvider
+          ? appKit.getWalletProvider()
+          : null;
+
+      if (rawProvider) {
+
+        return await buildWallet(
+          rawProvider
+        );
+      }
+
+    } catch (err) {
+
+      console.error(
+        "WalletConnect reconnect failed",
+        err
+      );
+    }
+
+    return await this.reconnectInjected();
   }
 
 };
@@ -331,7 +358,7 @@ async function autoGlobalReconnect() {
     }
 
     const wallet =
-      await window.LaborWallet.reconnectInjected();
+      await window.LaborWallet.reconnect();
 
     if (!wallet) {
       return;
