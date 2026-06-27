@@ -467,55 +467,71 @@ footer {
   text-align: center;
 }
 
+/* ===== GLOBAL LOADING OVERLAY ===== */
+
 #loadingOverlay {
   position: fixed;
   inset: 0;
 
-  background: rgba(0,0,0,0.75);
-
-  display: flex;
-  justify-content: center;
-  align-items: center;
-
-  z-index: 20000;
-  pointer-events: all;
-}
-
-.loading-box {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
 
-  text-align: center;
+  padding: 20px;
+  box-sizing: border-box;
+
+  background: rgba(0, 0, 0, 0.75);
+
+  z-index: 20000;
+  pointer-events: auto;
 }
 
-#loadingText {
+.loading-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+
+  gap: 20px;
+
+  width: 100%;
+  max-width: 360px;
+
   margin: 0;
-  max-width: none;
-  line-height: 1.4;
+  padding: 0;
+
   text-align: center;
 }
 
 .spinner {
-
   box-sizing: border-box;
 
   width: 60px;
   height: 60px;
 
+  flex: 0 0 auto;
+
+  margin: 0;
+
   border: 6px solid #333;
-
-  border-top:
-    6px solid #ff3b3b;
-
+  border-top-color: #ff3b3b;
   border-radius: 50%;
 
-  animation:
-    spin 1s linear infinite;
+  animation: spin 1s linear infinite;
+}
 
-  margin-bottom: 20px;
+#loadingText {
+  display: block;
 
+  width: 100%;
+  max-width: none;
+
+  margin: 0;
+  padding: 0;
+
+  line-height: 1.4;
+  text-align: center;
 }
 
 @keyframes spin {

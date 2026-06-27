@@ -332,14 +332,25 @@
 
 </footer>
 
-<div id="loadingOverlay" class="hidden">
+<div
+  id="loadingOverlay"
+  class="hidden"
+  role="status"
+  aria-live="polite"
+  aria-busy="true"
+>
+  <div class="loading-content">
 
-  <div class="spinner"></div>
+    <div
+      class="spinner"
+      aria-hidden="true"
+    ></div>
 
-  <p id="loadingText">
-    Loading...
-  </p>
+    <p id="loadingText">
+      Loading...
+    </p>
 
+  </div>
 </div>
 
 <script src="metrics.js"></script>
