@@ -27,6 +27,13 @@ const ensProvider =
     "https://ethereum-rpc.publicnode.com"
   );
 
+const ENS_OVERRIDES = {
+
+  "0x015b6d0990e56d908c876474c6a30eba2b8a0cfb":
+    "laborcoin.eth"
+
+};
+
 const appKit =
   createAppKit({
     adapters: [
@@ -293,7 +300,13 @@ async function getWalletDisplay(address) {
 
   try {
 
+    const overrideName =
+      ENS_OVERRIDES[
+        address.toLowerCase()
+      ];
+
     const ens =
+      overrideName ||
       await ensProvider.lookupAddress(
         address
       );
