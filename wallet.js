@@ -22,6 +22,11 @@ const metadata = {
   ]
 };
 
+const ensProvider =
+  new ethers.JsonRpcProvider(
+    "https://ethereum-rpc.publicnode.com"
+  );
+
 const appKit =
   createAppKit({
     adapters: [
@@ -284,6 +289,83 @@ function shortAddress(address) {
   );
 }
 
+async function getWalletDisplay(address) {
+
+  try {
+
+    const ens =
+      await ensProvider.lookupAddress(
+        address
+      );
+
+    if (!ens) {
+
+      return {
+        name: shortAddress(address),
+        avatar: null
+      };
+    }
+
+    const avatar =
+      await ensProvider.getAvatar(
+        ens
+      );
+
+    return {
+      name: ens,
+      avatar
+    };
+
+  } catch (err) {
+
+    console.log(
+      "ENS display lookup failed",
+      err
+    );
+
+    return {
+      name: shortAddress(address),
+      avatar: null
+    };
+  }
+}
+
+async function updateGlobalWalletButton(
+  btn,
+  address
+) {
+
+  const display =
+    await getWalletDisplay(address);
+
+  btn.innerHTML = "";
+
+  const label =
+    document.createElement("span");
+
+  label.innerText =
+    display.name;
+
+  btn.appendChild(label);
+
+  if (display.avatar) {
+
+    const img =
+      document.createElement("img");
+
+    img.src =
+      display.avatar;
+
+    img.alt =
+      display.name;
+
+    img.className =
+      "global-wallet-avatar";
+
+    btn.appendChild(img);
+  }
+}
+
 function ensureGlobalWalletButton() {
 
   if (
@@ -322,10 +404,10 @@ function ensureGlobalWalletButton() {
           "true"
         );
 
-        btn.innerText =
-          shortAddress(
-            wallet.address
-          );
+        await updateGlobalWalletButton(
+          btn,
+          wallet.address
+        );
 
         window.dispatchEvent(
           new CustomEvent(
@@ -374,10 +456,10 @@ async function autoGlobalReconnect() {
 
     if (btn) {
 
-      btn.innerText =
-        shortAddress(
-          wallet.address
-        );
+      await updateGlobalWalletButton(
+        btn,
+        wallet.address
+      );
     }
 
     window.dispatchEvent(
