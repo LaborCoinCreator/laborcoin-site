@@ -1,14 +1,14 @@
 import {
   createAppKit
-} from "https://esm.sh/@reown/appkit";
+} from "https://esm.sh/@reown/appkit@1.8.21";
 
 import {
   EthersAdapter
-} from "https://esm.sh/@reown/appkit-adapter-ethers";
+} from "https://esm.sh/@reown/appkit-adapter-ethers@1.8.21";
 
 import {
   polygon
-} from "https://esm.sh/@reown/appkit/networks";
+} from "https://esm.sh/@reown/appkit@1.8.21/networks";
 
 const projectId =
   "85ab9a6a880170f3d4ec1ae6893dc2bc";
