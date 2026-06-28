@@ -39,8 +39,7 @@ const REGISTRATION_ABI = [
 ];
 
 const LABRV_ABI = [
-  "function delegate(address delegatee)",
-  "function delegates(address account) view returns (address)"
+  "function balanceOf(address account) view returns (uint256)"
 ];
 
 // ===== STATE =====
@@ -347,72 +346,86 @@ connectBtn.onclick = async () => {
     connectBtn.style.display =
       "none";
 
-    completeStep("step-wallet");
+completeStep("step-wallet");
 
-    const balance =
-      await labr.balanceOf(
-        userAddress
-      );
+const alreadyRegistered =
+  await registration.registered(
+    userAddress
+  );
 
-    if (
-      Number(balance) <
-      Number(
-        ethers.parseEther("1")
-      )
-    ) {
+if (alreadyRegistered) {
 
-      setStatus(
-        "Requires at least 1 LABR",
-        "error"
-      );
+  completeStep("step-balance");
+  completeStep("step-identity");
+  completeStep("step-attest");
+  completeStep("step-register");
 
-      return;
-    }
+  governanceAccessWrapper
+    .classList
+    .remove("hidden");
 
-    completeStep("step-balance");
+  setStatus(
+    "Already registered. Governance access unlocked.",
+    "success"
+  );
 
-    verifyBtn.disabled = false;
+  try {
 
-    const alreadyRegistered =
-      await registration.registered(
-        userAddress
-      );
+    await showMembershipData();
 
-    if (alreadyRegistered) {
+    setCertificateStatus(
+      "Preparing certificate..."
+    );
 
-      completeStep("step-identity");
-      completeStep("step-attest");
-      completeStep("step-register");
+    await buildMembershipCertificate();
 
-      governanceAccessWrapper
-        .classList
-        .remove("hidden");
-
-      await showMembershipData();
-
-      setCertificateStatus(
-        "Preparing certificate..."
-      );
-
-      await buildMembershipCertificate();
-
-      setCertificateStatus(
-        "Certificate prepared. Tap Download Certificate to save or share.",
-        "success"
-      );
-
-      setStatus(
-        "Already registered",
-        "success"
-      );
-
-      return;
-    }
-
-    setStatus(
-      "Wallet connected",
+    setCertificateStatus(
+      "Certificate prepared. Tap Download Certificate to save or share.",
       "success"
     );
+
+  } catch (postRegistrationError) {
+
+    console.error(
+      "Membership display failed",
+      postRegistrationError
+    );
+
+    setCertificateStatus(
+      "Membership confirmed, but the certificate could not be prepared. Reload the page and try again.",
+      "error"
+    );
+  }
+
+  return;
+}
+
+const balance =
+  await labr.balanceOf(
+    userAddress
+  );
+
+if (
+  balance <
+  ethers.parseEther("1")
+) {
+
+  setStatus(
+    "Requires at least 1 LABR to register",
+    "error"
+  );
+
+  return;
+}
+
+completeStep("step-balance");
+
+verifyBtn.disabled = false;
+
+setStatus(
+  "Wallet connected",
+  "success"
+);
 
   } catch (err) {
 
@@ -1310,17 +1323,19 @@ function setCertificateStatus(msg, type = "") {
 // ===== REGISTER =====
 registerBtn.onclick = async () => {
 
+  let registrationConfirmed = false;
+
   try {
 
-registerBtn.disabled = true;
+    registerBtn.disabled = true;
 
-setStatus(
-  "Registering DAO membership..."
-);
+    setStatus(
+      "Registering DAO membership..."
+    );
 
-showLoading(
-  "Registering DAO membership..."
-);
+    showLoading(
+      "Registering DAO membership..."
+    );
 
     registrationSignature =
       registrationSignature ||
@@ -1341,6 +1356,8 @@ showLoading(
 
       hideLoading();
 
+      registerBtn.disabled = false;
+
       setStatus(
         "Verify identity first",
         "error"
@@ -1356,52 +1373,82 @@ showLoading(
       );
 
     setStatus(
-      "Confirming registration...",
-      "success"
+      "Confirming registration..."
     );
 
     await tx.wait();
 
-    // ===== AUTO DELEGATE =====
-    const currentDelegate =
-      await labrv.delegates(
-        userAddress
-      );
+    const [
+      isRegistered,
+      labrvBalance
+    ] =
+      await Promise.all([
+        registration.registered(
+          userAddress
+        ),
+        labrv.balanceOf(
+          userAddress
+        )
+      ]);
 
     if (
-      currentDelegate.toLowerCase() !==
-      userAddress.toLowerCase()
+      !isRegistered ||
+      labrvBalance === 0n
     ) {
 
-      const delegateTx =
-        await labrv.delegate(
-          userAddress
-        );
-
-      await delegateTx.wait();
-
+      throw new Error(
+        "Registration confirmed, but membership state could not be verified"
+      );
     }
 
-    completeStep("step-register");
+    registrationConfirmed = true;
 
-      await showMembershipData();
+    sessionStorage.removeItem(
+      "registrationSignature"
+    );
 
-      await buildMembershipCertificate();
+    sessionStorage.removeItem(
+      "registrationExpiry"
+    );
 
-      setCertificateStatus(
-       "Certificate prepared. Tap Download Certificate to save or share.",
-       "success"
-     );
+    completeStep(
+      "step-register"
+    );
 
     governanceAccessWrapper
       .classList
       .remove("hidden");
 
     hideLoading();
+
     setStatus(
       "DAO registration complete.",
       "success"
     );
+
+    try {
+
+      await showMembershipData();
+
+      await buildMembershipCertificate();
+
+      setCertificateStatus(
+        "Certificate prepared. Tap Download Certificate to save or share.",
+        "success"
+      );
+
+    } catch (postRegistrationError) {
+
+      console.error(
+        "Post-registration setup failed",
+        postRegistrationError
+      );
+
+      setCertificateStatus(
+        "Registration succeeded, but the certificate could not be prepared. Reload the page and try again.",
+        "error"
+      );
+    }
 
   } catch (err) {
 
@@ -1409,13 +1456,33 @@ showLoading(
 
     console.error(err);
 
-    // ===== ALREADY REGISTERED =====
+    if (registrationConfirmed) {
+
+      governanceAccessWrapper
+        .classList
+        .remove("hidden");
+
+      setStatus(
+        "DAO registration complete.",
+        "success"
+      );
+
+      return;
+    }
+
     const errorText =
-      JSON.stringify(err).toLowerCase();
+      JSON.stringify(err)
+        .toLowerCase();
 
     if (
-      errorText.includes("already registered")
+      errorText.includes(
+        "already registered"
+      )
     ) {
+
+      completeStep(
+        "step-register"
+      );
 
       governanceAccessWrapper
         .classList
@@ -1426,15 +1493,36 @@ showLoading(
         "success"
       );
 
-      return;
+      try {
 
+        await showMembershipData();
+
+        await buildMembershipCertificate();
+
+        setCertificateStatus(
+          "Certificate prepared. Tap Download Certificate to save or share.",
+          "success"
+        );
+
+      } catch (postRegistrationError) {
+
+        console.error(
+          "Membership display failed",
+          postRegistrationError
+        );
+      }
+
+      return;
     }
 
+    registerBtn.disabled = false;
+
     setStatus(
+      err.reason ||
+      err.message ||
       "Registration failed",
       "error"
     );
-
   }
 
 };
