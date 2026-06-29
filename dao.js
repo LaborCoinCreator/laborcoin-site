@@ -303,6 +303,12 @@ connectBtn.onclick = async () => {
 
     try {
 
+      if (!window.LaborWallet) {
+        throw new Error(
+          "Wallet system is still loading. Please wait a moment and try again."
+        );
+      }
+
       setStatus(
         "Opening wallet connection..."
       );
@@ -313,6 +319,8 @@ connectBtn.onclick = async () => {
       const wallet =
         await window.LaborWallet.connect();
 
+    walletInitialized = true;
+
     provider =
       wallet.provider;
 
@@ -320,7 +328,32 @@ connectBtn.onclick = async () => {
       wallet.signer;
 
     userAddress =
-      wallet.address;
+      ethers.getAddress(
+        wallet.address
+      );
+
+    const storedRegistrationAddress =
+      sessionStorage.getItem(
+        "registrationAddress"
+      );
+
+    if (
+      storedRegistrationAddress &&
+      storedRegistrationAddress.toLowerCase() !==
+      userAddress.toLowerCase()
+    ) {
+      sessionStorage.removeItem(
+        "registrationSignature"
+      );
+
+      sessionStorage.removeItem(
+        "registrationExpiry"
+      );
+
+      sessionStorage.removeItem(
+        "registrationAddress"
+      );
+    }
 
     registration =
       new ethers.Contract(
@@ -430,6 +463,10 @@ setStatus(
   } catch (err) {
 
     console.error(err);
+
+    connectBtn.disabled = false;
+    connectBtn.innerText =
+      "Connect Wallet";
 
     setStatus(
       err.message ||
@@ -548,6 +585,11 @@ showLoading(
     sessionStorage.setItem(
       "registrationExpiry",
       String(registrationExpiry)
+    );
+
+    sessionStorage.setItem(
+      "registrationAddress",
+      userAddress
     );
 
     completeStep("step-identity");
@@ -1337,6 +1379,29 @@ registerBtn.onclick = async () => {
       "Registering DAO membership..."
     );
 
+    const storedRegistrationAddress =
+      sessionStorage.getItem(
+        "registrationAddress"
+      );
+
+    if (
+      storedRegistrationAddress &&
+      storedRegistrationAddress.toLowerCase() !==
+      userAddress.toLowerCase()
+    ) {
+      sessionStorage.removeItem(
+        "registrationSignature"
+      );
+
+      sessionStorage.removeItem(
+        "registrationExpiry"
+      );
+
+      sessionStorage.removeItem(
+        "registrationAddress"
+      );
+    }
+
     registrationSignature =
       registrationSignature ||
       sessionStorage.getItem(
@@ -1409,6 +1474,10 @@ registerBtn.onclick = async () => {
 
     sessionStorage.removeItem(
       "registrationExpiry"
+    );
+
+    sessionStorage.removeItem(
+      "registrationAddress"
     );
 
     completeStep(
@@ -1584,20 +1653,5 @@ window.addEventListener(
 
       console.error(err);
     }
-  }
-);
-
-window.addEventListener(
-  "laborWalletConnected",
-  () => {
-
-    if (walletInitialized) {
-      return;
-    }
-
-    walletInitialized = true;
-
-    connectBtn.click();
-
   }
 );

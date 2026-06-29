@@ -8,6 +8,12 @@ const LABRV_TOKEN =
 const VERIFIER_URL =
   "https://laborcoin-verifier.onrender.com";
 
+const RPC_URL =
+  "https://polygon-bor-rpc.publicnode.com";
+
+const ENS_RPC_URL =
+  "https://ethereum-rpc.publicnode.com";
+
 const MAX_TRANSFER_PERCENT = 5;
 
 const DAO_TREASURY =
@@ -39,6 +45,23 @@ const LABRV_ABI = [
   "function balanceOf(address) view returns (uint256)"
 ];
 
+const readProvider =
+  new ethers.JsonRpcProvider(
+    RPC_URL
+  );
+
+const readGovernance =
+  new ethers.Contract(
+    GOVERNANCE_CONTRACT,
+    GOV_ABI,
+    readProvider
+  );
+
+const ensProvider =
+  new ethers.JsonRpcProvider(
+    ENS_RPC_URL
+  );
+
 // ===== STATE =====
 let provider;
 let signer;
@@ -48,6 +71,7 @@ let governance;
 let labrv;
 
 let walletInitialized = false;
+let governanceVerified = false;
 
 // ===== ELEMENTS =====
 const govConnectBtn =
@@ -200,7 +224,7 @@ async function displayName(address) {
   try {
 
     const ens =
-      await provider.lookupAddress(
+      await ensProvider.lookupAddress(
         address
       );
 
@@ -320,6 +344,10 @@ async function refreshGovernanceConnection() {
 
       govVerifyBtn.disabled =
         false;
+    } else {
+
+      govVerifyBtn.disabled =
+        true;
     }
 
   } catch (err) {
@@ -333,6 +361,12 @@ govConnectBtn.onclick = async () => {
 
   try {
 
+    if (!window.LaborWallet) {
+      throw new Error(
+        "Wallet system is still loading. Please wait a moment and try again."
+      );
+    }
+
     setStatus(
       "Opening wallet connection..."
     );
@@ -342,6 +376,8 @@ govConnectBtn.onclick = async () => {
 
     const wallet =
       await window.LaborWallet.connect();
+
+    walletInitialized = true;
 
     provider =
       wallet.provider;
@@ -373,23 +409,31 @@ govConnectBtn.onclick = async () => {
         userAddress
       );
 
+    govConnectBtn.style.display =
+      "none";
+
+    govConnectBtn.disabled = false;
+    govConnectBtn.innerText =
+      "Connect Wallet";
+
     if (Number(bal) <= 0) {
 
       setStatus(
-        "No LABRV voting power",
+        "Wallet connected. This address has no LABRV voting rights, but it may still view proposals and execute approved proposals.",
         "error"
       );
 
+      await loadProposalFeed();
+
       return;
     }
-
-    govConnectBtn.style.display =
-      "none";
 
     setStatus(
       "Wallet connected",
       "success"
     );
+
+    await loadProposalFeed();
 
   } catch (err) {
 
@@ -448,7 +492,10 @@ govVerifyBtn.onclick = async () => {
     const data =
       await response.json();
 
-    if (!response.ok) {
+    if (
+      !response.ok ||
+      !data.success
+    ) {
 
       throw new Error(
         data.error ||
@@ -460,11 +507,9 @@ govVerifyBtn.onclick = async () => {
       "gov-step-identity"
     );
 
-    govPanel.classList.remove(
-      "hidden"
-    );
+    governanceVerified = true;
 
-    proposalFeedSection.classList.remove(
+    govPanel.classList.remove(
       "hidden"
     );
 
@@ -511,31 +556,40 @@ async () => {
     const recipient =
       recipientAddress.value.trim();
 
-    const amount =
-      ethers.parseEther(
-        treasuryAmount.value
-      );
+    const amountText =
+      treasuryAmount.value.trim();
 
     const description =
       proposalDescription.value.trim();
 
-    if (!recipient) {
+    if (!ethers.isAddress(recipient)) {
 
       throw new Error(
-        "Missing recipient"
+        "Enter a valid Polygon recipient address"
       );
     }
 
     if (
-      Number(
-        treasuryAmount.value
-      ) <= 0
+      !amountText ||
+      Number(amountText) <= 0
     ) {
 
       throw new Error(
-        "Invalid amount"
+        "Enter a valid proposal amount"
       );
     }
+
+    if (!description) {
+
+      throw new Error(
+        "Enter a proposal description"
+      );
+    }
+
+    const amount =
+      ethers.parseEther(
+        amountText
+      );
 
     const auth =
       await getGovernanceSignature(0);
@@ -598,7 +652,7 @@ async function loadProposalLimit() {
   try {
 
     const balance =
-      await provider.getBalance(
+      await readProvider.getBalance(
         DAO_TREASURY
       );
 
@@ -618,7 +672,7 @@ async function loadProposalLimit() {
 
     const count =
       Number(
-        await governance.proposalCount()
+        await readGovernance.proposalCount()
       );
 
     const now =
@@ -633,7 +687,7 @@ async function loadProposalLimit() {
     ) {
 
       const proposal =
-        await governance.proposals(i);
+        await readGovernance.proposals(i);
 
       const executed =
         proposal.executed;
@@ -644,13 +698,21 @@ async function loadProposalLimit() {
         ) < now;
 
       const passed =
-        await governance.proposalPassed(
+        await readGovernance.proposalPassed(
           i
         );
 
+      const executionDeadline =
+        Number(proposal.endTime) +
+        7 * 24 * 60 * 60;
+
+      const executionWindowOpen =
+        ended &&
+        now <= executionDeadline;
+
       if (
         !executed &&
-        ended &&
+        executionWindowOpen &&
         passed
       ) {
 
@@ -776,7 +838,7 @@ async function loadProposalFeed() {
 
     const total =
       Number(
-        await governance.proposalCount()
+        await readGovernance.proposalCount()
       );
 
     const executionWindow =
@@ -800,7 +862,7 @@ async function loadProposalFeed() {
     ) {
 
 const p =
-  await governance.proposals(i);
+  await readGovernance.proposals(i);
 
 const recipientName =
   await displayName(
@@ -899,7 +961,7 @@ const card =
       } else {
 
         const passed =
-          await governance.proposalPassed(i);
+          await readGovernance.proposalPassed(i);
 
         if (!passed) {
 
@@ -1025,6 +1087,7 @@ const card =
 
           ${
             (
+              governanceVerified &&
               !p.executed &&
               now < Number(p.endTime)
             )
@@ -1116,6 +1179,22 @@ async (
 
   try {
 
+    if (
+      !governanceVerified ||
+      !governance ||
+      !signer ||
+      !userAddress
+    ) {
+
+      setProposalActionStatus(
+        id,
+        "Connect a LABRV wallet and verify identity before voting.",
+        "error"
+      );
+
+      return;
+    }
+
     showLoading(
       "Submitting vote..."
     );
@@ -1173,6 +1252,21 @@ async (id) => {
 
   try {
 
+    if (
+      !governance ||
+      !signer ||
+      !userAddress
+    ) {
+
+      setProposalActionStatus(
+        id,
+        "Connect a wallet before executing this proposal.",
+        "error"
+      );
+
+      return;
+    }
+
     showLoading(
       "Executing proposal..."
     );
@@ -1213,63 +1307,144 @@ async (id) => {
   }
 };
 
-window.addEventListener(
-  "load",
-  async () => {
+async function waitForLaborWallet(
+  timeoutMs = 10000
+) {
 
-    try {
+  const started =
+    Date.now();
 
-      if (!window.LaborWallet) {
-        return;
-      }
+  while (
+    !window.LaborWallet &&
+    Date.now() - started < timeoutMs
+  ) {
 
-      const wallet =
-        await window.LaborWallet.reconnect();
-
-      if (!wallet) {
-        return;
-      }
-
-      if (walletInitialized) {
-        return;
-      }
-
-      walletInitialized = true;
-
-      govConnectBtn.click();
-
-    } catch (err) {
-
-      console.error(err);
-    }
+    await new Promise(
+      resolve =>
+        setTimeout(
+          resolve,
+          100
+        )
+    );
   }
-);
 
-if (window.ethereum) {
-
-  window.ethereum.on(
-    "accountsChanged",
-    () => location.reload()
-  );
-
-  window.ethereum.on(
-    "chainChanged",
-    () => location.reload()
-  );
-
+  return window.LaborWallet ||
+    null;
 }
 
-window.addEventListener(
-  "laborWalletConnected",
-  () => {
+async function applyReconnectedWallet(
+  wallet
+) {
 
-    if (walletInitialized) {
+  if (
+    !wallet ||
+    walletInitialized
+  ) {
+    return;
+  }
+
+  walletInitialized = true;
+
+  provider =
+    wallet.provider;
+
+  signer =
+    wallet.signer;
+
+  userAddress =
+    ethers.getAddress(
+      wallet.address
+    );
+
+  governance =
+    new ethers.Contract(
+      GOVERNANCE_CONTRACT,
+      GOV_ABI,
+      signer
+    );
+
+  labrv =
+    new ethers.Contract(
+      LABRV_TOKEN,
+      LABRV_ABI,
+      provider
+    );
+
+  await refreshGovernanceConnection();
+
+  const bal =
+    await labrv.balanceOf(
+      userAddress
+    );
+
+  govConnectBtn.style.display =
+    "none";
+
+  if (Number(bal) > 0) {
+
+    setStatus(
+      "Wallet reconnected",
+      "success"
+    );
+
+  } else {
+
+    setStatus(
+      "Wallet reconnected. This address has no LABRV voting rights, but it may still execute approved proposals.",
+      "error"
+    );
+  }
+
+  await loadProposalFeed();
+}
+
+async function initializeGovernancePage() {
+
+  proposalFeedSection.classList.remove(
+    "hidden"
+  );
+
+  await loadProposalFeed();
+
+  try {
+
+    const laborWallet =
+      await waitForLaborWallet();
+
+    if (!laborWallet) {
       return;
     }
 
-    walletInitialized = true;
+    const wallet =
+      await laborWallet.ready;
 
-    govConnectBtn.click();
+    await applyReconnectedWallet(
+      wallet
+    );
 
+  } catch (err) {
+
+    console.error(
+      "Wallet reconnect failed:",
+      err
+    );
   }
-);
+}
+
+if (
+  document.readyState ===
+  "loading"
+) {
+
+  window.addEventListener(
+    "DOMContentLoaded",
+    initializeGovernancePage,
+    {
+      once: true
+    }
+  );
+
+} else {
+
+  initializeGovernancePage();
+}

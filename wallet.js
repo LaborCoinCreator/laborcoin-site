@@ -28,10 +28,8 @@ const ensProvider =
   );
 
 const ENS_OVERRIDES = {
-
   "0x015b6d0990e56d908c876474c6a30eba2b8a0cfb":
     "laborcoin.eth"
-
 };
 
 const appKit =
@@ -52,70 +50,255 @@ const appKit =
     }
   });
 
+let connectPromise = null;
+let reconnectPromise = null;
+let activeRawProvider = null;
+let accountChangeHandler = null;
+let chainChangeHandler = null;
+let disconnectHandler = null;
+
+let resolveReady;
+
+const walletReady =
+  new Promise(resolve => {
+    resolveReady = resolve;
+  });
+
+function isUserRejection(err) {
+  const code =
+    err?.code ??
+    err?.error?.code;
+
+  const message =
+    String(
+      err?.shortMessage ||
+      err?.message ||
+      ""
+    ).toLowerCase();
+
+  return (
+    code === 4001 ||
+    code === "ACTION_REJECTED" ||
+    message.includes("user rejected") ||
+    message.includes("request rejected") ||
+    message.includes("connection cancelled") ||
+    message.includes("connection canceled")
+  );
+}
+
+function friendlyWalletError(err) {
+  if (isUserRejection(err)) {
+    return new Error(
+      "Wallet connection was cancelled."
+    );
+  }
+
+  return err instanceof Error
+    ? err
+    : new Error(
+        "Wallet connection failed."
+      );
+}
+
 async function ensurePolygon(
   ethersProvider,
-  rawProvider
+  rawProvider,
+  allowSwitch
 ) {
-
   const network =
     await ethersProvider.getNetwork();
 
   if (Number(network.chainId) === 137) {
-    return;
+    return true;
+  }
+
+  if (!allowSwitch) {
+    return false;
   }
 
   if (
-    rawProvider &&
-    rawProvider.request
+    !rawProvider ||
+    typeof rawProvider.request !== "function"
   ) {
+    throw new Error(
+      "Please switch to Polygon Mainnet."
+    );
+  }
 
-    await rawProvider.request({
-      method: "wallet_switchEthereumChain",
-      params: [
-        {
-          chainId: "0x89"
-        }
-      ]
-    });
+  await rawProvider.request({
+    method: "wallet_switchEthereumChain",
+    params: [
+      {
+        chainId: "0x89"
+      }
+    ]
+  });
 
+  return true;
+}
+
+function removeProviderListeners() {
+  if (!activeRawProvider) {
     return;
   }
 
-  throw new Error(
-    "Please switch to Polygon Mainnet"
+  const remove =
+    activeRawProvider.removeListener ||
+    activeRawProvider.off;
+
+  if (typeof remove === "function") {
+    if (accountChangeHandler) {
+      remove.call(
+        activeRawProvider,
+        "accountsChanged",
+        accountChangeHandler
+      );
+    }
+
+    if (chainChangeHandler) {
+      remove.call(
+        activeRawProvider,
+        "chainChanged",
+        chainChangeHandler
+      );
+    }
+
+    if (disconnectHandler) {
+      remove.call(
+        activeRawProvider,
+        "disconnect",
+        disconnectHandler
+      );
+    }
+  }
+
+  activeRawProvider = null;
+  accountChangeHandler = null;
+  chainChangeHandler = null;
+  disconnectHandler = null;
+}
+
+function bindProviderListeners(rawProvider) {
+  if (
+    !rawProvider ||
+    typeof rawProvider.on !== "function" ||
+    activeRawProvider === rawProvider
+  ) {
+    return;
+  }
+
+  removeProviderListeners();
+
+  activeRawProvider =
+    rawProvider;
+
+  accountChangeHandler =
+    accounts => {
+      if (
+        !accounts ||
+        accounts.length === 0
+      ) {
+        localStorage.removeItem(
+          "laborWalletConnected"
+        );
+      }
+
+      window.location.reload();
+    };
+
+  chainChangeHandler =
+    () => {
+      window.location.reload();
+    };
+
+  disconnectHandler =
+    () => {
+      localStorage.removeItem(
+        "laborWalletConnected"
+      );
+
+      window.location.reload();
+    };
+
+  rawProvider.on(
+    "accountsChanged",
+    accountChangeHandler
+  );
+
+  rawProvider.on(
+    "chainChanged",
+    chainChangeHandler
+  );
+
+  rawProvider.on(
+    "disconnect",
+    disconnectHandler
   );
 }
 
 async function buildWallet(
-  rawProvider
+  rawProvider,
+  {
+    requestAccounts = false,
+    allowNetworkSwitch = false
+  } = {}
 ) {
-
   if (!rawProvider) {
     throw new Error(
-      "No wallet provider detected"
+      "No wallet provider detected."
     );
   }
 
-  const provider =
+  let provider =
     new ethers.BrowserProvider(
       rawProvider
     );
 
-  await provider.send(
-    "eth_requestAccounts",
-    []
-  );
+  const method =
+    requestAccounts
+      ? "eth_requestAccounts"
+      : "eth_accounts";
 
-  await ensurePolygon(
-    provider,
-    rawProvider
-  );
+  const accounts =
+    await provider.send(
+      method,
+      []
+    );
+
+  if (
+    !accounts ||
+    accounts.length === 0
+  ) {
+    return null;
+  }
+
+  const onPolygon =
+    await ensurePolygon(
+      provider,
+      rawProvider,
+      allowNetworkSwitch
+    );
+
+  if (!onPolygon) {
+    return null;
+  }
+
+  provider =
+    new ethers.BrowserProvider(
+      rawProvider
+    );
 
   const signer =
     await provider.getSigner();
 
   const address =
-    await signer.getAddress();
+    ethers.getAddress(
+      await signer.getAddress()
+    );
+
+  bindProviderListeners(
+    rawProvider
+  );
 
   return {
     provider,
@@ -125,181 +308,175 @@ async function buildWallet(
   };
 }
 
-function waitForAppKitProvider() {
+function createAppKitProviderWaiter() {
+  let cancelWait = () => {};
 
-  return new Promise(
-    (resolve, reject) => {
+  const promise =
+    new Promise(
+      (resolve, reject) => {
+        const existingProvider =
+          appKit.getWalletProvider
+            ? appKit.getWalletProvider()
+            : null;
 
-      let unsubscribe = null;
-
-      const timeout =
-        setTimeout(
-          () => {
-
-            if (unsubscribe) {
-              unsubscribe();
-            }
-
-            reject(
-              new Error(
-                "Wallet connection timed out"
-              )
-            );
-
-          },
-          120000
-        );
-
-      function finish(rawProvider) {
-
-        if (!rawProvider) {
+        if (existingProvider) {
+          resolve(existingProvider);
           return;
         }
 
-        clearTimeout(timeout);
+        let settled = false;
+        let timeout = null;
+        let sawOpen = false;
 
-        if (unsubscribe) {
-          unsubscribe();
+        let unsubscribeProviders = null;
+        let unsubscribeState = null;
+
+        let providerUnsubscribePending = false;
+        let stateUnsubscribePending = false;
+
+        const cleanup = () => {
+          if (timeout) {
+            clearTimeout(timeout);
+          }
+
+          if (unsubscribeProviders) {
+            unsubscribeProviders();
+            unsubscribeProviders = null;
+          } else {
+            providerUnsubscribePending = true;
+          }
+
+          if (unsubscribeState) {
+            unsubscribeState();
+            unsubscribeState = null;
+          } else {
+            stateUnsubscribePending = true;
+          }
+        };
+
+        const finish = rawProvider => {
+          if (
+            settled ||
+            !rawProvider
+          ) {
+            return;
+          }
+
+          settled = true;
+          cleanup();
+          resolve(rawProvider);
+        };
+
+        const fail = err => {
+          if (settled) {
+            return;
+          }
+
+          settled = true;
+          cleanup();
+          reject(err);
+        };
+
+        cancelWait = () => {
+          if (settled) {
+            return;
+          }
+
+          settled = true;
+          cleanup();
+          resolve(null);
+        };
+
+        timeout =
+          setTimeout(
+            () => {
+              fail(
+                new Error(
+                  "Wallet connection timed out."
+                )
+              );
+            },
+            120000
+          );
+
+        const providerSubscription =
+          appKit.subscribeProviders(
+            state => {
+              finish(
+                state?.eip155
+              );
+            }
+          );
+
+        unsubscribeProviders =
+          typeof providerSubscription === "function"
+            ? providerSubscription
+            : null;
+
+        if (
+          providerUnsubscribePending &&
+          unsubscribeProviders
+        ) {
+          unsubscribeProviders();
+          unsubscribeProviders = null;
         }
 
-        resolve(rawProvider);
-      }
+        if (
+          typeof appKit.subscribeState === "function"
+        ) {
+          const stateSubscription =
+            appKit.subscribeState(
+              state => {
+                if (state?.open) {
+                  sawOpen = true;
+                  return;
+                }
 
-      const existingProvider =
-        appKit.getWalletProvider
-          ? appKit.getWalletProvider()
-          : null;
+                if (
+                  sawOpen &&
+                  !appKit.getWalletProvider?.()
+                ) {
+                  fail(
+                    new Error(
+                      "Wallet connection was cancelled."
+                    )
+                  );
+                }
+              }
+            );
 
-      finish(existingProvider);
+          unsubscribeState =
+            typeof stateSubscription === "function"
+              ? stateSubscription
+              : null;
 
-      unsubscribe =
-        appKit.subscribeProviders(
-          state => {
-
-            const rawProvider =
-              state?.eip155;
-
-            finish(rawProvider);
+          if (
+            stateUnsubscribePending &&
+            unsubscribeState
+          ) {
+            unsubscribeState();
+            unsubscribeState = null;
           }
-        );
-    }
-  );
+        }
+      }
+    );
+
+  return {
+    promise,
+    cancel: () => cancelWait()
+  };
 }
 
-window.LaborWallet = {
-
-  connect: async function () {
-
-    try {
-
-      const providerPromise =
-        waitForAppKitProvider();
-
-      await appKit.open({
-        view: "Connect",
-        namespace: "eip155"
-      });
-
-      const rawProvider =
-        await providerPromise;
-
-      return await buildWallet(
-        rawProvider
-      );
-
-    } catch (err) {
-
-      if (window.ethereum) {
-
-        return await buildWallet(
-          window.ethereum
-        );
-      }
-
-      const path =
-        window.location.host +
-        window.location.pathname;
-
-      window.location.href =
-        `https://metamask.app.link/dapp/${path}`;
-
-      throw err;
-    }
-  },
-
-  reconnectInjected: async function () {
-
-    if (!window.ethereum) {
-      return null;
-    }
-
-    const provider =
-      new ethers.BrowserProvider(
-        window.ethereum
-      );
-
-    const accounts =
-      await provider.send(
-        "eth_accounts",
-        []
-      );
-
-    if (
-      !accounts ||
-      accounts.length === 0
-    ) {
-      return null;
-    }
-
-    return await buildWallet(
-      window.ethereum
-    );
-  },
-
-  reconnect: async function () {
-
-    try {
-
-      const rawProvider =
-        appKit.getWalletProvider
-          ? appKit.getWalletProvider()
-          : null;
-
-      if (rawProvider) {
-
-        return await buildWallet(
-          rawProvider
-        );
-      }
-
-    } catch (err) {
-
-      console.error(
-        "WalletConnect reconnect failed",
-        err
-      );
-    }
-
-    return await this.reconnectInjected();
-  }
-
-};
-
 function shortAddress(address) {
-
   return (
-    address.slice(0, 6)
-    +
-    "..."
-    +
+    address.slice(0, 6) +
+    "..." +
     address.slice(-4)
   );
 }
 
 async function getWalletDisplay(address) {
-
   try {
-
     const overrideName =
       ENS_OVERRIDES[
         address.toLowerCase()
@@ -312,7 +489,6 @@ async function getWalletDisplay(address) {
       );
 
     if (!ens) {
-
       return {
         name: shortAddress(address),
         avatar: null
@@ -328,9 +504,7 @@ async function getWalletDisplay(address) {
       name: ens,
       avatar
     };
-
   } catch (err) {
-
     console.log(
       "ENS display lookup failed",
       err
@@ -347,6 +521,9 @@ async function updateGlobalWalletButton(
   btn,
   address
 ) {
+  if (!btn) {
+    return;
+  }
 
   const display =
     await getWalletDisplay(address);
@@ -362,7 +539,6 @@ async function updateGlobalWalletButton(
   btn.appendChild(label);
 
   if (display.avatar) {
-
     const img =
       document.createElement("img");
 
@@ -379,8 +555,219 @@ async function updateGlobalWalletButton(
   }
 }
 
-function ensureGlobalWalletButton() {
+async function publishWallet(wallet) {
+  if (!wallet) {
+    return null;
+  }
 
+  window.LaborWallet.current =
+    wallet;
+
+  localStorage.setItem(
+    "laborWalletConnected",
+    "true"
+  );
+
+  const globalButton =
+    document.getElementById(
+      "globalWalletBtn"
+    );
+
+  if (globalButton) {
+    globalButton.innerText =
+      shortAddress(
+        wallet.address
+      );
+  }
+
+  updateGlobalWalletButton(
+    globalButton,
+    wallet.address
+  ).catch(err => {
+    console.log(
+      "Wallet display update failed",
+      err
+    );
+  });
+
+  window.dispatchEvent(
+    new CustomEvent(
+      "laborWalletConnected",
+      {
+        detail: wallet
+      }
+    )
+  );
+
+  return wallet;
+}
+
+window.LaborWallet = {
+  current: null,
+  ready: walletReady,
+
+  connect: async function () {
+    if (this.current) {
+      return this.current;
+    }
+
+    if (connectPromise) {
+      return connectPromise;
+    }
+
+    connectPromise =
+      (async () => {
+        try {
+          const providerWaiter =
+            createAppKitProviderWaiter();
+
+          try {
+            await appKit.open({
+              view: "Connect",
+              namespace: "eip155"
+            });
+          } catch (openError) {
+            providerWaiter.cancel();
+            throw openError;
+          }
+
+          const rawProvider =
+            await providerWaiter.promise;
+
+          const wallet =
+            await buildWallet(
+              rawProvider,
+              {
+                requestAccounts: true,
+                allowNetworkSwitch: true
+              }
+            );
+
+          if (!wallet) {
+            throw new Error(
+              "No wallet account was connected."
+            );
+          }
+
+          return await publishWallet(
+            wallet
+          );
+        } catch (err) {
+          if (
+            !isUserRejection(err) &&
+            window.ethereum
+          ) {
+            try {
+              const wallet =
+                await buildWallet(
+                  window.ethereum,
+                  {
+                    requestAccounts: true,
+                    allowNetworkSwitch: true
+                  }
+                );
+
+              if (wallet) {
+                return await publishWallet(
+                  wallet
+                );
+              }
+            } catch (fallbackError) {
+              throw friendlyWalletError(
+                fallbackError
+              );
+            }
+          }
+
+          throw friendlyWalletError(err);
+        } finally {
+          connectPromise = null;
+        }
+      })();
+
+    return connectPromise;
+  },
+
+  reconnectInjected: async function () {
+    if (!window.ethereum) {
+      return null;
+    }
+
+    return await buildWallet(
+      window.ethereum,
+      {
+        requestAccounts: false,
+        allowNetworkSwitch: false
+      }
+    );
+  },
+
+  reconnect: async function () {
+    if (this.current) {
+      return this.current;
+    }
+
+    if (reconnectPromise) {
+      return reconnectPromise;
+    }
+
+    reconnectPromise =
+      (async () => {
+        try {
+          const rawProvider =
+            appKit.getWalletProvider
+              ? appKit.getWalletProvider()
+              : null;
+
+          if (rawProvider) {
+            const wallet =
+              await buildWallet(
+                rawProvider,
+                {
+                  requestAccounts: false,
+                  allowNetworkSwitch: false
+                }
+              );
+
+            if (wallet) {
+              return await publishWallet(
+                wallet
+              );
+            }
+          }
+        } catch (err) {
+          console.error(
+            "WalletConnect reconnect failed",
+            err
+          );
+        }
+
+        try {
+          const wallet =
+            await this.reconnectInjected();
+
+          if (wallet) {
+            return await publishWallet(
+              wallet
+            );
+          }
+        } catch (err) {
+          console.error(
+            "Injected wallet reconnect failed",
+            err
+          );
+        }
+
+        return null;
+      })().finally(() => {
+        reconnectPromise = null;
+      });
+
+    return reconnectPromise;
+  }
+};
+
+function ensureGlobalWalletButton() {
   if (
     document.getElementById(
       "globalWalletBtn"
@@ -398,104 +785,89 @@ function ensureGlobalWalletButton() {
   btn.className =
     "global-wallet-button";
 
+  btn.type =
+    "button";
+
   btn.innerText =
     "Connect Wallet";
 
   btn.onclick =
     async () => {
+      const pageConnectButton =
+        document.querySelector(
+          "#connectBtn, #govConnectBtn"
+        );
+
+      if (
+        !window.LaborWallet.current &&
+        pageConnectButton &&
+        !pageConnectButton.disabled &&
+        pageConnectButton.offsetParent !== null
+      ) {
+        pageConnectButton.click();
+        return;
+      }
 
       try {
+        btn.disabled = true;
 
-        const wallet =
-          await window.LaborWallet.connect();
+        if (!window.LaborWallet.current) {
+          btn.innerText =
+            "Connecting...";
+        }
 
-        window.LaborWallet.current =
-          wallet;
-
-        localStorage.setItem(
-          "laborWalletConnected",
-          "true"
-        );
-
-        await updateGlobalWalletButton(
-          btn,
-          wallet.address
-        );
-
-        window.dispatchEvent(
-          new CustomEvent(
-            "laborWalletConnected",
-            {
-              detail: wallet
-            }
-          )
-        );
-
+        await window.LaborWallet.connect();
       } catch (err) {
-
         console.error(err);
+
+        btn.innerText =
+          err.message ||
+          "Connection failed";
+
+        setTimeout(
+          () => {
+            if (!window.LaborWallet.current) {
+              btn.innerText =
+                "Connect Wallet";
+            }
+          },
+          3000
+        );
+      } finally {
+        btn.disabled = false;
       }
     };
 
   document.body.appendChild(btn);
 }
 
-async function autoGlobalReconnect() {
+async function initializeGlobalWallet() {
+  ensureGlobalWalletButton();
 
-  try {
+  let wallet = null;
 
-    if (
-      localStorage.getItem(
-        "laborWalletConnected"
-      ) !== "true"
-    ) {
-      return;
-    }
-
-    const wallet =
+  if (
+    localStorage.getItem(
+      "laborWalletConnected"
+    ) === "true"
+  ) {
+    wallet =
       await window.LaborWallet.reconnect();
-
-    if (!wallet) {
-      return;
-    }
-
-    window.LaborWallet.current =
-      wallet;
-
-    const btn =
-      document.getElementById(
-        "globalWalletBtn"
-      );
-
-    if (btn) {
-
-      await updateGlobalWalletButton(
-        btn,
-        wallet.address
-      );
-    }
-
-    window.dispatchEvent(
-      new CustomEvent(
-        "laborWalletConnected",
-        {
-          detail: wallet
-        }
-      )
-    );
-
-  } catch (err) {
-
-    console.error(err);
   }
+
+  resolveReady(wallet);
 }
 
-document.addEventListener(
-  "DOMContentLoaded",
-  () => {
-
-    ensureGlobalWalletButton();
-
-    autoGlobalReconnect();
-  }
-);
+if (
+  document.readyState === "loading"
+) {
+  document.addEventListener(
+    "DOMContentLoaded",
+    initializeGlobalWallet,
+    {
+      once: true
+    }
+  );
+} else {
+  initializeGlobalWallet();
+}

@@ -60,7 +60,8 @@ const sellNet =
   );
 
 // ===== SETTINGS =====
-const SLIPPAGE = 0.95; // 5% protection
+const SLIPPAGE_NUMERATOR = 95n;
+const PERCENT_DENOMINATOR = 100n;
 
 // ===== ABIs =====
 const EXCHANGE_ABI = [
@@ -71,7 +72,8 @@ const EXCHANGE_ABI = [
   "function daoTreasury() view returns (address)",
   "function MAX_SUPPLY() view returns (uint256)",
   "function unlockedSupply() view returns (uint256)",
-  "function lastTxTime(address) view returns (uint256)"
+  "function lastTxTime(address) view returns (uint256)",
+  "function LABR() view returns (address)"
 ];
 
 const ORACLE_ABI = [
@@ -95,6 +97,7 @@ let provider, signer, exchange, userAddress;
 let exchangeVerified = false;
 
 let walletInitialized = false;
+let walletConnectionPromise = null;
 
 function updateBondingCurveProgress(
   sold
@@ -250,6 +253,18 @@ function hideLoading() {
 // ===== INITIAL LOAD =====
 async function initialLoad() {
   try {
+    const contractLabr =
+      await readExchange.LABR();
+
+    if (
+      ethers.getAddress(contractLabr) !==
+      ethers.getAddress(LABR_TOKEN)
+    ) {
+      throw new Error(
+        `Exchange LABR mismatch: contract uses ${contractLabr}`
+      );
+    }
+
     const sold = await readExchange.totalSold();
     const price = await readExchange.getPrice(sold);
     document.getElementById(
@@ -316,7 +331,7 @@ async function initialLoad() {
       sold
     );
 
-    await drawCurve();
+    await drawCurve(sold, polUsd);
     } catch (e) {
     console.error(e);
     setStatus("Failed to load data", "error");
@@ -324,83 +339,133 @@ async function initialLoad() {
 }
 
 // ===== CONNECT =====
-async function connectWallet() {
+async function applyConnectedWallet(
+  wallet
+) {
 
-  try {
-
-    setGateStatus(
-      "Opening wallet connection..."
-    );
-
-    const connectBtn =
-      document.getElementById(
-        "connectBtn"
-      );
-
-    connectBtn.disabled = true;
-    connectBtn.innerText = "Connecting...";
-
-    const wallet =
-      await window.LaborWallet.connect();
-
-    provider =
-      wallet.provider;
-
-    signer =
-      wallet.signer;
-
-    userAddress =
-      wallet.address;
-
-    document.getElementById(
-      "connectBtn"
-    ).style.display = "none";
-
-    setGateStatus(
-      "Wallet connected",
-      "success"
-    );
-
-    exchange =
-      new ethers.Contract(
-        EXCHANGE_ADDRESS,
-        EXCHANGE_ABI,
-        signer
-      );
-
-    completeStep(
-      "exchange-step-wallet"
-    );
-
-    document.getElementById(
-      "walletAddress"
-    ).innerText =
-      userAddress.slice(0, 6)
-      +
-      "..."
-      +
-      userAddress.slice(-4);
-
-    updateAll();
-
-  } catch (err) {
-
-    console.error(err);
-
-    const connectBtn =
-      document.getElementById(
-        "connectBtn"
-      );
-
-    connectBtn.disabled = false;
-    connectBtn.innerText = "Connect Wallet";
-
-    setGateStatus(
-      err.message ||
-      "Connection failed",
-      "error"
+  if (
+    !wallet ||
+    !wallet.provider ||
+    !wallet.signer ||
+    !wallet.address
+  ) {
+    throw new Error(
+      "Wallet connection returned incomplete data"
     );
   }
+
+  provider =
+    wallet.provider;
+
+  signer =
+    wallet.signer;
+
+  userAddress =
+    ethers.getAddress(
+      wallet.address
+    );
+
+  exchange =
+    new ethers.Contract(
+      EXCHANGE_ADDRESS,
+      EXCHANGE_ABI,
+      signer
+    );
+
+  walletInitialized = true;
+
+  const connectBtn =
+    document.getElementById(
+      "connectBtn"
+    );
+
+  connectBtn.disabled = false;
+  connectBtn.innerText =
+    "Connect Wallet";
+
+  connectBtn.style.display =
+    "none";
+
+  setGateStatus(
+    "Wallet connected",
+    "success"
+  );
+
+  completeStep(
+    "exchange-step-wallet"
+  );
+
+  document.getElementById(
+    "walletAddress"
+  ).innerText =
+    userAddress.slice(0, 6)
+    +
+    "..."
+    +
+    userAddress.slice(-4);
+
+  await updateAll();
+}
+
+async function connectWallet() {
+
+  if (walletConnectionPromise) {
+    return walletConnectionPromise;
+  }
+
+  walletConnectionPromise =
+    (async () => {
+
+      const connectBtn =
+        document.getElementById(
+          "connectBtn"
+        );
+
+      try {
+
+        if (!window.LaborWallet) {
+          throw new Error(
+            "Wallet system is still loading. Please try again."
+          );
+        }
+
+        setGateStatus(
+          "Opening wallet connection..."
+        );
+
+        connectBtn.disabled = true;
+        connectBtn.innerText =
+          "Connecting...";
+
+        const wallet =
+          await window.LaborWallet.connect();
+
+        await applyConnectedWallet(
+          wallet
+        );
+
+      } catch (err) {
+
+        console.error(err);
+
+        connectBtn.disabled = false;
+        connectBtn.innerText =
+          "Connect Wallet";
+
+        setGateStatus(
+          err.message ||
+          "Connection failed",
+          "error"
+        );
+
+      } finally {
+
+        walletConnectionPromise =
+          null;
+      }
+    })();
+
+  return walletConnectionPromise;
 }
 
 // ===== VERIFY EXCHANGE ACCESS =====
@@ -493,7 +558,7 @@ async function updateAll() {
       );
 
     if (
-      formattedBalance >= MAX_WALLET
+      formattedBalance > MAX_WALLET
     ) {
 
       setGateStatus(
@@ -564,7 +629,7 @@ document.getElementById(
   ).toLocaleString() + " LABR";
 
     document.getElementById("walletPercent").innerText =
-      ((bal / 10000) * 100).toFixed(1) + "% of limit";
+      ((bal / MAX_WALLET) * 100).toFixed(1) + "% of limit";
 
     const oracle =
       new ethers.Contract(
@@ -600,6 +665,11 @@ document.getElementById(
 
     updateBondingCurveProgress(
       sold
+    );
+
+    await drawCurve(
+      sold,
+      polUsd
     );
 
     updateCooldown();
@@ -724,30 +794,36 @@ buyBtn.onclick = async () => {
       );
 
     const currentBalance =
-      Number(
-        ethers.formatEther(
-          await balanceCheckContract.balanceOf(
-            userAddress
-          )
-        )
+      await balanceCheckContract.balanceOf(
+        userAddress
+      );
+
+    const maxWalletWei =
+      ethers.parseEther(
+        String(MAX_WALLET)
+      );
+
+    const maxTransactionWei =
+      ethers.parseEther(
+        String(MAX_TRANSACTION)
       );
 
     if (
-      currentBalance >= MAX_WALLET
+      currentBalance >= maxWalletWei
     ) {
 
-    setStatus(
-      "Wallet exceeds 10,000 LABR exchange limit",
-      "error"
-    );
+      setStatus(
+        "Wallet is already at the 10,000 LABR exchange limit",
+        "error"
+      );
 
-    hideLoading();
+      hideLoading();
 
-    return;
+      return;
     }
 
-    const pol =
-      Number(val);
+    const valueWei =
+      ethers.parseEther(val);
 
     const sold =
       await readExchange.totalSold();
@@ -758,13 +834,15 @@ buyBtn.onclick = async () => {
       );
 
     const tokensExpected =
-      pol /
-      Number(
-        ethers.formatEther(price)
-      );
+      (
+        valueWei *
+        10n ** 18n
+      ) /
+      price;
 
     if (
-      tokensExpected > MAX_TRANSACTION
+      tokensExpected >
+      maxTransactionWei
     ) {
 
       setStatus(
@@ -780,7 +858,7 @@ buyBtn.onclick = async () => {
     if (
       currentBalance +
       tokensExpected >
-      MAX_WALLET
+      maxWalletWei
     ) {
 
       setStatus(
@@ -794,18 +872,18 @@ buyBtn.onclick = async () => {
     }
 
     const minOut =
-      ethers.parseEther(
-        (
-          tokensExpected * SLIPPAGE
-        ).toString()
-      );
+      (
+        tokensExpected *
+        SLIPPAGE_NUMERATOR
+      ) /
+      PERCENT_DENOMINATOR;
 
     const tx =
       await exchange.buy(
         minOut,
         {
           value:
-            ethers.parseEther(val)
+            valueWei
         }
       );
 
@@ -875,16 +953,22 @@ sellBtn.onclick = async () => {
       );
 
     const currentBalance =
-      Number(
-        ethers.formatEther(
-          await labr.balanceOf(
-            userAddress
-          )
-        )
+      await labr.balanceOf(
+        userAddress
+      );
+
+    const maxWalletWei =
+      ethers.parseEther(
+        String(MAX_WALLET)
+      );
+
+    const maxTransactionWei =
+      ethers.parseEther(
+        String(MAX_TRANSACTION)
       );
 
     if (
-      currentBalance >= MAX_WALLET
+      currentBalance > maxWalletWei
     ) {
 
       setStatus(
@@ -897,9 +981,11 @@ sellBtn.onclick = async () => {
       return;
     }
 
+    const amt =
+      ethers.parseEther(val);
+
     if (
-      Number(val) >
-      MAX_TRANSACTION
+      amt > maxTransactionWei
     ) {
 
       setStatus(
@@ -911,9 +997,6 @@ sellBtn.onclick = async () => {
 
       return;
     }
-
-    const amt =
-      ethers.parseEther(val);
 
     const approveTx =
       await labr.approve(
@@ -939,21 +1022,28 @@ sellBtn.onclick = async () => {
         sold
       );
 
+    const netTokens =
+      (
+        amt *
+        90n
+      ) /
+      PERCENT_DENOMINATOR;
+
     const expectedPOL =
-      Number(val)
-      *
-      Number(
-        ethers.formatEther(price)
-      )
-      *
-      0.90;
+      (
+        netTokens *
+        price
+      ) /
+      (
+        10n ** 18n
+      );
 
     const minPOL =
-      ethers.parseEther(
-        (
-          expectedPOL * SLIPPAGE
-        ).toString()
-      );
+      (
+        expectedPOL *
+        SLIPPAGE_NUMERATOR
+      ) /
+      PERCENT_DENOMINATOR;
 
     const tx =
       await exchange.sell(
@@ -994,49 +1084,80 @@ sellBtn.onclick = async () => {
 };
 
 // ===== CURVE =====
-async function drawCurve() {
+async function drawCurve(
+  totalSoldBN,
+  polUsd
+) {
 
-  const canvas = curveCanvas;
-  const ctx = canvas.getContext("2d");
+  const canvas =
+    document.getElementById(
+      "curveCanvas"
+    );
 
-  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  if (!canvas || !polUsd) {
+    return;
+  }
+
+  const ctx =
+    canvas.getContext("2d");
+
+  ctx.clearRect(
+    0,
+    0,
+    canvas.width,
+    canvas.height
+  );
 
   const unlocked =
     await readExchange.unlockedSupply();
 
   const unlockedSupply =
     Number(
-      ethers.formatEther(unlocked)
+      ethers.formatEther(
+        unlocked
+      )
     );
-  const steps = 120;
 
+  const currentSold =
+    Number(
+      ethers.formatEther(
+        totalSoldBN
+      )
+    );
+
+  const steps = 120;
   const markerPadding = 18;
   const verticalPadding = 12;
 
-  let prices = [];
+  const prices = [];
 
-  for (let i = 0; i <= steps; i++) {
+  for (
+    let i = 0;
+    i <= steps;
+    i++
+  ) {
 
     const sold =
-      ethers.parseEther(
-        (
-          (i / steps) * unlockedSupply
-        ).toString()
-      );
+      (
+        i /
+        steps
+      ) *
+      unlockedSupply;
 
-    const rawPrice =
-      await readExchange.getPrice(
-        sold
-      );
+    const x =
+      sold /
+      1_000_000_000;
 
-    const price =
-      Number(
-        ethers.formatEther(
-          rawPrice
-        )
-      );
+    const priceUsd =
+      1 +
+      14 *
+      x *
+      x;
 
-    prices.push(price);
+    prices.push(
+      priceUsd /
+      polUsd
+    );
   }
 
   const maxPrice =
@@ -1045,17 +1166,23 @@ async function drawCurve() {
   const minPrice =
     Math.min(...prices);
 
+  const priceRange =
+    maxPrice - minPrice || 1;
+
   ctx.beginPath();
 
-  for (let x = 0; x < prices.length; x++) {
+  for (
+    let index = 0;
+    index < prices.length;
+    index++
+  ) {
 
     const normalized =
       (
-        prices[x] - minPrice
+        prices[index] -
+        minPrice
       ) /
-      (
-        maxPrice - minPrice
-      );
+      priceRange;
 
     const y =
       canvas.height -
@@ -1069,158 +1196,191 @@ async function drawCurve() {
     const drawX =
       markerPadding +
       (
-        x / (prices.length - 1)
+        index /
+        (prices.length - 1)
       ) *
       (
         canvas.width -
         markerPadding * 2
       );
 
-    if (x === 0) {
-
+    if (index === 0) {
       ctx.moveTo(
         drawX,
         y
-     );
-
+      );
     } else {
-
       ctx.lineTo(
         drawX,
         y
       );
     }
-  
   }
-
 
   ctx.strokeStyle = "#ff3b3b";
   ctx.lineWidth = 2;
   ctx.stroke();
-  
-const totalSoldBN =
-  await readExchange.totalSold();
 
-const currentSold =
-  Number(
-    ethers.formatEther(
-      totalSoldBN
-    )
-  );
-
-const progress =
-  currentSold / unlockedSupply;
-
-const markerRadius = 6;
-
-const markerX =
-  markerPadding +
-  progress *
-  (
-    canvas.width -
-    markerPadding * 2
-  );
-
-const currentPrice =
-  Number(
-    ethers.formatEther(
-      await readExchange.getPrice(
-        totalSoldBN
+  const progress =
+    Math.min(
+      1,
+      Math.max(
+        0,
+        currentSold /
+        unlockedSupply
       )
-    )
-  );
+    );
 
-const markerY =
-  canvas.height -
-  verticalPadding -
-  (
-    (currentPrice - minPrice)
-    /
-    (maxPrice - minPrice)
-  ) *
-  (
+  const markerX =
+    markerPadding +
+    progress *
+    (
+      canvas.width -
+      markerPadding * 2
+    );
+
+  const currentX =
+    currentSold /
+    1_000_000_000;
+
+  const currentPrice =
+    (
+      1 +
+      14 *
+      currentX *
+      currentX
+    ) /
+    polUsd;
+
+  const markerY =
     canvas.height -
-    verticalPadding * 2
+    verticalPadding -
+    (
+      (
+        currentPrice -
+        minPrice
+      ) /
+      priceRange
+    ) *
+    (
+      canvas.height -
+      verticalPadding * 2
+    );
+
+  ctx.beginPath();
+
+  ctx.arc(
+    markerX,
+    markerY,
+    6,
+    0,
+    Math.PI * 2
   );
 
-ctx.beginPath();
+  ctx.fillStyle = "#4dff88";
+  ctx.fill();
 
-ctx.arc(
-  markerX,
-  markerY,
-  markerRadius,
-  0,
-  Math.PI * 2
-);
-
-ctx.fillStyle = "#4dff88";
-ctx.fill();
-
-ctx.shadowBlur = 0;
-
-ctx.strokeStyle = "#ffffff";
-ctx.lineWidth = 2;
-ctx.stroke();
-
+  ctx.shadowBlur = 0;
+  ctx.strokeStyle = "#ffffff";
+  ctx.lineWidth = 2;
+  ctx.stroke();
 }
 
-// ===== CONNECT FIX =====
-window.addEventListener("DOMContentLoaded", () => {
+// ===== PAGE AND WALLET INITIALIZATION =====
+async function waitForLaborWallet(
+  timeoutMs = 10000
+) {
+
+  const started =
+    Date.now();
+
+  while (
+    !window.LaborWallet &&
+    Date.now() - started < timeoutMs
+  ) {
+
+    await new Promise(
+      resolve =>
+        setTimeout(
+          resolve,
+          100
+        )
+    );
+  }
+
+  return window.LaborWallet ||
+    null;
+}
+
+async function initializeExchangePage() {
 
   const connectBtn =
-    document.getElementById("connectBtn");
+    document.getElementById(
+      "connectBtn"
+    );
 
   connectBtn.onclick =
     connectWallet;
 
   initialLoad();
 
-});
+  try {
 
-// ===== AUTO RECONNECT =====
-window.addEventListener(
-  "load",
-  async () => {
+    const laborWallet =
+      await waitForLaborWallet();
 
-    try {
+    if (!laborWallet) {
 
-      if (!window.LaborWallet) {
-        return;
-      }
+      setGateStatus(
+        "Wallet connection system failed to load. Refresh the page.",
+        "error"
+      );
 
-      const wallet =
-        await window.LaborWallet.reconnect();
-
-      if (!wallet) {
-        return;
-      }
-
-      if (walletInitialized) {
-        return;
-      }
-
-      walletInitialized = true;
-
-      connectWallet();
-
-    } catch (err) {
-
-      console.error(err);
-    }
-  }
-);
-
-window.addEventListener(
-  "laborWalletConnected",
-  () => {
-
-    if (walletInitialized) {
       return;
     }
 
-    walletInitialized = true;
+    const wallet =
+      await laborWallet.reconnect();
 
-    connectWallet();
+    if (
+      wallet &&
+      !walletInitialized
+    ) {
 
+      await applyConnectedWallet(
+        wallet
+      );
+    }
+
+  } catch (err) {
+
+    console.error(
+      "Wallet reconnect failed:",
+      err
+    );
+
+    // A failed silent reconnect should not
+    // prevent a manual connection.
+    connectBtn.disabled = false;
+    connectBtn.innerText =
+      "Connect Wallet";
   }
-);
+}
+
+if (
+  document.readyState ===
+  "loading"
+) {
+
+  window.addEventListener(
+    "DOMContentLoaded",
+    initializeExchangePage,
+    {
+      once: true
+    }
+  );
+
+} else {
+
+  initializeExchangePage();
+}

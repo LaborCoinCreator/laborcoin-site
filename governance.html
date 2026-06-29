@@ -27,6 +27,7 @@
 
   <link rel="manifest" href="manifest.json">
   <link rel="apple-touch-icon" href="assets/logo.png">
+  <meta name="mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-title" content="LaborCoin">
   <meta name="apple-mobile-web-app-status-bar-style" content="black">
@@ -72,6 +73,15 @@
     <li>Passport verification</li>
 
   </ul>
+
+  <p>
+
+    Anyone may view proposals. Any connected
+    wallet may execute an approved proposal
+    during its execution window. Creating and
+    voting require LABRV and identity verification.
+
+  </p>
 
   <p>
 
@@ -199,6 +209,10 @@
       <input
         id="recipientAddress"
         placeholder="Recipient Address"
+        type="text"
+        inputmode="text"
+        autocomplete="off"
+        spellcheck="false"
       >
 
       <div id="proposalAmountSection">
@@ -223,6 +237,11 @@
           <input
             id="treasuryAmount"
             placeholder="Amount (POL)"
+            type="number"
+            min="0"
+            step="any"
+            inputmode="decimal"
+            autocomplete="off"
           >
 
     <button
@@ -300,11 +319,22 @@
 
 </section>
 
-<section id="proposalFeedSection" class="hidden">
+<section id="proposalFeedSection">
 
   <h2>Proposal Feed</h2>
 
-  <div id="proposalFeed"></div>
+  <p
+    class="status"
+    style="text-align:center;"
+  >
+    Proposals are public. Connect a wallet only when voting or executing.
+  </p>
+
+  <div id="proposalFeed">
+    <div class="trade-box">
+      Loading proposals...
+    </div>
+  </div>
 
 </section>
 

@@ -54,6 +54,12 @@ async () => {
 
   try {
 
+    if (!window.LaborWallet) {
+      throw new Error(
+        "Wallet system is still loading. Please wait a moment and try again."
+      );
+    }
+
     setStatus(
       "Opening wallet connection..."
     );
@@ -64,6 +70,8 @@ async () => {
     const wallet =
       await window.LaborWallet.connect();
 
+    walletInitialized = true;
+
     provider =
       wallet.provider;
 
@@ -72,6 +80,8 @@ async () => {
 
     connectBtn.style.display =
       "none";
+
+    donateBtn.disabled = false;
 
     setStatus(
       "Ready to donate",
@@ -126,6 +136,8 @@ async () => {
       return;
     }
 
+    donateBtn.disabled = true;
+
     setStatus(
       "Submitting donation..."
     );
@@ -157,9 +169,16 @@ async () => {
     console.error(err);
 
     setStatus(
-      "Donation failed",
+      err.code === 4001 ||
+      err.code === "ACTION_REJECTED"
+        ? "Donation cancelled"
+        : "Donation failed",
       "error"
     );
+
+  } finally {
+
+    donateBtn.disabled = false;
   }
 };
 
@@ -192,20 +211,5 @@ window.addEventListener(
 
       console.error(err);
     }
-  }
-);
-
-window.addEventListener(
-  "laborWalletConnected",
-  () => {
-
-    if (walletInitialized) {
-      return;
-    }
-
-    walletInitialized = true;
-
-    connectBtn.click();
-
   }
 );

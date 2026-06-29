@@ -1,4 +1,4 @@
-const CACHE_NAME = "laborcoin-pwa-v36";
+const CACHE_NAME = "laborcoin-pwa-v39";
 
 const APP_SHELL = [
   "/",
@@ -17,6 +17,12 @@ const APP_SHELL = [
   "/style.css",
   "/manifest.json",
   "/wallet.js",
+  "/exchange.js",
+  "/dao.js",
+  "/governance.js",
+  "/donate.js",
+  "/metrics.js",
+  "/pwa.js",
 
   "/assets/favicon.png",
   "/assets/logo.png",
