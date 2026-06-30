@@ -21,15 +21,7 @@
 <meta name="apple-mobile-web-app-title" content="LaborCoin">
 <meta name="apple-mobile-web-app-status-bar-style" content="black">
 
-<style id="style-mermaid">
-:root {
-  --mermaid-theme: dark;
-  --mermaid-sequence-numbers: off;
-  --mermaid-flowchart-curve: linear;
-  --mermaid--gantt-left-padding: 75;
-  --sequence-theme: simple;
-}
-
+<style id="whitepaper-rendering-helpers">
 .mathjax-block {
     max-width: 100%;
     margin: 25px auto;
@@ -38,20 +30,30 @@
     -webkit-overflow-scrolling: touch;
 }
 
-.mathjax-block svg {
+.mathjax-block svg,
+.mathjax-block mjx-container {
     max-width: 100%;
     height: auto;
 }
 
-.whitepaper-container figure.table-figure {
+.whitepaper-container figure.table-figure,
+.whitepaper-container pre,
+.mermaid-figure {
+    max-width: 100%;
     overflow-x: auto;
     -webkit-overflow-scrolling: touch;
 }
 
-.whitepaper-container pre {
-    max-width: 100%;
-    overflow-x: auto;
-    -webkit-overflow-scrolling: touch;
+.mermaid-source {
+    border-color: #ff3b3b !important;
+}
+
+.mermaid-render-error {
+    max-width: 75ch;
+    margin: 12px auto;
+    color: #ff8a8a;
+    text-align: center;
+    line-height: 1.5;
 }
 </style>
 
@@ -72,9 +74,11 @@ body {
 /* Main Content Width */
 
 .whitepaper-container {
+    width: 100%;
     max-width: 900px;
     margin: 0 auto;
     padding: 40px 20px 80px;
+    box-sizing: border-box;
 }
 
 /* Metadata */
@@ -170,9 +174,34 @@ body {
 
 /* Code Blocks */
 
-.whitepaper-container pre,
-.whitepaper-container code {
+.whitepaper-container pre {
+    max-width: 100%;
+    margin: 28px auto;
+    padding: 18px;
     overflow-x: auto;
+    box-sizing: border-box;
+    border: 1px solid #2b2b2b;
+    border-radius: 8px;
+    background: #111;
+    color: #e6e6e6;
+    line-height: 1.6;
+    white-space: pre;
+    -webkit-overflow-scrolling: touch;
+}
+
+.whitepaper-container code {
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+}
+
+.whitepaper-container p code,
+.whitepaper-container li code,
+.whitepaper-container td code {
+    padding: 0.12em 0.35em;
+    border: 1px solid #2b2b2b;
+    border-radius: 4px;
+    background: #151515;
+    color: #f1f1f1;
+    overflow-wrap: anywhere;
 }
 
 /* CTA Buttons */
@@ -189,16 +218,30 @@ body {
    MERMAID
    ===================================================== */
 
-.mermaid {
-    text-align: center;
+.mermaid-figure {
+    width: 100%;
     margin: 50px auto;
+    padding: 18px;
+    box-sizing: border-box;
+    border: 1px solid #222;
+    border-radius: 10px;
+    background: #101010;
+}
+
+.mermaid {
+    width: 100%;
+    text-align: center;
+    overflow-x: auto;
+    overflow-y: hidden;
+    -webkit-overflow-scrolling: touch;
 }
 
 .mermaid svg {
     display: block;
-    margin: auto;
+    width: auto;
     max-width: 100%;
     height: auto;
+    margin: 0 auto;
 }
 
 /* Text */
@@ -210,14 +253,15 @@ body {
 .mermaid span {
     fill: #ffffff !important;
     color: #ffffff !important;
+    font-family: 'Inter', sans-serif !important;
 }
 
-/* Nodes */
+/* Flowchart and state nodes */
 
-.mermaid rect,
-.mermaid polygon,
-.mermaid ellipse,
-.mermaid circle,
+.mermaid .node rect,
+.mermaid .node polygon,
+.mermaid .node ellipse,
+.mermaid .node circle,
 .mermaid .label-container,
 .mermaid .statediagram-state rect.basic {
     fill: #111111 !important;
@@ -225,16 +269,17 @@ body {
     stroke-width: 2px !important;
 }
 
-/* Edge Labels */
+/* Edge labels */
 
 .mermaid .edgeLabel,
 .mermaid .edgeLabel rect,
 .mermaid .labelBkg {
     fill: #111111 !important;
+    background-color: #111111 !important;
     opacity: 1 !important;
 }
 
-/* Lines */
+/* Lines and arrowheads */
 
 .mermaid .flowchart-link,
 .mermaid .edgePath path,
@@ -243,8 +288,6 @@ body {
     stroke-width: 2px !important;
 }
 
-/* Arrowheads */
-
 .mermaid .arrowheadPath,
 .mermaid .arrowMarkerPath,
 .mermaid marker path {
@@ -252,13 +295,14 @@ body {
     stroke: #ffffff !important;
 }
 
-/* ===== BONDING CURVE CHART ===== */
+/* XY chart */
 
 .mermaid .background {
     fill: #111111 !important;
 }
 
-.mermaid .line-plot-0 path {
+.mermaid .line-plot-0 path,
+.mermaid path.line-plot-0 {
     stroke: #e53935 !important;
     stroke-width: 4px !important;
 }
@@ -266,10 +310,6 @@ body {
 .mermaid .tick line,
 .mermaid .domain {
     stroke: #ffffff !important;
-}
-
-.mermaid text {
-    fill: #ffffff !important;
 }
 
 /* =====================================================
@@ -289,6 +329,15 @@ body {
     .whitepaper-container table {
         display: block;
         overflow-x: auto;
+    }
+
+    .mermaid-figure {
+        padding: 12px;
+    }
+
+    .mermaid svg {
+        max-width: none;
+        min-width: 680px;
     }
 
 }
@@ -380,7 +429,7 @@ body {
 <hr />
 <h1 id='table-of-contents'>Table of Contents</h1>
 <h2 id='core-specification'>Core Specification</h2>
-<ol start='' >
+<ol>
 <li>Executive Summary</li>
 <li>Problem Statement</li>
 <li>LaborCoin Design</li>
@@ -693,7 +742,7 @@ Protocol ownership</p>
 <hr />
 <h2 id='42-architectural-overview'>4.2 Architectural Overview</h2>
 <p>The LaborCoin protocol consists of six primary components:</p>
-<ol start='' >
+<ol>
 <li>LABR Utility Token</li>
 <li>Bonding Curve Exchange</li>
 <li>Registration System</li>
@@ -857,7 +906,7 @@ Protocol ownership</p>
 <p>Treasury distributions combine a governance-authorization process with a separate treasury-value transfer.</p>
 <p>The Aragon DAO holds custody of treasury assets. Governance V13 does not receive or hold proposal funds.</p>
 <p>The process proceeds through the following stages:</p>
-<ol start='' >
+<ol>
 <li>An eligible LABRV holder creates a treasury proposal.</li>
 <li>Eligible participants vote during the fourteen-day voting period.</li>
 <li>Governance V13 evaluates participation and approval.</li>
@@ -1824,7 +1873,7 @@ Participation in protocol economics</p>
 <h2 id='93-governance-eligibility'>9.3 Governance Eligibility</h2>
 <p>Governance onboarding combines an off-chain eligibility workflow with on-chain enforcement.</p>
 <p>The official workflow requires:</p>
-<ol start='' >
+<ol>
 <li>Ownership of at least one LABR.</li>
 <li>Passport evaluation under the verifier&#39;s published score policy.</li>
 <li>Acceptance of the LaborCoin attestation in the official interface.</li>
@@ -3761,7 +3810,7 @@ Registration
 <hr />
 <h2 id='152-threat-categories'>15.2 Threat Categories</h2>
 <p>The principal threat categories are:</p>
-<ol start='' >
+<ol>
 <li>Identity and registration threats</li>
 <li>Governance authorization and capture threats</li>
 <li>Treasury and DAO permission threats</li>
@@ -4537,7 +4586,7 @@ Registration
 <hr />
 <h2 id='168-purchase-labr'>16.8 Purchase LABR</h2>
 <p>A purchase follows this sequence:</p>
-<ol start='' >
+<ol>
 <li>The participant submits POL and <code>minTokensOut</code>.</li>
 <li>Exchange V4 reads the current bonding-curve state.</li>
 <li>Exchange V4 reads the fixed Chainlink POL/USD feed.</li>
@@ -4579,7 +4628,7 @@ Registration
 <h2 id='1610-sell-eligible-labr'>16.10 Sell Eligible LABR</h2>
 <p>A participant may attempt to sell LABR through Exchange V4.</p>
 <p>The participant:</p>
-<ol start='' >
+<ol>
 <li>Reviews the expected POL output.</li>
 <li>Reviews the submitted <code>minPOL</code>.</li>
 <li>Approves Exchange V4 to transfer LABR.</li>
@@ -4662,7 +4711,7 @@ Registration
 <hr />
 <h2 id='1614-receive-verifier-authorization'>16.14 Receive Verifier Authorization</h2>
 <p>The participant:</p>
-<ol start='' >
+<ol>
 <li>Connects the intended registration wallet.</li>
 <li>Confirms that the wallet holds at least 1 LABR.</li>
 <li>Requests identity verification.</li>
@@ -4808,7 +4857,7 @@ Registration
 <hr />
 <h2 id='1623-treasury-distribution-workflow'>16.23 Treasury Distribution Workflow</h2>
 <p>Approved treasury distributions combine:</p>
-<ol start='' >
+<ol>
 <li>Governance authorization</li>
 <li>DAO custody and execution</li>
 <li>Treasury Module V1 forwarding</li>
@@ -4856,7 +4905,7 @@ Registration
 
 </ul>
 <p>A successful distribution follows this sequence:</p>
-<ol start='' >
+<ol>
 <li>A LABRV holder creates a proposal.</li>
 <li>Eligible LABRV holders vote.</li>
 <li>Governance V13 evaluates the voting thresholds.</li>
@@ -4876,7 +4925,7 @@ Registration
 <h2 id='1624-receive-approved-support'>16.24 Receive Approved Support</h2>
 <p>A recipient may be a worker organization, strike-support effort, mutual-aid initiative, or another approved worker-centered recipient.</p>
 <p>If execution succeeds:</p>
-<ol start='' >
+<ol>
 <li>The Aragon DAO supplies the approved POL.</li>
 <li>Treasury Module V1 receives the POL as call value.</li>
 <li>Treasury Module V1 forwards the POL.</li>
@@ -5396,7 +5445,7 @@ High-level relationship between all core protocol components.</p>
 <p>External signing authority for registration and authenticated governance actions. It cannot directly mint, vote, create proposals, or transfer treasury funds.</p>
 <h2 id='188-final-deployment-sequence'>18.8 Final Deployment Sequence</h2>
 <p>The final deployment record is:</p>
-<ol start='' >
+<ol>
 <li><strong>LABR Token</strong> — deployed April 2, 2025.</li>
 <li><strong>LaborVote (LABRV) V7</strong> — deployed June 16, 2026.</li>
 <li><strong>LaborCoin Registration V4</strong> — deployed June 22, 2026.</li>
@@ -6617,14 +6666,14 @@ High-level relationship between all core protocol components.</p>
 <h2 id='h1-introduction'>H.1 Introduction</h2>
 <p>LaborCoin separates economic activity, treasury custody, governance authorization, and fund distribution into distinct on-chain paths.</p>
 <p>The protocol contains two different forms of flow:</p>
-<ol start='' >
+<ol>
 <li><strong>Value flow</strong>, which describes where POL and LABR move.</li>
 <li><strong>Authority flow</strong>, which describes who may authorize a treasury distribution.</li>
 
 </ol>
 <p>Governance V13 does not hold treasury assets. The Aragon DAO is the treasury custodian. Governance V13 records proposals and votes, evaluates fixed conditions, and constructs a constrained DAO execution request for approved native POL transfers.</p>
 <p>The principal economic systems are:</p>
-<ol start='' >
+<ol>
 <li>LABR distribution through Exchange V4</li>
 <li>Exchange liquidity accumulation and depletion</li>
 <li>DAO treasury accumulation</li>
@@ -6690,7 +6739,7 @@ High-level relationship between all core protocol components.</p>
 <h2 id='h4-sell-side-economic-flow'>H.4 Sell-Side Economic Flow</h2>
 <p>A participant selling LABR first authorizes Exchange V4 to transfer the submitted LABR amount.</p>
 <p>Exchange V4 then:</p>
-<ol start='' >
+<ol>
 <li>Calculates the current price from the pre-sale <code>totalSold</code> state.</li>
 <li>Transfers LABR from the seller.</li>
 <li>Measures the LABR actually received after token-level transfer mechanics.</li>
@@ -6813,7 +6862,7 @@ High-level relationship between all core protocol components.</p>
 <hr />
 <h2 id='h8-treasury-distribution-execution'>H.8 Treasury Distribution Execution</h2>
 <p>A successful distribution follows this sequence:</p>
-<ol start='' >
+<ol>
 <li>A participant holding LABRV creates a treasury proposal using a valid verifier authorization.</li>
 <li>The proposal stores its recipient, native POL amount, description, start time, and end time.</li>
 <li>Eligible LABRV holders vote during the fourteen-day voting period.</li>
@@ -7366,5 +7415,183 @@ State transition model governing proposals.</p>
 </ul>
 <hr />
 <h1 id='end-of-document'>End of Document</h1>
+
+</main>
+
+<script>
+(function () {
+  "use strict";
+
+  const MERMAID_SOURCES = [
+    "https://cdn.jsdelivr.net/npm/mermaid@11.16.0/dist/mermaid.min.js",
+    "https://unpkg.com/mermaid@11.16.0/dist/mermaid.min.js"
+  ];
+
+  function loadScript(source) {
+    return new Promise((resolve, reject) => {
+      const script = document.createElement("script");
+      script.src = source;
+      script.async = true;
+      script.crossOrigin = "anonymous";
+      script.onload = resolve;
+      script.onerror = () => reject(new Error("Unable to load " + source));
+      document.head.appendChild(script);
+    });
+  }
+
+  async function loadMermaid() {
+    if (window.mermaid) {
+      return window.mermaid;
+    }
+
+    let lastError = null;
+
+    for (const source of MERMAID_SOURCES) {
+      try {
+        await loadScript(source);
+
+        if (window.mermaid) {
+          return window.mermaid;
+        }
+      } catch (error) {
+        lastError = error;
+        console.warn("Mermaid source failed:", source, error);
+      }
+    }
+
+    throw lastError || new Error("Mermaid could not be loaded.");
+  }
+
+  function showGlobalMermaidFallback(error) {
+    console.error("Mermaid diagrams could not be rendered:", error);
+
+    document
+      .querySelectorAll("pre > code.language-mermaid, pre > code[lang='mermaid']")
+      .forEach(code => {
+        code.closest("pre")?.classList.add("mermaid-source");
+      });
+  }
+
+  async function renderMermaidDiagrams() {
+    const codeBlocks = Array.from(
+      document.querySelectorAll(
+        "pre > code.language-mermaid, pre > code[lang='mermaid']"
+      )
+    );
+
+    if (codeBlocks.length === 0) {
+      return;
+    }
+
+    let mermaidLibrary;
+
+    try {
+      mermaidLibrary = await loadMermaid();
+    } catch (error) {
+      showGlobalMermaidFallback(error);
+      return;
+    }
+
+    mermaidLibrary.initialize({
+      startOnLoad: false,
+      securityLevel: "strict",
+      theme: "base",
+      deterministicIds: true,
+      deterministicIDSeed: "laborcoin-whitepaper-v1",
+      fontFamily: "Inter, sans-serif",
+      flowchart: {
+        curve: "linear",
+        htmlLabels: true,
+        useMaxWidth: true
+      },
+      themeVariables: {
+        background: "#0d0d0d",
+        primaryColor: "#111111",
+        primaryTextColor: "#ffffff",
+        primaryBorderColor: "#ff3b3b",
+        secondaryColor: "#171717",
+        secondaryTextColor: "#ffffff",
+        secondaryBorderColor: "#ff3b3b",
+        tertiaryColor: "#111111",
+        tertiaryTextColor: "#ffffff",
+        tertiaryBorderColor: "#ff3b3b",
+        lineColor: "#ffffff",
+        textColor: "#ffffff",
+        mainBkg: "#111111",
+        nodeBorder: "#ff3b3b",
+        clusterBkg: "#111111",
+        clusterBorder: "#ff3b3b",
+        edgeLabelBackground: "#111111",
+        titleColor: "#ffffff",
+        axisColor: "#ffffff",
+        tickTextColor: "#ffffff",
+        xyChart: {
+          backgroundColor: "#111111",
+          titleColor: "#ffffff",
+          xAxisLabelColor: "#ffffff",
+          xAxisTitleColor: "#ffffff",
+          xAxisTickColor: "#ffffff",
+          xAxisLineColor: "#ffffff",
+          yAxisLabelColor: "#ffffff",
+          yAxisTitleColor: "#ffffff",
+          yAxisTickColor: "#ffffff",
+          yAxisLineColor: "#ffffff",
+          plotColorPalette: "#e53935"
+        }
+      }
+    });
+
+    for (let index = 0; index < codeBlocks.length; index += 1) {
+      const code = codeBlocks[index];
+      const source = code.textContent.trim();
+      const pre = code.closest("pre");
+
+      if (!pre || !source) {
+        continue;
+      }
+
+      try {
+        const renderId = "laborcoin-mermaid-" + (index + 1);
+        const rendered = await mermaidLibrary.render(renderId, source);
+
+        const figure = document.createElement("figure");
+        figure.className = "mermaid-figure";
+        figure.setAttribute("aria-label", "Whitepaper diagram " + (index + 1));
+
+        const diagram = document.createElement("div");
+        diagram.className = "mermaid";
+        diagram.innerHTML = rendered.svg;
+
+        figure.appendChild(diagram);
+        pre.replaceWith(figure);
+
+        if (typeof rendered.bindFunctions === "function") {
+          rendered.bindFunctions(diagram);
+        }
+      } catch (error) {
+        console.error("Mermaid diagram " + (index + 1) + " failed:", error);
+        pre.classList.add("mermaid-source");
+
+        const message = document.createElement("p");
+        message.className = "mermaid-render-error";
+        message.textContent =
+          "This diagram could not be rendered. Its Mermaid source is shown below.";
+        pre.before(message);
+      }
+    }
+  }
+
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", renderMermaidDiagrams, {
+      once: true
+    });
+  } else {
+    renderMermaidDiagrams();
+  }
+})();
+</script>
+
+<script src="pwa.js"></script>
+
 </body>
 </html>
