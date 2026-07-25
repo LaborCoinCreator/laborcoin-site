@@ -4,13 +4,15 @@
 
 **Status:** Precompilation source candidate, not deployed  
 **Network:** Polygon mainnet, chain ID 137  
-**Document date:** July 24, 2026
+**Document date:** July 25, 2026
 
 ---
 
 ## Disclaimer
 
-LaborCoin is experimental public infrastructure. This paper describes a source candidate, intended deployment procedure, and fixed economic and governance rules. It does not promise financial returns, price stability, liquidity, uninterrupted availability, legal treatment, tax treatment, successful labor outcomes, identity-provider availability, or freedom from smart-contract, network, governance, interface, key-management, and operational risk.
+LaborCoin is experimental public infrastructure intended to support working-class mutual aid and collective action. This paper explains the project's intended social function, the current source candidate, the proposed deployment procedure, and the fixed economic and governance rules that would govern the system after launch.
+
+LaborCoin does not promise financial returns, price stability, liquidity, uninterrupted availability, favorable legal or tax treatment, successful labor outcomes, identity-provider availability, or freedom from smart-contract, network, governance, interface, key-management, and operational risk.
 
 Revision 7 has not yet been compiled under the frozen profile, completed every unit, fuzz, invariant, fork, integration, and independent-review requirement, or been deployed. All replacement addresses and runtime commitments are pending. Nothing in this paper is legal, investment, tax, or financial advice.
 
@@ -18,17 +20,27 @@ Revision 7 has not yet been compiled under the frozen profile, completed every u
 
 # 1. Executive Summary
 
-LaborCoin is designed as public infrastructure for accumulating native POL and allocating it through constrained democratic governance to worker-support recipients. The protocol attempts to combine transparent economic rules, equal-member governance, equal-per-holder dividends, narrow treasury authority, and minimal post-launch contract control.
+Workers have power when they act together, but collective action is difficult to sustain when employers can immediately cut off wages and workers still have to pay for food, housing, healthcare, transportation, childcare, and other necessities. Economic retaliation turns a labor dispute into a test of who can survive without income the longest. In most cases, the employer begins with far greater reserves.
+
+At the same time, people outside a workplace may strongly support a strike or organizing campaign but have no clear, durable, and accountable way to help. Support is often scattered across temporary fundraisers, separate organizations, private accounts, and social-media posts that disappear from public attention. The public may want to stand with workers but still lack a common place to build resources, see what is available, evaluate requests, and decide where aid should go.
+
+LaborCoin is designed to help close that gap. It is public infrastructure intended to connect the broader public with people taking direct action to improve working-class material conditions. Participants can acquire LABR or contribute directly to the Aragon DAO treasury. Fixed economic flows add POL to the common treasury, and verified governance members decide through one-member-one-vote proposals which recipients should receive aid.
+
+Striking workers are the clearest use case because lost wages are one of the strongest weapons employers use against collective action. The same infrastructure can support other working-class causes when participants democratically agree that the transfer advances mutual aid, organizing, legal defense, communications, emergency support, or another part of the class struggle. The contracts do not determine which cause is worthy. They provide a transparent process through which participants can make that judgment together.
+
+LaborCoin is therefore a vehicle for solidarity, not technology for its own sake. The blockchain records balances, rules, votes, permissions, and transfers so that the system does not have to depend on a private administrator's promises. The technology matters only to the extent that it helps people pool resources, coordinate support, resist unilateral control, and sustain action that would otherwise be broken by economic pressure.
+
+The immediate goal is practical: make it easier to build and democratically distribute mutual aid to people engaged in collective action. The longer-term possibility is scale. A widely adopted system could support prolonged regional or national campaigns and, if mass participation ever made it possible, help place substantial resources behind a general strike. A treasury capable of distributing billions of dollars would require extraordinary public participation and is not guaranteed, but the architecture is intended to remain usable if participation grows to that level.
 
 The permanent dividend principle is central:
 
 > Every verified participant holding at least 1 LABR receives exactly one equal dividend share. Holding more LABR does not increase that participant's dividend weight.
 
-This distinguishes LaborCoin from common token systems that convert wealth into greater income and governance power. A wallet holding 1 LABR, a wallet holding 100 LABR, and a wallet holding 10,000 LABR each have one dividend unit when verified and eligible. LABR quantity affects the amount a participant can sell and the economic exposure they hold, but it does not multiply their dividend share or governance vote.
+This prevents the holder distribution from turning wealth into greater recurring income. A verified eligible wallet holding 1 LABR, 100 LABR, or 10,000 LABR receives one dividend unit. LABR quantity affects how much a participant can sell and the economic exposure they hold, but it does not multiply their dividend share or governance vote.
 
 Revision 7 uses a shared permanent Identity Registry. A direct Polygon wallet obtains a Human Passport score through a fixed scorer. When the score is at least 15.000, a fixed verifier may issue an EIP-712 authorization valid for no more than one hour. The wallet submits that authorization on-chain once. Successful verification is permanent and reused for official Exchange access, equal-holder dividend eligibility, dividend claims, and optional governance registration.
 
-The score gate is intended to reduce simple Sybil behavior and make every additional eligible wallet independently satisfy the same published scorer. It is not presented as a mathematical proof that one natural person controls only one wallet. Accessibility is prioritized by retaining a threshold of 15 rather than imposing government-ID, biometric, or higher-score requirements.
+The score gate is intended to reduce simple Sybil behavior and require every additional eligible wallet to satisfy the same published scorer. It is not proof that one natural person controls only one wallet. The threshold remains 15 to avoid imposing government-ID, biometric, or substantially higher-score requirements that would exclude many ordinary participants.
 
 The candidate consists of seven custom contracts:
 
@@ -40,26 +52,61 @@ The candidate consists of seven custom contracts:
 6. **Proposal Text Policy V1.0.1**, which applies fixed proposal-description rules.
 7. **LaborCoin Governance V15.0.0**, which provides one-member-one-vote native-POL treasury allocation through the existing Aragon DAO.
 
-The existing Aragon DAO remains the treasury custodian. Governance does not custody funds. A successful proposal can request exactly one native-POL transfer from the DAO to the approved recipient. Governance cannot change tokenomics, mint LABR, alter thresholds, pause trading, execute arbitrary calldata, upgrade contracts, or recover recipient funds.
+The existing Aragon DAO remains the treasury custodian. Governance does not hold proposal funds. A successful proposal can request exactly one native-POL transfer from the DAO to the approved recipient. Governance cannot change tokenomics, mint LABR, alter thresholds, pause trading, execute arbitrary calldata, upgrade contracts, or recover recipient funds.
 
 Revision 7 is a replacement source candidate. The historical V4/V7/V13 deployment and the superseded Revision 6 candidate remain preserved for transparency. Neither is represented as the final replacement system.
 
 ---
 
-# 2. Problem, Scope, and Non-Objectives
+# 2. Problem, Purpose, Scope, and Non-Objectives
 
-## 2.1 Worker-support infrastructure
+## 2.1 Economic retaliation limits collective action
 
-Workers participating in strikes, lockouts, organizing campaigns, mutual aid, or other labor actions can face immediate financial pressure. Income may stop while rent, food, transportation, health, childcare, legal, and communication costs continue. Existing support systems often rely on temporary fundraisers, private organizational accounts, payment processors, and informal distribution decisions. Those systems can be effective, but participants may have limited ability to inspect balances, fixed contribution rules, allocation thresholds, and completed transfers.
+A strike can stop production, disrupt distribution, and force an employer to negotiate. That leverage weakens when workers cannot afford to remain off the job. Wages may stop immediately while rent, food, transportation, healthcare, childcare, debt, legal costs, and communication expenses continue. Employers often have access to credit, retained profits, insurance, investors, and large cash reserves. Individual workers usually do not.
 
-LaborCoin addresses a narrow infrastructure question: can a transparent pool of native assets be accumulated under publicly fixed economic rules and allocated through a constrained one-member-one-vote process without allowing token wealth to determine voting or dividend weight?
+This imbalance is not incidental. The threat of missed pay, discipline, termination, benefit loss, or prolonged uncertainty is one of the main ways collective action is discouraged and defeated. A group may have broad support and a legitimate demand but still be forced back to work because the immediate cost of continuing becomes unbearable.
 
-The protocol is not a replacement for unions, worker centers, strike committees, legal representation, collective bargaining, or human organizing. It is an economic and governance tool whose usefulness depends on social participation, recipient diligence, and real-world coordination.
+LaborCoin begins from a simple premise: collective action becomes more sustainable when people taking the risk are not left to absorb the economic retaliation alone.
 
-## 2.2 Design objectives
+## 2.2 The solidarity gap
+
+Public sympathy does not automatically become material support. People may see a strike, agree with the workers, and still be unsure where to send money, whether a fundraiser is legitimate, how much has already been raised, who controls the funds, or how the money will be distributed. Separate campaigns must repeatedly rebuild attention and trust from the beginning.
+
+Existing strike funds, unions, worker centers, mutual-aid networks, and public fundraisers remain essential. LaborCoin is not designed to displace them. It is intended to add a common, transparent layer through which the broader public can accumulate resources over time and direct them through a published democratic process.
+
+The system is meant to serve as a bridge between people who want to help and people who are directly fighting to improve working-class material conditions.
+
+## 2.3 Theory of change
+
+LaborCoin's theory of change follows a direct path:
+
+1. Economic retaliation makes strikes and other collective action difficult to sustain.
+2. A broad public can reduce that pressure by pooling resources before and during a campaign.
+3. Fixed economic rules and public treasury balances make the shared pool visible and inspectable.
+4. Verified participants can evaluate proposals and decide where aid should go without allowing token wealth to buy more votes.
+5. Approved funds can be transferred directly to a recipient chosen by the membership.
+6. Greater material support can give workers more time to organize, remain on strike, communicate, provide mutual aid, and force an employer or institution to respond.
+
+This mechanism cannot guarantee victory. Money does not replace workplace organization, strategy, trust, discipline, or mass participation. It can, however, address one concrete weakness that repeatedly limits direct action: the inability of ordinary people to withstand prolonged economic punishment.
+
+At small scale, the system may help a local campaign cover urgent expenses. At larger scale, it may help sustain coordinated action across workplaces or regions. At mass scale, the same structure could support a general strike backed by a large public treasury. The architecture is built so the basic rules do not need to change as participation grows.
+
+## 2.4 Scope of worker support
+
+Strikes are the primary use case, but the treasury is not limited to a single organizational form or legally recognized union. Participants may consider proposals involving striking workers, locked-out workers, organizing campaigns, emergency mutual aid, legal defense, communications, workplace committees, worker centers, or other causes that materially aid the working class.
+
+The protocol cannot decide whether a proposal advances the class struggle, accurately represents affected workers, or will distribute aid fairly. Those questions remain matters of investigation, discussion, political judgment, and democratic voting. The contracts only constrain how proposals are created, approved, and executed.
+
+LaborCoin is not a replacement for unions, strike committees, worker centers, collective bargaining, legal representation, political education, or face-to-face organizing. It is a funding and decision-making tool that can strengthen those efforts when people choose to use it.
+
+## 2.5 Design objectives
 
 The system seeks to provide:
 
+- a durable and publicly inspectable pool for working-class mutual aid;
+- a clear path for the general public to contribute to collective action;
+- democratic allocation without token-balance-weighted voting;
+- transparent balances, proposal records, vote totals, and completed transfers;
 - a fixed and inspectable LABR supply;
 - an official Exchange with deterministic POL-denominated pricing;
 - permanent wallet, transaction, and cooldown limits;
@@ -72,11 +119,13 @@ The system seeks to provide:
 - no post-launch custom-contract owner, pause, upgrade, or economic setter;
 - public source, compilation, deployment, and permission records.
 
-## 2.3 Non-objectives
+## 2.6 Non-objectives
 
 LaborCoin does not attempt to:
 
-- guarantee strike success, employment protection, or recipient conduct;
+- guarantee strike success, employment protection, public support, or recipient conduct;
+- determine which labor campaign or political cause deserves support;
+- replace unions, workplace organization, collective bargaining, or human deliberation;
 - guarantee a LABR market price or fiat value;
 - provide a stablecoin or price peg;
 - eliminate all Sybil behavior;
@@ -89,43 +138,57 @@ LaborCoin does not attempt to:
 - guarantee that Polygon, Human Passport, RPC providers, website hosting, or the verifier remain available;
 - replace legal, tax, security, or organizational advice.
 
-## 2.4 Why economic equality requires explicit code
+## 2.7 Why economic equality requires explicit code
 
-A token system can describe egalitarian goals while implementing wealth-weighted mechanics. Revision 7 therefore states the equality rule in contract accounting rather than relying on interface language. Dividend weight is a binary unit, not the LABR balance. Governance weight is one nontransferable LABRV, not the LABR balance. More tokens do not create more votes and do not create a larger holder-dividend percentage.
+A project can use egalitarian language while quietly allowing wealth to control income and decision-making. Revision 7 therefore places the equality rules in the contracts rather than leaving them as website promises.
 
-This does not make all economic outcomes equal. Participants can still hold different LABR quantities, experience different price exposure, and sell different amounts. The design specifically prevents token quantity from multiplying dividend and governance weight.
+Dividend weight is one binary unit for each verified eligible wallet, not the wallet's LABR balance. Governance weight is one nontransferable LABRV membership unit, not the participant's LABR holdings. More tokens do not create more votes and do not create a larger percentage of holder dividends.
+
+This does not make every participant economically equal. People may hold different amounts of LABR, face different risks, and have unequal access to wallets, gas, identity credentials, and information. The narrower commitment is enforceable and explicit: token quantity cannot be used to multiply governance or holder-dividend power.
 
 ---
 
 # 3. Design Principles
 
+The design principles translate the project's social purpose into rules that can be inspected and tested. They are intended to prevent the system from reproducing the same concentration of power it is meant to resist.
+
 ## 3.1 One verified holder, one dividend share
 
-A verified wallet with at least 1 LABR receives one equal share of each holder-dividend deposit made while eligible. A verified wallet with 10,000 LABR receives the same share as a verified wallet with 1 LABR. An unverified wallet receives no share.
+A verified wallet holding at least 1 LABR receives one equal share of each holder-dividend deposit made while eligible. A verified wallet holding 10,000 LABR receives the same share as a verified wallet holding 1 LABR. An unverified wallet receives no share.
 
 ## 3.2 One registered participant, one vote
 
-Registration mints exactly one LABRV. LABRV cannot be transferred, delegated, burned, approved, or multiplied for the same wallet. Governance checks both the LABRV balance and the matching Registration record.
+Registration mints exactly one LABRV. LABRV cannot be transferred, delegated, burned, approved, or multiplied for the same wallet. Governance checks both the LABRV balance and the matching Registration record. Economic wealth is therefore separated from formal voting power.
 
-## 3.3 Economic participation and governance remain distinct
+## 3.3 Supporting the system does not require governing it
 
-Identity verification is required for official economic participation, but governance registration remains an additional optional action. A verified participant may buy, hold, receive equal dividends, claim, and sell without registering for governance. Registration requires at least 1 LABR and creates permanent membership.
+Economic participation and governance registration remain distinct. A verified participant may buy, hold, receive equal dividends, claim, and sell without registering to vote. A participant who wants to help build the common pool should not be required to become a governance member.
 
-## 3.4 Contract enforcement over interface promises
+Governance registration is a separate, optional commitment. It requires at least 1 LABR and creates permanent membership.
 
-The website is not the security boundary. Identity, wallet, transaction, cooldown, dividend, and governance rules are enforced on-chain. A participant who calls contracts directly remains subject to the same rules.
+## 3.4 Rules must survive the website
 
-## 3.5 Narrow authority over recoverability
+The website explains and simplifies the system, but it is not the source of authority. Identity, wallet, transaction, cooldown, dividend, and governance rules are enforced on-chain. Calling the contracts directly does not bypass those rules.
 
-Revision 7 favors immutable, narrow behavior over administrative recovery. This reduces unilateral control but means mistakes can be permanent. The launch process and testing burden are therefore unusually important.
+## 3.5 Narrow authority over administrative convenience
 
-## 3.6 Transparent limitations
+Revision 7 favors fixed, narrow behavior over an administrator who can intervene later. This reduces the risk that a founder, company, compromised key, or future governing faction can rewrite the system. It also means mistakes can be permanent. The launch process and testing burden are therefore unusually important.
 
-The protocol does not claim one natural person per wallet. Human Passport scoring and credential deduplication raise costs and friction for simple duplicate participation, but coordinated or independently credentialed wallets may still pass. Equal-per-wallet dividends make this residual risk important and it is disclosed directly.
+## 3.6 Limitations must be stated plainly
+
+The protocol does not claim one natural person per wallet. Human Passport scoring and credential deduplication raise the cost and difficulty of simple duplicate participation, but coordinated or independently credentialed wallets may still pass. Equal-per-wallet dividends make this residual risk important, so the system describes the rule honestly rather than claiming perfect identity.
+
+## 3.7 Technology is an instrument
+
+LaborCoin does not treat blockchain use as an achievement by itself. The technology is justified only where it serves a practical working-class purpose: keeping public records, constraining authority, making treasury activity visible, enforcing equal voting rules, and allowing approved aid to move without relying on a private custodian's discretion.
+
+The success of the project must therefore be judged by whether it helps people organize solidarity and sustain material support, not by transaction volume, token price, or technical novelty.
 
 ---
 
 # 4. System Architecture and Trust Boundaries
+
+LaborCoin separates economic participation, identity verification, governance membership, proposal voting, and treasury custody so that no single custom contract controls the entire system. The following flow shows how the components work together.
 
 ## 4.1 Component flow
 
@@ -153,23 +216,31 @@ Governance V15 --> Aragon DAO --> approved recipient
 
 ## 4.2 Economic layer
 
-LABR and Exchange implement supply, official inventory, reserve accounting, direct transfers, official buys and sells, cooldown, wallet and transaction limits, fixed DAO contributions, and equal-holder dividend deposits and claims.
+LABR and Exchange provide the economic path through which participants enter, exit, and help build shared value. They implement the fixed supply, official inventory, curve reserve, direct transfers, official buys and sells, cooldown, wallet and transaction limits, fixed DAO contributions, and equal-holder dividend deposits and claims.
+
+The economic layer does not decide who receives treasury aid. Its role is to apply the published rules and direct the fixed treasury share to the DAO.
 
 ## 4.3 Identity layer
 
-Human Passport supplies a score under a fixed scorer. The verifier signs a narrow authorization. Identity Registry verifies the authorization on-chain and stores permanent status. The verifier never custodies user tokens and cannot trade or vote on behalf of a participant.
+Human Passport supplies a score under a fixed scorer. The verifier signs a narrow authorization, and Identity Registry checks that authorization on-chain before permanently recording the wallet's status.
+
+The verifier cannot hold user funds, trade for a participant, register the participant, or vote on the participant's behalf. Its authority is limited to signing qualifying identity authorizations.
 
 ## 4.4 Membership layer
 
-Registration requires verified status and at least 1 LABR. LaborVote mints one permanent nontransferable membership unit. Identity verification alone does not create governance rights.
+Registration requires verified status and at least 1 LABR. LaborVote then mints one permanent, nontransferable membership unit. Identity verification alone does not create governance rights, and holding additional LABR does not create additional memberships.
 
 ## 4.5 Governance layer
 
-Governance uses the Registration and LABRV state, a fixed proposal-text policy, fixed thresholds, and the existing Aragon DAO's execute permission. It can execute only one native-POL transfer with empty calldata.
+Governance is the decision-making path for treasury aid. It uses Registration and LABRV state, a fixed proposal-text policy, fixed voting thresholds, and the existing Aragon DAO's execute permission. A successful proposal can execute only one native-POL transfer with empty calldata to the approved recipient.
+
+Governance cannot operate the Exchange, rewrite token rules, or use the DAO for arbitrary contract calls.
 
 ## 4.6 External infrastructure
 
-Polygon consensus, Human Passport, the verifier service, RPC providers, domain registration, Netlify hosting, browser dependencies, and Aragon DAO permissions are external trust and availability surfaces. Immutable custom contracts do not make those services immutable.
+Polygon consensus, Human Passport, the verifier service, RPC providers, domain registration, Netlify hosting, browser dependencies, and Aragon DAO permissions remain external trust and availability surfaces. Immutable custom contracts do not make those services permanent or immune from disruption.
+
+The protocol therefore distinguishes between rules enforced by deployed contracts and services that participants still need in order to reach or use those contracts.
 
 ## 4.7 Component registry
 
@@ -190,7 +261,9 @@ Polygon consensus, Human Passport, the verifier service, RPC providers, domain r
 
 ## 5.1 Purpose
 
-Identity Registry provides a single permanent identity status used by all economic and membership components. Earlier architectures could place verification only in the frontend or duplicate authorization logic across contracts. Frontend-only gating can be bypassed by direct calls. Duplicate contract gates increase code and configuration risk. Revision 7 therefore centralizes verification in one immutable registry.
+Identity Registry gives the system one shared answer to a basic question: has this wallet completed the required identity check? Exchange, LABR dividend accounting, and Registration all read the same permanent status.
+
+Keeping this rule on-chain prevents the website from granting access by appearance alone. It also avoids repeating separate verification logic in several contracts, where mismatched scorers, thresholds, or signature rules could create conflicting results. Revision 7 therefore centralizes verification in one immutable registry.
 
 ## 5.2 Score rule
 
@@ -363,7 +436,9 @@ Balance above 1 LABR does not increase weight.
 
 ## 7.2 Why token-proportional accounting is rejected
 
-A balance-weighted model gives greater recurring income to wealthier holders. That conflicts with the intended LaborCoin model. Revision 7 treats LABR as the qualification threshold and economic participation token, not as a multiplier for holder-dividend power.
+A token-balance-weighted distribution would give the largest recurring payments to the people who already hold the most. That would reproduce a wealth-weighted model inside a project intended to support collective solidarity.
+
+Revision 7 instead treats 1 LABR as the qualification threshold for the holder set. Once a verified wallet qualifies, additional LABR does not increase its dividend weight. LABR remains an economic participation token, but it is not a multiplier for influence or recurring holder income.
 
 ## 7.3 Global accumulator
 
@@ -512,9 +587,13 @@ The contract rejects direct POL deposits. Dividend funds can enter through `depo
 
 ## 7.16 Policy implications
 
-Equal-holder dividends are intentionally not a passive yield proportional to capital. They provide a shared economic benefit to qualifying participants. The minimum 1 LABR balance represents membership in the economic holder set, while verification reduces trivial replication of that set.
+Equal-holder dividends are intended to give qualifying participants a shared benefit from official Exchange activity without rewarding larger token balances with larger percentages. The rule supports the broader principle that participation in LaborCoin should not become another mechanism through which wealth automatically accumulates more power and income.
 
-The model does not make every natural person's total economic position equal. A person who controls several independently qualifying wallets may receive several shares, and a person who cannot satisfy the scorer receives none. The contract enforces the published rule exactly, but the fairness of the result still depends on the external identity system and participant behavior.
+The holder distribution is separate from the DAO treasury. Dividend claims provide one equal economic share to each verified eligible wallet, while the DAO treasury exists to fund collective working-class needs through proposals and votes. One mechanism supports participants in the holder set; the other directs common resources toward approved causes.
+
+The minimum 1 LABR balance creates a clear economic membership threshold, and identity verification makes simple wallet replication more difficult. The result is still one share per verified eligible wallet, not a guaranteed one share per natural person. The fairness of the outcome therefore depends partly on the external identity system and participant behavior.
+
+The policy should be evaluated by its enforceable commitment: larger LABR holdings do not buy a larger holder-dividend share.
 
 ---
 
@@ -522,7 +601,11 @@ The model does not make every natural person's total economic position equal. A 
 
 ## 8.1 Official market role
 
-Exchange V6 is the official initial distribution and redemption contract. External transfers and third-party markets may exist, but they are not official Exchange activity and cannot be guaranteed or controlled by the protocol.
+Exchange V6 is the official path for initial LABR distribution and redemption. It is also one of the mechanisms through which participation contributes to the shared system: the fixed buy allocation sends a portion of incoming POL to the DAO, and the fixed sell allocation sends portions to the DAO and equal-holder dividends.
+
+The Exchange is not intended as a speculative marketplace detached from the project's purpose. Its role is to apply the published pricing and limit rules while helping build the common treasury and preserve a defined redemption path.
+
+Direct transfers and third-party markets may exist, but they are not official Exchange activity and cannot be guaranteed or controlled by the protocol.
 
 ## 8.2 Identity gate
 
@@ -692,9 +775,13 @@ The tranche mechanism limits how much inventory is distributable at a time but d
 
 # 9. Registration V6 and LaborVote V9
 
+Registration is the step through which a verified participant chooses to become a permanent governance member. It turns economic participation into an optional democratic role without allowing additional LABR to create additional votes.
+
 ## 9.1 Shared identity
 
-Registration reads permanent status from Identity Registry. It does not call Human Passport, use the verifier key, or validate a second EIP-712 authorization. This reduces duplicate code and prevents scorer or threshold mismatch between economic and governance onboarding.
+Registration reuses the wallet's permanent Identity Registry status. A participant does not need to complete a second Passport check or obtain another verifier signature in order to join governance.
+
+This keeps economic and governance onboarding consistent while preserving the distinction between them: verification permits official economic participation, while Registration is a separate voluntary act that creates governance membership.
 
 ## 9.2 Requirements
 
@@ -709,7 +796,9 @@ Registration stores:
 - registration timestamp;
 - total member count.
 
-Registration cannot be revoked. A participant who transfers or sells all LABR after registration keeps LABRV and governance membership under this candidate. The 1 LABR requirement is an admission threshold, not an ongoing voting-balance requirement.
+Registration cannot be revoked. A participant who later transfers or sells all LABR keeps LABRV and governance membership under this candidate. The 1 LABR requirement is an admission threshold, not an ongoing wealth test for voting.
+
+Permanent membership is intended to prevent voting rights from being bought, sold, temporarily borrowed, or removed by an administrator.
 
 ## 9.4 LaborVote
 
@@ -749,13 +838,15 @@ A fixed policy can produce false positives, false negatives, and future linguist
 
 # 11. Governance V15
 
+Governance V15 has one narrow purpose: allow registered participants to decide whether the Aragon DAO should send a specified amount of POL to a specified recipient. It is not a general protocol administration system.
+
 ## 11.1 One-member-one-vote
 
-A wallet is eligible when it holds exactly one LABRV and has a matching Registration record. Token wealth does not affect vote weight.
+A wallet is eligible when it holds exactly one LABRV and has a matching Registration record. Every eligible member has one vote. LABR wealth, dividend history, proposal activity, and Passport score do not increase voting weight.
 
 ## 11.2 Activation
 
-Governance proposal creation remains unavailable until at least 50 registered members exist. This prevents a very small founding group from activating treasury transfers through the final contract.
+Proposal creation remains unavailable until at least 50 registered members exist. This prevents the final treasury-transfer process from being activated by a very small founding group and creates a minimum community base before collective funds can be directed through Governance V15.
 
 ## 11.3 Proposal creation
 
@@ -836,7 +927,9 @@ The 5% cap is per proposal, not per week, month, or year. Repeated approved prop
 
 ## 12.1 Custody
 
-The Aragon DAO at `0x0C2e5679153593b82a84eAB5CA90895BB291Cec4` holds treasury POL. Custom Governance does not receive or escrow proposal funds.
+The Aragon DAO at `0x0C2e5679153593b82a84eAB5CA90895BB291Cec4` holds treasury POL. Custom Governance does not receive, escrow, or temporarily control proposal funds.
+
+This separation matters politically as well as technically. The shared treasury is not placed in a founder wallet or a private organizational account. Its balance and outgoing transfers remain publicly visible, and Governance receives only the narrow authority needed to execute an approved transfer.
 
 ## 12.2 Execute permission
 
@@ -844,7 +937,9 @@ Governance requires Aragon's `EXECUTE_PERMISSION_ID`. The permission must be gra
 
 ## 12.3 Recipient diligence
 
-A technically valid proposal can pay a bad recipient. Contracts cannot prove that an address represents workers, a strike, a union, a mutual-aid effort, or a legitimate expense. Participants must verify recipient control and purpose through social and organizational processes before voting.
+A technically valid proposal can still support the wrong recipient. Contracts cannot prove that an address represents affected workers, that a campaign has worker consent, that a workplace committee is accountable, or that the proposed use of funds will advance working-class interests.
+
+Members must therefore investigate the recipient, confirm control of the destination address, evaluate the stated purpose, and consider how the funds will be distributed before voting. Public proposals and on-chain transfers improve transparency, but they do not replace political judgment or human accountability.
 
 ## 12.4 Irreversibility
 
@@ -1134,37 +1229,59 @@ An independent reviewer should receive source, compiler profile, artifacts, test
 
 # 17. Participant Journey
 
+A participant can support LaborCoin at several levels. They may simply learn about a campaign and share it, contribute POL to the DAO, acquire LABR and join the equal-holder set, register as a governance member, or help workers prepare and submit a treasury proposal. The system does not require every supporter to perform every role.
+
 ## 17.1 Wallet setup
 
-A participant uses MetaMask or another compatible self-custody wallet that exposes a direct EOA. Contract wallets and relays are unsupported. The wallet switches to Polygon and obtains POL.
+A participant uses MetaMask or another compatible self-custody wallet that exposes a direct EOA. Contract wallets and relays are unsupported. The wallet switches to Polygon and obtains enough POL for gas and any intended purchase or donation.
 
 ## 17.2 Human Passport
 
-The participant builds a score through Human Passport. The site links directly to the Passport application. A score of at least 15 is required.
+To use the official Exchange, receive equal-holder dividends, claim, or register for governance, the participant builds a score through Human Passport. The site links to the Passport application. A score of at least 15 is required.
+
+The identity step is intended to make simple duplicate-wallet participation harder while remaining more accessible than a government-ID or biometric requirement.
 
 ## 17.3 Permanent verification
 
-The site requests an authorization from the LaborCoin verifier. The wallet submits it to Identity Registry and pays Polygon gas. Once confirmed, status is permanent.
+The site requests an authorization from the LaborCoin verifier. The wallet submits it to Identity Registry and pays Polygon gas. Once confirmed, status is permanent and does not require a fresh Passport check for each later action.
 
-## 17.4 Economic participation
+## 17.4 Building the common system
 
-The verified wallet opens Exchange, reviews current curve metrics, and buys an exact LABR amount. The resulting balance cannot exceed 10,000 LABR and the trade cannot exceed 5,000 LABR.
+A verified participant can open the Exchange, review the current curve metrics, and buy an exact LABR amount. A person may also send POL directly to the DAO treasury without buying LABR.
 
-## 17.5 Equal dividends
+Official purchases help build the DAO treasury through the fixed buy allocation. The resulting LABR balance cannot exceed 10,000 LABR, and an official trade cannot exceed 5,000 LABR.
 
-When the verified wallet holds at least 1 LABR, it enters the equal-holder set. The Exchange page shows eligibility, current eligible-holder count, and withdrawable POL. Claims are made on the Exchange page.
+## 17.5 Equal-holder dividends
+
+When a verified wallet holds at least 1 LABR, it enters the equal-holder set. Official sales contribute a fixed holder share, and each eligible wallet receives one equal dividend unit regardless of whether it holds 1, 100, or 10,000 LABR.
+
+The Exchange page shows eligibility, the current eligible-holder count, and withdrawable POL. Claims are made from the participant's verified wallet.
 
 ## 17.6 Selling
 
-The verified wallet may sell after cooldown, subject to limits and available reserve. A sale returning the balance below 1 LABR removes future dividend eligibility while preserving accrued amounts.
+A verified wallet may sell after the cooldown, subject to limits and available reserve. A sale that leaves the balance below 1 LABR ends future dividend eligibility while preserving amounts already accrued.
+
+A worker preparing for direct action may choose to sell LABR for expenses, but LaborCoin does not require recipients to hold or sell LABR. The DAO can also approve a direct treasury transfer to an approved recipient address selected through governance.
 
 ## 17.7 Governance registration
 
-A verified wallet holding at least 1 LABR may sign the worker-centered attestation and call Registration. One LABRV and permanent member number are created. The site may generate a US Letter certificate.
+A verified wallet holding at least 1 LABR may sign the worker-centered attestation and call Registration. One LABRV and a permanent member number are created. LABRV cannot be transferred or multiplied by purchasing more LABR.
 
-## 17.8 Governance
+The site may generate a US Letter membership certificate, but the on-chain Registration record is authoritative.
 
-After 50 members, eligible participants may create treasury-transfer proposals and vote. Successful proposals execute through the Aragon DAO within the fixed window.
+## 17.8 Proposing and voting on aid
+
+After 50 members, eligible participants may create treasury-transfer proposals and vote. A proposal identifies one recipient, one POL amount, and a public description that passes the fixed text policy.
+
+Before voting, members are expected to investigate whether the recipient represents the affected workers or cause, whether the address is controlled safely, and whether the proposed distribution plan is credible. The contract cannot perform that social verification.
+
+A successful proposal executes through the Aragon DAO within the fixed window. The completed transfer is public and irreversible.
+
+## 17.9 From local support to sustained action
+
+The same participant path can serve different scales. A local group may seek emergency help during a short strike. A larger network may coordinate support across several workplaces. With broad adoption, a much larger treasury could help workers withstand prolonged action that would otherwise collapse under lost wages.
+
+The protocol provides the funding and voting rails. Workers, supporters, organizations, and communities still have to build the campaign, establish legitimacy, communicate demands, and organize the collective action itself.
 
 ---
 
@@ -1236,7 +1353,9 @@ Polygon congestion, RPC outage, site compromise, DNS loss, verifier hosting fail
 
 ## 19.11 Adoption risk
 
-The protocol depends on people choosing to acquire LABR, verify, participate, evaluate proposals, and organize. Technical correctness does not create social legitimacy or adoption.
+LaborCoin only becomes useful when people choose to participate. A technically correct treasury with no public support cannot sustain a strike, and a large balance without legitimate organizing cannot create collective power.
+
+The project depends on workers and supporters learning how the system works, trusting the published rules, acquiring LABR or contributing POL, registering to vote, evaluating proposals, and connecting the on-chain process to real campaigns. Technology can reduce coordination and trust problems, but it cannot manufacture solidarity or social legitimacy.
 
 ## 19.12 Equal-holder policy limitations
 
@@ -1258,26 +1377,40 @@ This candidate intentionally does not invent a migration mechanism before it is 
 
 ## 19.15 Social and institutional limits
 
-LaborCoin can constrain how a treasury proposal is created, voted, and executed. It cannot determine whether a labor dispute is legitimate, whether a recipient fairly distributes assistance, whether a campaign reflects worker consent, or whether an organization remains accountable after receiving funds.
+LaborCoin can make a treasury visible and constrain how a proposal is created, voted on, and executed. It cannot determine whether a labor dispute is legitimate, whether a campaign reflects worker consent, whether a recipient will distribute assistance fairly, or whether an organization remains accountable after receiving funds.
 
-Those judgments remain social and political. The protocol provides transparent rules and auditable transfers, not an automated substitute for organizing, investigation, deliberation, or solidarity.
+It also cannot substitute for the relationships that make collective action possible. Workers still need organization, communication, strategy, trusted representatives or committees, and a shared willingness to act. Supporters still need to investigate claims and remain engaged after sending money.
+
+The protocol provides transparent rules and auditable transfers. The political and social work remains human.
 
 ---
 
 # 20. Governance Philosophy and Conclusion
 
-LaborCoin attempts to encode a limited set of political-economic commitments:
+LaborCoin is built around the idea that solidarity becomes materially powerful when people can organize it before a crisis, see it clearly, and direct it together. Workers who challenge an employer should not have to face economic retaliation in isolation, and members of the public who support them should have a clear way to turn that support into sustained aid.
+
+The system does not attempt to automate the class struggle. It cannot create a union, choose a just demand, verify worker consent, build trust inside a workplace, or decide whether a campaign deserves support. It can provide durable public infrastructure for one part of that work: pooling value and democratically transferring it to people engaged in collective action.
+
+The governance design encodes a limited set of political-economic commitments:
 
 - token wealth does not purchase more governance votes;
 - token wealth does not purchase a larger holder-dividend share;
 - each additional eligible wallet must independently pass the same identity gate;
-- treasury authority is narrow and transparent;
+- the general public can help build a common treasury without surrendering it to a private custodian;
+- registered participants decide where treasury aid goes through one-member-one-vote proposals;
+- treasury authority is narrow, transparent, and limited to approved native-POL transfers;
 - core economic constants are not adjustable after launch;
 - deployment evidence is part of the protocol's public accountability.
 
-The design does not claim to solve identity, governance, labor organization, or economic inequality in general. It creates a specific mechanism whose fairness depends on faithfully implementing and testing those commitments.
+These rules are intended to keep the technology subordinate to the purpose. LABR, the Exchange, the Identity Registry, LaborVote, Governance, and the DAO are not ends in themselves. They are components of a solidarity system whose value depends on whether people use it to defend one another and improve material conditions.
+
+At modest scale, LaborCoin may help people find and fund a strike that would otherwise receive little sustained attention. At greater scale, it may allow a broad public to support longer and more coordinated campaigns. At extraordinary scale, it could help place substantial resources behind a general strike or another mass working-class action. That outcome would require organizing and participation far beyond anything a contract can produce, but the system is intended to remain transparent and usable if such participation emerges.
+
+The design does not claim to solve identity, governance, labor organization, or economic inequality in general. It addresses a specific problem: economic retaliation can break collective action, while public support is often fragmented and difficult to direct. LaborCoin provides one possible bridge between those who want to help and those taking the risk.
 
 Revision 7 is ready for compilation review only when the source package, documentation, site, verifier, and compilation-record scaffold agree. It is ready for deployment only after the seven contracts compile exactly, all runtime commitments are sealed, the equal-holder accounting survives intensive tests, the Aragon permission migration is rehearsed, and independent review is complete.
+
+The technical standard must remain uncompromising because the final system is intended to operate without a founder, administrator, or upgrade authority. The political standard is equally important: the infrastructure should be judged by whether it expands the working class's ability to organize solidarity, withstand retaliation, and sustain collective action.
 
 ---
 
@@ -1411,6 +1544,8 @@ Nonexistent -> Active -> Defeated
 **Human Passport:** External credential scoring system used by the fixed scorer.  
 **LABR:** Fixed-supply economic participation token.  
 **LABRV:** Nontransferable governance membership token.  
+**Mutual aid:** Direct material support organized among people and communities to meet shared needs.  
+**Public infrastructure:** A shared system whose rules and records are available for public use and inspection rather than controlled as a private service.  
 **Runtime code hash:** Keccak-256 of deployed contract bytecode.  
 **Scorer ID hash:** Fixed hash identifying the configured Passport scorer.  
 **Sybil behavior:** One actor attempting to appear as multiple participants.  

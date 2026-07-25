@@ -35,9 +35,10 @@
 <header class="hero"><img src="assets/banner.png" alt="LaborCoin Banner" class="hero-img"></header>
 <div class="whitepaper-actions"><a href="index.html" class="cta-button secondary">← Back</a> <a href="whitepaper.pdf" class="cta-button">Download PDF</a></div>
 <main class="whitepaper-page">
-<nav id="TOC" role="doc-toc"><h2>Contents</h2><ul>
-<li><a href="#laborcoin-technical-whitepaper-v30-candidate"
-id="toc-laborcoin-technical-whitepaper-v30-candidate">LaborCoin
+<nav id="TOC" role="doc-toc"><h2>Contents</h2>
+<ul>
+<li><a href="#laborcoin-technical-whitepaper-v3.0-candidate"
+id="toc-laborcoin-technical-whitepaper-v3.0-candidate">LaborCoin
 Technical Whitepaper v3.0 Candidate</a>
 <ul>
 <li><a href="#revision-7-equal-holder-architecture"
@@ -45,145 +46,151 @@ id="toc-revision-7-equal-holder-architecture">Revision 7 equal-holder
 architecture</a></li>
 <li><a href="#disclaimer" id="toc-disclaimer">Disclaimer</a></li>
 </ul></li>
-<li><a href="#1-executive-summary" id="toc-1-executive-summary">1.
-Executive Summary</a></li>
-<li><a href="#2-problem-scope-and-non-objectives"
-id="toc-2-problem-scope-and-non-objectives">2. Problem, Scope, and
-Non-Objectives</a>
+<li><a href="#executive-summary" id="toc-executive-summary">1. Executive
+Summary</a></li>
+<li><a href="#problem-purpose-scope-and-non-objectives"
+id="toc-problem-purpose-scope-and-non-objectives">2. Problem, Purpose,
+Scope, and Non-Objectives</a>
 <ul>
-<li><a href="#21-worker-support-infrastructure"
-id="toc-21-worker-support-infrastructure">2.1 Worker-support
-infrastructure</a></li>
-<li><a href="#22-design-objectives" id="toc-22-design-objectives">2.2
-Design objectives</a></li>
-<li><a href="#23-non-objectives" id="toc-23-non-objectives">2.3
+<li><a href="#economic-retaliation-limits-collective-action"
+id="toc-economic-retaliation-limits-collective-action">2.1 Economic
+retaliation limits collective action</a></li>
+<li><a href="#the-solidarity-gap" id="toc-the-solidarity-gap">2.2 The
+solidarity gap</a></li>
+<li><a href="#theory-of-change" id="toc-theory-of-change">2.3 Theory of
+change</a></li>
+<li><a href="#scope-of-worker-support"
+id="toc-scope-of-worker-support">2.4 Scope of worker support</a></li>
+<li><a href="#design-objectives" id="toc-design-objectives">2.5 Design
+objectives</a></li>
+<li><a href="#non-objectives" id="toc-non-objectives">2.6
 Non-objectives</a></li>
-<li><a href="#24-why-economic-equality-requires-explicit-code"
-id="toc-24-why-economic-equality-requires-explicit-code">2.4 Why
-economic equality requires explicit code</a></li>
+<li><a href="#why-economic-equality-requires-explicit-code"
+id="toc-why-economic-equality-requires-explicit-code">2.7 Why economic
+equality requires explicit code</a></li>
 </ul></li>
-<li><a href="#3-design-principles" id="toc-3-design-principles">3.
-Design Principles</a>
+<li><a href="#design-principles" id="toc-design-principles">3. Design
+Principles</a>
 <ul>
-<li><a href="#31-one-verified-holder-one-dividend-share"
-id="toc-31-one-verified-holder-one-dividend-share">3.1 One verified
-holder, one dividend share</a></li>
-<li><a href="#32-one-registered-participant-one-vote"
-id="toc-32-one-registered-participant-one-vote">3.2 One registered
+<li><a href="#one-verified-holder-one-dividend-share"
+id="toc-one-verified-holder-one-dividend-share">3.1 One verified holder,
+one dividend share</a></li>
+<li><a href="#one-registered-participant-one-vote"
+id="toc-one-registered-participant-one-vote">3.2 One registered
 participant, one vote</a></li>
-<li><a href="#33-economic-participation-and-governance-remain-distinct"
-id="toc-33-economic-participation-and-governance-remain-distinct">3.3
-Economic participation and governance remain distinct</a></li>
-<li><a href="#34-contract-enforcement-over-interface-promises"
-id="toc-34-contract-enforcement-over-interface-promises">3.4 Contract
-enforcement over interface promises</a></li>
-<li><a href="#35-narrow-authority-over-recoverability"
-id="toc-35-narrow-authority-over-recoverability">3.5 Narrow authority
-over recoverability</a></li>
-<li><a href="#36-transparent-limitations"
-id="toc-36-transparent-limitations">3.6 Transparent limitations</a></li>
+<li><a href="#supporting-the-system-does-not-require-governing-it"
+id="toc-supporting-the-system-does-not-require-governing-it">3.3
+Supporting the system does not require governing it</a></li>
+<li><a href="#rules-must-survive-the-website"
+id="toc-rules-must-survive-the-website">3.4 Rules must survive the
+website</a></li>
+<li><a href="#narrow-authority-over-administrative-convenience"
+id="toc-narrow-authority-over-administrative-convenience">3.5 Narrow
+authority over administrative convenience</a></li>
+<li><a href="#limitations-must-be-stated-plainly"
+id="toc-limitations-must-be-stated-plainly">3.6 Limitations must be
+stated plainly</a></li>
+<li><a href="#technology-is-an-instrument"
+id="toc-technology-is-an-instrument">3.7 Technology is an
+instrument</a></li>
 </ul></li>
-<li><a href="#4-system-architecture-and-trust-boundaries"
-id="toc-4-system-architecture-and-trust-boundaries">4. System
-Architecture and Trust Boundaries</a>
+<li><a href="#system-architecture-and-trust-boundaries"
+id="toc-system-architecture-and-trust-boundaries">4. System Architecture
+and Trust Boundaries</a>
 <ul>
-<li><a href="#41-component-flow" id="toc-41-component-flow">4.1
-Component flow</a></li>
-<li><a href="#42-economic-layer" id="toc-42-economic-layer">4.2 Economic
+<li><a href="#component-flow" id="toc-component-flow">4.1 Component
+flow</a></li>
+<li><a href="#economic-layer" id="toc-economic-layer">4.2 Economic
 layer</a></li>
-<li><a href="#43-identity-layer" id="toc-43-identity-layer">4.3 Identity
+<li><a href="#identity-layer" id="toc-identity-layer">4.3 Identity
 layer</a></li>
-<li><a href="#44-membership-layer" id="toc-44-membership-layer">4.4
-Membership layer</a></li>
-<li><a href="#45-governance-layer" id="toc-45-governance-layer">4.5
-Governance layer</a></li>
-<li><a href="#46-external-infrastructure"
-id="toc-46-external-infrastructure">4.6 External infrastructure</a></li>
-<li><a href="#47-component-registry" id="toc-47-component-registry">4.7
+<li><a href="#membership-layer" id="toc-membership-layer">4.4 Membership
+layer</a></li>
+<li><a href="#governance-layer" id="toc-governance-layer">4.5 Governance
+layer</a></li>
+<li><a href="#external-infrastructure"
+id="toc-external-infrastructure">4.6 External infrastructure</a></li>
+<li><a href="#component-registry" id="toc-component-registry">4.7
 Component registry</a></li>
 </ul></li>
-<li><a href="#5-identity-registry-v1" id="toc-5-identity-registry-v1">5.
+<li><a href="#identity-registry-v1" id="toc-identity-registry-v1">5.
 Identity Registry V1</a>
 <ul>
-<li><a href="#51-purpose" id="toc-51-purpose">5.1 Purpose</a></li>
-<li><a href="#52-score-rule" id="toc-52-score-rule">5.2 Score
-rule</a></li>
-<li><a href="#53-authorization-domain"
-id="toc-53-authorization-domain">5.3 Authorization domain</a></li>
-<li><a href="#54-replay-protection" id="toc-54-replay-protection">5.4
-Replay protection</a></li>
-<li><a href="#55-expiry-and-chain-time"
-id="toc-55-expiry-and-chain-time">5.5 Expiry and chain time</a></li>
-<li><a href="#56-direct-wallet-requirement"
-id="toc-56-direct-wallet-requirement">5.6 Direct-wallet
+<li><a href="#purpose" id="toc-purpose">5.1 Purpose</a></li>
+<li><a href="#score-rule" id="toc-score-rule">5.2 Score rule</a></li>
+<li><a href="#authorization-domain" id="toc-authorization-domain">5.3
+Authorization domain</a></li>
+<li><a href="#replay-protection" id="toc-replay-protection">5.4 Replay
+protection</a></li>
+<li><a href="#expiry-and-chain-time" id="toc-expiry-and-chain-time">5.5
+Expiry and chain time</a></li>
+<li><a href="#direct-wallet-requirement"
+id="toc-direct-wallet-requirement">5.6 Direct-wallet
 requirement</a></li>
-<li><a href="#57-launch-binding" id="toc-57-launch-binding">5.7 Launch
+<li><a href="#launch-binding" id="toc-launch-binding">5.7 Launch
 binding</a></li>
-<li><a href="#58-atomic-dividend-synchronization"
-id="toc-58-atomic-dividend-synchronization">5.8 Atomic dividend
+<li><a href="#atomic-dividend-synchronization"
+id="toc-atomic-dividend-synchronization">5.8 Atomic dividend
 synchronization</a></li>
-<li><a href="#59-permanence-and-compromise"
-id="toc-59-permanence-and-compromise">5.9 Permanence and
+<li><a href="#permanence-and-compromise"
+id="toc-permanence-and-compromise">5.9 Permanence and
 compromise</a></li>
-<li><a href="#510-accessibility-and-sybil-tradeoff"
-id="toc-510-accessibility-and-sybil-tradeoff">5.10 Accessibility and
-Sybil tradeoff</a></li>
-<li><a href="#511-verification-lifecycle-and-failure-behavior"
-id="toc-511-verification-lifecycle-and-failure-behavior">5.11
-Verification lifecycle and failure behavior</a></li>
-<li><a
-href="#512-why-verification-is-one-time-rather-than-per-transaction"
-id="toc-512-why-verification-is-one-time-rather-than-per-transaction">5.12
+<li><a href="#accessibility-and-sybil-tradeoff"
+id="toc-accessibility-and-sybil-tradeoff">5.10 Accessibility and Sybil
+tradeoff</a></li>
+<li><a href="#verification-lifecycle-and-failure-behavior"
+id="toc-verification-lifecycle-and-failure-behavior">5.11 Verification
+lifecycle and failure behavior</a></li>
+<li><a href="#why-verification-is-one-time-rather-than-per-transaction"
+id="toc-why-verification-is-one-time-rather-than-per-transaction">5.12
 Why verification is one-time rather than per transaction</a></li>
 </ul></li>
-<li><a href="#6-labr-v3-token" id="toc-6-labr-v3-token">6. LABR V3
-Token</a>
+<li><a href="#labr-v3-token" id="toc-labr-v3-token">6. LABR V3 Token</a>
 <ul>
-<li><a href="#61-fixed-supply" id="toc-61-fixed-supply">6.1 Fixed
+<li><a href="#fixed-supply" id="toc-fixed-supply">6.1 Fixed
 supply</a></li>
-<li><a href="#62-launch-ownership" id="toc-62-launch-ownership">6.2
-Launch ownership</a></li>
-<li><a href="#63-transfer-limits" id="toc-63-transfer-limits">6.3
-Transfer limits</a></li>
-<li><a href="#64-direct-transfers" id="toc-64-direct-transfers">6.4
-Direct transfers</a></li>
-<li><a href="#65-allowances-and-transferfrom"
-id="toc-65-allowances-and-transferfrom">6.5 Allowances and
+<li><a href="#launch-ownership" id="toc-launch-ownership">6.2 Launch
+ownership</a></li>
+<li><a href="#transfer-limits" id="toc-transfer-limits">6.3 Transfer
+limits</a></li>
+<li><a href="#direct-transfers" id="toc-direct-transfers">6.4 Direct
+transfers</a></li>
+<li><a href="#allowances-and-transferfrom"
+id="toc-allowances-and-transferfrom">6.5 Allowances and
 <code>transferFrom</code></a></li>
-<li><a href="#66-trade-recording" id="toc-66-trade-recording">6.6 Trade
+<li><a href="#trade-recording" id="toc-trade-recording">6.6 Trade
 recording</a></li>
 </ul></li>
-<li><a href="#7-equal-holder-dividend-accounting"
-id="toc-7-equal-holder-dividend-accounting">7. Equal-Holder Dividend
+<li><a href="#equal-holder-dividend-accounting"
+id="toc-equal-holder-dividend-accounting">7. Equal-Holder Dividend
 Accounting</a>
 <ul>
-<li><a href="#71-policy-definition" id="toc-71-policy-definition">7.1
-Policy definition</a></li>
-<li><a href="#72-why-token-proportional-accounting-is-rejected"
-id="toc-72-why-token-proportional-accounting-is-rejected">7.2 Why
+<li><a href="#policy-definition" id="toc-policy-definition">7.1 Policy
+definition</a></li>
+<li><a href="#why-token-proportional-accounting-is-rejected"
+id="toc-why-token-proportional-accounting-is-rejected">7.2 Why
 token-proportional accounting is rejected</a></li>
-<li><a href="#73-global-accumulator" id="toc-73-global-accumulator">7.3
-Global accumulator</a></li>
-<li><a href="#74-entry-correction" id="toc-74-entry-correction">7.4
-Entry correction</a></li>
-<li><a href="#75-exit-correction" id="toc-75-exit-correction">7.5 Exit
+<li><a href="#global-accumulator" id="toc-global-accumulator">7.3 Global
+accumulator</a></li>
+<li><a href="#entry-correction" id="toc-entry-correction">7.4 Entry
 correction</a></li>
-<li><a href="#76-re-entry" id="toc-76-re-entry">7.6 Re-entry</a></li>
-<li><a href="#77-unequal-balance-example"
-id="toc-77-unequal-balance-example">7.7 Unequal-balance example</a></li>
-<li><a href="#78-multi-wallet-risk" id="toc-78-multi-wallet-risk">7.8
+<li><a href="#exit-correction" id="toc-exit-correction">7.5 Exit
+correction</a></li>
+<li><a href="#re-entry" id="toc-re-entry">7.6 Re-entry</a></li>
+<li><a href="#unequal-balance-example"
+id="toc-unequal-balance-example">7.7 Unequal-balance example</a></li>
+<li><a href="#multi-wallet-risk" id="toc-multi-wallet-risk">7.8
 Multi-wallet risk</a></li>
-<li><a href="#79-deposit-source" id="toc-79-deposit-source">7.9 Deposit
+<li><a href="#deposit-source" id="toc-deposit-source">7.9 Deposit
 source</a></li>
-<li><a href="#710-zero-eligible-holders"
-id="toc-710-zero-eligible-holders">7.10 Zero eligible holders</a></li>
-<li><a href="#711-rounding" id="toc-711-rounding">7.11 Rounding</a></li>
-<li><a href="#712-claim-gate" id="toc-712-claim-gate">7.12 Claim
-gate</a></li>
-<li><a href="#713-accounting-state-model"
-id="toc-713-accounting-state-model">7.13 Accounting state model</a></li>
-<li><a href="#714-detailed-distribution-scenarios"
-id="toc-714-detailed-distribution-scenarios">7.14 Detailed distribution
+<li><a href="#zero-eligible-holders" id="toc-zero-eligible-holders">7.10
+Zero eligible holders</a></li>
+<li><a href="#rounding" id="toc-rounding">7.11 Rounding</a></li>
+<li><a href="#claim-gate" id="toc-claim-gate">7.12 Claim gate</a></li>
+<li><a href="#accounting-state-model"
+id="toc-accounting-state-model">7.13 Accounting state model</a></li>
+<li><a href="#detailed-distribution-scenarios"
+id="toc-detailed-distribution-scenarios">7.14 Detailed distribution
 scenarios</a>
 <ul>
 <li><a href="#scenario-a-equal-weight-despite-unequal-balances"
@@ -202,304 +209,297 @@ exit</a></li>
 id="toc-scenario-e-attempted-wallet-splitting">Scenario E: attempted
 wallet splitting</a></li>
 </ul></li>
-<li><a href="#715-claim-integrity-and-payout-order"
-id="toc-715-claim-integrity-and-payout-order">7.15 Claim integrity and
+<li><a href="#claim-integrity-and-payout-order"
+id="toc-claim-integrity-and-payout-order">7.15 Claim integrity and
 payout order</a></li>
-<li><a href="#716-policy-implications"
-id="toc-716-policy-implications">7.16 Policy implications</a></li>
+<li><a href="#policy-implications" id="toc-policy-implications">7.16
+Policy implications</a></li>
 </ul></li>
-<li><a href="#8-exchange-v6-and-bonding-curve"
-id="toc-8-exchange-v6-and-bonding-curve">8. Exchange V6 and Bonding
+<li><a href="#exchange-v6-and-bonding-curve"
+id="toc-exchange-v6-and-bonding-curve">8. Exchange V6 and Bonding
 Curve</a>
 <ul>
-<li><a href="#81-official-market-role"
-id="toc-81-official-market-role">8.1 Official market role</a></li>
-<li><a href="#82-identity-gate" id="toc-82-identity-gate">8.2 Identity
+<li><a href="#official-market-role" id="toc-official-market-role">8.1
+Official market role</a></li>
+<li><a href="#identity-gate" id="toc-identity-gate">8.2 Identity
 gate</a></li>
-<li><a href="#83-permanent-limits" id="toc-83-permanent-limits">8.3
-Permanent limits</a></li>
-<li><a href="#84-direct-pol-denomination"
-id="toc-84-direct-pol-denomination">8.4 Direct POL denomination</a></li>
-<li><a href="#85-marginal-price" id="toc-85-marginal-price">8.5 Marginal
+<li><a href="#permanent-limits" id="toc-permanent-limits">8.3 Permanent
+limits</a></li>
+<li><a href="#direct-pol-denomination"
+id="toc-direct-pol-denomination">8.4 Direct POL denomination</a></li>
+<li><a href="#marginal-price" id="toc-marginal-price">8.5 Marginal
 price</a></li>
-<li><a href="#86-integral-reserve" id="toc-86-integral-reserve">8.6
-Integral reserve</a></li>
-<li><a href="#87-buy-allocation" id="toc-87-buy-allocation">8.7 Buy
+<li><a href="#integral-reserve" id="toc-integral-reserve">8.6 Integral
+reserve</a></li>
+<li><a href="#buy-allocation" id="toc-buy-allocation">8.7 Buy
 allocation</a></li>
-<li><a href="#88-sell-allocation" id="toc-88-sell-allocation">8.8 Sell
+<li><a href="#sell-allocation" id="toc-sell-allocation">8.8 Sell
 allocation</a></li>
-<li><a href="#89-tranche-unlocking" id="toc-89-tranche-unlocking">8.9
-Tranche unlocking</a></li>
-<li><a href="#810-inventory-invariant"
-id="toc-810-inventory-invariant">8.10 Inventory invariant</a></li>
-<li><a href="#811-reserve-invariant" id="toc-811-reserve-invariant">8.11
-Reserve invariant</a></li>
-<li><a href="#812-quote-examples" id="toc-812-quote-examples">8.12 Quote
+<li><a href="#tranche-unlocking" id="toc-tranche-unlocking">8.9 Tranche
+unlocking</a></li>
+<li><a href="#inventory-invariant" id="toc-inventory-invariant">8.10
+Inventory invariant</a></li>
+<li><a href="#reserve-invariant" id="toc-reserve-invariant">8.11 Reserve
+invariant</a></li>
+<li><a href="#quote-examples" id="toc-quote-examples">8.12 Quote
 examples</a></li>
-<li><a href="#813-external-markets" id="toc-813-external-markets">8.13
-External markets</a></li>
-<li><a href="#814-amount-units-rounding-and-slippage-controls"
-id="toc-814-amount-units-rounding-and-slippage-controls">8.14 Amount
-units, rounding, and slippage controls</a></li>
-<li><a href="#815-trade-execution-sequence"
-id="toc-815-trade-execution-sequence">8.15 Trade execution
-sequence</a></li>
-<li><a href="#816-official-exchange-scope-and-bypass-boundaries"
-id="toc-816-official-exchange-scope-and-bypass-boundaries">8.16 Official
+<li><a href="#external-markets" id="toc-external-markets">8.13 External
+markets</a></li>
+<li><a href="#amount-units-rounding-and-slippage-controls"
+id="toc-amount-units-rounding-and-slippage-controls">8.14 Amount units,
+rounding, and slippage controls</a></li>
+<li><a href="#trade-execution-sequence"
+id="toc-trade-execution-sequence">8.15 Trade execution sequence</a></li>
+<li><a href="#official-exchange-scope-and-bypass-boundaries"
+id="toc-official-exchange-scope-and-bypass-boundaries">8.16 Official
 Exchange scope and bypass boundaries</a></li>
-<li><a href="#817-economic-stress-conditions"
-id="toc-817-economic-stress-conditions">8.17 Economic stress
+<li><a href="#economic-stress-conditions"
+id="toc-economic-stress-conditions">8.17 Economic stress
 conditions</a></li>
 </ul></li>
-<li><a href="#9-registration-v6-and-laborvote-v9"
-id="toc-9-registration-v6-and-laborvote-v9">9. Registration V6 and
+<li><a href="#registration-v6-and-laborvote-v9"
+id="toc-registration-v6-and-laborvote-v9">9. Registration V6 and
 LaborVote V9</a>
 <ul>
-<li><a href="#91-shared-identity" id="toc-91-shared-identity">9.1 Shared
+<li><a href="#shared-identity" id="toc-shared-identity">9.1 Shared
 identity</a></li>
-<li><a href="#92-requirements" id="toc-92-requirements">9.2
+<li><a href="#requirements" id="toc-requirements">9.2
 Requirements</a></li>
-<li><a href="#93-permanent-record" id="toc-93-permanent-record">9.3
-Permanent record</a></li>
-<li><a href="#94-laborvote" id="toc-94-laborvote">9.4 LaborVote</a></li>
-<li><a href="#95-launch-finalization"
-id="toc-95-launch-finalization">9.5 Launch finalization</a></li>
-<li><a href="#96-certificate" id="toc-96-certificate">9.6
-Certificate</a></li>
+<li><a href="#permanent-record" id="toc-permanent-record">9.3 Permanent
+record</a></li>
+<li><a href="#laborvote" id="toc-laborvote">9.4 LaborVote</a></li>
+<li><a href="#launch-finalization" id="toc-launch-finalization">9.5
+Launch finalization</a></li>
+<li><a href="#certificate" id="toc-certificate">9.6 Certificate</a></li>
 </ul></li>
-<li><a href="#10-proposal-text-policy-v1"
-id="toc-10-proposal-text-policy-v1">10. Proposal Text Policy V1</a>
+<li><a href="#proposal-text-policy-v1"
+id="toc-proposal-text-policy-v1">10. Proposal Text Policy V1</a>
 <ul>
-<li><a href="#101-purpose" id="toc-101-purpose">10.1 Purpose</a></li>
-<li><a href="#102-fixed-properties" id="toc-102-fixed-properties">10.2
-Fixed properties</a></li>
-<li><a href="#103-limitations" id="toc-103-limitations">10.3
+<li><a href="#purpose-1" id="toc-purpose-1">10.1 Purpose</a></li>
+<li><a href="#fixed-properties" id="toc-fixed-properties">10.2 Fixed
+properties</a></li>
+<li><a href="#limitations" id="toc-limitations">10.3
 Limitations</a></li>
 </ul></li>
-<li><a href="#11-governance-v15" id="toc-11-governance-v15">11.
-Governance V15</a>
+<li><a href="#governance-v15" id="toc-governance-v15">11. Governance
+V15</a>
 <ul>
-<li><a href="#111-one-member-one-vote"
-id="toc-111-one-member-one-vote">11.1 One-member-one-vote</a></li>
-<li><a href="#112-activation" id="toc-112-activation">11.2
-Activation</a></li>
-<li><a href="#113-proposal-creation" id="toc-113-proposal-creation">11.3
+<li><a href="#one-member-one-vote" id="toc-one-member-one-vote">11.1
+One-member-one-vote</a></li>
+<li><a href="#activation" id="toc-activation">11.2 Activation</a></li>
+<li><a href="#proposal-creation" id="toc-proposal-creation">11.3
 Proposal creation</a></li>
-<li><a href="#114-electorate-snapshot"
-id="toc-114-electorate-snapshot">11.4 Electorate snapshot</a></li>
-<li><a href="#115-participation-threshold"
-id="toc-115-participation-threshold">11.5 Participation
-threshold</a></li>
-<li><a href="#116-approval-threshold"
-id="toc-116-approval-threshold">11.6 Approval threshold</a></li>
-<li><a href="#117-timing" id="toc-117-timing">11.7 Timing</a></li>
-<li><a href="#118-execution" id="toc-118-execution">11.8
-Execution</a></li>
-<li><a href="#119-narrow-authority" id="toc-119-narrow-authority">11.9
-Narrow authority</a></li>
-<li><a href="#1110-repeated-proposal-risk"
-id="toc-1110-repeated-proposal-risk">11.10 Repeated-proposal
-risk</a></li>
+<li><a href="#electorate-snapshot" id="toc-electorate-snapshot">11.4
+Electorate snapshot</a></li>
+<li><a href="#participation-threshold"
+id="toc-participation-threshold">11.5 Participation threshold</a></li>
+<li><a href="#approval-threshold" id="toc-approval-threshold">11.6
+Approval threshold</a></li>
+<li><a href="#timing" id="toc-timing">11.7 Timing</a></li>
+<li><a href="#execution" id="toc-execution">11.8 Execution</a></li>
+<li><a href="#narrow-authority" id="toc-narrow-authority">11.9 Narrow
+authority</a></li>
+<li><a href="#repeated-proposal-risk"
+id="toc-repeated-proposal-risk">11.10 Repeated-proposal risk</a></li>
 </ul></li>
-<li><a href="#12-treasury-and-aragon-permission-architecture"
-id="toc-12-treasury-and-aragon-permission-architecture">12. Treasury and
+<li><a href="#treasury-and-aragon-permission-architecture"
+id="toc-treasury-and-aragon-permission-architecture">12. Treasury and
 Aragon Permission Architecture</a>
 <ul>
-<li><a href="#121-custody" id="toc-121-custody">12.1 Custody</a></li>
-<li><a href="#122-execute-permission"
-id="toc-122-execute-permission">12.2 Execute permission</a></li>
-<li><a href="#123-recipient-diligence"
-id="toc-123-recipient-diligence">12.3 Recipient diligence</a></li>
-<li><a href="#124-irreversibility" id="toc-124-irreversibility">12.4
+<li><a href="#custody" id="toc-custody">12.1 Custody</a></li>
+<li><a href="#execute-permission" id="toc-execute-permission">12.2
+Execute permission</a></li>
+<li><a href="#recipient-diligence" id="toc-recipient-diligence">12.3
+Recipient diligence</a></li>
+<li><a href="#irreversibility" id="toc-irreversibility">12.4
 Irreversibility</a></li>
 </ul></li>
-<li><a href="#13-runtime-commitments-and-immutable-deployment"
-id="toc-13-runtime-commitments-and-immutable-deployment">13. Runtime
+<li><a href="#runtime-commitments-and-immutable-deployment"
+id="toc-runtime-commitments-and-immutable-deployment">13. Runtime
 Commitments and Immutable Deployment</a>
 <ul>
-<li><a href="#131-why-source-verification-is-insufficient"
-id="toc-131-why-source-verification-is-insufficient">13.1 Why source
+<li><a href="#why-source-verification-is-insufficient"
+id="toc-why-source-verification-is-insufficient">13.1 Why source
 verification is insufficient</a></li>
-<li><a href="#132-record-types" id="toc-132-record-types">13.2 Record
+<li><a href="#record-types" id="toc-record-types">13.2 Record
 types</a></li>
-<li><a href="#133-constructor-independent-runtimes"
-id="toc-133-constructor-independent-runtimes">13.3
-Constructor-independent runtimes</a></li>
-<li><a href="#134-governance-immutables"
-id="toc-134-governance-immutables">13.4 Governance immutables</a></li>
-<li><a href="#135-commitment-cycle" id="toc-135-commitment-cycle">13.5
+<li><a href="#constructor-independent-runtimes"
+id="toc-constructor-independent-runtimes">13.3 Constructor-independent
+runtimes</a></li>
+<li><a href="#governance-immutables" id="toc-governance-immutables">13.4
+Governance immutables</a></li>
+<li><a href="#commitment-cycle" id="toc-commitment-cycle">13.5
 Commitment cycle</a></li>
-<li><a href="#136-source-freeze" id="toc-136-source-freeze">13.6 Source
+<li><a href="#source-freeze" id="toc-source-freeze">13.6 Source
 freeze</a></li>
-<li><a href="#137-evidence-chain-from-source-to-deployed-runtime"
-id="toc-137-evidence-chain-from-source-to-deployed-runtime">13.7
-Evidence chain from source to deployed runtime</a></li>
-<li><a href="#138-runtime-commitments-versus-addresses"
-id="toc-138-runtime-commitments-versus-addresses">13.8 Runtime
-commitments versus addresses</a></li>
-<li><a href="#139-mandatory-abort-conditions"
-id="toc-139-mandatory-abort-conditions">13.9 Mandatory abort
+<li><a href="#evidence-chain-from-source-to-deployed-runtime"
+id="toc-evidence-chain-from-source-to-deployed-runtime">13.7 Evidence
+chain from source to deployed runtime</a></li>
+<li><a href="#runtime-commitments-versus-addresses"
+id="toc-runtime-commitments-versus-addresses">13.8 Runtime commitments
+versus addresses</a></li>
+<li><a href="#mandatory-abort-conditions"
+id="toc-mandatory-abort-conditions">13.9 Mandatory abort
 conditions</a></li>
 </ul></li>
-<li><a href="#14-deployment-procedure"
-id="toc-14-deployment-procedure">14. Deployment Procedure</a>
+<li><a href="#deployment-procedure" id="toc-deployment-procedure">14.
+Deployment Procedure</a>
 <ul>
-<li><a href="#141-build-profile" id="toc-141-build-profile">14.1 Build
+<li><a href="#build-profile" id="toc-build-profile">14.1 Build
 profile</a></li>
-<li><a href="#142-compile-order" id="toc-142-compile-order">14.2 Compile
+<li><a href="#compile-order" id="toc-compile-order">14.2 Compile
 order</a></li>
-<li><a href="#143-deploy-and-finalize-identityeconomic-cycle"
-id="toc-143-deploy-and-finalize-identityeconomic-cycle">14.3 Deploy and
+<li><a href="#deploy-and-finalize-identityeconomic-cycle"
+id="toc-deploy-and-finalize-identityeconomic-cycle">14.3 Deploy and
 finalize identity/economic cycle</a></li>
-<li><a href="#144-deploy-and-finalize-membership"
-id="toc-144-deploy-and-finalize-membership">14.4 Deploy and finalize
+<li><a href="#deploy-and-finalize-membership"
+id="toc-deploy-and-finalize-membership">14.4 Deploy and finalize
 membership</a></li>
-<li><a href="#145-deploy-governance" id="toc-145-deploy-governance">14.5
-Deploy governance</a></li>
-<li><a href="#146-production-cutover"
-id="toc-146-production-cutover">14.6 Production cutover</a></li>
+<li><a href="#deploy-governance" id="toc-deploy-governance">14.5 Deploy
+governance</a></li>
+<li><a href="#production-cutover" id="toc-production-cutover">14.6
+Production cutover</a></li>
 </ul></li>
-<li><a href="#15-security-architecture-and-threat-model"
-id="toc-15-security-architecture-and-threat-model">15. Security
+<li><a href="#security-architecture-and-threat-model"
+id="toc-security-architecture-and-threat-model">15. Security
 Architecture and Threat Model</a>
 <ul>
-<li><a href="#151-immutability-risk" id="toc-151-immutability-risk">15.1
+<li><a href="#immutability-risk" id="toc-immutability-risk">15.1
 Immutability risk</a></li>
-<li><a href="#152-verifier-compromise"
-id="toc-152-verifier-compromise">15.2 Verifier compromise</a></li>
-<li><a href="#153-scorer-dependence" id="toc-153-scorer-dependence">15.3
-Scorer dependence</a></li>
-<li><a href="#154-sybil-residual-risk"
-id="toc-154-sybil-residual-risk">15.4 Sybil residual risk</a></li>
-<li><a href="#155-dividend-accounting-risk"
-id="toc-155-dividend-accounting-risk">15.5 Dividend accounting
+<li><a href="#verifier-compromise" id="toc-verifier-compromise">15.2
+Verifier compromise</a></li>
+<li><a href="#scorer-dependence" id="toc-scorer-dependence">15.3 Scorer
+dependence</a></li>
+<li><a href="#sybil-residual-risk" id="toc-sybil-residual-risk">15.4
+Sybil residual risk</a></li>
+<li><a href="#dividend-accounting-risk"
+id="toc-dividend-accounting-risk">15.5 Dividend accounting risk</a></li>
+<li><a href="#exchange-risk" id="toc-exchange-risk">15.6 Exchange
 risk</a></li>
-<li><a href="#156-exchange-risk" id="toc-156-exchange-risk">15.6
-Exchange risk</a></li>
-<li><a href="#157-smart-wallet-exclusion"
-id="toc-157-smart-wallet-exclusion">15.7 Smart-wallet exclusion</a></li>
-<li><a href="#158-treasury-risk" id="toc-158-treasury-risk">15.8
-Treasury risk</a></li>
-<li><a href="#159-governance-capture"
-id="toc-159-governance-capture">15.9 Governance capture</a></li>
-<li><a href="#1510-permission-migration"
-id="toc-1510-permission-migration">15.10 Permission migration</a></li>
-<li><a href="#1511-frontend-and-infrastructure"
-id="toc-1511-frontend-and-infrastructure">15.11 Frontend and
+<li><a href="#smart-wallet-exclusion"
+id="toc-smart-wallet-exclusion">15.7 Smart-wallet exclusion</a></li>
+<li><a href="#treasury-risk" id="toc-treasury-risk">15.8 Treasury
+risk</a></li>
+<li><a href="#governance-capture" id="toc-governance-capture">15.9
+Governance capture</a></li>
+<li><a href="#permission-migration" id="toc-permission-migration">15.10
+Permission migration</a></li>
+<li><a href="#frontend-and-infrastructure"
+id="toc-frontend-and-infrastructure">15.11 Frontend and
 infrastructure</a></li>
-<li><a href="#1512-legal-and-operational-uncertainty"
-id="toc-1512-legal-and-operational-uncertainty">15.12 Legal and
-operational uncertainty</a></li>
-<li><a href="#1513-cross-component-failure-matrix"
-id="toc-1513-cross-component-failure-matrix">15.13 Cross-component
-failure matrix</a></li>
-<li><a href="#1514-verifier-operational-controls"
-id="toc-1514-verifier-operational-controls">15.14 Verifier operational
+<li><a href="#legal-and-operational-uncertainty"
+id="toc-legal-and-operational-uncertainty">15.12 Legal and operational
+uncertainty</a></li>
+<li><a href="#cross-component-failure-matrix"
+id="toc-cross-component-failure-matrix">15.13 Cross-component failure
+matrix</a></li>
+<li><a href="#verifier-operational-controls"
+id="toc-verifier-operational-controls">15.14 Verifier operational
 controls</a></li>
-<li><a href="#1515-website-and-dependency-integrity"
-id="toc-1515-website-and-dependency-integrity">15.15 Website and
-dependency integrity</a></li>
+<li><a href="#website-and-dependency-integrity"
+id="toc-website-and-dependency-integrity">15.15 Website and dependency
+integrity</a></li>
 </ul></li>
-<li><a href="#16-testing-and-assurance"
-id="toc-16-testing-and-assurance">16. Testing and Assurance</a>
+<li><a href="#testing-and-assurance" id="toc-testing-and-assurance">16.
+Testing and Assurance</a>
 <ul>
-<li><a href="#161-source-level-gates"
-id="toc-161-source-level-gates">16.1 Source-level gates</a></li>
-<li><a href="#162-unit-tests" id="toc-162-unit-tests">16.2 Unit
+<li><a href="#source-level-gates" id="toc-source-level-gates">16.1
+Source-level gates</a></li>
+<li><a href="#unit-tests" id="toc-unit-tests">16.2 Unit tests</a></li>
+<li><a href="#fuzz-tests" id="toc-fuzz-tests">16.3 Fuzz tests</a></li>
+<li><a href="#stateful-invariants" id="toc-stateful-invariants">16.4
+Stateful invariants</a></li>
+<li><a href="#fork-tests" id="toc-fork-tests">16.5 Fork tests</a></li>
+<li><a href="#frontend-and-verifier-tests"
+id="toc-frontend-and-verifier-tests">16.6 Frontend and verifier
 tests</a></li>
-<li><a href="#163-fuzz-tests" id="toc-163-fuzz-tests">16.3 Fuzz
-tests</a></li>
-<li><a href="#164-stateful-invariants"
-id="toc-164-stateful-invariants">16.4 Stateful invariants</a></li>
-<li><a href="#165-fork-tests" id="toc-165-fork-tests">16.5 Fork
-tests</a></li>
-<li><a href="#166-frontend-and-verifier-tests"
-id="toc-166-frontend-and-verifier-tests">16.6 Frontend and verifier
-tests</a></li>
-<li><a href="#167-independent-review"
-id="toc-167-independent-review">16.7 Independent review</a></li>
+<li><a href="#independent-review" id="toc-independent-review">16.7
+Independent review</a></li>
 </ul></li>
-<li><a href="#17-participant-journey"
-id="toc-17-participant-journey">17. Participant Journey</a>
+<li><a href="#participant-journey" id="toc-participant-journey">17.
+Participant Journey</a>
 <ul>
-<li><a href="#171-wallet-setup" id="toc-171-wallet-setup">17.1 Wallet
+<li><a href="#wallet-setup" id="toc-wallet-setup">17.1 Wallet
 setup</a></li>
-<li><a href="#172-human-passport" id="toc-172-human-passport">17.2 Human
+<li><a href="#human-passport" id="toc-human-passport">17.2 Human
 Passport</a></li>
-<li><a href="#173-permanent-verification"
-id="toc-173-permanent-verification">17.3 Permanent verification</a></li>
-<li><a href="#174-economic-participation"
-id="toc-174-economic-participation">17.4 Economic participation</a></li>
-<li><a href="#175-equal-dividends" id="toc-175-equal-dividends">17.5
-Equal dividends</a></li>
-<li><a href="#176-selling" id="toc-176-selling">17.6 Selling</a></li>
-<li><a href="#177-governance-registration"
-id="toc-177-governance-registration">17.7 Governance
-registration</a></li>
-<li><a href="#178-governance" id="toc-178-governance">17.8
-Governance</a></li>
+<li><a href="#permanent-verification"
+id="toc-permanent-verification">17.3 Permanent verification</a></li>
+<li><a href="#building-the-common-system"
+id="toc-building-the-common-system">17.4 Building the common
+system</a></li>
+<li><a href="#equal-holder-dividends"
+id="toc-equal-holder-dividends">17.5 Equal-holder dividends</a></li>
+<li><a href="#selling" id="toc-selling">17.6 Selling</a></li>
+<li><a href="#governance-registration"
+id="toc-governance-registration">17.7 Governance registration</a></li>
+<li><a href="#proposing-and-voting-on-aid"
+id="toc-proposing-and-voting-on-aid">17.8 Proposing and voting on
+aid</a></li>
+<li><a href="#from-local-support-to-sustained-action"
+id="toc-from-local-support-to-sustained-action">17.9 From local support
+to sustained action</a></li>
 </ul></li>
-<li><a href="#18-historical-migration"
-id="toc-18-historical-migration">18. Historical Migration</a>
+<li><a href="#historical-migration" id="toc-historical-migration">18.
+Historical Migration</a>
 <ul>
-<li><a href="#181-historical-deployed-stack"
-id="toc-181-historical-deployed-stack">18.1 Historical deployed
+<li><a href="#historical-deployed-stack"
+id="toc-historical-deployed-stack">18.1 Historical deployed
 stack</a></li>
-<li><a href="#182-superseded-revision-6"
-id="toc-182-superseded-revision-6">18.2 Superseded Revision 6</a></li>
-<li><a href="#183-migration-principles"
-id="toc-183-migration-principles">18.3 Migration principles</a></li>
+<li><a href="#superseded-revision-6" id="toc-superseded-revision-6">18.2
+Superseded Revision 6</a></li>
+<li><a href="#migration-principles" id="toc-migration-principles">18.3
+Migration principles</a></li>
 </ul></li>
-<li><a href="#19-risks-and-limitations"
-id="toc-19-risks-and-limitations">19. Risks and Limitations</a>
+<li><a href="#risks-and-limitations" id="toc-risks-and-limitations">19.
+Risks and Limitations</a>
 <ul>
-<li><a href="#191-no-guaranteed-one-person-one-wallet-result"
-id="toc-191-no-guaranteed-one-person-one-wallet-result">19.1 No
-guaranteed one-person-one-wallet result</a></li>
-<li><a href="#192-permanent-verification"
-id="toc-192-permanent-verification">19.2 Permanent verification</a></li>
-<li><a href="#193-verifier-and-provider-availability"
-id="toc-193-verifier-and-provider-availability">19.3 Verifier and
-provider availability</a></li>
-<li><a href="#194-pol-volatility-and-liquidity"
-id="toc-194-pol-volatility-and-liquidity">19.4 POL volatility and
+<li><a href="#no-guaranteed-one-person-one-wallet-result"
+id="toc-no-guaranteed-one-person-one-wallet-result">19.1 No guaranteed
+one-person-one-wallet result</a></li>
+<li><a href="#permanent-verification-1"
+id="toc-permanent-verification-1">19.2 Permanent verification</a></li>
+<li><a href="#verifier-and-provider-availability"
+id="toc-verifier-and-provider-availability">19.3 Verifier and provider
+availability</a></li>
+<li><a href="#pol-volatility-and-liquidity"
+id="toc-pol-volatility-and-liquidity">19.4 POL volatility and
 liquidity</a></li>
-<li><a href="#195-immutability" id="toc-195-immutability">19.5
+<li><a href="#immutability" id="toc-immutability">19.5
 Immutability</a></li>
-<li><a href="#196-direct-wallet-exclusion"
-id="toc-196-direct-wallet-exclusion">19.6 Direct-wallet
-exclusion</a></li>
-<li><a href="#197-governance-outcomes"
-id="toc-197-governance-outcomes">19.7 Governance outcomes</a></li>
-<li><a href="#198-treasury-depletion"
-id="toc-198-treasury-depletion">19.8 Treasury depletion</a></li>
-<li><a href="#199-recipient-and-legal-risk"
-id="toc-199-recipient-and-legal-risk">19.9 Recipient and legal
+<li><a href="#direct-wallet-exclusion"
+id="toc-direct-wallet-exclusion">19.6 Direct-wallet exclusion</a></li>
+<li><a href="#governance-outcomes" id="toc-governance-outcomes">19.7
+Governance outcomes</a></li>
+<li><a href="#treasury-depletion" id="toc-treasury-depletion">19.8
+Treasury depletion</a></li>
+<li><a href="#recipient-and-legal-risk"
+id="toc-recipient-and-legal-risk">19.9 Recipient and legal risk</a></li>
+<li><a href="#infrastructure-risk" id="toc-infrastructure-risk">19.10
+Infrastructure risk</a></li>
+<li><a href="#adoption-risk" id="toc-adoption-risk">19.11 Adoption
 risk</a></li>
-<li><a href="#1910-infrastructure-risk"
-id="toc-1910-infrastructure-risk">19.10 Infrastructure risk</a></li>
-<li><a href="#1911-adoption-risk" id="toc-1911-adoption-risk">19.11
-Adoption risk</a></li>
-<li><a href="#1912-equal-holder-policy-limitations"
-id="toc-1912-equal-holder-policy-limitations">19.12 Equal-holder policy
+<li><a href="#equal-holder-policy-limitations"
+id="toc-equal-holder-policy-limitations">19.12 Equal-holder policy
 limitations</a></li>
-<li><a href="#1913-identity-gated-exit-risk"
-id="toc-1913-identity-gated-exit-risk">19.13 Identity-gated exit
+<li><a href="#identity-gated-exit-risk"
+id="toc-identity-gated-exit-risk">19.13 Identity-gated exit
 risk</a></li>
-<li><a href="#1914-migration-and-continuity-risk"
-id="toc-1914-migration-and-continuity-risk">19.14 Migration and
-continuity risk</a></li>
-<li><a href="#1915-social-and-institutional-limits"
-id="toc-1915-social-and-institutional-limits">19.15 Social and
-institutional limits</a></li>
+<li><a href="#migration-and-continuity-risk"
+id="toc-migration-and-continuity-risk">19.14 Migration and continuity
+risk</a></li>
+<li><a href="#social-and-institutional-limits"
+id="toc-social-and-institutional-limits">19.15 Social and institutional
+limits</a></li>
 </ul></li>
-<li><a href="#20-governance-philosophy-and-conclusion"
-id="toc-20-governance-philosophy-and-conclusion">20. Governance
-Philosophy and Conclusion</a></li>
-<li><a href="#appendix-a-fixed-constants"
-id="toc-appendix-a-fixed-constants">Appendix A. Fixed Constants</a></li>
-<li><a href="#appendix-b-address-registry"
-id="toc-appendix-b-address-registry">Appendix B. Address Registry</a>
+<li><a href="#governance-philosophy-and-conclusion"
+id="toc-governance-philosophy-and-conclusion">20. Governance Philosophy
+and Conclusion</a></li>
+<li><a href="#appendix-a.-fixed-constants"
+id="toc-appendix-a.-fixed-constants">Appendix A. Fixed
+Constants</a></li>
+<li><a href="#appendix-b.-address-registry"
+id="toc-appendix-b.-address-registry">Appendix B. Address Registry</a>
 <ul>
 <li><a href="#revision-7" id="toc-revision-7">Revision 7</a></li>
 <li><a href="#existing-infrastructure"
@@ -507,14 +507,14 @@ id="toc-existing-infrastructure">Existing infrastructure</a></li>
 <li><a href="#historical-evidence"
 id="toc-historical-evidence">Historical evidence</a></li>
 </ul></li>
-<li><a href="#appendix-c-runtime-commitment-status"
-id="toc-appendix-c-runtime-commitment-status">Appendix C. Runtime
+<li><a href="#appendix-c.-runtime-commitment-status"
+id="toc-appendix-c.-runtime-commitment-status">Appendix C. Runtime
 Commitment Status</a></li>
-<li><a href="#appendix-d-authority-matrix"
-id="toc-appendix-d-authority-matrix">Appendix D. Authority
+<li><a href="#appendix-d.-authority-matrix"
+id="toc-appendix-d.-authority-matrix">Appendix D. Authority
 Matrix</a></li>
-<li><a href="#appendix-e-state-transitions"
-id="toc-appendix-e-state-transitions">Appendix E. State Transitions</a>
+<li><a href="#appendix-e.-state-transitions"
+id="toc-appendix-e.-state-transitions">Appendix E. State Transitions</a>
 <ul>
 <li><a href="#identity" id="toc-identity">Identity</a></li>
 <li><a href="#dividend-eligibility"
@@ -522,19 +522,20 @@ id="toc-dividend-eligibility">Dividend eligibility</a></li>
 <li><a href="#registration" id="toc-registration">Registration</a></li>
 <li><a href="#proposal" id="toc-proposal">Proposal</a></li>
 </ul></li>
-<li><a href="#appendix-f-threat-model-matrix"
-id="toc-appendix-f-threat-model-matrix">Appendix F. Threat Model
+<li><a href="#appendix-f.-threat-model-matrix"
+id="toc-appendix-f.-threat-model-matrix">Appendix F. Threat Model
 Matrix</a></li>
-<li><a href="#appendix-g-glossary" id="toc-appendix-g-glossary">Appendix
-G. Glossary</a></li>
-<li><a href="#appendix-h-final-launch-checklist"
-id="toc-appendix-h-final-launch-checklist">Appendix H. Final Launch
+<li><a href="#appendix-g.-glossary"
+id="toc-appendix-g.-glossary">Appendix G. Glossary</a></li>
+<li><a href="#appendix-h.-final-launch-checklist"
+id="toc-appendix-h.-final-launch-checklist">Appendix H. Final Launch
 Checklist</a></li>
-<li><a href="#appendix-i-references-and-repository-records"
-id="toc-appendix-i-references-and-repository-records">Appendix I.
+<li><a href="#appendix-i.-references-and-repository-records"
+id="toc-appendix-i.-references-and-repository-records">Appendix I.
 References and Repository Records</a></li>
-</ul></nav>
-<section id="laborcoin-technical-whitepaper-v30-candidate"
+</ul>
+</nav>
+<section id="laborcoin-technical-whitepaper-v3.0-candidate"
 class="level1">
 <h1>LaborCoin Technical Whitepaper v3.0 Candidate</h1>
 <section id="revision-7-equal-holder-architecture" class="level2">
@@ -542,18 +543,21 @@ class="level1">
 <p><strong>Status:</strong> Precompilation source candidate, not
 deployed<br />
 <strong>Network:</strong> Polygon mainnet, chain ID 137<br />
-<strong>Document date:</strong> July 24, 2026</p>
+<strong>Document date:</strong> July 25, 2026</p>
 <hr />
 </section>
 <section id="disclaimer" class="level2">
 <h2>Disclaimer</h2>
-<p>LaborCoin is experimental public infrastructure. This paper describes
-a source candidate, intended deployment procedure, and fixed economic
-and governance rules. It does not promise financial returns, price
-stability, liquidity, uninterrupted availability, legal treatment, tax
-treatment, successful labor outcomes, identity-provider availability, or
-freedom from smart-contract, network, governance, interface,
-key-management, and operational risk.</p>
+<p>LaborCoin is experimental public infrastructure intended to support
+working-class mutual aid and collective action. This paper explains the
+project’s intended social function, the current source candidate, the
+proposed deployment procedure, and the fixed economic and governance
+rules that would govern the system after launch.</p>
+<p>LaborCoin does not promise financial returns, price stability,
+liquidity, uninterrupted availability, favorable legal or tax treatment,
+successful labor outcomes, identity-provider availability, or freedom
+from smart-contract, network, governance, interface, key-management, and
+operational risk.</p>
 <p>Revision 7 has not yet been compiled under the frozen profile,
 completed every unit, fuzz, invariant, fork, integration, and
 independent-review requirement, or been deployed. All replacement
@@ -562,26 +566,63 @@ legal, investment, tax, or financial advice.</p>
 <hr />
 </section>
 </section>
-<section id="1-executive-summary" class="level1">
+<section id="executive-summary" class="level1">
 <h1>1. Executive Summary</h1>
-<p>LaborCoin is designed as public infrastructure for accumulating
-native POL and allocating it through constrained democratic governance
-to worker-support recipients. The protocol attempts to combine
-transparent economic rules, equal-member governance, equal-per-holder
-dividends, narrow treasury authority, and minimal post-launch contract
-control.</p>
+<p>Workers have power when they act together, but collective action is
+difficult to sustain when employers can immediately cut off wages and
+workers still have to pay for food, housing, healthcare, transportation,
+childcare, and other necessities. Economic retaliation turns a labor
+dispute into a test of who can survive without income the longest. In
+most cases, the employer begins with far greater reserves.</p>
+<p>At the same time, people outside a workplace may strongly support a
+strike or organizing campaign but have no clear, durable, and
+accountable way to help. Support is often scattered across temporary
+fundraisers, separate organizations, private accounts, and social-media
+posts that disappear from public attention. The public may want to stand
+with workers but still lack a common place to build resources, see what
+is available, evaluate requests, and decide where aid should go.</p>
+<p>LaborCoin is designed to help close that gap. It is public
+infrastructure intended to connect the broader public with people taking
+direct action to improve working-class material conditions. Participants
+can acquire LABR or contribute directly to the Aragon DAO treasury.
+Fixed economic flows add POL to the common treasury, and verified
+governance members decide through one-member-one-vote proposals which
+recipients should receive aid.</p>
+<p>Striking workers are the clearest use case because lost wages are one
+of the strongest weapons employers use against collective action. The
+same infrastructure can support other working-class causes when
+participants democratically agree that the transfer advances mutual aid,
+organizing, legal defense, communications, emergency support, or another
+part of the class struggle. The contracts do not determine which cause
+is worthy. They provide a transparent process through which participants
+can make that judgment together.</p>
+<p>LaborCoin is therefore a vehicle for solidarity, not technology for
+its own sake. The blockchain records balances, rules, votes,
+permissions, and transfers so that the system does not have to depend on
+a private administrator’s promises. The technology matters only to the
+extent that it helps people pool resources, coordinate support, resist
+unilateral control, and sustain action that would otherwise be broken by
+economic pressure.</p>
+<p>The immediate goal is practical: make it easier to build and
+democratically distribute mutual aid to people engaged in collective
+action. The longer-term possibility is scale. A widely adopted system
+could support prolonged regional or national campaigns and, if mass
+participation ever made it possible, help place substantial resources
+behind a general strike. A treasury capable of distributing billions of
+dollars would require extraordinary public participation and is not
+guaranteed, but the architecture is intended to remain usable if
+participation grows to that level.</p>
 <p>The permanent dividend principle is central:</p>
 <blockquote>
 <p>Every verified participant holding at least 1 LABR receives exactly
 one equal dividend share. Holding more LABR does not increase that
-participant's dividend weight.</p>
+participant’s dividend weight.</p>
 </blockquote>
-<p>This distinguishes LaborCoin from common token systems that convert
-wealth into greater income and governance power. A wallet holding 1
-LABR, a wallet holding 100 LABR, and a wallet holding 10,000 LABR each
-have one dividend unit when verified and eligible. LABR quantity affects
-the amount a participant can sell and the economic exposure they hold,
-but it does not multiply their dividend share or governance vote.</p>
+<p>This prevents the holder distribution from turning wealth into
+greater recurring income. A verified eligible wallet holding 1 LABR, 100
+LABR, or 10,000 LABR receives one dividend unit. LABR quantity affects
+how much a participant can sell and the economic exposure they hold, but
+it does not multiply their dividend share or governance vote.</p>
 <p>Revision 7 uses a shared permanent Identity Registry. A direct
 Polygon wallet obtains a Human Passport score through a fixed scorer.
 When the score is at least 15.000, a fixed verifier may issue an EIP-712
@@ -589,12 +630,12 @@ authorization valid for no more than one hour. The wallet submits that
 authorization on-chain once. Successful verification is permanent and
 reused for official Exchange access, equal-holder dividend eligibility,
 dividend claims, and optional governance registration.</p>
-<p>The score gate is intended to reduce simple Sybil behavior and make
-every additional eligible wallet independently satisfy the same
-published scorer. It is not presented as a mathematical proof that one
-natural person controls only one wallet. Accessibility is prioritized by
-retaining a threshold of 15 rather than imposing government-ID,
-biometric, or higher-score requirements.</p>
+<p>The score gate is intended to reduce simple Sybil behavior and
+require every additional eligible wallet to satisfy the same published
+scorer. It is not proof that one natural person controls only one
+wallet. The threshold remains 15 to avoid imposing government-ID,
+biometric, or substantially higher-score requirements that would exclude
+many ordinary participants.</p>
 <p>The candidate consists of seven custom contracts:</p>
 <ol type="1">
 <li><strong>LaborCoin Identity Registry V1.0.0</strong>, which records
@@ -617,45 +658,115 @@ one-member-one-vote native-POL treasury allocation through the existing
 Aragon DAO.</li>
 </ol>
 <p>The existing Aragon DAO remains the treasury custodian. Governance
-does not custody funds. A successful proposal can request exactly one
-native-POL transfer from the DAO to the approved recipient. Governance
-cannot change tokenomics, mint LABR, alter thresholds, pause trading,
-execute arbitrary calldata, upgrade contracts, or recover recipient
-funds.</p>
+does not hold proposal funds. A successful proposal can request exactly
+one native-POL transfer from the DAO to the approved recipient.
+Governance cannot change tokenomics, mint LABR, alter thresholds, pause
+trading, execute arbitrary calldata, upgrade contracts, or recover
+recipient funds.</p>
 <p>Revision 7 is a replacement source candidate. The historical
 V4/V7/V13 deployment and the superseded Revision 6 candidate remain
 preserved for transparency. Neither is represented as the final
 replacement system.</p>
 <hr />
 </section>
-<section id="2-problem-scope-and-non-objectives" class="level1">
-<h1>2. Problem, Scope, and Non-Objectives</h1>
-<section id="21-worker-support-infrastructure" class="level2">
-<h2>2.1 Worker-support infrastructure</h2>
-<p>Workers participating in strikes, lockouts, organizing campaigns,
-mutual aid, or other labor actions can face immediate financial
-pressure. Income may stop while rent, food, transportation, health,
-childcare, legal, and communication costs continue. Existing support
-systems often rely on temporary fundraisers, private organizational
-accounts, payment processors, and informal distribution decisions. Those
-systems can be effective, but participants may have limited ability to
-inspect balances, fixed contribution rules, allocation thresholds, and
-completed transfers.</p>
-<p>LaborCoin addresses a narrow infrastructure question: can a
-transparent pool of native assets be accumulated under publicly fixed
-economic rules and allocated through a constrained one-member-one-vote
-process without allowing token wealth to determine voting or dividend
-weight?</p>
-<p>The protocol is not a replacement for unions, worker centers, strike
-committees, legal representation, collective bargaining, or human
-organizing. It is an economic and governance tool whose usefulness
-depends on social participation, recipient diligence, and real-world
-coordination.</p>
+<section id="problem-purpose-scope-and-non-objectives" class="level1">
+<h1>2. Problem, Purpose, Scope, and Non-Objectives</h1>
+<section id="economic-retaliation-limits-collective-action"
+class="level2">
+<h2>2.1 Economic retaliation limits collective action</h2>
+<p>A strike can stop production, disrupt distribution, and force an
+employer to negotiate. That leverage weakens when workers cannot afford
+to remain off the job. Wages may stop immediately while rent, food,
+transportation, healthcare, childcare, debt, legal costs, and
+communication expenses continue. Employers often have access to credit,
+retained profits, insurance, investors, and large cash reserves.
+Individual workers usually do not.</p>
+<p>This imbalance is not incidental. The threat of missed pay,
+discipline, termination, benefit loss, or prolonged uncertainty is one
+of the main ways collective action is discouraged and defeated. A group
+may have broad support and a legitimate demand but still be forced back
+to work because the immediate cost of continuing becomes unbearable.</p>
+<p>LaborCoin begins from a simple premise: collective action becomes
+more sustainable when people taking the risk are not left to absorb the
+economic retaliation alone.</p>
 </section>
-<section id="22-design-objectives" class="level2">
-<h2>2.2 Design objectives</h2>
+<section id="the-solidarity-gap" class="level2">
+<h2>2.2 The solidarity gap</h2>
+<p>Public sympathy does not automatically become material support.
+People may see a strike, agree with the workers, and still be unsure
+where to send money, whether a fundraiser is legitimate, how much has
+already been raised, who controls the funds, or how the money will be
+distributed. Separate campaigns must repeatedly rebuild attention and
+trust from the beginning.</p>
+<p>Existing strike funds, unions, worker centers, mutual-aid networks,
+and public fundraisers remain essential. LaborCoin is not designed to
+displace them. It is intended to add a common, transparent layer through
+which the broader public can accumulate resources over time and direct
+them through a published democratic process.</p>
+<p>The system is meant to serve as a bridge between people who want to
+help and people who are directly fighting to improve working-class
+material conditions.</p>
+</section>
+<section id="theory-of-change" class="level2">
+<h2>2.3 Theory of change</h2>
+<p>LaborCoin’s theory of change follows a direct path:</p>
+<ol type="1">
+<li>Economic retaliation makes strikes and other collective action
+difficult to sustain.</li>
+<li>A broad public can reduce that pressure by pooling resources before
+and during a campaign.</li>
+<li>Fixed economic rules and public treasury balances make the shared
+pool visible and inspectable.</li>
+<li>Verified participants can evaluate proposals and decide where aid
+should go without allowing token wealth to buy more votes.</li>
+<li>Approved funds can be transferred directly to a recipient chosen by
+the membership.</li>
+<li>Greater material support can give workers more time to organize,
+remain on strike, communicate, provide mutual aid, and force an employer
+or institution to respond.</li>
+</ol>
+<p>This mechanism cannot guarantee victory. Money does not replace
+workplace organization, strategy, trust, discipline, or mass
+participation. It can, however, address one concrete weakness that
+repeatedly limits direct action: the inability of ordinary people to
+withstand prolonged economic punishment.</p>
+<p>At small scale, the system may help a local campaign cover urgent
+expenses. At larger scale, it may help sustain coordinated action across
+workplaces or regions. At mass scale, the same structure could support a
+general strike backed by a large public treasury. The architecture is
+built so the basic rules do not need to change as participation
+grows.</p>
+</section>
+<section id="scope-of-worker-support" class="level2">
+<h2>2.4 Scope of worker support</h2>
+<p>Strikes are the primary use case, but the treasury is not limited to
+a single organizational form or legally recognized union. Participants
+may consider proposals involving striking workers, locked-out workers,
+organizing campaigns, emergency mutual aid, legal defense,
+communications, workplace committees, worker centers, or other causes
+that materially aid the working class.</p>
+<p>The protocol cannot decide whether a proposal advances the class
+struggle, accurately represents affected workers, or will distribute aid
+fairly. Those questions remain matters of investigation, discussion,
+political judgment, and democratic voting. The contracts only constrain
+how proposals are created, approved, and executed.</p>
+<p>LaborCoin is not a replacement for unions, strike committees, worker
+centers, collective bargaining, legal representation, political
+education, or face-to-face organizing. It is a funding and
+decision-making tool that can strengthen those efforts when people
+choose to use it.</p>
+</section>
+<section id="design-objectives" class="level2">
+<h2>2.5 Design objectives</h2>
 <p>The system seeks to provide:</p>
 <ul>
+<li>a durable and publicly inspectable pool for working-class mutual
+aid;</li>
+<li>a clear path for the general public to contribute to collective
+action;</li>
+<li>democratic allocation without token-balance-weighted voting;</li>
+<li>transparent balances, proposal records, vote totals, and completed
+transfers;</li>
 <li>a fixed and inspectable LABR supply;</li>
 <li>an official Exchange with deterministic POL-denominated
 pricing;</li>
@@ -672,12 +783,16 @@ setter;</li>
 <li>public source, compilation, deployment, and permission records.</li>
 </ul>
 </section>
-<section id="23-non-objectives" class="level2">
-<h2>2.3 Non-objectives</h2>
+<section id="non-objectives" class="level2">
+<h2>2.6 Non-objectives</h2>
 <p>LaborCoin does not attempt to:</p>
 <ul>
-<li>guarantee strike success, employment protection, or recipient
-conduct;</li>
+<li>guarantee strike success, employment protection, public support, or
+recipient conduct;</li>
+<li>determine which labor campaign or political cause deserves
+support;</li>
+<li>replace unions, workplace organization, collective bargaining, or
+human deliberation;</li>
 <li>guarantee a LABR market price or fiat value;</li>
 <li>provide a stablecoin or price peg;</li>
 <li>eliminate all Sybil behavior;</li>
@@ -693,77 +808,104 @@ hosting, or the verifier remain available;</li>
 <li>replace legal, tax, security, or organizational advice.</li>
 </ul>
 </section>
-<section id="24-why-economic-equality-requires-explicit-code"
+<section id="why-economic-equality-requires-explicit-code"
 class="level2">
-<h2>2.4 Why economic equality requires explicit code</h2>
-<p>A token system can describe egalitarian goals while implementing
-wealth-weighted mechanics. Revision 7 therefore states the equality rule
-in contract accounting rather than relying on interface language.
-Dividend weight is a binary unit, not the LABR balance. Governance
-weight is one nontransferable LABRV, not the LABR balance. More tokens
-do not create more votes and do not create a larger holder-dividend
-percentage.</p>
-<p>This does not make all economic outcomes equal. Participants can
-still hold different LABR quantities, experience different price
-exposure, and sell different amounts. The design specifically prevents
-token quantity from multiplying dividend and governance weight.</p>
+<h2>2.7 Why economic equality requires explicit code</h2>
+<p>A project can use egalitarian language while quietly allowing wealth
+to control income and decision-making. Revision 7 therefore places the
+equality rules in the contracts rather than leaving them as website
+promises.</p>
+<p>Dividend weight is one binary unit for each verified eligible wallet,
+not the wallet’s LABR balance. Governance weight is one nontransferable
+LABRV membership unit, not the participant’s LABR holdings. More tokens
+do not create more votes and do not create a larger percentage of holder
+dividends.</p>
+<p>This does not make every participant economically equal. People may
+hold different amounts of LABR, face different risks, and have unequal
+access to wallets, gas, identity credentials, and information. The
+narrower commitment is enforceable and explicit: token quantity cannot
+be used to multiply governance or holder-dividend power.</p>
 <hr />
 </section>
 </section>
-<section id="3-design-principles" class="level1">
+<section id="design-principles" class="level1">
 <h1>3. Design Principles</h1>
-<section id="31-one-verified-holder-one-dividend-share" class="level2">
+<p>The design principles translate the project’s social purpose into
+rules that can be inspected and tested. They are intended to prevent the
+system from reproducing the same concentration of power it is meant to
+resist.</p>
+<section id="one-verified-holder-one-dividend-share" class="level2">
 <h2>3.1 One verified holder, one dividend share</h2>
-<p>A verified wallet with at least 1 LABR receives one equal share of
-each holder-dividend deposit made while eligible. A verified wallet with
-10,000 LABR receives the same share as a verified wallet with 1 LABR. An
-unverified wallet receives no share.</p>
+<p>A verified wallet holding at least 1 LABR receives one equal share of
+each holder-dividend deposit made while eligible. A verified wallet
+holding 10,000 LABR receives the same share as a verified wallet holding
+1 LABR. An unverified wallet receives no share.</p>
 </section>
-<section id="32-one-registered-participant-one-vote" class="level2">
+<section id="one-registered-participant-one-vote" class="level2">
 <h2>3.2 One registered participant, one vote</h2>
 <p>Registration mints exactly one LABRV. LABRV cannot be transferred,
 delegated, burned, approved, or multiplied for the same wallet.
 Governance checks both the LABRV balance and the matching Registration
-record.</p>
+record. Economic wealth is therefore separated from formal voting
+power.</p>
 </section>
-<section id="33-economic-participation-and-governance-remain-distinct"
+<section id="supporting-the-system-does-not-require-governing-it"
 class="level2">
-<h2>3.3 Economic participation and governance remain distinct</h2>
-<p>Identity verification is required for official economic
-participation, but governance registration remains an additional
-optional action. A verified participant may buy, hold, receive equal
-dividends, claim, and sell without registering for governance.
-Registration requires at least 1 LABR and creates permanent
-membership.</p>
+<h2>3.3 Supporting the system does not require governing it</h2>
+<p>Economic participation and governance registration remain distinct. A
+verified participant may buy, hold, receive equal dividends, claim, and
+sell without registering to vote. A participant who wants to help build
+the common pool should not be required to become a governance
+member.</p>
+<p>Governance registration is a separate, optional commitment. It
+requires at least 1 LABR and creates permanent membership.</p>
 </section>
-<section id="34-contract-enforcement-over-interface-promises"
+<section id="rules-must-survive-the-website" class="level2">
+<h2>3.4 Rules must survive the website</h2>
+<p>The website explains and simplifies the system, but it is not the
+source of authority. Identity, wallet, transaction, cooldown, dividend,
+and governance rules are enforced on-chain. Calling the contracts
+directly does not bypass those rules.</p>
+</section>
+<section id="narrow-authority-over-administrative-convenience"
 class="level2">
-<h2>3.4 Contract enforcement over interface promises</h2>
-<p>The website is not the security boundary. Identity, wallet,
-transaction, cooldown, dividend, and governance rules are enforced
-on-chain. A participant who calls contracts directly remains subject to
-the same rules.</p>
+<h2>3.5 Narrow authority over administrative convenience</h2>
+<p>Revision 7 favors fixed, narrow behavior over an administrator who
+can intervene later. This reduces the risk that a founder, company,
+compromised key, or future governing faction can rewrite the system. It
+also means mistakes can be permanent. The launch process and testing
+burden are therefore unusually important.</p>
 </section>
-<section id="35-narrow-authority-over-recoverability" class="level2">
-<h2>3.5 Narrow authority over recoverability</h2>
-<p>Revision 7 favors immutable, narrow behavior over administrative
-recovery. This reduces unilateral control but means mistakes can be
-permanent. The launch process and testing burden are therefore unusually
-important.</p>
-</section>
-<section id="36-transparent-limitations" class="level2">
-<h2>3.6 Transparent limitations</h2>
+<section id="limitations-must-be-stated-plainly" class="level2">
+<h2>3.6 Limitations must be stated plainly</h2>
 <p>The protocol does not claim one natural person per wallet. Human
-Passport scoring and credential deduplication raise costs and friction
-for simple duplicate participation, but coordinated or independently
-credentialed wallets may still pass. Equal-per-wallet dividends make
-this residual risk important and it is disclosed directly.</p>
+Passport scoring and credential deduplication raise the cost and
+difficulty of simple duplicate participation, but coordinated or
+independently credentialed wallets may still pass. Equal-per-wallet
+dividends make this residual risk important, so the system describes the
+rule honestly rather than claiming perfect identity.</p>
+</section>
+<section id="technology-is-an-instrument" class="level2">
+<h2>3.7 Technology is an instrument</h2>
+<p>LaborCoin does not treat blockchain use as an achievement by itself.
+The technology is justified only where it serves a practical
+working-class purpose: keeping public records, constraining authority,
+making treasury activity visible, enforcing equal voting rules, and
+allowing approved aid to move without relying on a private custodian’s
+discretion.</p>
+<p>The success of the project must therefore be judged by whether it
+helps people organize solidarity and sustain material support, not by
+transaction volume, token price, or technical novelty.</p>
 <hr />
 </section>
 </section>
-<section id="4-system-architecture-and-trust-boundaries" class="level1">
+<section id="system-architecture-and-trust-boundaries" class="level1">
 <h1>4. System Architecture and Trust Boundaries</h1>
-<section id="41-component-flow" class="level2">
+<p>LaborCoin separates economic participation, identity verification,
+governance membership, proposal voting, and treasury custody so that no
+single custom contract controls the entire system. The following flow
+shows how the components work together.</p>
+<section id="component-flow" class="level2">
 <h2>4.1 Component flow</h2>
 <pre class="text"><code>Human Passport scorer
         |
@@ -785,44 +927,64 @@ Registration V6 --&gt; LaborVote V9 --&gt; Governance V15
 Proposal Text Policy V1 ---------&gt; Governance V15
 Governance V15 --&gt; Aragon DAO --&gt; approved recipient</code></pre>
 </section>
-<section id="42-economic-layer" class="level2">
+<section id="economic-layer" class="level2">
 <h2>4.2 Economic layer</h2>
-<p>LABR and Exchange implement supply, official inventory, reserve
-accounting, direct transfers, official buys and sells, cooldown, wallet
-and transaction limits, fixed DAO contributions, and equal-holder
-dividend deposits and claims.</p>
+<p>LABR and Exchange provide the economic path through which
+participants enter, exit, and help build shared value. They implement
+the fixed supply, official inventory, curve reserve, direct transfers,
+official buys and sells, cooldown, wallet and transaction limits, fixed
+DAO contributions, and equal-holder dividend deposits and claims.</p>
+<p>The economic layer does not decide who receives treasury aid. Its
+role is to apply the published rules and direct the fixed treasury share
+to the DAO.</p>
 </section>
-<section id="43-identity-layer" class="level2">
+<section id="identity-layer" class="level2">
 <h2>4.3 Identity layer</h2>
 <p>Human Passport supplies a score under a fixed scorer. The verifier
-signs a narrow authorization. Identity Registry verifies the
-authorization on-chain and stores permanent status. The verifier never
-custodies user tokens and cannot trade or vote on behalf of a
-participant.</p>
+signs a narrow authorization, and Identity Registry checks that
+authorization on-chain before permanently recording the wallet’s
+status.</p>
+<p>The verifier cannot hold user funds, trade for a participant,
+register the participant, or vote on the participant’s behalf. Its
+authority is limited to signing qualifying identity authorizations.</p>
 </section>
-<section id="44-membership-layer" class="level2">
+<section id="membership-layer" class="level2">
 <h2>4.4 Membership layer</h2>
 <p>Registration requires verified status and at least 1 LABR. LaborVote
-mints one permanent nontransferable membership unit. Identity
-verification alone does not create governance rights.</p>
+then mints one permanent, nontransferable membership unit. Identity
+verification alone does not create governance rights, and holding
+additional LABR does not create additional memberships.</p>
 </section>
-<section id="45-governance-layer" class="level2">
+<section id="governance-layer" class="level2">
 <h2>4.5 Governance layer</h2>
-<p>Governance uses the Registration and LABRV state, a fixed
-proposal-text policy, fixed thresholds, and the existing Aragon DAO's
-execute permission. It can execute only one native-POL transfer with
-empty calldata.</p>
+<p>Governance is the decision-making path for treasury aid. It uses
+Registration and LABRV state, a fixed proposal-text policy, fixed voting
+thresholds, and the existing Aragon DAO’s execute permission. A
+successful proposal can execute only one native-POL transfer with empty
+calldata to the approved recipient.</p>
+<p>Governance cannot operate the Exchange, rewrite token rules, or use
+the DAO for arbitrary contract calls.</p>
 </section>
-<section id="46-external-infrastructure" class="level2">
+<section id="external-infrastructure" class="level2">
 <h2>4.6 External infrastructure</h2>
 <p>Polygon consensus, Human Passport, the verifier service, RPC
 providers, domain registration, Netlify hosting, browser dependencies,
-and Aragon DAO permissions are external trust and availability surfaces.
-Immutable custom contracts do not make those services immutable.</p>
+and Aragon DAO permissions remain external trust and availability
+surfaces. Immutable custom contracts do not make those services
+permanent or immune from disruption.</p>
+<p>The protocol therefore distinguishes between rules enforced by
+deployed contracts and services that participants still need in order to
+reach or use those contracts.</p>
 </section>
-<section id="47-component-registry" class="level2">
+<section id="component-registry" class="level2">
 <h2>4.7 Component registry</h2>
 <table>
+<colgroup>
+<col style="width: 25%" />
+<col style="width: 25%" />
+<col style="width: 25%" />
+<col style="width: 25%" />
+</colgroup>
 <thead>
 <tr class="header">
 <th>Component</th>
@@ -885,18 +1047,21 @@ Immutable custom contracts do not make those services immutable.</p>
 <hr />
 </section>
 </section>
-<section id="5-identity-registry-v1" class="level1">
+<section id="identity-registry-v1" class="level1">
 <h1>5. Identity Registry V1</h1>
-<section id="51-purpose" class="level2">
+<section id="purpose" class="level2">
 <h2>5.1 Purpose</h2>
-<p>Identity Registry provides a single permanent identity status used by
-all economic and membership components. Earlier architectures could
-place verification only in the frontend or duplicate authorization logic
-across contracts. Frontend-only gating can be bypassed by direct calls.
-Duplicate contract gates increase code and configuration risk. Revision
-7 therefore centralizes verification in one immutable registry.</p>
+<p>Identity Registry gives the system one shared answer to a basic
+question: has this wallet completed the required identity check?
+Exchange, LABR dividend accounting, and Registration all read the same
+permanent status.</p>
+<p>Keeping this rule on-chain prevents the website from granting access
+by appearance alone. It also avoids repeating separate verification
+logic in several contracts, where mismatched scorers, thresholds, or
+signature rules could create conflicting results. Revision 7 therefore
+centralizes verification in one immutable registry.</p>
 </section>
-<section id="52-score-rule" class="level2">
+<section id="score-rule" class="level2">
 <h2>5.2 Score rule</h2>
 <p>Scores are represented in thousandths:</p>
 <pre class="text"><code>15.000 score = 15,000 contract units</code></pre>
@@ -904,7 +1069,7 @@ Duplicate contract gates increase code and configuration risk. Revision
 registry accepts scores above the minimum but does not grant greater
 rights for a higher score.</p>
 </section>
-<section id="53-authorization-domain" class="level2">
+<section id="authorization-domain" class="level2">
 <h2>5.3 Authorization domain</h2>
 <p>The EIP-712 domain is intended to be:</p>
 <pre class="text"><code>name: LaborCoin Identity
@@ -923,7 +1088,7 @@ verifyingContract: exact Identity Registry address</code></pre>
 Its Keccak-256 hash is fixed in the registry. The verifier must compute
 the same hash from its environment configuration.</p>
 </section>
-<section id="54-replay-protection" class="level2">
+<section id="replay-protection" class="level2">
 <h2>5.4 Replay protection</h2>
 <p>Each participant begins with nonce zero. Successful verification
 consumes the current nonce and stores verified status. The wallet cannot
@@ -931,14 +1096,14 @@ verify twice. A signature for another wallet, nonce, chain, scorer,
 Registry address, score, or expiry produces a different digest and
 fails.</p>
 </section>
-<section id="55-expiry-and-chain-time" class="level2">
+<section id="expiry-and-chain-time" class="level2">
 <h2>5.5 Expiry and chain time</h2>
 <p>The authorization must not be expired and may not extend more than
 one hour beyond current chain time. The verifier should derive expiry
 from the latest Polygon block rather than server wall-clock time to
 reduce clock-skew failure.</p>
 </section>
-<section id="56-direct-wallet-requirement" class="level2">
+<section id="direct-wallet-requirement" class="level2">
 <h2>5.6 Direct-wallet requirement</h2>
 <p>The participant must call Registry directly from an address with no
 code and <code>msg.sender == tx.origin</code>. This excludes
@@ -946,7 +1111,7 @@ smart-contract wallets, multisignatures, account-abstraction accounts,
 and relays. The restriction is intentionally broad and should be tested
 against future Polygon behavior before launch.</p>
 </section>
-<section id="57-launch-binding" class="level2">
+<section id="launch-binding" class="level2">
 <h2>5.7 Launch binding</h2>
 <p>Identity Registry is deployed with the expected LABR runtime hash and
 a temporary launch owner. The owner may call
@@ -957,33 +1122,33 @@ Registry runtime hash. It stores LABR and sets owner to zero.</p>
 Exchange. This prevents participants from entering an incomplete
 system.</p>
 </section>
-<section id="58-atomic-dividend-synchronization" class="level2">
+<section id="atomic-dividend-synchronization" class="level2">
 <h2>5.8 Atomic dividend synchronization</h2>
 <p>A wallet may receive LABR before it verifies through a direct
-transfer. When verification succeeds, Registry calls LABR's eligibility
+transfer. When verification succeeds, Registry calls LABR’s eligibility
 synchronization in the same transaction. A wallet already holding at
 least 1 LABR enters the equal-holder set immediately without a second
 manual transaction.</p>
 </section>
-<section id="59-permanence-and-compromise" class="level2">
+<section id="permanence-and-compromise" class="level2">
 <h2>5.9 Permanence and compromise</h2>
 <p>There is no revocation. If the verifier key signs an unauthorized
 wallet, that status is permanent. If Human Passport later reduces the
-wallet's score, status remains. This limits ongoing external dependence
+wallet’s score, status remains. This limits ongoing external dependence
 but makes prelaunch key security and scorer validation critical.</p>
 </section>
-<section id="510-accessibility-and-sybil-tradeoff" class="level2">
+<section id="accessibility-and-sybil-tradeoff" class="level2">
 <h2>5.10 Accessibility and Sybil tradeoff</h2>
 <p>A threshold of 15 is selected because people creating a new wallet
 may have limited on-chain history and may not reach higher default
-thresholds. The scorer's credential deduplication makes reused
+thresholds. The scorer’s credential deduplication makes reused
 qualifying credentials less effective across multiple wallets.
 Nevertheless, independent credential sets, coordinated persons, or
 changes in provider behavior can still permit multiple wallets. The
 protocol describes the gate as Sybil resistance, not proof of unique
 humanity.</p>
 </section>
-<section id="511-verification-lifecycle-and-failure-behavior"
+<section id="verification-lifecycle-and-failure-behavior"
 class="level2">
 <h2>5.11 Verification lifecycle and failure behavior</h2>
 <p>The complete verification lifecycle is deliberately separated into an
@@ -1013,6 +1178,10 @@ because the wallet address is part of the signed struct and
 <code>msg.sender</code> is the participant checked by Registry.</p>
 <p>Failure behavior is intentionally fail-closed:</p>
 <table>
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
 <thead>
 <tr class="header">
 <th>Condition</th>
@@ -1063,8 +1232,7 @@ because the wallet address is part of the signed struct and
 </tbody>
 </table>
 </section>
-<section
-id="512-why-verification-is-one-time-rather-than-per-transaction"
+<section id="why-verification-is-one-time-rather-than-per-transaction"
 class="level2">
 <h2>5.12 Why verification is one-time rather than per transaction</h2>
 <p>A new Passport check on every buy, sell, or claim would create
@@ -1085,9 +1253,9 @@ registration, votes, or proposal authority.</p>
 <hr />
 </section>
 </section>
-<section id="6-labr-v3-token" class="level1">
+<section id="labr-v3-token" class="level1">
 <h1>6. LABR V3 Token</h1>
-<section id="61-fixed-supply" class="level2">
+<section id="fixed-supply" class="level2">
 <h2>6.1 Fixed supply</h2>
 <p>LABR has 18 decimals and a fixed supply of:</p>
 <pre class="text"><code>1,000,000,000 LABR</code></pre>
@@ -1095,7 +1263,7 @@ registration, votes, or proposal authority.</p>
 external mint function. Burns and transfers to the zero address are
 disabled.</p>
 </section>
-<section id="62-launch-ownership" class="level2">
+<section id="launch-ownership" class="level2">
 <h2>6.2 Launch ownership</h2>
 <p>A temporary owner exists only to bind the exact Exchange. Before
 finalization, ordinary transfers and approvals are disabled.
@@ -1107,7 +1275,7 @@ zero atomically.</p>
 <p>A separate early renunciation path is prohibited because it could
 strand the supply in LABR.</p>
 </section>
-<section id="63-transfer-limits" class="level2">
+<section id="transfer-limits" class="level2">
 <h2>6.3 Transfer limits</h2>
 <pre class="text"><code>Maximum transaction: 5,000 LABR
 Maximum wallet: 10,000 LABR
@@ -1116,7 +1284,7 @@ Minimum dividend balance: 1 LABR</code></pre>
 <p>The official Exchange holds more than the wallet maximum because it
 contains inventory. No ordinary participant receives an exemption.</p>
 </section>
-<section id="64-direct-transfers" class="level2">
+<section id="direct-transfers" class="level2">
 <h2>6.4 Direct transfers</h2>
 <p>A user transfer must be initiated directly by the sending EOA. The
 recipient must have no code. A direct transfer does not require the
@@ -1126,7 +1294,7 @@ accrue dividends, claim dividends, or register until verification.</p>
 <p>The resulting recipient balance may not exceed 10,000 LABR and the
 transfer amount may not exceed 5,000 LABR.</p>
 </section>
-<section id="65-allowances-and-transferfrom" class="level2">
+<section id="allowances-and-transferfrom" class="level2">
 <h2>6.5 Allowances and <code>transferFrom</code></h2>
 <p>Approvals are restricted to the official Exchange and require a
 verified direct wallet. Only Exchange may call
@@ -1134,21 +1302,21 @@ verified direct wallet. Only Exchange may call
 movement and reduces third-party contract risk, at the cost of
 composability.</p>
 </section>
-<section id="66-trade-recording" class="level2">
+<section id="trade-recording" class="level2">
 <h2>6.6 Trade recording</h2>
 <p>Official buys and sells are token transfers initiated by Exchange.
 LABR validates the trader as a verified direct wallet, applies the
 wallet and transaction limits, enforces the cooldown, updates dividend
 eligibility after the balance change, and records the trade
 timestamp.</p>
-<p>The token is the authoritative cooldown source used by Exchange's
+<p>The token is the authoritative cooldown source used by Exchange’s
 <code>canTrade</code> and <code>nextTradeTime</code> views.</p>
 <hr />
 </section>
 </section>
-<section id="7-equal-holder-dividend-accounting" class="level1">
+<section id="equal-holder-dividend-accounting" class="level1">
 <h1>7. Equal-Holder Dividend Accounting</h1>
-<section id="71-policy-definition" class="level2">
+<section id="policy-definition" class="level2">
 <h2>7.1 Policy definition</h2>
 <p>Dividend weight is binary:</p>
 <pre class="text"><code>weight(account) = 1 when:
@@ -1159,15 +1327,20 @@ timestamp.</p>
 weight(account) = 0 otherwise</code></pre>
 <p>Balance above 1 LABR does not increase weight.</p>
 </section>
-<section id="72-why-token-proportional-accounting-is-rejected"
+<section id="why-token-proportional-accounting-is-rejected"
 class="level2">
 <h2>7.2 Why token-proportional accounting is rejected</h2>
-<p>A balance-weighted model gives greater recurring income to wealthier
-holders. That conflicts with the intended LaborCoin model. Revision 7
-treats LABR as the qualification threshold and economic participation
-token, not as a multiplier for holder-dividend power.</p>
+<p>A token-balance-weighted distribution would give the largest
+recurring payments to the people who already hold the most. That would
+reproduce a wealth-weighted model inside a project intended to support
+collective solidarity.</p>
+<p>Revision 7 instead treats 1 LABR as the qualification threshold for
+the holder set. Once a verified wallet qualifies, additional LABR does
+not increase its dividend weight. LABR remains an economic participation
+token, but it is not a multiplier for influence or recurring holder
+income.</p>
 </section>
-<section id="73-global-accumulator" class="level2">
+<section id="global-accumulator" class="level2">
 <h2>7.3 Global accumulator</h2>
 <p>LABR tracks:</p>
 <pre class="text"><code>eligibleDividendHolderCount
@@ -1181,7 +1354,7 @@ totalDividendsRedirectedToDAO</code></pre>
 <p>Each eligible account has a synthetic unit of one. The contract does
 not iterate over holder addresses.</p>
 </section>
-<section id="74-entry-correction" class="level2">
+<section id="entry-correction" class="level2">
 <h2>7.4 Entry correction</h2>
 <p>When an account becomes eligible, its correction subtracts the
 current global accumulator. This prevents the new account from receiving
@@ -1191,13 +1364,13 @@ deposits made before entry.</p>
 <li>Alice and Bob are eligible when 20 POL is deposited. Each earns 10
 POL.</li>
 <li>Carol then verifies and reaches 1 LABR.</li>
-<li>Carol's entry correction excludes the previous 20 POL.</li>
+<li>Carol’s entry correction excludes the previous 20 POL.</li>
 <li>A later 30 POL deposit is split three ways. Alice, Bob, and Carol
 each earn 10 POL from that deposit.</li>
 </ul>
 <p>Totals are Alice 20, Bob 20, Carol 10.</p>
 </section>
-<section id="75-exit-correction" class="level2">
+<section id="exit-correction" class="level2">
 <h2>7.5 Exit correction</h2>
 <p>When an eligible account falls below 1 LABR, its correction adds the
 current accumulator. This preserves prior accrual while setting future
@@ -1206,13 +1379,13 @@ weight to zero.</p>
 LABR, provided the wallet remains permanently verified. The account
 receives no deposits made while below the threshold.</p>
 </section>
-<section id="76-re-entry" class="level2">
+<section id="re-entry" class="level2">
 <h2>7.6 Re-entry</h2>
 <p>Re-entry subtracts the then-current accumulator. The participant
 resumes with one unit but does not receive deposits made during
 absence.</p>
 </section>
-<section id="77-unequal-balance-example" class="level2">
+<section id="unequal-balance-example" class="level2">
 <h2>7.7 Unequal-balance example</h2>
 <p>Assume the eligible set is:</p>
 <table>
@@ -1244,7 +1417,7 @@ absence.</p>
 <p>A 90 POL deposit gives 30 POL to each. C does not receive more
 because C owns more LABR.</p>
 </section>
-<section id="78-multi-wallet-risk" class="level2">
+<section id="multi-wallet-risk" class="level2">
 <h2>7.8 Multi-wallet risk</h2>
 <p>If one person controls several independently verified wallets and
 keeps at least 1 LABR in each, each wallet has one unit. This is
@@ -1254,35 +1427,35 @@ harder, but do not eliminate the possibility. The design chooses an
 accessible score gate rather than requiring government ID or biometric
 proof.</p>
 </section>
-<section id="79-deposit-source" class="level2">
+<section id="deposit-source" class="level2">
 <h2>7.9 Deposit source</h2>
 <p>Only official Exchange may call <code>depositDividends</code>. The 5%
-holder share from each sale is deposited after the seller's LABR balance
+holder share from each sale is deposited after the seller’s LABR balance
 and eligibility have been updated. A seller who exits below 1 LABR does
 not share in the dividend generated by that same sale.</p>
 </section>
-<section id="710-zero-eligible-holders" class="level2">
+<section id="zero-eligible-holders" class="level2">
 <h2>7.10 Zero eligible holders</h2>
 <p>When no eligible holder exists, LABR sends the deposit to the DAO and
 records the redirection. Retaining it for future participants could
 award historical value to the first later entrant and create timing
 incentives.</p>
 </section>
-<section id="711-rounding" class="level2">
+<section id="rounding" class="level2">
 <h2>7.11 Rounding</h2>
 <p>Integer division may leave a small undistributed residue inside LABR.
 Testing must bound this residue and prove it cannot be extracted through
 repeated entry, exit, transfer, or claim operations. No administrator
 may sweep residue.</p>
 </section>
-<section id="712-claim-gate" class="level2">
+<section id="claim-gate" class="level2">
 <h2>7.12 Claim gate</h2>
 <p><code>claimDividends</code> requires the verified direct wallet. This
-expresses the project's policy that equal-holder distributions belong to
+expresses the project’s policy that equal-holder distributions belong to
 verified participants. Since verification is permanent, claims do not
 depend on a fresh Passport API response.</p>
 </section>
-<section id="713-accounting-state-model" class="level2">
+<section id="accounting-state-model" class="level2">
 <h2>7.13 Accounting state model</h2>
 <p>For each account, dividend accounting can be understood as a small
 state machine:</p>
@@ -1304,7 +1477,7 @@ pre-funded wallet is handled atomically.</p>
 during eligible periods from deposits made before entry or during
 absence. The contract never needs to retain an array of all holders or
 iterate over the eligible set. The global count is used only as the
-denominator for a new deposit; the correction records each account's
+denominator for a new deposit; the correction records each account’s
 entry and exit boundaries.</p>
 <p>The following conservation relationship should hold apart from
 bounded integer residue:</p>
@@ -1317,7 +1490,7 @@ POL withdrawn by participants
 <p>The test suite must calculate each term independently over randomized
 state sequences rather than trusting public counters alone.</p>
 </section>
-<section id="714-detailed-distribution-scenarios" class="level2">
+<section id="detailed-distribution-scenarios" class="level2">
 <h2>7.14 Detailed distribution scenarios</h2>
 <section id="scenario-a-equal-weight-despite-unequal-balances"
 class="level3">
@@ -1330,10 +1503,10 @@ denominator or account weight.</p>
 <section id="scenario-b-entry-after-a-distribution" class="level3">
 <h3>Scenario B: entry after a distribution</h3>
 <p>Alice is the only eligible holder when 8 POL arrives, so Alice
-accrues 8 POL. Bob then verifies while holding 2 LABR. Bob's entry
+accrues 8 POL. Bob then verifies while holding 2 LABR. Bob’s entry
 correction excludes the earlier accumulator. A later 10 POL deposit is
-divided between Alice and Bob. Alice's cumulative accrual becomes 13 POL
-and Bob's becomes 5 POL.</p>
+divided between Alice and Bob. Alice’s cumulative accrual becomes 13 POL
+and Bob’s becomes 5 POL.</p>
 </section>
 <section id="scenario-c-temporary-exit-and-re-entry" class="level3">
 <h3>Scenario C: temporary exit and re-entry</h3>
@@ -1360,7 +1533,7 @@ guarantee that one natural person can never qualify multiple
 wallets.</p>
 </section>
 </section>
-<section id="715-claim-integrity-and-payout-order" class="level2">
+<section id="claim-integrity-and-payout-order" class="level2">
 <h2>7.15 Claim integrity and payout order</h2>
 <p>A claim performs the following operations in one non-reentrant
 transaction:</p>
@@ -1385,39 +1558,56 @@ still exist outside accounted distributions and has no recovery path.
 Tests must distinguish accounted dividends from unrelated forced
 balance.</p>
 </section>
-<section id="716-policy-implications" class="level2">
+<section id="policy-implications" class="level2">
 <h2>7.16 Policy implications</h2>
-<p>Equal-holder dividends are intentionally not a passive yield
-proportional to capital. They provide a shared economic benefit to
-qualifying participants. The minimum 1 LABR balance represents
-membership in the economic holder set, while verification reduces
-trivial replication of that set.</p>
-<p>The model does not make every natural person's total economic
-position equal. A person who controls several independently qualifying
-wallets may receive several shares, and a person who cannot satisfy the
-scorer receives none. The contract enforces the published rule exactly,
-but the fairness of the result still depends on the external identity
-system and participant behavior.</p>
+<p>Equal-holder dividends are intended to give qualifying participants a
+shared benefit from official Exchange activity without rewarding larger
+token balances with larger percentages. The rule supports the broader
+principle that participation in LaborCoin should not become another
+mechanism through which wealth automatically accumulates more power and
+income.</p>
+<p>The holder distribution is separate from the DAO treasury. Dividend
+claims provide one equal economic share to each verified eligible
+wallet, while the DAO treasury exists to fund collective working-class
+needs through proposals and votes. One mechanism supports participants
+in the holder set; the other directs common resources toward approved
+causes.</p>
+<p>The minimum 1 LABR balance creates a clear economic membership
+threshold, and identity verification makes simple wallet replication
+more difficult. The result is still one share per verified eligible
+wallet, not a guaranteed one share per natural person. The fairness of
+the outcome therefore depends partly on the external identity system and
+participant behavior.</p>
+<p>The policy should be evaluated by its enforceable commitment: larger
+LABR holdings do not buy a larger holder-dividend share.</p>
 <hr />
 </section>
 </section>
-<section id="8-exchange-v6-and-bonding-curve" class="level1">
+<section id="exchange-v6-and-bonding-curve" class="level1">
 <h1>8. Exchange V6 and Bonding Curve</h1>
-<section id="81-official-market-role" class="level2">
+<section id="official-market-role" class="level2">
 <h2>8.1 Official market role</h2>
-<p>Exchange V6 is the official initial distribution and redemption
-contract. External transfers and third-party markets may exist, but they
-are not official Exchange activity and cannot be guaranteed or
-controlled by the protocol.</p>
+<p>Exchange V6 is the official path for initial LABR distribution and
+redemption. It is also one of the mechanisms through which participation
+contributes to the shared system: the fixed buy allocation sends a
+portion of incoming POL to the DAO, and the fixed sell allocation sends
+portions to the DAO and equal-holder dividends.</p>
+<p>The Exchange is not intended as a speculative marketplace detached
+from the project’s purpose. Its role is to apply the published pricing
+and limit rules while helping build the common treasury and preserve a
+defined redemption path.</p>
+<p>Direct transfers and third-party markets may exist, but they are not
+official Exchange activity and cannot be guaranteed or controlled by the
+protocol.</p>
 </section>
-<section id="82-identity-gate" class="level2">
+<section id="identity-gate" class="level2">
 <h2>8.2 Identity gate</h2>
 <p>Every buy and sell requires permanent Registry verification. This is
 contract-level enforcement. Direct contract calls cannot bypass it.</p>
 <p>The frontend may help a wallet obtain verification, but its interface
 state does not grant access. Exchange reads Registry on-chain.</p>
 </section>
-<section id="83-permanent-limits" class="level2">
+<section id="permanent-limits" class="level2">
 <h2>8.3 Permanent limits</h2>
 <pre class="text"><code>Maximum official transaction: 5,000 LABR
 Maximum permitted participant wallet: 10,000 LABR
@@ -1427,14 +1617,14 @@ buying and selling. At exactly 10,000 LABR it may sell but cannot buy
 more. These rules are permanent constants and must appear in source,
 tests, interface, FAQ, and whitepaper.</p>
 </section>
-<section id="84-direct-pol-denomination" class="level2">
+<section id="direct-pol-denomination" class="level2">
 <h2>8.4 Direct POL denomination</h2>
 <p>Exchange uses POL directly. There is no Chainlink feed and no USD
 conversion. This removes oracle freshness and conversion failure, but
-the fiat value of every price changes with POL's external market
+the fiat value of every price changes with POL’s external market
 value.</p>
 </section>
-<section id="85-marginal-price" class="level2">
+<section id="marginal-price" class="level2">
 <h2>8.5 Marginal price</h2>
 <p>Let:</p>
 <pre class="text"><code>S = 1,000,000,000 LABR
@@ -1448,7 +1638,7 @@ R = 196 POL per LABR</code></pre>
 <p>At zero distribution, marginal price is 14 POL. At full distribution,
 it is 210 POL.</p>
 </section>
-<section id="86-integral-reserve" class="level2">
+<section id="integral-reserve" class="level2">
 <h2>8.6 Integral reserve</h2>
 <p>A user buying a range of tokens must pay the area under the curve
 rather than the ending marginal price multiplied by amount. Define:</p>
@@ -1461,7 +1651,7 @@ Purchase calculations use protective rounding so reserve is not
 underfunded. Sale calculations use protective rounding so reserve is not
 overpaid.</p>
 </section>
-<section id="87-buy-allocation" class="level2">
+<section id="buy-allocation" class="level2">
 <h2>8.7 Buy allocation</h2>
 <p>Exchange first determines the curve reserve contribution. The DAO
 contribution is calculated so it is 10% of total input:</p>
@@ -1471,9 +1661,9 @@ DAO contribution = ceil(reserve contribution / 9)</code></pre>
 10% goes to the DAO.</p>
 <p>The buyer provides an exact token amount, maximum POL input,
 deadline, and required <code>msg.value</code>. Excess above the exact
-required input is refunded within the user's maximum.</p>
+required input is refunded within the user’s maximum.</p>
 </section>
-<section id="88-sell-allocation" class="level2">
+<section id="sell-allocation" class="level2">
 <h2>8.8 Sell allocation</h2>
 <p>For gross curve redemption <code>G</code>:</p>
 <pre class="text"><code>seller = floor(90% of G)
@@ -1484,19 +1674,19 @@ gross redemption. Exchange returns LABR to inventory, updates
 <code>totalSold</code> and reserve, deposits dividends, sends DAO
 contribution, and pays seller.</p>
 </section>
-<section id="89-tranche-unlocking" class="level2">
+<section id="tranche-unlocking" class="level2">
 <h2>8.9 Tranche unlocking</h2>
 <p>The initial unlocked supply is 100,000,000 LABR. Additional capacity
 unlocks in 50,000,000 LABR increments as a valid purchase requires it.
 Unlocking does not create tokens and does not move POL.</p>
 </section>
-<section id="810-inventory-invariant" class="level2">
+<section id="inventory-invariant" class="level2">
 <h2>8.10 Inventory invariant</h2>
 <pre class="text"><code>Exchange LABR balance = 1,000,000,000 LABR - totalSold</code></pre>
 <p>A direct token transfer into Exchange is rejected by LABR because it
 would violate this relationship.</p>
 </section>
-<section id="811-reserve-invariant" class="level2">
+<section id="reserve-invariant" class="level2">
 <h2>8.11 Reserve invariant</h2>
 <pre class="text"><code>accountedReserve = F(totalSold)
 Exchange POL balance &gt;= accountedReserve</code></pre>
@@ -1505,7 +1695,7 @@ forced POL transfer can create excess but cannot cover a recorded
 accounting mismatch. Excess has no recovery function and remains
 trapped.</p>
 </section>
-<section id="812-quote-examples" class="level2">
+<section id="quote-examples" class="level2">
 <h2>8.12 Quote examples</h2>
 <p>At low distribution the curve is near 14 POL per LABR. A small
 exact-token buy therefore requires roughly 14 POL of reserve per LABR
@@ -1515,14 +1705,14 @@ from the deployed <code>quoteBuyExactTokens</code> and
 <code>quoteSellExactTokens</code> functions because integer rounding and
 current <code>totalSold</code> determine execution.</p>
 </section>
-<section id="813-external-markets" class="level2">
+<section id="external-markets" class="level2">
 <h2>8.13 External markets</h2>
 <p>LABR may move through direct transfers and may appear on unofficial
 venues. Official wallet, cooldown, identity, and curve rules do not
 control an external venue. The protocol must not imply that every LABR
 market is identity-gated or reserve-backed by Exchange.</p>
 </section>
-<section id="814-amount-units-rounding-and-slippage-controls"
+<section id="amount-units-rounding-and-slippage-controls"
 class="level2">
 <h2>8.14 Amount units, rounding, and slippage controls</h2>
 <p>All token inputs use 18-decimal LABR units and all POL values use
@@ -1546,7 +1736,7 @@ from a state change between quote and execution. They do not guarantee
 execution because another transaction may change sold supply, inventory,
 cooldown, wallet balance, or allowance first.</p>
 </section>
-<section id="815-trade-execution-sequence" class="level2">
+<section id="trade-execution-sequence" class="level2">
 <h2>8.15 Trade execution sequence</h2>
 <p>A successful buy performs these high-level steps:</p>
 <ol type="1">
@@ -1571,17 +1761,17 @@ supply, and reserve.</li>
 <li>Reduce sold supply and accounted reserve.</li>
 <li>Transfer LABR back to Exchange, causing token eligibility
 synchronization.</li>
-<li>Deposit the holder share after the seller's new eligibility is
+<li>Deposit the holder share after the seller’s new eligibility is
 known.</li>
 <li>Send DAO contribution and seller proceeds.</li>
 <li>Recheck accounting invariants.</li>
 </ol>
 <p>This order prevents a seller who exits below 1 LABR from receiving a
-share of the same sale's dividend deposit. A seller remaining above the
+share of the same sale’s dividend deposit. A seller remaining above the
 threshold stays in the eligible set and receives the same one unit as
 every other eligible holder.</p>
 </section>
-<section id="816-official-exchange-scope-and-bypass-boundaries"
+<section id="official-exchange-scope-and-bypass-boundaries"
 class="level2">
 <h2>8.16 Official Exchange scope and bypass boundaries</h2>
 <p>Identity, wallet, transaction, and cooldown rules are enforced by
@@ -1591,7 +1781,7 @@ a convenience and safety layer, not the source of authorization.</p>
 <p>The protocol cannot prevent independent markets from accepting LABR
 under different rules. A person may transfer LABR directly or trade
 through an unrelated venue if one exists. Such activity does not use
-official curve reserves and does not alter the official Exchange's
+official curve reserves and does not alter the official Exchange’s
 published access rules. The project should avoid claiming control over
 all secondary activity.</p>
 <p>An unverified wallet may receive LABR through a permitted direct
@@ -1600,10 +1790,10 @@ until it verifies. This is an intentional consequence of identity-gated
 official exits. Participants must be told clearly before accepting
 transferred LABR.</p>
 </section>
-<section id="817-economic-stress-conditions" class="level2">
+<section id="economic-stress-conditions" class="level2">
 <h2>8.17 Economic stress conditions</h2>
-<p>The official curve is denominated in POL. A large change in POL's
-external purchasing power does not alter the contract's POL price
+<p>The official curve is denominated in POL. A large change in POL’s
+external purchasing power does not alter the contract’s POL price
 function. It can materially change the fiat value of LABR, the DAO
 treasury, holder distributions, and redemptions.</p>
 <p>Heavy selling reduces sold supply and reserve liability along the
@@ -1619,22 +1809,29 @@ capacity. It does not change total supply or curve mathematics.</p>
 <hr />
 </section>
 </section>
-<section id="9-registration-v6-and-laborvote-v9" class="level1">
+<section id="registration-v6-and-laborvote-v9" class="level1">
 <h1>9. Registration V6 and LaborVote V9</h1>
-<section id="91-shared-identity" class="level2">
+<p>Registration is the step through which a verified participant chooses
+to become a permanent governance member. It turns economic participation
+into an optional democratic role without allowing additional LABR to
+create additional votes.</p>
+<section id="shared-identity" class="level2">
 <h2>9.1 Shared identity</h2>
-<p>Registration reads permanent status from Identity Registry. It does
-not call Human Passport, use the verifier key, or validate a second
-EIP-712 authorization. This reduces duplicate code and prevents scorer
-or threshold mismatch between economic and governance onboarding.</p>
+<p>Registration reuses the wallet’s permanent Identity Registry status.
+A participant does not need to complete a second Passport check or
+obtain another verifier signature in order to join governance.</p>
+<p>This keeps economic and governance onboarding consistent while
+preserving the distinction between them: verification permits official
+economic participation, while Registration is a separate voluntary act
+that creates governance membership.</p>
 </section>
-<section id="92-requirements" class="level2">
+<section id="requirements" class="level2">
 <h2>9.2 Requirements</h2>
 <p>The direct wallet must be verified, hold at least 1 LABR, have no
 prior registration, hold no LABRV, and interact after LaborVote has
 finalized Registration as its sole minter.</p>
 </section>
-<section id="93-permanent-record" class="level2">
+<section id="permanent-record" class="level2">
 <h2>9.3 Permanent record</h2>
 <p>Registration stores:</p>
 <ul>
@@ -1643,12 +1840,14 @@ finalized Registration as its sole minter.</p>
 <li>registration timestamp;</li>
 <li>total member count.</li>
 </ul>
-<p>Registration cannot be revoked. A participant who transfers or sells
-all LABR after registration keeps LABRV and governance membership under
-this candidate. The 1 LABR requirement is an admission threshold, not an
-ongoing voting-balance requirement.</p>
+<p>Registration cannot be revoked. A participant who later transfers or
+sells all LABR keeps LABRV and governance membership under this
+candidate. The 1 LABR requirement is an admission threshold, not an
+ongoing wealth test for voting.</p>
+<p>Permanent membership is intended to prevent voting rights from being
+bought, sold, temporarily borrowed, or removed by an administrator.</p>
 </section>
-<section id="94-laborvote" class="level2">
+<section id="laborvote" class="level2">
 <h2>9.4 LaborVote</h2>
 <p>Each registrant receives exactly <code>1 ether</code> LABRV. The
 token uses 18 decimals only for ERC-20 representation; one whole LABRV
@@ -1657,7 +1856,7 @@ is the fixed membership unit.</p>
 delegation or checkpoint system exists. Governance reads current LABRV
 balance and Registration records directly.</p>
 </section>
-<section id="95-launch-finalization" class="level2">
+<section id="launch-finalization" class="level2">
 <h2>9.5 Launch finalization</h2>
 <p>LaborVote is deployed with expected LABR and Registration runtime
 hashes and a temporary launch owner. Registration is deployed with
@@ -1665,7 +1864,7 @@ expected LABR, LABRV, Identity, and self runtime hashes. LaborVote
 validates Registration and atomically locks it as sole minter while
 setting owner to zero.</p>
 </section>
-<section id="96-certificate" class="level2">
+<section id="certificate" class="level2">
 <h2>9.6 Certificate</h2>
 <p>The site can generate a US Letter membership certificate from
 confirmed on-chain member number and timestamp. It is a local
@@ -1674,16 +1873,16 @@ certificate does not create rights.</p>
 <hr />
 </section>
 </section>
-<section id="10-proposal-text-policy-v1" class="level1">
+<section id="proposal-text-policy-v1" class="level1">
 <h1>10. Proposal Text Policy V1</h1>
-<section id="101-purpose" class="level2">
+<section id="purpose-1" class="level2">
 <h2>10.1 Purpose</h2>
 <p>Proposal descriptions are permanent public data. Governance calls an
 exact immutable policy before storing description text. This prevents
 the official Governance contract from accepting categories of links,
 markup, encodings, and disallowed terms selected at launch.</p>
 </section>
-<section id="102-fixed-properties" class="level2">
+<section id="fixed-properties" class="level2">
 <h2>10.2 Fixed properties</h2>
 <ul>
 <li>maximum 1,000 bytes;</li>
@@ -1693,7 +1892,7 @@ markup, encodings, and disallowed terms selected at launch.</p>
 <li>no administrator or update path.</li>
 </ul>
 </section>
-<section id="103-limitations" class="level2">
+<section id="limitations" class="level2">
 <h2>10.3 Limitations</h2>
 <p>A fixed policy can produce false positives, false negatives, and
 future linguistic mismatch. It cannot understand intent. Since it is
@@ -1702,27 +1901,34 @@ new Aragon permission migration.</p>
 <hr />
 </section>
 </section>
-<section id="11-governance-v15" class="level1">
+<section id="governance-v15" class="level1">
 <h1>11. Governance V15</h1>
-<section id="111-one-member-one-vote" class="level2">
+<p>Governance V15 has one narrow purpose: allow registered participants
+to decide whether the Aragon DAO should send a specified amount of POL
+to a specified recipient. It is not a general protocol administration
+system.</p>
+<section id="one-member-one-vote" class="level2">
 <h2>11.1 One-member-one-vote</h2>
 <p>A wallet is eligible when it holds exactly one LABRV and has a
-matching Registration record. Token wealth does not affect vote
-weight.</p>
+matching Registration record. Every eligible member has one vote. LABR
+wealth, dividend history, proposal activity, and Passport score do not
+increase voting weight.</p>
 </section>
-<section id="112-activation" class="level2">
+<section id="activation" class="level2">
 <h2>11.2 Activation</h2>
-<p>Governance proposal creation remains unavailable until at least 50
-registered members exist. This prevents a very small founding group from
-activating treasury transfers through the final contract.</p>
+<p>Proposal creation remains unavailable until at least 50 registered
+members exist. This prevents the final treasury-transfer process from
+being activated by a very small founding group and creates a minimum
+community base before collective funds can be directed through
+Governance V15.</p>
 </section>
-<section id="113-proposal-creation" class="level2">
+<section id="proposal-creation" class="level2">
 <h2>11.3 Proposal creation</h2>
 <p>A registered direct wallet may have one active proposal at a time.
 The proposal title is fixed as <code>Treasury Transfer</code>. The
 description must pass Policy. Recipient cannot be zero, the DAO, the
 current protocol contracts, or listed superseded protocol addresses.
-Amount must be positive and at most 5% of the DAO's current native-POL
+Amount must be positive and at most 5% of the DAO’s current native-POL
 balance.</p>
 <p>The proposal snapshots:</p>
 <ul>
@@ -1736,20 +1942,20 @@ balance.</p>
 <li>deterministic call ID.</li>
 </ul>
 </section>
-<section id="114-electorate-snapshot" class="level2">
+<section id="electorate-snapshot" class="level2">
 <h2>11.4 Electorate snapshot</h2>
 <p>A member registering after proposal creation cannot vote on that
 proposal. Governance uses member number relative to the stored
 electorate size to enforce the snapshot.</p>
 </section>
-<section id="115-participation-threshold" class="level2">
+<section id="participation-threshold" class="level2">
 <h2>11.5 Participation threshold</h2>
 <p>Required participation is:</p>
 <pre class="text"><code>ceil(electorateSize * 25 / 100)</code></pre>
 <p>At 50 members, required participation is 13, not 12. At 51 members,
 it is also 13.</p>
 </section>
-<section id="116-approval-threshold" class="level2">
+<section id="approval-threshold" class="level2">
 <h2>11.6 Approval threshold</h2>
 <p>Required yes votes are:</p>
 <pre class="text"><code>ceil(votesCast * 67 / 100)</code></pre>
@@ -1757,12 +1963,12 @@ it is also 13.</p>
 because <code>ceil(2.01) = 3</code>. At 100 votes cast, 67 yes are
 required.</p>
 </section>
-<section id="117-timing" class="level2">
+<section id="timing" class="level2">
 <h2>11.7 Timing</h2>
 <p>Voting lasts 14 days. A successful proposal may execute for 7 days
 after voting ends. After the execution window, it expires.</p>
 </section>
-<section id="118-execution" class="level2">
+<section id="execution" class="level2">
 <h2>11.8 Execution</h2>
 <p>Any wallet may call execution after success because execution is
 mechanical. Governance rechecks:</p>
@@ -1782,13 +1988,13 @@ data = empty</code></pre>
 <p>The DAO performs the transfer. Governance records execution and
 cannot execute the proposal again.</p>
 </section>
-<section id="119-narrow-authority" class="level2">
+<section id="narrow-authority" class="level2">
 <h2>11.9 Narrow authority</h2>
 <p>Governance cannot submit arbitrary calldata, token transfers,
 upgrades, permission changes, or multiple actions. It has no owner,
 pause, setter, or recovery function.</p>
 </section>
-<section id="1110-repeated-proposal-risk" class="level2">
+<section id="repeated-proposal-risk" class="level2">
 <h2>11.10 Repeated-proposal risk</h2>
 <p>The 5% cap is per proposal, not per week, month, or year. Repeated
 approved proposals can spend a substantial fraction of treasury. The
@@ -1797,49 +2003,59 @@ additional cumulative cap.</p>
 <hr />
 </section>
 </section>
-<section id="12-treasury-and-aragon-permission-architecture"
+<section id="treasury-and-aragon-permission-architecture"
 class="level1">
 <h1>12. Treasury and Aragon Permission Architecture</h1>
-<section id="121-custody" class="level2">
+<section id="custody" class="level2">
 <h2>12.1 Custody</h2>
 <p>The Aragon DAO at
 <code>0x0C2e5679153593b82a84eAB5CA90895BB291Cec4</code> holds treasury
-POL. Custom Governance does not receive or escrow proposal funds.</p>
+POL. Custom Governance does not receive, escrow, or temporarily control
+proposal funds.</p>
+<p>This separation matters politically as well as technically. The
+shared treasury is not placed in a founder wallet or a private
+organizational account. Its balance and outgoing transfers remain
+publicly visible, and Governance receives only the narrow authority
+needed to execute an approved transfer.</p>
 </section>
-<section id="122-execute-permission" class="level2">
+<section id="execute-permission" class="level2">
 <h2>12.2 Execute permission</h2>
-<p>Governance requires Aragon's <code>EXECUTE_PERMISSION_ID</code>. The
+<p>Governance requires Aragon’s <code>EXECUTE_PERMISSION_ID</code>. The
 permission must be granted only after deployed runtime verification and
 fork rehearsal. Old Governance and Treasury Module permissions must be
 revoked after the new path is proven.</p>
 </section>
-<section id="123-recipient-diligence" class="level2">
+<section id="recipient-diligence" class="level2">
 <h2>12.3 Recipient diligence</h2>
-<p>A technically valid proposal can pay a bad recipient. Contracts
-cannot prove that an address represents workers, a strike, a union, a
-mutual-aid effort, or a legitimate expense. Participants must verify
-recipient control and purpose through social and organizational
-processes before voting.</p>
+<p>A technically valid proposal can still support the wrong recipient.
+Contracts cannot prove that an address represents affected workers, that
+a campaign has worker consent, that a workplace committee is
+accountable, or that the proposed use of funds will advance
+working-class interests.</p>
+<p>Members must therefore investigate the recipient, confirm control of
+the destination address, evaluate the stated purpose, and consider how
+the funds will be distributed before voting. Public proposals and
+on-chain transfers improve transparency, but they do not replace
+political judgment or human accountability.</p>
 </section>
-<section id="124-irreversibility" class="level2">
+<section id="irreversibility" class="level2">
 <h2>12.4 Irreversibility</h2>
 <p>A completed native-POL transfer cannot be reversed by Governance.
 There is no clawback, dispute administrator, or recipient freeze.</p>
 <hr />
 </section>
 </section>
-<section id="13-runtime-commitments-and-immutable-deployment"
+<section id="runtime-commitments-and-immutable-deployment"
 class="level1">
 <h1>13. Runtime Commitments and Immutable Deployment</h1>
-<section id="131-why-source-verification-is-insufficient"
-class="level2">
+<section id="why-source-verification-is-insufficient" class="level2">
 <h2>13.1 Why source verification is insufficient</h2>
 <p>Publishing source does not prove that a deployed address contains
 that runtime. Compiler version, optimizer, metadata, imports,
 constructor values, and immutables affect bytecode. Revision 7 records
 the complete build and compares on-chain runtime directly.</p>
 </section>
-<section id="132-record-types" class="level2">
+<section id="record-types" class="level2">
 <h2>13.2 Record types</h2>
 <p>For each contract the release must preserve:</p>
 <ul>
@@ -1856,7 +2072,7 @@ the complete build and compares on-chain runtime directly.</p>
 <li>sealed compilation ZIP and hash.</li>
 </ul>
 </section>
-<section id="133-constructor-independent-runtimes" class="level2">
+<section id="constructor-independent-runtimes" class="level2">
 <h2>13.3 Constructor-independent runtimes</h2>
 <p>Identity, LABR, Exchange, LABRV, Registration, and Policy
 intentionally store deployment values in ordinary storage or have no
@@ -1864,7 +2080,7 @@ constructor inputs affecting runtime. Their runtime templates are
 intended to be independent of constructor values. Compilation must
 confirm this assumption.</p>
 </section>
-<section id="134-governance-immutables" class="level2">
+<section id="governance-immutables" class="level2">
 <h2>13.4 Governance immutables</h2>
 <p>Governance stores final LABR, LABRV, Registration, Policy, and
 expected hashes in immutables. Its deployed runtime differs by final
@@ -1872,21 +2088,21 @@ values. The compilation record must identify immutable offsets and
 reconstruct the exact expected deployed runtime after addresses are
 known.</p>
 </section>
-<section id="135-commitment-cycle" class="level2">
+<section id="commitment-cycle" class="level2">
 <h2>13.5 Commitment cycle</h2>
 <p>Identity commits to LABR runtime. LABR commits to Identity and
 Exchange runtimes. Exchange validates Identity and LABR. This is
 resolved through the ordered finalization procedure rather than a
 permanent setter.</p>
 </section>
-<section id="136-source-freeze" class="level2">
+<section id="source-freeze" class="level2">
 <h2>13.6 Source freeze</h2>
 <p>Any source edit after compilation invalidates affected artifacts and
 all downstream commitments. A comment-only edit can change metadata and
 bytecode. The final source tree must therefore be frozen before record
 creation.</p>
 </section>
-<section id="137-evidence-chain-from-source-to-deployed-runtime"
+<section id="evidence-chain-from-source-to-deployed-runtime"
 class="level2">
 <h2>13.7 Evidence chain from source to deployed runtime</h2>
 <p>A credible immutable deployment record should allow an independent
@@ -1924,10 +2140,10 @@ information;</li>
 deployment.</li>
 </ul>
 </section>
-<section id="138-runtime-commitments-versus-addresses" class="level2">
+<section id="runtime-commitments-versus-addresses" class="level2">
 <h2>13.8 Runtime commitments versus addresses</h2>
-<p>A runtime hash answers: "What exact executable code is present?" An
-address answers: "Where is that code and state located?" Both are
+<p>A runtime hash answers: “What exact executable code is present?” An
+address answers: “Where is that code and state located?” Both are
 required. Two contracts can share a runtime hash but have different
 storage configuration, balances, permissions, or histories.
 Constructor-independent runtime design improves precommitment but does
@@ -1938,7 +2154,7 @@ it also checks that Exchange reports the same LABR, Registry, DAO
 treasury, compatibility ID, and fee constants. Registry similarly checks
 that LABR points back to Registry and its expected code hash.</p>
 </section>
-<section id="139-mandatory-abort-conditions" class="level2">
+<section id="mandatory-abort-conditions" class="level2">
 <h2>13.9 Mandatory abort conditions</h2>
 <p>Deployment must stop rather than improvise when any of the following
 occurs:</p>
@@ -1966,9 +2182,9 @@ and every runtime-dependent contract to compilation and review.</p>
 <hr />
 </section>
 </section>
-<section id="14-deployment-procedure" class="level1">
+<section id="deployment-procedure" class="level1">
 <h1>14. Deployment Procedure</h1>
-<section id="141-build-profile" class="level2">
+<section id="build-profile" class="level2">
 <h2>14.1 Build profile</h2>
 <pre class="text"><code>Solidity: 0.8.36+commit.8a079791
 OpenZeppelin: 5.6.1
@@ -1978,7 +2194,7 @@ Via IR: false
 Metadata bytecode hash: ipfs
 Network: Polygon mainnet, chain ID 137</code></pre>
 </section>
-<section id="142-compile-order" class="level2">
+<section id="compile-order" class="level2">
 <h2>14.2 Compile order</h2>
 <ol type="1">
 <li>Proposal Text Policy V1.0.1</li>
@@ -1990,8 +2206,7 @@ Network: Polygon mainnet, chain ID 137</code></pre>
 <li>Governance V15.0.0</li>
 </ol>
 </section>
-<section id="143-deploy-and-finalize-identityeconomic-cycle"
-class="level2">
+<section id="deploy-and-finalize-identityeconomic-cycle" class="level2">
 <h2>14.3 Deploy and finalize identity/economic cycle</h2>
 <ol type="1">
 <li>Deploy Policy and verify runtime.</li>
@@ -2009,7 +2224,7 @@ LABR owner zero.</li>
 inventory, and fixed constants.</li>
 </ol>
 </section>
-<section id="144-deploy-and-finalize-membership" class="level2">
+<section id="deploy-and-finalize-membership" class="level2">
 <h2>14.4 Deploy and finalize membership</h2>
 <ol type="1">
 <li>Deploy LaborVote with LABR and expected LABR and Registration
@@ -2021,7 +2236,7 @@ hashes.</li>
 supply.</li>
 </ol>
 </section>
-<section id="145-deploy-governance" class="level2">
+<section id="deploy-governance" class="level2">
 <h2>14.5 Deploy governance</h2>
 <ol type="1">
 <li>Deploy Governance with LABRV, Registration, Policy, and expected
@@ -2032,7 +2247,7 @@ hashes.</li>
 <li>Revoke all obsolete LaborCoin execute permissions.</li>
 </ol>
 </section>
-<section id="146-production-cutover" class="level2">
+<section id="production-cutover" class="level2">
 <h2>14.6 Production cutover</h2>
 <p>Update verifier environment to the final Registry. Update site
 addresses and runtime hashes. Verify frontend ABIs, EIP-712 domain,
@@ -2041,16 +2256,16 @@ end-to-end rehearsal before opening production.</p>
 <hr />
 </section>
 </section>
-<section id="15-security-architecture-and-threat-model" class="level1">
+<section id="security-architecture-and-threat-model" class="level1">
 <h1>15. Security Architecture and Threat Model</h1>
-<section id="151-immutability-risk" class="level2">
+<section id="immutability-risk" class="level2">
 <h2>15.1 Immutability risk</h2>
 <p>The absence of upgrade and recovery authority prevents unilateral
 changes but also prevents patching. A severe defect can permanently
 disable or misallocate value. Compilation and tests are not substitutes
 for independent review.</p>
 </section>
-<section id="152-verifier-compromise" class="level2">
+<section id="verifier-compromise" class="level2">
 <h2>15.2 Verifier compromise</h2>
 <p>The fixed verifier can authorize permanent status. A stolen key can
 admit unauthorized wallets until the service is stopped, and admitted
@@ -2058,14 +2273,14 @@ status cannot be revoked. The key must be isolated, access-limited,
 backed up securely only when intended, and never used for unrelated
 blockchain transactions.</p>
 </section>
-<section id="153-scorer-dependence" class="level2">
+<section id="scorer-dependence" class="level2">
 <h2>15.3 Scorer dependence</h2>
-<p>The scorer's composition and external provider behavior may change
+<p>The scorer’s composition and external provider behavior may change
 even though the on-chain threshold and scorer hash do not. The verifier
 must verify it is querying the intended scorer. Provider outages stop
 new verification.</p>
 </section>
-<section id="154-sybil-residual-risk" class="level2">
+<section id="sybil-residual-risk" class="level2">
 <h2>15.4 Sybil residual risk</h2>
 <p>Passport scoring is not proof of a unique natural person.
 Equal-per-wallet dividends create an incentive to establish additional
@@ -2073,21 +2288,21 @@ verified wallets. Deduplicated credentials, threshold, direct-wallet
 restrictions, and trading limits reduce ordinary abuse but cannot
 eliminate coordinated or independently credentialed participants.</p>
 </section>
-<section id="155-dividend-accounting-risk" class="level2">
+<section id="dividend-accounting-risk" class="level2">
 <h2>15.5 Dividend accounting risk</h2>
 <p>The equal-holder accumulator is sensitive to eligibility transitions.
 A correction-sign error could award history, erase accrual, or duplicate
 value. Tests must cover every transition and randomized long sequences.
 No manual reconciliation exists after launch.</p>
 </section>
-<section id="156-exchange-risk" class="level2">
+<section id="exchange-risk" class="level2">
 <h2>15.6 Exchange risk</h2>
 <p>Integral arithmetic, rounding, reserve updates, transfer order, and
 external POL sends must remain consistent under reentrancy protection.
 Forced POL remains trapped. POL volatility can make the real-world curve
 value unexpectedly high or low.</p>
 </section>
-<section id="157-smart-wallet-exclusion" class="level2">
+<section id="smart-wallet-exclusion" class="level2">
 <h2>15.7 Smart-wallet exclusion</h2>
 <p>The direct-wallet policy excludes legitimate multisig and
 account-abstraction users. <code>tx.origin</code> is used as a
@@ -2095,13 +2310,13 @@ restrictive condition, not an authentication secret. Future protocol
 changes on Polygon could affect assumptions and should be reviewed
 immediately before launch.</p>
 </section>
-<section id="158-treasury-risk" class="level2">
+<section id="treasury-risk" class="level2">
 <h2>15.8 Treasury risk</h2>
 <p>Governance can approve a mistaken or malicious recipient. The DAO
 transfer is irreversible. The contract cannot evaluate worker
 legitimacy, fraud, coercion, or legal compliance.</p>
 </section>
-<section id="159-governance-capture" class="level2">
+<section id="governance-capture" class="level2">
 <h2>15.9 Governance capture</h2>
 <p>One-member-one-vote reduces wealth weighting but does not prevent
 coordinated capture, low turnout, bribery, coercion, or a
@@ -2109,14 +2324,14 @@ verifier-admitted Sybil population. The 50-member activation threshold
 and 25% participation requirement are fixed safeguards, not
 guarantees.</p>
 </section>
-<section id="1510-permission-migration" class="level2">
+<section id="permission-migration" class="level2">
 <h2>15.10 Permission migration</h2>
 <p>Leaving old Aragon execute permissions active can preserve obsolete
 control paths. The final audit must enumerate all grantees and revoke
 every superseded LaborCoin Governance, module, executor, and deployer
 permission not required after launch.</p>
 </section>
-<section id="1511-frontend-and-infrastructure" class="level2">
+<section id="frontend-and-infrastructure" class="level2">
 <h2>15.11 Frontend and infrastructure</h2>
 <p>A compromised site can display false addresses, request malicious
 signatures, or hide failures. Users can verify contracts independently,
@@ -2124,15 +2339,21 @@ but many rely on the interface. Dependencies should be pinned or
 preserved locally, service-worker caches versioned, TLS and DNS
 protected, and final addresses displayed prominently.</p>
 </section>
-<section id="1512-legal-and-operational-uncertainty" class="level2">
+<section id="legal-and-operational-uncertainty" class="level2">
 <h2>15.12 Legal and operational uncertainty</h2>
 <p>Token, DAO, identity, labor-support, and tax treatment can vary by
 jurisdiction and change. No immutable contract can guarantee legal
 classification or service-provider access.</p>
 </section>
-<section id="1513-cross-component-failure-matrix" class="level2">
+<section id="cross-component-failure-matrix" class="level2">
 <h2>15.13 Cross-component failure matrix</h2>
 <table>
+<colgroup>
+<col style="width: 25%" />
+<col style="width: 25%" />
+<col style="width: 25%" />
+<col style="width: 25%" />
+</colgroup>
 <thead>
 <tr class="header">
 <th>Failure</th>
@@ -2214,7 +2435,7 @@ unavailable</td>
 </tbody>
 </table>
 </section>
-<section id="1514-verifier-operational-controls" class="level2">
+<section id="verifier-operational-controls" class="level2">
 <h2>15.14 Verifier operational controls</h2>
 <p>Although verification status is on-chain, the signer is an
 operationally sensitive service. The production verifier should use a
@@ -2236,7 +2457,7 @@ should expose only public configuration and should never reveal private
 keys, API keys, raw Passport responses, or internal exception
 details.</p>
 </section>
-<section id="1515-website-and-dependency-integrity" class="level2">
+<section id="website-and-dependency-integrity" class="level2">
 <h2>15.15 Website and dependency integrity</h2>
 <p>The website does not enforce protocol authorization, but it
 influences most participant decisions. A compromised build could
@@ -2254,28 +2475,28 @@ the previous cached site.</p>
 <hr />
 </section>
 </section>
-<section id="16-testing-and-assurance" class="level1">
+<section id="testing-and-assurance" class="level1">
 <h1>16. Testing and Assurance</h1>
-<section id="161-source-level-gates" class="level2">
+<section id="source-level-gates" class="level2">
 <h2>16.1 Source-level gates</h2>
 <p>Before compilation, automated guards should confirm versions,
 constants, compatibility strings, equal-holder variable names, absence
 of balance-weighted dividend denominators, required identity checks, and
 no stale Revision 6 active references.</p>
 </section>
-<section id="162-unit-tests" class="level2">
+<section id="unit-tests" class="level2">
 <h2>16.2 Unit tests</h2>
 <p>Every public and external function, error branch, finalization state,
 eligibility transition, quote boundary, and proposal transition requires
 deterministic tests.</p>
 </section>
-<section id="163-fuzz-tests" class="level2">
+<section id="fuzz-tests" class="level2">
 <h2>16.3 Fuzz tests</h2>
 <p>Fuzz token amounts, supply points, wallet balances, holder counts,
 deposit sizes, entry/exit sequences, vote counts, electorate sizes, and
 treasury balances.</p>
 </section>
-<section id="164-stateful-invariants" class="level2">
+<section id="stateful-invariants" class="level2">
 <h2>16.4 Stateful invariants</h2>
 <p>At all reachable states:</p>
 <ul>
@@ -2293,14 +2514,14 @@ redirections as defined;</li>
 <li>executed proposals cannot execute again.</li>
 </ul>
 </section>
-<section id="165-fork-tests" class="level2">
+<section id="fork-tests" class="level2">
 <h2>16.5 Fork tests</h2>
 <p>A Polygon fork should use the actual DAO and permission system.
 Rehearse deployment order, runtime comparisons, finalization, permission
 grant, proposal creation, voting, execution, permission revocation, and
 failure cases.</p>
 </section>
-<section id="166-frontend-and-verifier-tests" class="level2">
+<section id="frontend-and-verifier-tests" class="level2">
 <h2>16.6 Frontend and verifier tests</h2>
 <p>Verify exact EIP-712 digest parity, startup fail-closed behavior,
 score conversion, origin restrictions, no secret logging, wallet
@@ -2308,7 +2529,7 @@ reconnection, identity synchronization, equal-dividend display, claim,
 registration, certificate generation, mobile behavior, service-worker
 updates, and predeployment disablement.</p>
 </section>
-<section id="167-independent-review" class="level2">
+<section id="independent-review" class="level2">
 <h2>16.7 Independent review</h2>
 <p>An independent reviewer should receive source, compiler profile,
 artifacts, tests, runtime graph, deployment sequence, authority matrix,
@@ -2317,77 +2538,119 @@ explicitly accepted before deployment.</p>
 <hr />
 </section>
 </section>
-<section id="17-participant-journey" class="level1">
+<section id="participant-journey" class="level1">
 <h1>17. Participant Journey</h1>
-<section id="171-wallet-setup" class="level2">
+<p>A participant can support LaborCoin at several levels. They may
+simply learn about a campaign and share it, contribute POL to the DAO,
+acquire LABR and join the equal-holder set, register as a governance
+member, or help workers prepare and submit a treasury proposal. The
+system does not require every supporter to perform every role.</p>
+<section id="wallet-setup" class="level2">
 <h2>17.1 Wallet setup</h2>
 <p>A participant uses MetaMask or another compatible self-custody wallet
 that exposes a direct EOA. Contract wallets and relays are unsupported.
-The wallet switches to Polygon and obtains POL.</p>
+The wallet switches to Polygon and obtains enough POL for gas and any
+intended purchase or donation.</p>
 </section>
-<section id="172-human-passport" class="level2">
+<section id="human-passport" class="level2">
 <h2>17.2 Human Passport</h2>
-<p>The participant builds a score through Human Passport. The site links
-directly to the Passport application. A score of at least 15 is
-required.</p>
+<p>To use the official Exchange, receive equal-holder dividends, claim,
+or register for governance, the participant builds a score through Human
+Passport. The site links to the Passport application. A score of at
+least 15 is required.</p>
+<p>The identity step is intended to make simple duplicate-wallet
+participation harder while remaining more accessible than a
+government-ID or biometric requirement.</p>
 </section>
-<section id="173-permanent-verification" class="level2">
+<section id="permanent-verification" class="level2">
 <h2>17.3 Permanent verification</h2>
 <p>The site requests an authorization from the LaborCoin verifier. The
 wallet submits it to Identity Registry and pays Polygon gas. Once
-confirmed, status is permanent.</p>
+confirmed, status is permanent and does not require a fresh Passport
+check for each later action.</p>
 </section>
-<section id="174-economic-participation" class="level2">
-<h2>17.4 Economic participation</h2>
-<p>The verified wallet opens Exchange, reviews current curve metrics,
-and buys an exact LABR amount. The resulting balance cannot exceed
-10,000 LABR and the trade cannot exceed 5,000 LABR.</p>
+<section id="building-the-common-system" class="level2">
+<h2>17.4 Building the common system</h2>
+<p>A verified participant can open the Exchange, review the current
+curve metrics, and buy an exact LABR amount. A person may also send POL
+directly to the DAO treasury without buying LABR.</p>
+<p>Official purchases help build the DAO treasury through the fixed buy
+allocation. The resulting LABR balance cannot exceed 10,000 LABR, and an
+official trade cannot exceed 5,000 LABR.</p>
 </section>
-<section id="175-equal-dividends" class="level2">
-<h2>17.5 Equal dividends</h2>
-<p>When the verified wallet holds at least 1 LABR, it enters the
-equal-holder set. The Exchange page shows eligibility, current
-eligible-holder count, and withdrawable POL. Claims are made on the
-Exchange page.</p>
+<section id="equal-holder-dividends" class="level2">
+<h2>17.5 Equal-holder dividends</h2>
+<p>When a verified wallet holds at least 1 LABR, it enters the
+equal-holder set. Official sales contribute a fixed holder share, and
+each eligible wallet receives one equal dividend unit regardless of
+whether it holds 1, 100, or 10,000 LABR.</p>
+<p>The Exchange page shows eligibility, the current eligible-holder
+count, and withdrawable POL. Claims are made from the participant’s
+verified wallet.</p>
 </section>
-<section id="176-selling" class="level2">
+<section id="selling" class="level2">
 <h2>17.6 Selling</h2>
-<p>The verified wallet may sell after cooldown, subject to limits and
-available reserve. A sale returning the balance below 1 LABR removes
-future dividend eligibility while preserving accrued amounts.</p>
+<p>A verified wallet may sell after the cooldown, subject to limits and
+available reserve. A sale that leaves the balance below 1 LABR ends
+future dividend eligibility while preserving amounts already
+accrued.</p>
+<p>A worker preparing for direct action may choose to sell LABR for
+expenses, but LaborCoin does not require recipients to hold or sell
+LABR. The DAO can also approve a direct treasury transfer to an approved
+recipient address selected through governance.</p>
 </section>
-<section id="177-governance-registration" class="level2">
+<section id="governance-registration" class="level2">
 <h2>17.7 Governance registration</h2>
 <p>A verified wallet holding at least 1 LABR may sign the
-worker-centered attestation and call Registration. One LABRV and
-permanent member number are created. The site may generate a US Letter
-certificate.</p>
+worker-centered attestation and call Registration. One LABRV and a
+permanent member number are created. LABRV cannot be transferred or
+multiplied by purchasing more LABR.</p>
+<p>The site may generate a US Letter membership certificate, but the
+on-chain Registration record is authoritative.</p>
 </section>
-<section id="178-governance" class="level2">
-<h2>17.8 Governance</h2>
+<section id="proposing-and-voting-on-aid" class="level2">
+<h2>17.8 Proposing and voting on aid</h2>
 <p>After 50 members, eligible participants may create treasury-transfer
-proposals and vote. Successful proposals execute through the Aragon DAO
-within the fixed window.</p>
+proposals and vote. A proposal identifies one recipient, one POL amount,
+and a public description that passes the fixed text policy.</p>
+<p>Before voting, members are expected to investigate whether the
+recipient represents the affected workers or cause, whether the address
+is controlled safely, and whether the proposed distribution plan is
+credible. The contract cannot perform that social verification.</p>
+<p>A successful proposal executes through the Aragon DAO within the
+fixed window. The completed transfer is public and irreversible.</p>
+</section>
+<section id="from-local-support-to-sustained-action" class="level2">
+<h2>17.9 From local support to sustained action</h2>
+<p>The same participant path can serve different scales. A local group
+may seek emergency help during a short strike. A larger network may
+coordinate support across several workplaces. With broad adoption, a
+much larger treasury could help workers withstand prolonged action that
+would otherwise collapse under lost wages.</p>
+<p>The protocol provides the funding and voting rails. Workers,
+supporters, organizations, and communities still have to build the
+campaign, establish legitimacy, communicate demands, and organize the
+collective action itself.</p>
 <hr />
 </section>
 </section>
-<section id="18-historical-migration" class="level1">
+<section id="historical-migration" class="level1">
 <h1>18. Historical Migration</h1>
-<section id="181-historical-deployed-stack" class="level2">
+<section id="historical-deployed-stack" class="level2">
 <h2>18.1 Historical deployed stack</h2>
 <p>The previous deployed system includes the historical LABR token,
 Exchange V4, LaborVote V7, Registration V4, Governance V13, Treasury
 Module V1, and the existing Aragon DAO. Addresses remain in the public
 historical registry.</p>
 </section>
-<section id="182-superseded-revision-6" class="level2">
+<section id="superseded-revision-6" class="level2">
 <h2>18.2 Superseded Revision 6</h2>
 <p>Revision 6 introduced direct-POL Exchange V5 and improved runtime
 commitments, but LABR V2.1 implemented token-balance-weighted dividends.
 That economic model was not the intended LaborCoin design. Revision 6 is
 permanently superseded and must not be deployed as final.</p>
 </section>
-<section id="183-migration-principles" class="level2">
+<section id="migration-principles" class="level2">
 <h2>18.3 Migration principles</h2>
 <ul>
 <li>Preserve historical source and deployment evidence.</li>
@@ -2405,74 +2668,79 @@ specified, tested, and documented before deployment.</p>
 <hr />
 </section>
 </section>
-<section id="19-risks-and-limitations" class="level1">
+<section id="risks-and-limitations" class="level1">
 <h1>19. Risks and Limitations</h1>
-<section id="191-no-guaranteed-one-person-one-wallet-result"
-class="level2">
+<section id="no-guaranteed-one-person-one-wallet-result" class="level2">
 <h2>19.1 No guaranteed one-person-one-wallet result</h2>
 <p>A score-15 Passport gate materially raises friction but does not
 guarantee unique humanity. Equal dividends remain vulnerable to multiple
 independently verified wallets.</p>
 </section>
-<section id="192-permanent-verification" class="level2">
+<section id="permanent-verification-1" class="level2">
 <h2>19.2 Permanent verification</h2>
 <p>Verification cannot be revoked or recovered. A compromised wallet
 keeps status; a lost wallet cannot transfer status; a mistaken
 authorization cannot be undone.</p>
 </section>
-<section id="193-verifier-and-provider-availability" class="level2">
+<section id="verifier-and-provider-availability" class="level2">
 <h2>19.3 Verifier and provider availability</h2>
 <p>New users depend on the verifier and Human Passport. Existing
 verified users continue, but growth can stop during an outage.</p>
 </section>
-<section id="194-pol-volatility-and-liquidity" class="level2">
+<section id="pol-volatility-and-liquidity" class="level2">
 <h2>19.4 POL volatility and liquidity</h2>
 <p>The curve is denominated in POL. Fiat value can change sharply.
 External liquidity may differ from official Exchange pricing and may not
 exist.</p>
 </section>
-<section id="195-immutability" class="level2">
+<section id="immutability" class="level2">
 <h2>19.5 Immutability</h2>
 <p>No owner can patch the final contracts. A bug can permanently halt or
 distort operation. Replacement deployment does not automatically migrate
 state or value.</p>
 </section>
-<section id="196-direct-wallet-exclusion" class="level2">
+<section id="direct-wallet-exclusion" class="level2">
 <h2>19.6 Direct-wallet exclusion</h2>
 <p>Smart-wallet users are excluded. This can reduce accessibility for
 organizations, security-conscious multisig users, and people relying on
 account-abstraction recovery.</p>
 </section>
-<section id="197-governance-outcomes" class="level2">
+<section id="governance-outcomes" class="level2">
 <h2>19.7 Governance outcomes</h2>
 <p>Members may approve ineffective, controversial, or fraudulent
 transfers. Fixed thresholds do not ensure wise decisions or fair
 geographic distribution.</p>
 </section>
-<section id="198-treasury-depletion" class="level2">
+<section id="treasury-depletion" class="level2">
 <h2>19.8 Treasury depletion</h2>
 <p>Repeated proposals can spend treasury despite the 5% per-proposal
 cap. There is no cumulative budget period.</p>
 </section>
-<section id="199-recipient-and-legal-risk" class="level2">
+<section id="recipient-and-legal-risk" class="level2">
 <h2>19.9 Recipient and legal risk</h2>
 <p>Recipients may lose keys, misuse funds, face sanctions, incur taxes,
 or be unable to distribute support. Jurisdictional treatment may
 change.</p>
 </section>
-<section id="1910-infrastructure-risk" class="level2">
+<section id="infrastructure-risk" class="level2">
 <h2>19.10 Infrastructure risk</h2>
 <p>Polygon congestion, RPC outage, site compromise, DNS loss, verifier
 hosting failure, and browser dependency changes can disrupt access even
 if contracts remain present.</p>
 </section>
-<section id="1911-adoption-risk" class="level2">
+<section id="adoption-risk" class="level2">
 <h2>19.11 Adoption risk</h2>
-<p>The protocol depends on people choosing to acquire LABR, verify,
-participate, evaluate proposals, and organize. Technical correctness
-does not create social legitimacy or adoption.</p>
+<p>LaborCoin only becomes useful when people choose to participate. A
+technically correct treasury with no public support cannot sustain a
+strike, and a large balance without legitimate organizing cannot create
+collective power.</p>
+<p>The project depends on workers and supporters learning how the system
+works, trusting the published rules, acquiring LABR or contributing POL,
+registering to vote, evaluating proposals, and connecting the on-chain
+process to real campaigns. Technology can reduce coordination and trust
+problems, but it cannot manufacture solidarity or social legitimacy.</p>
 </section>
-<section id="1912-equal-holder-policy-limitations" class="level2">
+<section id="equal-holder-policy-limitations" class="level2">
 <h2>19.12 Equal-holder policy limitations</h2>
 <p>Equal dividends remove token-balance weighting from the holder
 distribution, but they do not eliminate all inequality. Participants
@@ -2485,7 +2753,7 @@ difficult for the scorer to interpret.</p>
 one equal share per verified eligible wallet. It should not simplify
 that rule into an absolute claim of one share per natural person.</p>
 </section>
-<section id="1913-identity-gated-exit-risk" class="level2">
+<section id="identity-gated-exit-risk" class="level2">
 <h2>19.13 Identity-gated exit risk</h2>
 <p>Revision 7 intentionally requires permanent verification before
 official selling. This reduces the usefulness of transferring tokens
@@ -2498,7 +2766,7 @@ verifier outage. The site, FAQ, transfer warnings, and whitepaper must
 disclose this clearly. Direct transfers should not be presented as
 equivalent to buying through the official Exchange.</p>
 </section>
-<section id="1914-migration-and-continuity-risk" class="level2">
+<section id="migration-and-continuity-risk" class="level2">
 <h2>19.14 Migration and continuity risk</h2>
 <p>A new immutable deployment does not automatically replace balances,
 registrations, proposals, treasury permissions, site caches, verifier
@@ -2513,46 +2781,89 @@ treated, and when old interface paths become inaccessible. A technically
 correct new stack can still fail operationally if the migration is
 ambiguous.</p>
 </section>
-<section id="1915-social-and-institutional-limits" class="level2">
+<section id="social-and-institutional-limits" class="level2">
 <h2>19.15 Social and institutional limits</h2>
-<p>LaborCoin can constrain how a treasury proposal is created, voted,
-and executed. It cannot determine whether a labor dispute is legitimate,
-whether a recipient fairly distributes assistance, whether a campaign
-reflects worker consent, or whether an organization remains accountable
-after receiving funds.</p>
-<p>Those judgments remain social and political. The protocol provides
-transparent rules and auditable transfers, not an automated substitute
-for organizing, investigation, deliberation, or solidarity.</p>
+<p>LaborCoin can make a treasury visible and constrain how a proposal is
+created, voted on, and executed. It cannot determine whether a labor
+dispute is legitimate, whether a campaign reflects worker consent,
+whether a recipient will distribute assistance fairly, or whether an
+organization remains accountable after receiving funds.</p>
+<p>It also cannot substitute for the relationships that make collective
+action possible. Workers still need organization, communication,
+strategy, trusted representatives or committees, and a shared
+willingness to act. Supporters still need to investigate claims and
+remain engaged after sending money.</p>
+<p>The protocol provides transparent rules and auditable transfers. The
+political and social work remains human.</p>
 <hr />
 </section>
 </section>
-<section id="20-governance-philosophy-and-conclusion" class="level1">
+<section id="governance-philosophy-and-conclusion" class="level1">
 <h1>20. Governance Philosophy and Conclusion</h1>
-<p>LaborCoin attempts to encode a limited set of political-economic
+<p>LaborCoin is built around the idea that solidarity becomes materially
+powerful when people can organize it before a crisis, see it clearly,
+and direct it together. Workers who challenge an employer should not
+have to face economic retaliation in isolation, and members of the
+public who support them should have a clear way to turn that support
+into sustained aid.</p>
+<p>The system does not attempt to automate the class struggle. It cannot
+create a union, choose a just demand, verify worker consent, build trust
+inside a workplace, or decide whether a campaign deserves support. It
+can provide durable public infrastructure for one part of that work:
+pooling value and democratically transferring it to people engaged in
+collective action.</p>
+<p>The governance design encodes a limited set of political-economic
 commitments:</p>
 <ul>
 <li>token wealth does not purchase more governance votes;</li>
 <li>token wealth does not purchase a larger holder-dividend share;</li>
 <li>each additional eligible wallet must independently pass the same
 identity gate;</li>
-<li>treasury authority is narrow and transparent;</li>
+<li>the general public can help build a common treasury without
+surrendering it to a private custodian;</li>
+<li>registered participants decide where treasury aid goes through
+one-member-one-vote proposals;</li>
+<li>treasury authority is narrow, transparent, and limited to approved
+native-POL transfers;</li>
 <li>core economic constants are not adjustable after launch;</li>
-<li>deployment evidence is part of the protocol's public
+<li>deployment evidence is part of the protocol’s public
 accountability.</li>
 </ul>
+<p>These rules are intended to keep the technology subordinate to the
+purpose. LABR, the Exchange, the Identity Registry, LaborVote,
+Governance, and the DAO are not ends in themselves. They are components
+of a solidarity system whose value depends on whether people use it to
+defend one another and improve material conditions.</p>
+<p>At modest scale, LaborCoin may help people find and fund a strike
+that would otherwise receive little sustained attention. At greater
+scale, it may allow a broad public to support longer and more
+coordinated campaigns. At extraordinary scale, it could help place
+substantial resources behind a general strike or another mass
+working-class action. That outcome would require organizing and
+participation far beyond anything a contract can produce, but the system
+is intended to remain transparent and usable if such participation
+emerges.</p>
 <p>The design does not claim to solve identity, governance, labor
-organization, or economic inequality in general. It creates a specific
-mechanism whose fairness depends on faithfully implementing and testing
-those commitments.</p>
+organization, or economic inequality in general. It addresses a specific
+problem: economic retaliation can break collective action, while public
+support is often fragmented and difficult to direct. LaborCoin provides
+one possible bridge between those who want to help and those taking the
+risk.</p>
 <p>Revision 7 is ready for compilation review only when the source
 package, documentation, site, verifier, and compilation-record scaffold
 agree. It is ready for deployment only after the seven contracts compile
 exactly, all runtime commitments are sealed, the equal-holder accounting
 survives intensive tests, the Aragon permission migration is rehearsed,
 and independent review is complete.</p>
+<p>The technical standard must remain uncompromising because the final
+system is intended to operate without a founder, administrator, or
+upgrade authority. The political standard is equally important: the
+infrastructure should be judged by whether it expands the working
+class’s ability to organize solidarity, withstand retaliation, and
+sustain collective action.</p>
 <hr />
 </section>
-<section id="appendix-a-fixed-constants" class="level1">
+<section id="appendix-a.-fixed-constants" class="level1">
 <h1>Appendix A. Fixed Constants</h1>
 <table>
 <thead>
@@ -2657,7 +2968,7 @@ and independent review is complete.</p>
 </tbody>
 </table>
 </section>
-<section id="appendix-b-address-registry" class="level1">
+<section id="appendix-b.-address-registry" class="level1">
 <h1>Appendix B. Address Registry</h1>
 <section id="revision-7" class="level2">
 <h2>Revision 7</h2>
@@ -2681,9 +2992,15 @@ Governance V13:        0x8238105d31F6Bb26897d8Ab270a0A521FEF03E8c
 Treasury Module V1:    0x0B018E45E4cB71E222C345a5341BdbaeE519c623</code></pre>
 </section>
 </section>
-<section id="appendix-c-runtime-commitment-status" class="level1">
+<section id="appendix-c.-runtime-commitment-status" class="level1">
 <h1>Appendix C. Runtime Commitment Status</h1>
 <table>
+<colgroup>
+<col style="width: 25%" />
+<col style="width: 25%" />
+<col style="width: 25%" />
+<col style="width: 25%" />
+</colgroup>
 <thead>
 <tr class="header">
 <th>Contract</th>
@@ -2738,9 +3055,18 @@ Treasury Module V1:    0x0B018E45E4cB71E222C345a5341BdbaeE519c623</code></pre>
 </tbody>
 </table>
 </section>
-<section id="appendix-d-authority-matrix" class="level1">
+<section id="appendix-d.-authority-matrix" class="level1">
 <h1>Appendix D. Authority Matrix</h1>
-<table>
+<table style="width:100%;">
+<colgroup>
+<col style="width: 14%" />
+<col style="width: 14%" />
+<col style="width: 14%" />
+<col style="width: 14%" />
+<col style="width: 14%" />
+<col style="width: 14%" />
+<col style="width: 14%" />
+</colgroup>
 <thead>
 <tr class="header">
 <th>Component</th>
@@ -2819,7 +3145,7 @@ Treasury Module V1:    0x0B018E45E4cB71E222C345a5341BdbaeE519c623</code></pre>
 </tbody>
 </table>
 </section>
-<section id="appendix-e-state-transitions" class="level1">
+<section id="appendix-e.-state-transitions" class="level1">
 <h1>Appendix E. State Transitions</h1>
 <section id="identity" class="level2">
 <h2>Identity</h2>
@@ -2842,9 +3168,15 @@ Ineligible -&gt; balance reaches &gt;=1 -&gt; Eligible without missed history</c
                                   \-&gt; Expired</code></pre>
 </section>
 </section>
-<section id="appendix-f-threat-model-matrix" class="level1">
+<section id="appendix-f.-threat-model-matrix" class="level1">
 <h1>Appendix F. Threat Model Matrix</h1>
 <table>
+<colgroup>
+<col style="width: 25%" />
+<col style="width: 25%" />
+<col style="width: 25%" />
+<col style="width: 25%" />
+</colgroup>
 <thead>
 <tr class="header">
 <th>Threat</th>
@@ -2905,7 +3237,7 @@ Ineligible -&gt; balance reaches &gt;=1 -&gt; Eligible without missed history</c
 </tbody>
 </table>
 </section>
-<section id="appendix-g-glossary" class="level1">
+<section id="appendix-g.-glossary" class="level1">
 <h1>Appendix G. Glossary</h1>
 <p><strong>Accounted reserve:</strong> POL recorded as liability for
 official curve redemptions.<br />
@@ -2920,6 +3252,11 @@ by the fixed scorer.<br />
 <strong>LABR:</strong> Fixed-supply economic participation token.<br />
 <strong>LABRV:</strong> Nontransferable governance membership
 token.<br />
+<strong>Mutual aid:</strong> Direct material support organized among
+people and communities to meet shared needs.<br />
+<strong>Public infrastructure:</strong> A shared system whose rules and
+records are available for public use and inspection rather than
+controlled as a private service.<br />
 <strong>Runtime code hash:</strong> Keccak-256 of deployed contract
 bytecode.<br />
 <strong>Scorer ID hash:</strong> Fixed hash identifying the configured
@@ -2929,7 +3266,7 @@ multiple participants.<br />
 <strong>Treasury snapshot:</strong> DAO native-POL balance recorded at
 proposal creation.</p>
 </section>
-<section id="appendix-h-final-launch-checklist" class="level1">
+<section id="appendix-h.-final-launch-checklist" class="level1">
 <h1>Appendix H. Final Launch Checklist</h1>
 <ul class="task-list">
 <li><label><input type="checkbox" />Seven sources frozen and
@@ -2968,14 +3305,14 @@ completed.</label></li>
 record prepared.</label></li>
 </ul>
 </section>
-<section id="appendix-i-references-and-repository-records"
+<section id="appendix-i.-references-and-repository-records"
 class="level1">
 <h1>Appendix I. References and Repository Records</h1>
 <p>The canonical implementation record is the public LaborCoin source
 repository together with the separate
 <code>LaborCoin-Compilation-Records</code>, site, and verifier
 repositories. Human Passport integration should be checked against the
-provider's official current documentation immediately before production
+provider’s official current documentation immediately before production
 deployment. Polygon and Aragon interactions should be checked against
 their official current documentation and actual deployed contracts.</p>
 </section>
