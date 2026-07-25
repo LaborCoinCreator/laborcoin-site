@@ -1,501 +1,120 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-
   <meta charset="UTF-8">
-
-  <title>
-    LaborCoin Exchange
-  </title>
-
-  <meta
-    name="viewport"
-    content="width=device-width, initial-scale=1.0"
-  >
-
-  <meta
-    name="theme-color"
-    content="#0d0d0d"
-  >
-
-  <link
-    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap"
-    rel="stylesheet"
-  >
-
-  <link
-    rel="stylesheet"
-    href="style.css"
-  >
-
+  <title>LaborCoin Exchange V6</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#0d0d0d">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
   <link rel="manifest" href="/manifest.json">
   <link rel="icon" type="image/png" href="/assets/favicon.png">
-  <link rel="icon" sizes="64x64" href="/assets/favicon.png">
   <link rel="apple-touch-icon" href="/assets/logo.png">
   <meta name="mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-title" content="LaborCoin">
   <meta name="apple-mobile-web-app-status-bar-style" content="black">
-
   <script src="https://cdn.jsdelivr.net/npm/ethers@6.13.1/dist/ethers.umd.min.js"></script>
-
+  <script src="protocol-config.js"></script>
 </head>
-
 <body>
-
-<header class="hero">
-
-  <img
-    src="assets/banner.png"
-    alt="LaborCoin Banner"
-    class="hero-img"
-  >
-
-</header>
-
+<header class="hero"><img src="assets/banner.png" alt="LaborCoin Banner" class="hero-img"></header>
 <section class="exchange-intro">
-
-  <a href="index.html">
-    ← Back
-  </a>
-
-  <h1>
-    LaborCoin Exchange
-  </h1>
-
-  <p>
-    Buy and sell LABR directly through the on-chain bonding curve exchange.
-  </p>
-
-  <p>
-    The exchange uses POL on Polygon. You must hold POL in your wallet before   purchasing LABR.
-  </p>
-
-  <p>
-    Pricing increases automatically according to the bonding curve as LABR enters circulation.
-  </p>
-
+  <a href="index.html">← Back</a>
+  <h1>LaborCoin Exchange V6</h1>
+  <p>Buy and sell exact LABR amounts through the identity-gated POL-denominated integral bonding curve.</p>
+  <p>One-time Human Passport verification at score 15 is required for official buys, sells, equal-holder dividend eligibility, and dividend claims. DAO registration remains optional.</p>
 </section>
-
-<section>
-
-<div class="info-box">
-
-  <h3>
-    New to LaborCoin?
-  </h3>
-
-  <p>
-
-    Exchange access requires Passport
-    verification.
-
-  </p>
-
-  <p>
-
-    DAO registration is NOT required
-    to buy LABR.
-
-  </p>
-
+<section><div class="info-box">
+  <h3>Permanent official-exchange and dividend rules</h3>
+  <p>Maximum trade: 5,000 LABR. Maximum permitted wallet: 10,000 LABR. Trade cooldown: 12 hours.</p>
+  <p>A wallet holding more than 10,000 LABR is completely barred from both buying and selling through the official exchange.</p>
+  <p>Every verified wallet holding at least 1 LABR receives one equal dividend share. Holding more LABR does not increase dividend weight.</p>
   <div class="cta-row">
-
-    <a
-      href="onboarding.html"
-      class="cta-button"
-    >
-      Onboarding Guide
-    </a>
-
-    <a
-      href="faq.html"
-      class="cta-button secondary"
-    >
-      FAQ
-    </a>
-
+    <a href="onboarding.html" class="cta-button">Onboarding Guide</a>
+    <a href="https://app.passport.xyz/" class="cta-button secondary" target="_blank" rel="noopener noreferrer">Open Human Passport</a>
+    <a href="faq.html" class="cta-button secondary">FAQ</a>
   </div>
-
-</div>
-
-</section>
-
+</div></section>
 <div class="exchange-container">
-
-  <!-- LEFT -->
   <div class="exchange-left">
-
-    <!-- CURVE -->
     <div class="trade-box">
-
-      <h2>
-        Bonding Curve
-      </h2>
-
-      <canvas
-        id="curveCanvas"
-        width="800"
-        height="300"
-      ></canvas>
-
+      <h2>Integral bonding curve</h2>
+      <canvas id="curveCanvas" width="800" height="300"></canvas>
       <div class="curve-stats">
-
-        <p>
-        <strong>Current Price:</strong><br>
-        <span id="currentPrice">
-          Loading...
-        </span>
-      </p>
-
-        <p>
-          <strong>Starting Price:</strong>
-          <span>
-            $1.00 USD
-          </span>
-        </p>
-
-        <p>
-          <strong>Curve Maximum:</strong>
-          <span>
-            $15.00 USD
-          </span>
-        </p>
-
+        <p><strong>Current marginal price:</strong><br><span id="currentPrice">Loading...</span></p>
+        <p><strong>Starting price:</strong><br><span>14 POL per LABR</span></p>
+        <p><strong>Curve maximum:</strong><br><span>210 POL per LABR</span></p>
       </div>
-
     </div>
-
-    <!-- LIVE MARKET -->
     <div class="trade-box">
-
-      <h2>
-        Live Market Metrics
-      </h2>
-
-      <p>
-          <strong>Total Sold:</strong>
-          <span id="totalSoldDisplay">
-            Loading...
-          </span>
-        </p>
-
-        <p>
-          <strong>Total LABR Available:</strong>
-          <span id="availableSupply">
-            Loading...
-          </span>
-        </p>
-
-        <p>
-          <strong>Total Bonding Curve Value:</strong>
-          <span id="bondingCurveValue">
-            Loading...
-          </span>
-        </p>
-
-        <p>
-          <strong>Bonding Curve Progress:</strong>
-          <span id="bondingCurveProgress">
-           Loading...
-         </span>
-        </p>
-
-      <p>
-        <strong>Cooldown Status:</strong><br>
-        <span id="cooldown">
-          Ready
-        </span>
-      </p>
-
+      <h2>Live market metrics</h2>
+      <p><strong>Total sold:</strong> <span id="totalSoldDisplay">Loading...</span></p>
+      <p><strong>Unlocked supply:</strong> <span id="availableSupply">Loading...</span></p>
+      <p><strong>Accounted curve reserve:</strong> <span id="bondingCurveValue">Loading...</span></p>
+      <p><strong>Distribution progress:</strong> <span id="bondingCurveProgress">Loading...</span></p>
+      <p><strong>Equal-share holders:</strong> <span id="eligibleHolderCount">Loading...</span></p>
+      <p><strong>Invariant status:</strong> <span id="invariantStatus">Loading...</span></p>
+      <p><strong>Cooldown status:</strong><br><span id="cooldown">Connect wallet</span></p>
     </div>
-
   </div>
-
-  <!-- RIGHT -->
   <div class="exchange-right">
-
-    <!-- EXCHANGE ACCESS -->
-<div class="trade-box center-status">
-
-  <h2>
-    Exchange Access
-  </h2>
-
-<div class="center-button">
-
-  <button
-    id="connectBtn"
-    class="cta-button"
-  >
-    Connect Wallet
-  </button>
-
-</div>  
-
-<div class="dao-steps">
-
-    <div
-      class="dao-step"
-      id="exchange-step-wallet"
-    >
-      Connect Wallet
+    <div class="trade-box center-status">
+      <h2>Exchange access</h2>
+      <div class="center-button"><button id="connectBtn" class="cta-button">Connect Wallet</button></div>
+      <div class="dao-steps">
+        <div class="dao-step" id="exchange-step-wallet">Connect Wallet</div>
+        <div class="dao-step" id="exchange-step-identity">Verify Human Passport Score ≥ 15</div>
+        <div class="dao-step" id="exchange-step-balance">Wallet at or below 10,000 LABR</div>
+        <div class="dao-step" id="exchange-step-cooldown">12-hour cooldown ready</div>
+      </div>
+      <div class="center-button dao-buttons">
+        <button id="identityVerifyBtn" class="cta-button" disabled>Verify Identity</button>
+        <button id="exchangeVerifyBtn" class="cta-button secondary" disabled>Check Exchange Access</button>
+      </div>
+      <p id="exchangeGateStatus" class="status" style="text-align:center;"></p>
     </div>
-
-    <div
-      class="dao-step"
-      id="exchange-step-balance"
-    >
-      Verify Wallet Limit
-    </div>
-
-    <div
-      class="dao-step"
-      id="exchange-step-identity"
-    >
-      Verify Identity
-    </div>
-
-  </div>
-
-  <div class="center-button dao-buttons">
-
-    <button
-      id="exchangeVerifyBtn"
-      class="cta-button"
-      disabled
-    >
-      Verify Identity
-    </button>
-
-  </div>
-
-  <p
-    id="exchangeGateStatus"
-    class="status"
-    style="text-align:center;"
-  ></p>
-
-</div>
-
-    <!-- WALLET -->
     <div class="wallet-box center-content">
-
-      <h2>
-        Wallet
-      </h2>
-
-      <p>
-        <strong>Address:</strong><br>
-        <span id="walletAddress">
-          Not connected
-        </span>
-      </p>
-
-      <p>
-        <strong>POL Balance:</strong><br>
-        <span id="polBalance">
-          0
-        </span>
-      </p>
-
-      <p>
-        <strong>LABR Balance:</strong><br>
-        <span id="labrBalance">
-          0
-        </span>
-      </p>
-
-      <p>
-        <strong>Wallet Ownership:</strong><br>
-        <span id="walletPercent">
-          0%
-        </span>
-      </p>
-
+      <h2>Wallet</h2>
+      <p><strong>Address:</strong><br><span id="walletAddress">Not connected</span></p>
+      <p><strong>Identity:</strong><br><span id="identityStatus">Not verified</span></p>
+      <p><strong>POL balance:</strong><br><span id="polBalance">0</span></p>
+      <p><strong>LABR balance:</strong><br><span id="labrBalance">0</span></p>
+      <p><strong>Wallet room:</strong><br><span id="walletPercent">0 LABR</span></p>
+      <p><strong>Dividend status:</strong><br><span id="dividendEligibility">Not eligible</span></p>
+      <p><strong>Available dividends:</strong><br><span id="withdrawableDividends">0 POL</span></p>
+      <div class="center-button"><button id="claimDividendsBtn" class="cta-button" disabled>Claim Dividends</button></div>
     </div>
-
-<div
-  id="exchangeTradePanel"
-  class="hidden"
->
-
-  <!-- BUY -->
-  <div class="trade-box">
-
-    <h2>
-      Buy LABR
-    </h2>
-
-    <input
-      id="buyAmount"
-      placeholder="POL Amount"
-      type="number"
-      min="0"
-      step="any"
-      inputmode="decimal"
-      autocomplete="off"
-    >
-
-    <div class="trade-preview">
-
-      <p>
-        <strong>Estimated LABR:</strong><br>
-        <span id="buyEstimate">
-          0
-        </span>
-      </p>
-
-      <p>
-        <strong>DAO Treasury Share:</strong><br>
-        <span id="buyDaoShare">
-          0
-        </span>
-      </p>
-
+    <div id="exchangeTradePanel" class="hidden">
+      <div class="trade-box">
+        <h2>Buy exact LABR</h2>
+        <input id="buyAmount" placeholder="LABR amount" type="number" min="0" max="5000" step="any" inputmode="decimal" autocomplete="off">
+        <div class="trade-preview">
+          <p><strong>Curve reserve:</strong><br><span id="buyEstimate">0 POL</span></p>
+          <p><strong>DAO contribution:</strong><br><span id="buyDaoShare">0 POL</span></p>
+          <p><strong>Total POL required:</strong><br><span id="buyTotal">0 POL</span></p>
+        </div>
+        <div class="center-button"><button id="buyBtn" class="cta-button">Buy exact amount</button></div>
+      </div>
+      <div class="trade-box">
+        <h2>Sell exact LABR</h2>
+        <input id="sellAmount" placeholder="LABR amount" type="number" min="0" max="5000" step="any" inputmode="decimal" autocomplete="off">
+        <div class="trade-preview">
+          <p><strong>Gross curve redemption:</strong><br><span id="sellEstimate">0 POL</span></p>
+          <p><strong>DAO contribution:</strong><br><span id="sellTax">0 POL</span></p>
+          <p><strong>Equal-holder dividend contribution:</strong><br><span id="sellDividend">0 POL</span></p>
+          <p><strong>Seller receives:</strong><br><span id="sellNet">0 POL</span></p>
+        </div>
+        <div class="center-button"><button id="sellBtn" class="cta-button secondary">Sell exact amount</button></div>
+      </div>
     </div>
-
-    <div class="center-button">
-
-      <button
-        id="buyBtn"
-        class="cta-button"
-      >
-        Buy
-      </button>
-
-    </div>
-
-  </div>
-
-  <!-- SELL -->
-  <div class="trade-box">
-
-    <h2>
-      Sell LABR
-    </h2>
-
-    <input
-      id="sellAmount"
-      placeholder="LABR Amount"
-      type="number"
-      min="0"
-      step="any"
-      inputmode="decimal"
-      autocomplete="off"
-    >
-
-    <div class="trade-preview">
-
-      <p>
-        <strong>Estimated POL:</strong><br>
-        <span id="sellEstimate">
-          0
-        </span>
-      </p>
-
-      <p>
-        <strong>Sell Tax:</strong><br>
-        <span id="sellTax">
-          0
-        </span>
-      </p>
-
-      <p>
-        <strong>Net POL Received:</strong><br>
-        <span id="sellNet">
-          0
-        </span>
-      </p>
-
-    </div>
-
-    <div class="center-button">
-
-      <button
-        id="sellBtn"
-        class="cta-button secondary"
-      >
-        Sell
-      </button>
-
-    </div>
-
-  </div>
-
-</div>
-
-    <!-- STATUS -->
-    <div class="trade-box center-status status-box">
-
-      <h2>
-        Status
-      </h2>
-
-      <p id="statusMessage">
-        Ready.
-      </p>
-
-    </div>
-
-  </div>
-
-</div>
-
-<footer>
-
-  <div class="cta-row">
-
-    <a href="onboarding.html">
-      Onboarding
-    </a>
-
-    <a href="faq.html">
-      FAQ
-    </a>
-
-    <a href="disclaimer.html">
-      Disclaimer
-    </a>
-
-    <a href="whitepaper.html">
-      Whitepaper
-    </a>
-
-  </div>
-
-  <p>
-    © LaborCoin
-  </p>
-
-</footer>
-
-<div
-  id="loadingOverlay"
-  class="hidden"
-  role="status"
-  aria-live="polite"
-  aria-busy="true"
->
-  <div class="loading-content">
-
-    <div
-      class="spinner"
-      aria-hidden="true"
-    ></div>
-
-    <p id="loadingText">
-      Loading...
-    </p>
-
+    <div class="trade-box center-status status-box"><h2>Status</h2><p id="statusMessage">Ready.</p></div>
   </div>
 </div>
-
+<footer><div class="cta-row"><a href="onboarding.html">Onboarding</a><a href="faq.html">FAQ</a><a href="disclaimer.html">Disclaimer</a><a href="whitepaper.html">Whitepaper</a></div><p>© LaborCoin</p></footer>
+<div id="loadingOverlay" class="hidden" role="status" aria-live="polite" aria-busy="true"><div class="loading-content"><div class="spinner" aria-hidden="true"></div><p id="loadingText">Loading...</p></div></div>
 <script type="module" src="wallet.js"></script>
-
 <script src="exchange.js"></script>
-
 <script src="pwa.js"></script>
-
 </body>
 </html>

@@ -17,6 +17,7 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black">
 
   <script src="https://cdn.jsdelivr.net/npm/ethers@6.13.1/dist/ethers.umd.min.js"></script>
+  <script src="protocol-config.js"></script>
 </head>
 
 <body>
@@ -66,8 +67,7 @@
 
   <p>
 
-    You do not need DAO registration
-    to purchase LABR.
+    DAO registration is not required to purchase LABR, but permanent Human Passport verification is required for official Exchange use and equal-holder dividends.
 
   </p>
 
@@ -87,6 +87,15 @@
       FAQ
     </a>
 
+    <a
+      href="https://app.passport.xyz/"
+      class="cta-button secondary"
+      target="_blank"
+      rel="noopener noreferrer"
+    >
+      Open Human Passport
+    </a>
+
   </div>
 
 </div>
@@ -103,7 +112,7 @@
   </div>
 
   <div class="dao-step" id="step-identity">
-    Verify Identity
+    Verify Permanent Identity
   </div>
 
   <div class="dao-step" id="step-attest">
@@ -119,7 +128,7 @@
   <div class="center-button dao-buttons">
     <button id="connectBtn" class="cta-button">Connect Wallet</button>
          <button id="verifyBtn" class="cta-button">
-               Verify Identity
+               Verify Permanent Identity
          </button>    
     <button id="attestBtn" class="cta-button secondary" disabled>Sign Attestation</button>
     <button id="registerBtn" class="cta-button" disabled>Register</button>

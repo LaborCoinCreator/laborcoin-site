@@ -33,6 +33,7 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black">
 
   <script src="https://cdn.jsdelivr.net/npm/ethers@6.13.1/dist/ethers.umd.min.js"></script>
+  <script src="protocol-config.js"></script>
 
 </head>
 
@@ -70,7 +71,7 @@
 
     <li>LABRV voting rights</li>
 
-    <li>Passport verification</li>
+    <li>Permanent Registration V6 membership</li>
 
   </ul>
 
@@ -79,7 +80,7 @@
     Anyone may view proposals. Any connected
     wallet may execute an approved proposal
     during its execution window. Creating and
-    voting require LABRV and identity verification.
+    voting require LABRV membership established through Registration V6.
 
   </p>
 
@@ -122,7 +123,7 @@
     </div>
 
     <div class="dao-step" id="gov-step-identity">
-      Verify Identity
+      Confirm Governance Access
     </div>
 
   </div>
@@ -141,7 +142,7 @@
       class="cta-button"
       disabled
     >
-      Verify Identity
+      Confirm Governance Access
     </button>
 
   </div>
@@ -289,7 +290,33 @@
     color:#999;
   "
 >
-  0 / 1000 characters
+  0 / 1,000 bytes
+</p>
+
+<p
+  id="proposalPolicyStatus"
+  class="status"
+  aria-live="polite"
+  style="
+    text-align:center;
+    font-size:0.85rem;
+    margin-top:8px;
+    color:#999;
+  "
+></p>
+
+<p
+  class="status"
+  style="
+    text-align:center;
+    font-size:0.85rem;
+    margin-top:8px;
+    color:#aaa;
+  "
+>
+  Proposal descriptions are permanently screened on-chain.
+  Use plain English ASCII text only. Links, markup, profanity,
+  slurs, and fixed prohibited phrases are rejected.
 </p>
 
     </div>
@@ -390,6 +417,8 @@
 <script src="metrics.js"></script>
 
 <script type="module" src="wallet.js"></script>
+
+<script src="proposal-text-policy-v1.js"></script>
 
 <script src="governance.js"></script>
 

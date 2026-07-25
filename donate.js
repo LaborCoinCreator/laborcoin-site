@@ -1,7 +1,8 @@
 // ===== CONFIG =====
 
 const DAO_TREASURY =
-  "0x0C2e5679153593b82a84eAB5CA90895BB291Cec4";
+  window.LaborCoinConfig?.addresses?.daoTreasury
+  || "0x0C2e5679153593b82a84eAB5CA90895BB291Cec4";
 
 let provider;
 let signer;

@@ -1,657 +1,88 @@
-// ===== CONFIG =====
-const LABR_TOKEN =
-  "0x460DD873A1D2a41e77410B125cD3027C5FEd2f78";
+// ===== REVISION 7 SHARED IDENTITY + REGISTRATION =====
+const SITE_CONFIG = window.LaborCoinConfig;
+const DEPLOYMENT_ACTIVE = window.LaborCoinDeployment?.isActive() === true;
+const LABR_TOKEN = SITE_CONFIG?.addresses?.labr || ethers.ZeroAddress;
+const IDENTITY_REGISTRY = SITE_CONFIG?.addresses?.identityRegistry || ethers.ZeroAddress;
+const REGISTRATION_CONTRACT = SITE_CONFIG?.addresses?.registration || ethers.ZeroAddress;
+const LABRV_TOKEN = SITE_CONFIG?.addresses?.labrv || ethers.ZeroAddress;
+const VERIFIER_URL = SITE_CONFIG?.verifierUrl || "";
+const ENS_OVERRIDES = {"0x015b6d0990e56d908c876474c6a30eba2b8a0cfb":"laborcoin.eth"};
 
-const REGISTRATION_CONTRACT =
-  "0xd1CD6C0B6f1F709A52908B40C07D3C54649e323C";
+const ERC20_ABI=["function balanceOf(address) view returns(uint256)"];
+const IDENTITY_ABI=["function isVerified(address) view returns(bool)","function verifyParticipant(uint256,uint256,bytes)","function identityReady() view returns(bool)"];
+const REGISTRATION_ABI=["function register()","function registered(address) view returns(bool)","function memberNumber(address) view returns(uint256)","function registrationTimestamp(address) view returns(uint256)","function getMemberData(address) view returns(bool,uint256,uint256)","function totalMembers() view returns(uint256)"];
+const LABRV_ABI=["function balanceOf(address) view returns(uint256)"];
 
-const LABRV_TOKEN =
-  "0x833242E933c675846D8f8982048FecA95B8e435A";
+let provider,signer,userAddress,identity,registration,labr,labrv;
+let walletInitialized=false;
+let cachedCertificateFile=null,cachedCertificateUrl=null,cachedCertificateName=null;
 
-const VERIFIER_URL =
-  "https://laborcoin-verifier.onrender.com";
+const connectBtn=document.getElementById("connectBtn");
+const verifyBtn=document.getElementById("verifyBtn");
+const attestBtn=document.getElementById("attestBtn");
+const registerBtn=document.getElementById("registerBtn");
+const daoStatus=document.getElementById("daoStatus");
+const memberCount=document.getElementById("memberCount");
+const certificateBox=document.getElementById("certificateBox");
+const certificateText=document.getElementById("certificateText");
+const downloadCertificateBtn=document.getElementById("downloadCertificateBtn");
+const certificateStatus=document.getElementById("certificateStatus");
+const governanceAccessWrapper=document.getElementById("governanceAccessWrapper");
+const attestationModal=document.getElementById("attestationModal");
+const confirmAttestationBtn=document.getElementById("confirmAttestationBtn");
+const cancelAttestationBtn=document.getElementById("cancelAttestationBtn");
+const downloadAttestationBtn=document.getElementById("downloadAttestationBtn");
+const loadingOverlay=document.getElementById("loadingOverlay");
+const loadingText=document.getElementById("loadingText");
 
-const ENS_OVERRIDES = {
+connectBtn.disabled=!DEPLOYMENT_ACTIVE; verifyBtn.disabled=true; attestBtn.disabled=true; registerBtn.disabled=true;
+if(!DEPLOYMENT_ACTIVE){daoStatus.innerText="Revision 7 is in predeployment mode. Registration is disabled until all seven final contract addresses and runtime commitments are verified.";daoStatus.style.color="#ff4d4d";}
+function setStatus(msg,type=""){daoStatus.innerText=msg;daoStatus.style.color=type==="error"?"#ff4d4d":type==="success"?"#4dff88":"#ccc";}
+function completeStep(id,complete=true){document.getElementById(id)?.classList.toggle("complete",Boolean(complete));}
+function showLoading(text){if(loadingText)loadingText.innerText=text;loadingOverlay?.classList.remove("hidden");}
+function hideLoading(){loadingOverlay?.classList.add("hidden");}
 
-  "0x015b6d0990e56d908c876474c6a30eba2b8a0cfb":
-    "laborcoin.eth"
-
-};
-
-// ===== ABIS =====
-const ERC20_ABI = [
-  "function balanceOf(address) view returns (uint256)"
-];
-
-const REGISTRATION_ABI = [
-
-  "function register(uint256 expiry, bytes signature)",
-
-  "function registered(address) view returns (bool)",
-
-  "function memberNumber(address) view returns (uint256)",
-
-  "function registrationTimestamp(address) view returns (uint256)",
-
-  "function getMemberData(address) view returns (bool,uint256,uint256)",
-
-  "function totalMembers() view returns (uint256)"
-];
-
-const LABRV_ABI = [
-  "function balanceOf(address account) view returns (uint256)"
-];
-
-// ===== STATE =====
-let provider;
-let signer;
-let userAddress;
-
-let registration;
-let labr;
-let labrv;
-
-let registrationSignature;
-let registrationExpiry;
-
-let walletInitialized = false;
-
-let cachedCertificateFile = null;
-let cachedCertificateUrl = null;
-let cachedCertificateName = null;
-
-// ===== ELEMENTS =====
-const connectBtn =
-  document.getElementById("connectBtn");
-
-const verifyBtn =
-  document.getElementById("verifyBtn");
-
-const attestBtn =
-  document.getElementById("attestBtn");
-
-const registerBtn =
-  document.getElementById("registerBtn");
-
-const daoStatus =
-  document.getElementById("daoStatus");
-
-const certificateBox =
-  document.getElementById(
-    "certificateBox"
-  );
-
-const certificateText =
-  document.getElementById(
-    "certificateText"
-  );
-
-const downloadCertificateBtn =
-  document.getElementById(
-    "downloadCertificateBtn"
-  );
-
-const certificateStatus =
-  document.getElementById(
-    "certificateStatus"
-  );
-
-const governanceAccessWrapper =
-  document.getElementById(
-    "governanceAccessWrapper"
-  );
-
-const attestationModal =
-  document.getElementById(
-    "attestationModal"
-  );
-
-const confirmAttestationBtn =
-  document.getElementById(
-    "confirmAttestationBtn"
-  );
-
-const cancelAttestationBtn =
-  document.getElementById(
-    "cancelAttestationBtn"
-  );
-
-// ===== INITIAL UI STATE =====
-verifyBtn.disabled = true;
-attestBtn.disabled = true;
-registerBtn.disabled = true;
-
-// ===== HELPERS =====
-function setStatus(msg, type = "") {
-
-  daoStatus.innerText = msg;
-
-  daoStatus.style.color =
-    type === "error"
-      ? "#ff4d4d"
-      : type === "success"
-      ? "#4dff88"
-      : "#ccc";
-
+async function showMembershipData(){
+  try{
+    const memberData=await registration.getMemberData(userAddress); if(!memberData[0])return;
+    const memberId=Number(memberData[1]),registeredAt=Number(memberData[2]); let displayName=userAddress;
+    const overrideName=ENS_OVERRIDES[userAddress.toLowerCase()]; if(overrideName)displayName=overrideName;
+    try{const ethProvider=new ethers.JsonRpcProvider(SITE_CONFIG?.ensRpcUrl||"https://ethereum-rpc.publicnode.com");const ens=await ethProvider.lookupAddress(userAddress);if(ens)displayName=ens;}catch(err){console.log("ENS lookup failed",err);}
+    const date=new Date(registeredAt*1000);
+    certificateText.innerHTML=`<div style="font-size:28px;font-weight:bold;">Member #${memberId}</div><br><div style="font-size:22px;">${displayName}</div><br><div style="font-size:14px;color:#aaa;">${userAddress.slice(0,6)}...${userAddress.slice(-4)}</div><br><div style="font-size:16px;">Registered</div><div style="font-size:18px;">${date.toLocaleString()}</div>`;
+    certificateBox.classList.remove("hidden");
+  }catch(err){console.error("Membership display failed",err);}
 }
 
-function completeStep(id) {
-
-  const el =
-    document.getElementById(id);
-
-  if (!el) return;
-
-  el.classList.add("complete");
-
+async function refreshRegistrationState(){
+  if(!userAddress)return;
+  const [isRegistered,isVerified,balance,total]=await Promise.all([registration.registered(userAddress),identity.isVerified(userAddress),labr.balanceOf(userAddress),registration.totalMembers()]);
+  if(memberCount)memberCount.innerText=`Registered members: ${Number(total).toLocaleString()}`;
+  completeStep("step-wallet",true); completeStep("step-balance",balance>=ethers.parseEther("1")); completeStep("step-identity",isVerified);
+  verifyBtn.disabled=isVerified;
+  if(isRegistered){completeStep("step-attest",true);completeStep("step-register",true);governanceAccessWrapper.classList.remove("hidden");attestBtn.disabled=true;registerBtn.disabled=true;setStatus("Already registered. Governance access unlocked.","success");await showMembershipData();setCertificateStatus("Preparing certificate...");await buildMembershipCertificate();setCertificateStatus("Certificate prepared. Tap Download Certificate to save or share.","success");return;}
+  attestBtn.disabled=!(isVerified && balance>=ethers.parseEther("1"));
+  if(!isVerified)setStatus("Permanent Human Passport verification is required before registration.","error");
+  else if(balance<ethers.parseEther("1"))setStatus("Identity verified. Hold at least 1 LABR to register.","error");
+  else setStatus("Identity and LABR requirements passed. Sign the attestation to continue.","success");
 }
 
-async function showMembershipData() {
-
-  try {
-
-    const memberData =
-      await registration.getMemberData(
-        userAddress
-      );
-
-    const isRegistered =
-      memberData[0];
-
-    const memberId =
-      Number(memberData[1]);
-
-    const registeredAt =
-      Number(memberData[2]);
-
-    if (!isRegistered) {
-      return;
-    }
-
-  let displayName =
-    userAddress;
-
-const overrideName =
-  ENS_OVERRIDES[
-    userAddress.toLowerCase()
-  ];
-
-if (overrideName) {
-
-  displayName =
-    overrideName;
-
+async function adoptWallet(wallet){
+  provider=wallet.provider;signer=wallet.signer;userAddress=ethers.getAddress(wallet.address);
+  identity=new ethers.Contract(IDENTITY_REGISTRY,IDENTITY_ABI,signer);
+  registration=new ethers.Contract(REGISTRATION_CONTRACT,REGISTRATION_ABI,signer);
+  labr=new ethers.Contract(LABR_TOKEN,ERC20_ABI,provider);
+  labrv=new ethers.Contract(LABRV_TOKEN,LABRV_ABI,signer);
+  connectBtn.style.display="none";await refreshRegistrationState();
 }
 
-  try {
+connectBtn.onclick=async()=>{try{window.LaborCoinDeployment.requireActive();if(!window.LaborWallet)throw new Error("Wallet system is still loading. Please wait a moment and try again.");setStatus("Opening wallet connection...");connectBtn.disabled=true;connectBtn.innerText="Connecting...";const wallet=await window.LaborWallet.connect();walletInitialized=true;await adoptWallet(wallet);}catch(err){console.error(err);connectBtn.disabled=false;connectBtn.innerText="Connect Wallet";setStatus(err.message||"Connection failed","error");}};
 
-    const ethProvider =
-      new ethers.JsonRpcProvider(
-        "https://ethereum-rpc.publicnode.com"
-      );
+verifyBtn.onclick=async()=>{try{if(!userAddress)throw new Error("Connect wallet first.");verifyBtn.disabled=true;showLoading("Checking Human Passport score...");const response=await fetch(`${VERIFIER_URL}/verify`,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({address:userAddress,type:"identity"})});const data=await response.json();if(!response.ok||!data.success)throw new Error(data.error||`Human Passport score must be at least ${SITE_CONFIG.limits.minPassportScore}.`);if(!data.signature||!data.expiry||!data.scoreThousandths)throw new Error("Verification response is incomplete.");showLoading("Recording permanent identity verification...");const tx=await identity.verifyParticipant(data.scoreThousandths,data.expiry,data.signature);await tx.wait();if(!await identity.isVerified(userAddress))throw new Error("Registry did not confirm verification.");setStatus(`Permanent identity verification confirmed. Human Passport score: ${data.score}.`,"success");await refreshRegistrationState();}catch(err){console.error(err);setStatus(err.shortMessage||err.reason||err.message||"Verification failed","error");verifyBtn.disabled=false;}finally{hideLoading();}};
 
-    const ens =
-      await ethProvider.lookupAddress(
-        userAddress
-      );
-
-    console.log(
-      "ENS:",
-      ens
-    );
-
-    if (ens) {
-
-      displayName = ens;
-
-    }
-
-  } catch (err) {
-
-    console.log(
-      "ENS lookup failed",
-      err
-    );
-
-  }
-
-    const date =
-      new Date(
-        registeredAt * 1000
-      );
-
-    certificateText.innerHTML = `
-    <div style="font-size:28px;font-weight:bold;">
-      Member #${memberId}
-    </div>
-
-    <br>
-
-    <div style="font-size:22px;">
-      ${displayName}
-    </div>
-
-    <br>
-
-    <div style="font-size:14px;color:#aaa;">
-      ${userAddress.slice(0,6)}...${userAddress.slice(-4)}
-    </div>
-
-    <br>
-
-    <div style="font-size:16px;">
-      Registered
-    </div>
-
-    <div style="font-size:18px;">
-      ${date.toLocaleString()}
-    </div>
-  `;
-
-    certificateBox.classList.remove(
-      "hidden"
-    );
-
-  } catch (err) {
-
-    console.error(
-      "Membership display failed",
-      err
-    );
-  }
-}
-
-const loadingOverlay =
-  document.getElementById(
-    "loadingOverlay"
-  );
-
-const loadingText =
-  document.getElementById(
-    "loadingText"
-  );
-
-function showLoading(text) {
-
-  if (loadingText) {
-
-    loadingText.innerText =
-      text;
-  }
-
-  if (loadingOverlay) {
-
-    loadingOverlay.classList.remove(
-      "hidden"
-    );
-  }
-}
-
-function hideLoading() {
-
-  if (!loadingOverlay) {
-    return;
-  }
-
-  loadingOverlay.classList.add(
-    "hidden"
-  );
-}
-
-// ===== CONNECT =====
-connectBtn.onclick = async () => {
-
-    try {
-
-      if (!window.LaborWallet) {
-        throw new Error(
-          "Wallet system is still loading. Please wait a moment and try again."
-        );
-      }
-
-      setStatus(
-        "Opening wallet connection..."
-      );
-
-      connectBtn.disabled = true;
-      connectBtn.innerText = "Connecting...";
-
-      const wallet =
-        await window.LaborWallet.connect();
-
-    walletInitialized = true;
-
-    provider =
-      wallet.provider;
-
-    signer =
-      wallet.signer;
-
-    userAddress =
-      ethers.getAddress(
-        wallet.address
-      );
-
-    const storedRegistrationAddress =
-      sessionStorage.getItem(
-        "registrationAddress"
-      );
-
-    if (
-      storedRegistrationAddress &&
-      storedRegistrationAddress.toLowerCase() !==
-      userAddress.toLowerCase()
-    ) {
-      sessionStorage.removeItem(
-        "registrationSignature"
-      );
-
-      sessionStorage.removeItem(
-        "registrationExpiry"
-      );
-
-      sessionStorage.removeItem(
-        "registrationAddress"
-      );
-    }
-
-    registration =
-      new ethers.Contract(
-        REGISTRATION_CONTRACT,
-        REGISTRATION_ABI,
-        signer
-      );
-
-    labr =
-      new ethers.Contract(
-        LABR_TOKEN,
-        ERC20_ABI,
-        provider
-      );
-
-    labrv =
-      new ethers.Contract(
-        LABRV_TOKEN,
-        LABRV_ABI,
-        signer
-      );
-
-    connectBtn.style.display =
-      "none";
-
-completeStep("step-wallet");
-
-const alreadyRegistered =
-  await registration.registered(
-    userAddress
-  );
-
-if (alreadyRegistered) {
-
-  completeStep("step-balance");
-  completeStep("step-identity");
-  completeStep("step-attest");
-  completeStep("step-register");
-
-  governanceAccessWrapper
-    .classList
-    .remove("hidden");
-
-  setStatus(
-    "Already registered. Governance access unlocked.",
-    "success"
-  );
-
-  try {
-
-    await showMembershipData();
-
-    setCertificateStatus(
-      "Preparing certificate..."
-    );
-
-    await buildMembershipCertificate();
-
-    setCertificateStatus(
-      "Certificate prepared. Tap Download Certificate to save or share.",
-      "success"
-    );
-
-  } catch (postRegistrationError) {
-
-    console.error(
-      "Membership display failed",
-      postRegistrationError
-    );
-
-    setCertificateStatus(
-      "Membership confirmed, but the certificate could not be prepared. Reload the page and try again.",
-      "error"
-    );
-  }
-
-  return;
-}
-
-const balance =
-  await labr.balanceOf(
-    userAddress
-  );
-
-if (
-  balance <
-  ethers.parseEther("1")
-) {
-
-  setStatus(
-    "Requires at least 1 LABR to register",
-    "error"
-  );
-
-  return;
-}
-
-completeStep("step-balance");
-
-verifyBtn.disabled = false;
-
-setStatus(
-  "Wallet connected",
-  "success"
-);
-
-  } catch (err) {
-
-    console.error(err);
-
-    connectBtn.disabled = false;
-    connectBtn.innerText =
-      "Connect Wallet";
-
-    setStatus(
-      err.message ||
-      "Connection failed",
-      "error"
-    );
-  }
-};
-
-// ===== VERIFY IDENTITY =====
-verifyBtn.onclick = async () => {
-
-  try {
-
-verifyBtn.disabled = true;
-
-setStatus(
-  "Verifying identity..."
-);
-
-showLoading(
-  "Verifying identity..."
-);
-
-    if (!userAddress) {
-
-      hideLoading();
-
-      verifyBtn.disabled = false;
-
-      setStatus(
-        "Connect wallet first",
-        "error"
-      );
-
-  return;
-}
-
-    const response =
-      await fetch(
-        `${VERIFIER_URL}/verify`,
-        {
-          method: "POST",
-
-          headers: {
-            "Content-Type":
-              "application/json"
-          },
-
-          body: JSON.stringify({
-            address: userAddress,
-            type: "registration"
-          })
-        }
-      );
-
-    const data =
-      await response.json();
-
-    if (response.ok && data.success) {
-
-      daoStatus.innerText =
-        `Verification passed.\nPassport score: ${data.score}`;
-
-      daoStatus.style.color =
-        "#4dff88";
-
-    } else {
-
-      daoStatus.innerText =
-        `Verification failed.\nPassport score: ${data.score || 0}\nMinimum required: 15`;
-
-      daoStatus.style.color =
-        "#ff4d4d";
-    }
-
-    if (!response.ok || !data.success) {
-
-      hideLoading();
-
-      verifyBtn.disabled = false;
-
-      return;
-    }
-
-    console.log("VERIFY RESPONSE:", data);
-
-    if (
-      !data.signature ||
-      !data.expiry
-    ) {
-
-      hideLoading();
-
-      verifyBtn.disabled = false;
-
-      setStatus(
-        "Verification response missing signature or expiry",
-        "error"
-      );
-
-      return;
-    }
-
-    registrationSignature =
-      data.signature;
-
-    registrationExpiry =
-      data.expiry;
-
-    sessionStorage.setItem(
-      "registrationSignature",
-      registrationSignature
-    );
-
-    sessionStorage.setItem(
-      "registrationExpiry",
-      String(registrationExpiry)
-    );
-
-    sessionStorage.setItem(
-      "registrationAddress",
-      userAddress
-    );
-
-    completeStep("step-identity");
-
-    attestBtn.disabled = false;
-
-    hideLoading();
-
-  } catch (err) {
-
-  hideLoading();
-
-  console.error(err);
-
-  verifyBtn.disabled = false;
-
-  setStatus(
-    "Verification failed",
-    "error"
-  );
-
-}
-
-};
-
-// ===== SIGN ATTESTATION =====
-
-// ===== OPEN MODAL =====
-attestBtn.onclick = () => {
-
-  if (!signer) {
-
-    setStatus(
-      "Connect wallet first",
-      "error"
-    );
-
-    return;
-  }
-
-  attestationModal.classList.remove(
-    "hidden"
-  );
-
-};
-
-// ===== CANCEL =====
-cancelAttestationBtn.onclick = () => {
-
-  attestationModal.classList.add(
-    "hidden"
-  );
-
-};
-
-// ===== CONFIRM + SIGN =====
-confirmAttestationBtn.onclick =
-  async () => {
-
-  try {
-
-    const message = `
+attestBtn.onclick=()=>{if(!signer){setStatus("Connect wallet first","error");return;}attestationModal.classList.remove("hidden");};
+cancelAttestationBtn.onclick=()=>attestationModal.classList.add("hidden");
+confirmAttestationBtn.onclick=async()=>{try{const message=`
 LaborCoin DAO Attestation
 
 I affirm my support for democratic worker organization,
@@ -674,81 +105,8 @@ to strengthen cooperation, democratic governance,
 and collective power.
 
 Power to the People.
-`;
-
-    await signer.signMessage(
-      message
-    );
-
-    completeStep(
-      "step-attest"
-    );
-
-    registerBtn.disabled = false;
-
-    setStatus(
-      "Attestation signed",
-      "success"
-    );
-
-    attestationModal.classList.add(
-      "hidden"
-    );
-
-    // ===== DOWNLOAD PDF =====
-    const link =
-      document.createElement("a");
-
-    link.href =
-      "attestation.pdf";
-
-    link.download =
-      "LaborCoin-DAO-Attestation.pdf";
-
-    document.body.appendChild(link);
-
-    link.click();
-
-    document.body.removeChild(link);
-
-  } catch (err) {
-
-    console.error(err);
-
-    connectBtn.disabled = false;
-    connectBtn.innerText = "Connect Wallet";
-
-    setStatus(
-      "Attestation cancelled",
-      "error"
-    );
-
-  }
-
-};
-
-const downloadAttestationBtn =
-  document.getElementById(
-    "downloadAttestationBtn"
-  );
-
-downloadAttestationBtn.onclick =
-() => {
-
-  const link =
-    document.createElement("a");
-
-  link.href =
-    "attestation.pdf";
-
-  link.download =
-    "LaborCoin-DAO-Attestation.pdf";
-
-  link.click();
-
-};
-
-// ===== MEMBERSHIP CERTIFICATE =====
+`;await signer.signMessage(message);completeStep("step-attest",true);registerBtn.disabled=false;setStatus("Attestation signed","success");attestationModal.classList.add("hidden");const link=document.createElement("a");link.href="attestation.pdf";link.download="LaborCoin-DAO-Attestation.pdf";document.body.appendChild(link);link.click();document.body.removeChild(link);}catch(err){console.error(err);setStatus("Attestation cancelled","error");}};
+downloadAttestationBtn.onclick=()=>{const link=document.createElement("a");link.href="attestation.pdf";link.download="LaborCoin-DAO-Attestation.pdf";link.click();};
 
 async function imageToJpegDataUrl(
   src,
@@ -1362,296 +720,21 @@ function setCertificateStatus(msg, type = "") {
       : "#ccc";
 }
 
-// ===== REGISTER =====
-registerBtn.onclick = async () => {
-
-  let registrationConfirmed = false;
-
-  try {
-
-    registerBtn.disabled = true;
-
-    setStatus(
-      "Registering DAO membership..."
-    );
-
-    showLoading(
-      "Registering DAO membership..."
-    );
-
-    const storedRegistrationAddress =
-      sessionStorage.getItem(
-        "registrationAddress"
-      );
-
-    if (
-      storedRegistrationAddress &&
-      storedRegistrationAddress.toLowerCase() !==
-      userAddress.toLowerCase()
-    ) {
-      sessionStorage.removeItem(
-        "registrationSignature"
-      );
-
-      sessionStorage.removeItem(
-        "registrationExpiry"
-      );
-
-      sessionStorage.removeItem(
-        "registrationAddress"
-      );
-    }
-
-    registrationSignature =
-      registrationSignature ||
-      sessionStorage.getItem(
-        "registrationSignature"
-      );
-
-    registrationExpiry =
-      registrationExpiry ||
-      sessionStorage.getItem(
-        "registrationExpiry"
-      );
-
-    if (
-      !registrationSignature ||
-      !registrationExpiry
-    ) {
-
-      hideLoading();
-
-      registerBtn.disabled = false;
-
-      setStatus(
-        "Verify identity first",
-        "error"
-      );
-
-      return;
-    }
-
-    const tx =
-      await registration.register(
-        registrationExpiry,
-        registrationSignature
-      );
-
-    setStatus(
-      "Confirming registration..."
-    );
-
-    await tx.wait();
-
-    const [
-      isRegistered,
-      labrvBalance
-    ] =
-      await Promise.all([
-        registration.registered(
-          userAddress
-        ),
-        labrv.balanceOf(
-          userAddress
-        )
-      ]);
-
-    if (
-      !isRegistered ||
-      labrvBalance === 0n
-    ) {
-
-      throw new Error(
-        "Registration confirmed, but membership state could not be verified"
-      );
-    }
-
-    registrationConfirmed = true;
-
-    sessionStorage.removeItem(
-      "registrationSignature"
-    );
-
-    sessionStorage.removeItem(
-      "registrationExpiry"
-    );
-
-    sessionStorage.removeItem(
-      "registrationAddress"
-    );
-
-    completeStep(
-      "step-register"
-    );
-
-    governanceAccessWrapper
-      .classList
-      .remove("hidden");
-
-    hideLoading();
-
-    setStatus(
-      "DAO registration complete.",
-      "success"
-    );
-
-    try {
-
-      await showMembershipData();
-
-      await buildMembershipCertificate();
-
-      setCertificateStatus(
-        "Certificate prepared. Tap Download Certificate to save or share.",
-        "success"
-      );
-
-    } catch (postRegistrationError) {
-
-      console.error(
-        "Post-registration setup failed",
-        postRegistrationError
-      );
-
-      setCertificateStatus(
-        "Registration succeeded, but the certificate could not be prepared. Reload the page and try again.",
-        "error"
-      );
-    }
-
-  } catch (err) {
-
-    hideLoading();
-
-    console.error(err);
-
-    if (registrationConfirmed) {
-
-      governanceAccessWrapper
-        .classList
-        .remove("hidden");
-
-      setStatus(
-        "DAO registration complete.",
-        "success"
-      );
-
-      return;
-    }
-
-    const errorText =
-      JSON.stringify(err)
-        .toLowerCase();
-
-    if (
-      errorText.includes(
-        "already registered"
-      )
-    ) {
-
-      completeStep(
-        "step-register"
-      );
-
-      governanceAccessWrapper
-        .classList
-        .remove("hidden");
-
-      setStatus(
-        "Already registered. Governance access unlocked.",
-        "success"
-      );
-
-      try {
-
-        await showMembershipData();
-
-        await buildMembershipCertificate();
-
-        setCertificateStatus(
-          "Certificate prepared. Tap Download Certificate to save or share.",
-          "success"
-        );
-
-      } catch (postRegistrationError) {
-
-        console.error(
-          "Membership display failed",
-          postRegistrationError
-        );
-      }
-
-      return;
-    }
-
-    registerBtn.disabled = false;
-
-    setStatus(
-      err.reason ||
-      err.message ||
-      "Registration failed",
-      "error"
-    );
-  }
-
+// ===== REGISTER WITH SHARED IDENTITY =====
+registerBtn.onclick=async()=>{
+  let registrationConfirmed=false;
+  try{
+    registerBtn.disabled=true;setStatus("Registering DAO membership...");showLoading("Registering DAO membership...");
+    if(!await identity.isVerified(userAddress))throw new Error("Permanent identity verification is required.");
+    if(await labr.balanceOf(userAddress)<ethers.parseEther("1"))throw new Error("At least 1 LABR is required to register.");
+    const tx=await registration.register();setStatus("Confirming registration...");await tx.wait();
+    const [isRegistered,labrvBalance]=await Promise.all([registration.registered(userAddress),labrv.balanceOf(userAddress)]);
+    if(!isRegistered||labrvBalance===0n)throw new Error("Registration confirmed, but membership state could not be verified.");
+    registrationConfirmed=true;completeStep("step-register",true);governanceAccessWrapper.classList.remove("hidden");hideLoading();setStatus("DAO registration complete.","success");
+    try{await showMembershipData();await buildMembershipCertificate();setCertificateStatus("Certificate prepared. Tap Download Certificate to save or share.","success");}catch(postError){console.error("Post-registration setup failed",postError);setCertificateStatus("Registration succeeded, but the certificate could not be prepared. Reload the page and try again.","error");}
+  }catch(err){hideLoading();console.error(err);if(registrationConfirmed){setStatus("DAO registration complete.","success");return;}registerBtn.disabled=false;setStatus(err.shortMessage||err.reason||err.message||"Registration failed","error");}
 };
 
-downloadCertificateBtn.onclick =
-async () => {
+downloadCertificateBtn.onclick=async()=>{try{downloadCertificateBtn.disabled=true;await downloadMembershipCertificate();}catch(err){console.error(err);setCertificateStatus("Certificate download failed","error");}finally{downloadCertificateBtn.disabled=false;}};
 
-  try {
-
-    downloadCertificateBtn.disabled =
-      true;
-
-    await downloadMembershipCertificate();
-
-  } catch (err) {
-
-    console.error(err);
-
-    setCertificateStatus(
-      "Certificate download failed",
-      "error"
-    );
-
-  } finally {
-
-    downloadCertificateBtn.disabled =
-      false;
-
-  }
-
-};
-
-window.addEventListener(
-  "load",
-  async () => {
-
-    try {
-
-      if (!window.LaborWallet) {
-        return;
-      }
-
-      const wallet =
-        await window.LaborWallet.reconnect();
-
-      if (!wallet) {
-        return;
-      }
-
-      if (walletInitialized) {
-        return;
-      }
-
-      walletInitialized = true;
-
-      connectBtn.click();
-
-    } catch (err) {
-
-      console.error(err);
-    }
-  }
-);
+window.addEventListener("load",async()=>{try{if(!DEPLOYMENT_ACTIVE||!window.LaborWallet)return;const wallet=await window.LaborWallet.reconnect();if(!wallet||walletInitialized)return;walletInitialized=true;await adoptWallet(wallet);}catch(err){console.error(err);}});

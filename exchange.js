@@ -1,1386 +1,226 @@
-// ===== CONFIG =====
-const EXCHANGE_ADDRESS = "0x4Cf18cB39203B678f5C26f2338a10a79f9684749";
-const LABR_TOKEN = "0x460DD873A1D2a41e77410B125cD3027C5FEd2f78";
-const RPC_URL = "https://polygon-bor-rpc.publicnode.com";
-const VERIFIER_URL =
-  "https://laborcoin-verifier.onrender.com";
+(() => {
+  const config = window.LaborCoinConfig;
+  const deployment = window.LaborCoinDeployment;
+  const active = deployment?.isActive() === true;
+  const zero = ethers.ZeroAddress;
 
-const POL_ORACLE =
-  "0xAB594600376Ec9fD91F8e885dADF0CE036862dE0";
+  const identityAddress = config?.addresses?.identityRegistry || zero;
+  const exchangeAddress = config?.addresses?.exchange || zero;
+  const labrAddress = config?.addresses?.labr || zero;
+  const rpcUrl = config?.rpcUrl;
+  const verifierUrl = config?.verifierUrl || "";
+  const maxWallet = BigInt(config?.limits?.maxWalletLabr ?? 10000);
+  const maxTrade = BigInt(config?.limits?.maxTradeLabr ?? 5000);
 
-const MAX_WALLET =
-  10000;
+  const IDENTITY_ABI = [
+    "function isVerified(address) view returns(bool)",
+    "function identityReady() view returns(bool)",
+    "function MIN_PASSPORT_SCORE() view returns(uint256)",
+    "function verifyParticipant(uint256 passportScore,uint256 expiry,bytes signature)",
+    "function nonces(address) view returns(uint256)"
+  ];
+  const EXCHANGE_ABI = [
+    "function LABR() view returns(address)",
+    "function identityRegistry() view returns(address)",
+    "function totalSold() view returns(uint256)",
+    "function unlockedSupply() view returns(uint256)",
+    "function accountedReserve() view returns(uint256)",
+    "function currentSpotPricePOL() view returns(uint256)",
+    "function quoteBuyExactTokens(uint256) view returns(uint256 reserveContribution,uint256 daoContribution,uint256 totalPOLIn)",
+    "function quoteSellExactTokens(uint256) view returns(uint256 grossRedemption,uint256 sellerPOL,uint256 daoContribution,uint256 dividendContribution)",
+    "function buyExactTokens(uint256,uint256,uint256) payable returns(uint256)",
+    "function sellExactTokens(uint256,uint256,uint256) returns(uint256)",
+    "function maxBuyableTokens(address) view returns(uint256)",
+    "function maxSellableTokens(address) view returns(uint256)",
+    "function canTrade(address) view returns(bool)",
+    "function nextTradeTime(address) view returns(uint256)",
+    "function invariantsHold() view returns(bool)",
+    "function launchReady() view returns(bool)"
+  ];
+  const LABR_ABI = [
+    "function balanceOf(address) view returns(uint256)",
+    "function allowance(address,address) view returns(uint256)",
+    "function approve(address,uint256) returns(bool)",
+    "function dividendEligible(address) view returns(bool)",
+    "function eligibleDividendHolderCount() view returns(uint256)",
+    "function withdrawableDividendOf(address) view returns(uint256)",
+    "function claimDividends() returns(uint256)"
+  ];
 
-const MAX_TRANSACTION =
-  5000;
+  const ids = [
+    "connectBtn", "identityVerifyBtn", "exchangeVerifyBtn", "exchangeGateStatus", "exchangeTradePanel",
+    "walletAddress", "identityStatus", "polBalance", "labrBalance", "walletPercent", "cooldown",
+    "dividendEligibility", "withdrawableDividends", "claimDividendsBtn", "eligibleHolderCount",
+    "currentPrice", "totalSoldDisplay", "availableSupply", "bondingCurveValue", "bondingCurveProgress",
+    "invariantStatus", "buyAmount", "buyEstimate", "buyDaoShare", "buyTotal", "sellAmount",
+    "sellEstimate", "sellTax", "sellDividend", "sellNet", "buyBtn", "sellBtn", "statusMessage",
+    "loadingOverlay", "loadingText", "curveCanvas"
+  ];
+  const els = Object.fromEntries(ids.map(id => [id, document.getElementById(id)]));
 
-const buyBtn =
-  document.getElementById(
-    "buyBtn"
-  );
+  const readProvider = active ? new ethers.JsonRpcProvider(rpcUrl) : null;
+  const readIdentity = active ? new ethers.Contract(identityAddress, IDENTITY_ABI, readProvider) : null;
+  const readExchange = active ? new ethers.Contract(exchangeAddress, EXCHANGE_ABI, readProvider) : null;
+  const readLabr = active ? new ethers.Contract(labrAddress, LABR_ABI, readProvider) : null;
 
-const sellBtn =
-  document.getElementById(
-    "sellBtn"
-  );
+  let wallet;
+  let identity;
+  let exchange;
+  let labr;
+  let userAddress;
+  let walletBalance = 0n;
+  let verified = false;
+  let accessReady = false;
 
-const buyAmount =
-  document.getElementById(
-    "buyAmount"
-  );
-
-const sellAmount =
-  document.getElementById(
-    "sellAmount"
-  );
-
-const buyEstimate =
-  document.getElementById(
-    "buyEstimate"
-  );
-
-const buyDaoShare =
-  document.getElementById(
-    "buyDaoShare"
-  );
-
-const sellEstimate =
-  document.getElementById(
-    "sellEstimate"
-  );
-
-const sellTax =
-  document.getElementById(
-    "sellTax"
-  );
-
-const sellNet =
-  document.getElementById(
-    "sellNet"
-  );
-
-// ===== SETTINGS =====
-const SLIPPAGE_NUMERATOR = 95n;
-const PERCENT_DENOMINATOR = 100n;
-
-// ===== ABIs =====
-const EXCHANGE_ABI = [
-  "function buy(uint256 minTokensOut) payable",
-  "function sell(uint256 amount, uint256 minPOL)",
-  "function getPrice(uint256 sold) view returns (uint256)",
-  "function totalSold() view returns (uint256)",
-  "function daoTreasury() view returns (address)",
-  "function MAX_SUPPLY() view returns (uint256)",
-  "function unlockedSupply() view returns (uint256)",
-  "function lastTxTime(address) view returns (uint256)",
-  "function LABR() view returns (address)"
-];
-
-const ORACLE_ABI = [
-  "function latestRoundData() view returns (uint80,int256,uint256,uint256,uint80)"
-];
-
-const ERC20_ABI = [
-
-  "function balanceOf(address) view returns (uint256)",
-
-  "function approve(address spender, uint256 amount) returns (bool)"
-
-];  
-
-// ===== PROVIDERS =====
-const readProvider = new ethers.JsonRpcProvider(RPC_URL);
-const readExchange = new ethers.Contract(EXCHANGE_ADDRESS, EXCHANGE_ABI, readProvider);
-
-let provider, signer, exchange, userAddress;
-
-let exchangeVerified = false;
-
-let walletInitialized = false;
-let walletConnectionPromise = null;
-
-function updateBondingCurveProgress(
-  sold
-) {
-
-  const soldLABR =
-    Number(
-      ethers.formatEther(sold)
-    );
-
-  const progress =
-    (
-      soldLABR /
-      1_000_000_000
-    ) * 100;
-
-  const el =
-    document.getElementById(
-      "bondingCurveProgress"
-    );
-
-  if (!el) {
-    return;
+  function setText(el, value) { if (el) el.textContent = value; }
+  function colorStatus(el, type) {
+    if (!el) return;
+    el.style.color = type === "error" ? "#ff4d4d" : type === "success" ? "#4dff88" : "#ccc";
   }
-
-  el.innerText =
-    `${Math.round(progress)}%`;
-}
-
-function updateBondingCurveValue(
-  sold,
-  price,
-  polUsd
-) {
-
-  const soldLABR =
-    Number(
-      ethers.formatEther(sold)
-    );
-
-  const pricePOL =
-    Number(
-      ethers.formatEther(price)
-    );
-
-  const valuePOL =
-    soldLABR * pricePOL;
-
-  const valueUSD =
-    valuePOL * polUsd;
-
-  const el =
-    document.getElementById(
-      "bondingCurveValue"
-    );
-
-  if (!el) {
-    return;
+  function setStatus(message, type = "") { setText(els.statusMessage, message); colorStatus(els.statusMessage, type); }
+  function setGate(message, type = "") { setText(els.exchangeGateStatus, message); colorStatus(els.exchangeGateStatus, type); }
+  function completeStep(id, complete) { document.getElementById(id)?.classList.toggle("complete", Boolean(complete)); }
+  function showLoading(message) { setText(els.loadingText, message); els.loadingOverlay?.classList.remove("hidden"); }
+  function hideLoading() { els.loadingOverlay?.classList.add("hidden"); }
+  function formatPOL(value, digits = 6) { return `${Number(ethers.formatEther(value)).toLocaleString(undefined,{maximumFractionDigits:digits})} POL`; }
+  function formatLABR(value, digits = 6) { return `${Number(ethers.formatEther(value)).toLocaleString(undefined,{maximumFractionDigits:digits})} LABR`; }
+  function parseLABRInput(input) {
+    const raw = input?.value?.trim();
+    if (!raw) return 0n;
+    const value = ethers.parseEther(raw);
+    if (value <= 0n) throw new Error("Enter an amount greater than zero.");
+    if (value > ethers.parseEther(maxTrade.toString())) throw new Error("The maximum official trade is 5,000 LABR.");
+    return value;
   }
+  function deadline() { return BigInt(Math.floor(Date.now() / 1000) + 15 * 60); }
 
-  el.innerText =
-    `${valuePOL.toLocaleString(
-      undefined,
-      {
-        maximumFractionDigits: 2
-      }
-    )} POL / $${valueUSD.toLocaleString(
-      undefined,
-      {
-        maximumFractionDigits: 2
-      }
-    )} USD`;
-}
-
-// ===== STATUS UI =====
-function setStatus(msg, type = "") {
-  const el = document.getElementById("statusMessage");
-  el.innerText = msg;
-
-  el.style.color =
-    type === "error" ? "#ff4d4d" :
-    type === "success" ? "#4dff88" :
-    "#ccc";
-}
-
-const exchangeVerifyBtn =
-  document.getElementById(
-    "exchangeVerifyBtn"
-  );
-
-const exchangeGateStatus =
-  document.getElementById(
-    "exchangeGateStatus"
-  );
-
-const exchangeTradePanel =
-  document.getElementById(
-    "exchangeTradePanel"
-  );
-
-const loadingOverlay =
-  document.getElementById(
-    "loadingOverlay"
-  );
-
-const loadingText =
-  document.getElementById(
-    "loadingText"
-  );
-
-function setGateStatus(
-  msg,
-  type = ""
-) {
-
-  exchangeGateStatus.innerText =
-    msg;
-
-  exchangeGateStatus.style.color =
-    type === "error"
-      ? "#ff4d4d"
-      : type === "success"
-      ? "#4dff88"
-      : "#ccc";
-}
-
-function completeStep(id) {
-
-  const el =
-    document.getElementById(id);
-
-  if (!el) return;
-
-  el.classList.add("complete");
-}
-
-function showLoading(text) {
-
-  loadingText.innerText = text;
-
-  loadingOverlay.classList.remove(
-    "hidden"
-  );
-}
-
-function hideLoading() {
-
-  loadingOverlay.classList.add(
-    "hidden"
-  );
-}
-
-// ===== INITIAL LOAD =====
-async function initialLoad() {
-  try {
-    const contractLabr =
-      await readExchange.LABR();
-
-    if (
-      ethers.getAddress(contractLabr) !==
-      ethers.getAddress(LABR_TOKEN)
-    ) {
-      throw new Error(
-        `Exchange LABR mismatch: contract uses ${contractLabr}`
-      );
+  function drawCurve(totalSold = 0n) {
+    const canvas = els.curveCanvas;
+    if (!canvas) return;
+    const ctx = canvas.getContext("2d"), width = canvas.width, height = canvas.height, pad = 30;
+    ctx.clearRect(0,0,width,height);
+    ctx.strokeStyle="#444"; ctx.lineWidth=1; ctx.beginPath(); ctx.moveTo(pad,pad); ctx.lineTo(pad,height-pad); ctx.lineTo(width-pad,height-pad); ctx.stroke();
+    ctx.strokeStyle="#ff3b3b"; ctx.lineWidth=2; ctx.beginPath();
+    for (let i=0;i<=100;i+=1) {
+      const x=i/100, price=14+196*x*x, px=pad+x*(width-2*pad), py=height-pad-((price-14)/196)*(height-2*pad);
+      if (i===0) ctx.moveTo(px,py); else ctx.lineTo(px,py);
     }
-
-    const sold = await readExchange.totalSold();
-    const price = await readExchange.getPrice(sold);
-    document.getElementById(
-      "totalSoldDisplay"
-    ).innerText =
-      Number(
-        ethers.formatEther(sold)
-      ).toLocaleString() + " LABR";
-
-    const labrRead =
-      new ethers.Contract(
-        LABR_TOKEN,
-        ERC20_ABI,
-        readProvider
-      );
-
-    const available =
-      await labrRead.balanceOf(
-        EXCHANGE_ADDRESS
-      );
-
-    document.getElementById(
-      "availableSupply"
-    ).innerText =
-      Number(
-        ethers.formatEther(
-          available
-        )
-      ).toLocaleString() + " LABR";
-
-    const oracle =
-      new ethers.Contract(
-        POL_ORACLE,
-        ORACLE_ABI,
-        readProvider
-      );
-
-    const round =
-      await oracle.latestRoundData();
-
-    const polUsd =
-      Number(round[1]) / 1e8;
-
-    const pricePOL =
-      Number(
-        ethers.formatEther(price)
-      );
-
-    const priceUSD =
-      pricePOL * polUsd;
-
-    document.getElementById(
-      "currentPrice"
-    ).innerText =
-      `$${priceUSD.toFixed(2)} USD (${pricePOL.toFixed(6)} POL)`;
-
-    updateBondingCurveValue(
-      sold,
-      price,
-      polUsd
-    );
-
-    updateBondingCurveProgress(
-      sold
-    );
-
-    await drawCurve(sold, polUsd);
-    } catch (e) {
-    console.error(e);
-    setStatus("Failed to load data", "error");
-  }
-}
-
-// ===== CONNECT =====
-async function applyConnectedWallet(
-  wallet
-) {
-
-  if (
-    !wallet ||
-    !wallet.provider ||
-    !wallet.signer ||
-    !wallet.address
-  ) {
-    throw new Error(
-      "Wallet connection returned incomplete data"
-    );
+    ctx.stroke();
+    const sold=Number(ethers.formatEther(totalSold)), progress=Math.max(0,Math.min(1,sold/1_000_000_000));
+    const price=14+196*progress*progress, markerX=pad+progress*(width-2*pad), markerY=height-pad-((price-14)/196)*(height-2*pad);
+    ctx.fillStyle="#4dff88"; ctx.beginPath(); ctx.arc(markerX,markerY,6,0,Math.PI*2); ctx.fill();
   }
 
-  provider =
-    wallet.provider;
-
-  signer =
-    wallet.signer;
-
-  userAddress =
-    ethers.getAddress(
-      wallet.address
-    );
-
-  exchange =
-    new ethers.Contract(
-      EXCHANGE_ADDRESS,
-      EXCHANGE_ABI,
-      signer
-    );
-
-  walletInitialized = true;
-
-  const connectBtn =
-    document.getElementById(
-      "connectBtn"
-    );
-
-  connectBtn.disabled = false;
-  connectBtn.innerText =
-    "Connect Wallet";
-
-  connectBtn.style.display =
-    "none";
-
-  setGateStatus(
-    "Wallet connected",
-    "success"
-  );
-
-  completeStep(
-    "exchange-step-wallet"
-  );
-
-  document.getElementById(
-    "walletAddress"
-  ).innerText =
-    userAddress.slice(0, 6)
-    +
-    "..."
-    +
-    userAddress.slice(-4);
-
-  await updateAll();
-}
-
-async function connectWallet() {
-
-  if (walletConnectionPromise) {
-    return walletConnectionPromise;
+  async function loadMarket() {
+    if (!active) return;
+    try {
+      const [reportedLabr, reportedIdentity, totalSold, unlocked, reserve, price, invariants, ready, holders] = await Promise.all([
+        readExchange.LABR(), readExchange.identityRegistry(), readExchange.totalSold(), readExchange.unlockedSupply(),
+        readExchange.accountedReserve(), readExchange.currentSpotPricePOL(), readExchange.invariantsHold(),
+        readExchange.launchReady(), readLabr.eligibleDividendHolderCount()
+      ]);
+      if (ethers.getAddress(reportedLabr) !== ethers.getAddress(labrAddress)) throw new Error("Exchange LABR address does not match protocol configuration.");
+      if (ethers.getAddress(reportedIdentity) !== ethers.getAddress(identityAddress)) throw new Error("Exchange Identity Registry does not match protocol configuration.");
+      setText(els.currentPrice, `${formatPOL(price)} per LABR`);
+      setText(els.totalSoldDisplay, formatLABR(totalSold,2)); setText(els.availableSupply, formatLABR(unlocked,2));
+      setText(els.bondingCurveValue, formatPOL(reserve,2));
+      setText(els.bondingCurveProgress, `${(Number(ethers.formatEther(totalSold))/1_000_000_000*100).toFixed(4)}%`);
+      setText(els.eligibleHolderCount, Number(holders).toLocaleString());
+      setText(els.invariantStatus, invariants && ready ? "Verified" : "Not ready");
+      colorStatus(els.invariantStatus, invariants && ready ? "success" : "error"); drawCurve(totalSold);
+    } catch (error) { console.error(error); setStatus(error.message || "Unable to load Exchange V6.","error"); }
   }
 
-  walletConnectionPromise =
-    (async () => {
-
-      const connectBtn =
-        document.getElementById(
-          "connectBtn"
-        );
-
-      try {
-
-        if (!window.LaborWallet) {
-          throw new Error(
-            "Wallet system is still loading. Please try again."
-          );
-        }
-
-        setGateStatus(
-          "Opening wallet connection..."
-        );
-
-        connectBtn.disabled = true;
-        connectBtn.innerText =
-          "Connecting...";
-
-        const wallet =
-          await window.LaborWallet.connect();
-
-        await applyConnectedWallet(
-          wallet
-        );
-
-      } catch (err) {
-
-        console.error(err);
-
-        connectBtn.disabled = false;
-        connectBtn.innerText =
-          "Connect Wallet";
-
-        setGateStatus(
-          err.message ||
-          "Connection failed",
-          "error"
-        );
-
-      } finally {
-
-        walletConnectionPromise =
-          null;
-      }
-    })();
-
-  return walletConnectionPromise;
-}
-
-// ===== VERIFY EXCHANGE ACCESS =====
-exchangeVerifyBtn.onclick =
-async () => {
-
-  try {
-
-    showLoading(
-      "Verifying identity..."
-    );
-
-    const response =
-      await fetch(
-        `${VERIFIER_URL}/verify`,
-        {
-          method: "POST",
-
-          headers: {
-            "Content-Type":
-              "application/json"
-          },
-
-          body: JSON.stringify({
-            address: userAddress,
-            type: "exchange"
-          })
-        }
-      );
-
-    const data =
-      await response.json();
-
-    if (
-      !response.ok ||
-      !data.success
-    ) {
-
-      throw new Error(
-        "Verification failed"
-      );
-    }
-
-    exchangeVerified = true;
-
-    completeStep(
-      "exchange-step-identity"
-    );
-
-    exchangeTradePanel
-      .classList
-      .remove("hidden");
-
-    setGateStatus(
-      `Verified. Passport score: ${data.score}`,
-      "success"
-    );
-
-    hideLoading();
-
-  } catch (err) {
-
-    console.error(err);
-
-    hideLoading();
-
-    setGateStatus(
-      err.message ||
-      "Verification failed",
-      "error"
-    );
-  }
-};
-
-// ===== UPDATE =====
-async function updateAll() {
-  if (!userAddress) return;
-
-  try {
-    const labrRead = new ethers.Contract(LABR_TOKEN, ERC20_ABI, provider);
-
-    const balance =
-      await labrRead.balanceOf(
-        userAddress
-      );
-
-    const formattedBalance =
-      Number(
-        ethers.formatEther(balance)
-      );
-
-    if (
-      formattedBalance > MAX_WALLET
-    ) {
-
-      setGateStatus(
-        "Wallet exceeds exchange limit",
-        "error"
-      );
-
-      return;
-    }
-
-    completeStep(
-      "exchange-step-balance"
-    );
-
-    exchangeVerifyBtn.disabled =
-      false;
-
-    const sold = await readExchange.totalSold();
-    const price = await readExchange.getPrice(sold);
-
-    const bal = Number(ethers.formatEther(balance));
-
-// ===== POL BALANCE =====
-const polBalance =
-  await provider.getBalance(
-    userAddress
-  );
-
-document.getElementById(
-  "polBalance"
-).innerText =
-  Number(
-    ethers.formatEther(polBalance)
-  ).toFixed(4);
-
-// ===== LABR BALANCE =====
-document.getElementById(
-  "labrBalance"
-).innerText =
-  bal.toFixed(2);
-
-// ===== TOTAL SOLD =====
-const totalSold =
-  await readExchange.totalSold();
-
-document.getElementById(
-  "totalSoldDisplay"
-).innerText =
-  Number(
-    ethers.formatEther(
-      totalSold
-    )
-  ).toLocaleString() + " LABR";
-
-// ===== CIRCULATING SUPPLY =====
-const available =
-  await labrRead.balanceOf(
-    EXCHANGE_ADDRESS
-  );
-
-document.getElementById(
-  "availableSupply"
-).innerText =
-  Number(
-    ethers.formatEther(
-      available
-    )
-  ).toLocaleString() + " LABR";
-
-    document.getElementById("walletPercent").innerText =
-      ((bal / MAX_WALLET) * 100).toFixed(1) + "% of limit";
-
-    const oracle =
-      new ethers.Contract(
-        POL_ORACLE,
-        ORACLE_ABI,
-        readProvider
-      );
-
-    const round =
-      await oracle.latestRoundData();
-
-    const polUsd =
-      Number(round[1]) / 1e8;
-
-    const pricePOL =
-      Number(
-        ethers.formatEther(price)
-      );
-
-    const priceUSD =
-      pricePOL * polUsd;
-
-    document.getElementById(
-      "currentPrice"
-    ).innerText =
-      `$${priceUSD.toFixed(2)} USD (${pricePOL.toFixed(6)} POL)`;
-
-    updateBondingCurveValue(
-      sold,
-      price,
-      polUsd
-    );
-
-    updateBondingCurveProgress(
-      sold
-    );
-
-    await drawCurve(
-      sold,
-      polUsd
-    );
-
-    updateCooldown();
-
-  } catch (e) {
-    console.error(e);
-  }
-}
-
-// ===== COOLDOWN =====
-async function updateCooldown() {
-  if (!userAddress) return;
-
-  try {
-    const last = await readExchange.lastTxTime(userAddress);
-    const now = Math.floor(Date.now() / 1000);
-
-    const remaining = Number(last) + 43200 - now;
-
-    const btns = [buyBtn, sellBtn];
-
-    if (remaining <= 0) {
-      document.getElementById("cooldown").innerText = "Ready";
-      btns.forEach(b => b.disabled = false);
-    } else {
-      btns.forEach(b => b.disabled = true);
-
-      const hours = Math.floor(remaining / 3600);
-      const mins = Math.floor((remaining % 3600) / 60);
-
-      document.getElementById("cooldown").innerText =
-        `${hours}h ${mins}m`;
-    }
-  } catch (e) {
-    console.error(e);
-  }
-}
-
-// ===== BUY ESTIMATE =====
-buyAmount.oninput = async (e) => {
-  const pol = Number(e.target.value);
-
-  if (isNaN(pol) || pol <= 0) {
-    buyEstimate.innerText = "0";
-    buyDaoShare.innerText = "0";
-    return;
+  async function refreshWallet() {
+    if (!wallet || !active) return;
+    userAddress=ethers.getAddress(wallet.address);
+    identity=new ethers.Contract(identityAddress,IDENTITY_ABI,wallet.signer);
+    exchange=new ethers.Contract(exchangeAddress,EXCHANGE_ABI,wallet.signer);
+    labr=new ethers.Contract(labrAddress,LABR_ABI,wallet.signer);
+    const [pol,balance,isVerified,canTrade,nextTime,maxBuy,maxSell,isEligible,withdrawable] = await Promise.all([
+      wallet.provider.getBalance(userAddress), labr.balanceOf(userAddress), identity.isVerified(userAddress),
+      exchange.canTrade(userAddress), exchange.nextTradeTime(userAddress), exchange.maxBuyableTokens(userAddress),
+      exchange.maxSellableTokens(userAddress), labr.dividendEligible(userAddress), labr.withdrawableDividendOf(userAddress)
+    ]);
+    walletBalance=balance; verified=isVerified;
+    setText(els.walletAddress,`${userAddress.slice(0,8)}...${userAddress.slice(-6)}`);
+    setText(els.identityStatus,verified ? "Verified permanently" : "Verification required"); colorStatus(els.identityStatus,verified?"success":"error");
+    setText(els.polBalance,formatPOL(pol)); setText(els.labrBalance,formatLABR(balance));
+    const room=balance>=ethers.parseEther(maxWallet.toString())?0n:ethers.parseEther(maxWallet.toString())-balance;
+    setText(els.walletPercent,formatLABR(room));
+    setText(els.dividendEligibility,isEligible ? "Eligible for one equal share" : "Not currently eligible");
+    colorStatus(els.dividendEligibility,isEligible?"success":"");
+    setText(els.withdrawableDividends,formatPOL(withdrawable));
+    completeStep("exchange-step-wallet",true); completeStep("exchange-step-identity",verified);
+    completeStep("exchange-step-balance",balance<=ethers.parseEther(maxWallet.toString())); completeStep("exchange-step-cooldown",canTrade);
+    const now=BigInt(Math.floor(Date.now()/1000));
+    setText(els.cooldown,canTrade?"Ready":nextTime>now?`Ready ${new Date(Number(nextTime)*1000).toLocaleString()}`:"Unavailable");
+    els.identityVerifyBtn.disabled=verified; els.exchangeVerifyBtn.disabled=false; els.claimDividendsBtn.disabled=!verified || withdrawable===0n;
+    els.buyBtn.disabled=maxBuy===0n; els.sellBtn.disabled=maxSell===0n;
+    accessReady=verified && balance<=ethers.parseEther(maxWallet.toString()) && canTrade;
+    if (!verified) { setGate("Human Passport verification is required before official buying, selling, dividend eligibility, or claims.","error"); els.exchangeTradePanel.classList.add("hidden"); return; }
+    if (balance>ethers.parseEther(maxWallet.toString())) { setGate("This wallet holds more than 10,000 LABR and is barred from both buying and selling through the official exchange.","error"); els.exchangeTradePanel.classList.add("hidden"); return; }
+    setGate(canTrade?`Identity and wallet checks passed. Maximum current buy: ${formatLABR(maxBuy)}. Maximum current sell: ${formatLABR(maxSell)}.`:"Identity and wallet checks passed, but the trade cooldown is active.",canTrade?"success":"error");
   }
 
-  const sold = await readExchange.totalSold();
-  const price = await readExchange.getPrice(sold);
-
-  const p = Number(ethers.formatEther(price));
-
-  const tokens = pol / p;
-
-  buyEstimate.innerText = tokens.toFixed(8);
-  buyDaoShare.innerText = (pol * 0.10).toFixed(4) + " POL";
-};
-
-// ===== SELL ESTIMATE (FIXED LOGIC) =====
-sellAmount.oninput = async (e) => {
-  const amt = Number(e.target.value);
-
-  if (isNaN(amt) || amt <= 0) {
-    sellEstimate.innerText = "0";
-    sellTax.innerText = "0";
-    sellNet.innerText = "0";
-    return;
+  async function connectWallet() {
+    try {
+      deployment.requireActive(); els.connectBtn.disabled=true; setGate("Opening wallet connection...");
+      wallet=await window.LaborWallet.connect(); await refreshWallet(); els.connectBtn.style.display="none";
+    } catch(error) { console.error(error); setGate(error.message||"Wallet connection failed.","error"); els.connectBtn.disabled=false; }
   }
 
-  const sold = await readExchange.totalSold();
-  const price = await readExchange.getPrice(sold);
-
-  const p = Number(ethers.formatEther(price));
-
-  // Token tax happens BEFORE conversion
-  const netTokens = amt * 0.90;
-  const gross = netTokens * p;
-  const tax = (amt - netTokens) * p;
-
-  sellEstimate.innerText = gross.toFixed(4);
-  sellTax.innerText = tax.toFixed(4) + " POL";
-  sellNet.innerText = gross.toFixed(4) + " POL";
-};
-
-// ===== BUY =====
-buyBtn.onclick = async () => {
-
-  if (!exchangeVerified) {
-
-    setStatus(
-      "Exchange access not verified",
-      "error"
-    );
-
-    return;
+  async function verifyIdentity() {
+    try {
+      if (!userAddress || !identity) throw new Error("Connect wallet first.");
+      if (verified) { setGate("This wallet is already permanently verified.","success"); return; }
+      els.identityVerifyBtn.disabled=true; showLoading("Checking Human Passport score...");
+      const response=await fetch(`${verifierUrl}/verify`,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({address:userAddress,type:"identity"})});
+      const data=await response.json();
+      if (!response.ok || !data.success) throw new Error(data.error || `Human Passport score must be at least ${config.limits.minPassportScore}.`);
+      if (!data.signature || !data.expiry || !data.scoreThousandths) throw new Error("Verification response is incomplete.");
+      showLoading("Recording permanent identity verification...");
+      const tx=await identity.verifyParticipant(data.scoreThousandths,data.expiry,data.signature); await tx.wait();
+      const confirmed=await identity.isVerified(userAddress); if (!confirmed) throw new Error("Verification transaction confirmed but Registry status is false.");
+      setStatus(`Identity verification confirmed. Human Passport score: ${data.score}.`,"success");
+      await Promise.all([refreshWallet(),loadMarket()]);
+    } catch(error) { console.error(error); setStatus(error.shortMessage||error.reason||error.message||"Identity verification failed.","error"); els.identityVerifyBtn.disabled=false; }
+    finally { hideLoading(); }
   }
 
-  if (!exchange) return;
-
-  const val = buyAmount.value;
-
-  if (!val || val <= 0) {
-    return;
+  async function checkAccess() {
+    try { await refreshWallet(); els.exchangeTradePanel.classList.toggle("hidden",!accessReady); if(accessReady)setGate("Official Exchange access is currently available.","success"); }
+    catch(error){setGate(error.message||"Access check failed.","error");}
   }
 
-  try {
-
-    showLoading(
-      "Processing buy..."
-    );
-
-    setStatus(
-      "Processing buy..."
-    );
-
-    const balanceCheckContract =
-      new ethers.Contract(
-        LABR_TOKEN,
-        ERC20_ABI,
-        provider
-      );
-
-    const currentBalance =
-      await balanceCheckContract.balanceOf(
-        userAddress
-      );
-
-    const maxWalletWei =
-      ethers.parseEther(
-        String(MAX_WALLET)
-      );
-
-    const maxTransactionWei =
-      ethers.parseEther(
-        String(MAX_TRANSACTION)
-      );
-
-    if (
-      currentBalance >= maxWalletWei
-    ) {
-
-      setStatus(
-        "Wallet is already at the 10,000 LABR exchange limit",
-        "error"
-      );
-
-      hideLoading();
-
-      return;
-    }
-
-    const valueWei =
-      ethers.parseEther(val);
-
-    const sold =
-      await readExchange.totalSold();
-
-    const price =
-      await readExchange.getPrice(
-        sold
-      );
-
-    const tokensExpected =
-      (
-        valueWei *
-        10n ** 18n
-      ) /
-      price;
-
-    if (
-      tokensExpected >
-      maxTransactionWei
-    ) {
-
-      setStatus(
-        "Buy exceeds 5,000 LABR limit",
-        "error"
-      );
-
-      hideLoading();
-
-      return;
-    }
-
-    if (
-      currentBalance +
-      tokensExpected >
-      maxWalletWei
-    ) {
-
-      setStatus(
-        "Purchase would exceed 10,000 LABR wallet limit",
-        "error"
-      );
-
-      hideLoading();
-
-      return;
-    }
-
-    const minOut =
-      (
-        tokensExpected *
-        SLIPPAGE_NUMERATOR
-      ) /
-      PERCENT_DENOMINATOR;
-
-    const tx =
-      await exchange.buy(
-        minOut,
-        {
-          value:
-            valueWei
-        }
-      );
-
-    await tx.wait();
-
-    hideLoading();
-
-    buyAmount.value = "";
-
-    buyEstimate.innerText = "0";
-
-    buyDaoShare.innerText = "0";
-
-    setStatus(
-      "Buy successful",
-      "success"
-    );
-
-    updateAll();
-
-  } catch (e) {
-
-    console.error(e);
-
-    hideLoading();
-
-    setStatus(
-      "Buy failed",
-      "error"
-    );
+  async function quoteBuy() {
+    try { if(!active)return; const amount=parseLABRInput(els.buyAmount); if(amount===0n){setText(els.buyEstimate,"0 POL");setText(els.buyDaoShare,"0 POL");setText(els.buyTotal,"0 POL");return;} const [reserve,dao,total]=await readExchange.quoteBuyExactTokens(amount); setText(els.buyEstimate,formatPOL(reserve));setText(els.buyDaoShare,formatPOL(dao));setText(els.buyTotal,formatPOL(total)); }
+    catch(error){setText(els.buyTotal,error.shortMessage||error.message||"Quote unavailable");}
   }
-};
-
-// ===== SELL =====
-sellBtn.onclick = async () => {
-
-  if (!exchangeVerified) {
-
-    setStatus(
-      "Exchange access not verified",
-      "error"
-    );
-
-    return;
+  async function quoteSell() {
+    try { if(!active)return; const amount=parseLABRInput(els.sellAmount); if(amount===0n){setText(els.sellEstimate,"0 POL");setText(els.sellTax,"0 POL");setText(els.sellDividend,"0 POL");setText(els.sellNet,"0 POL");return;} const [gross,seller,dao,dividend]=await readExchange.quoteSellExactTokens(amount); setText(els.sellEstimate,formatPOL(gross));setText(els.sellTax,formatPOL(dao));setText(els.sellDividend,formatPOL(dividend));setText(els.sellNet,formatPOL(seller)); }
+    catch(error){setText(els.sellNet,error.shortMessage||error.message||"Quote unavailable");}
+  }
+  async function buy() {
+    try { if(!accessReady)throw new Error("Complete the identity and Exchange access checks first."); const amount=parseLABRInput(els.buyAmount); const [,,required]=await exchange.quoteBuyExactTokens(amount); const maxPOL=(required*101n+99n)/100n; showLoading("Submitting exact-token purchase..."); const tx=await exchange.buyExactTokens(amount,maxPOL,deadline(),{value:required}); await tx.wait(); setStatus("Purchase confirmed.","success"); els.buyAmount.value=""; await Promise.all([loadMarket(),refreshWallet()]); await quoteBuy(); }
+    catch(error){console.error(error);setStatus(error.shortMessage||error.reason||error.message||"Purchase failed.","error");}finally{hideLoading();}
+  }
+  async function sell() {
+    try { if(!accessReady)throw new Error("Complete the identity and Exchange access checks first."); const amount=parseLABRInput(els.sellAmount); if(amount>walletBalance)throw new Error("Insufficient LABR balance."); const [,seller]=await exchange.quoteSellExactTokens(amount); const minPOL=seller*99n/100n; const allowance=await labr.allowance(userAddress,exchangeAddress); if(allowance<amount){showLoading("Approving Exchange V6...");const approval=await labr.approve(exchangeAddress,amount);await approval.wait();} showLoading("Submitting exact-token sale..."); const tx=await exchange.sellExactTokens(amount,minPOL,deadline());await tx.wait();setStatus("Sale confirmed.","success");els.sellAmount.value="";await Promise.all([loadMarket(),refreshWallet()]);await quoteSell(); }
+    catch(error){console.error(error);setStatus(error.shortMessage||error.reason||error.message||"Sale failed.","error");}finally{hideLoading();}
+  }
+  async function claimDividends() {
+    try { if(!verified)throw new Error("Permanent identity verification is required to claim dividends."); showLoading("Claiming available equal-holder dividends..."); const tx=await labr.claimDividends(); await tx.wait(); setStatus("Dividend claim confirmed.","success"); await Promise.all([loadMarket(),refreshWallet()]); }
+    catch(error){console.error(error);setStatus(error.shortMessage||error.reason||error.message||"Dividend claim failed.","error");}finally{hideLoading();}
   }
 
-  if (!exchange) return;
-
-  const val =
-    sellAmount.value;
-
-  if (!val || val <= 0) {
-    return;
+  async function initialize() {
+    els.connectBtn.onclick=connectWallet; els.identityVerifyBtn.onclick=verifyIdentity; els.exchangeVerifyBtn.onclick=checkAccess;
+    els.buyAmount.addEventListener("input",quoteBuy); els.sellAmount.addEventListener("input",quoteSell);
+    els.buyBtn.onclick=buy; els.sellBtn.onclick=sell; els.claimDividendsBtn.onclick=claimDividends;
+    if(!active){for(const b of [els.connectBtn,els.identityVerifyBtn,els.exchangeVerifyBtn,els.buyBtn,els.sellBtn,els.claimDividendsBtn])b.disabled=true;setGate("Predeployment mode. Enter and verify all seven final addresses and runtime hashes in protocol-config.js before enabling interactions.","error");setStatus("Revision 7 is a source candidate and has not been compiled or deployed.");drawCurve(0n);return;}
+    await loadMarket();
+    try { if(!window.LaborWallet)return; wallet=await window.LaborWallet.reconnect(); if(wallet){els.connectBtn.style.display="none";await refreshWallet();} } catch(error){console.error("Wallet reconnect failed",error);}
   }
-
-  try {
-
-    showLoading(
-      "Preparing approval..."
-    );
-  
-    const labr =
-      new ethers.Contract(
-        LABR_TOKEN,
-        ERC20_ABI,
-        signer
-      );
-
-    const currentBalance =
-      await labr.balanceOf(
-        userAddress
-      );
-
-    const maxWalletWei =
-      ethers.parseEther(
-        String(MAX_WALLET)
-      );
-
-    const maxTransactionWei =
-      ethers.parseEther(
-        String(MAX_TRANSACTION)
-      );
-
-    if (
-      currentBalance > maxWalletWei
-    ) {
-
-      setStatus(
-        "Wallet exceeds 10,000 LABR exchange limit",
-        "error"
-      );
-
-      hideLoading();
-
-      return;
-    }
-
-    const amt =
-      ethers.parseEther(val);
-
-    if (
-      amt > maxTransactionWei
-    ) {
-
-      setStatus(
-        "Sell exceeds 5,000 LABR limit",
-        "error"
-      );
-
-      hideLoading();
-
-      return;
-    }
-
-    const approveTx =
-      await labr.approve(
-        EXCHANGE_ADDRESS,
-        amt
-      );
-
-    await approveTx.wait();
-
-    showLoading(
-      "Processing sell..."
-    );
-
-    setStatus(
-      "Processing sell..."
-    );
-
-    const sold =
-      await readExchange.totalSold();
-
-    const price =
-      await readExchange.getPrice(
-        sold
-      );
-
-    const netTokens =
-      (
-        amt *
-        90n
-      ) /
-      PERCENT_DENOMINATOR;
-
-    const expectedPOL =
-      (
-        netTokens *
-        price
-      ) /
-      (
-        10n ** 18n
-      );
-
-    const minPOL =
-      (
-        expectedPOL *
-        SLIPPAGE_NUMERATOR
-      ) /
-      PERCENT_DENOMINATOR;
-
-    const tx =
-      await exchange.sell(
-        amt,
-        minPOL
-      );
-
-    await tx.wait();
-
-    hideLoading();
-
-    sellAmount.value = "";
-
-    sellEstimate.innerText = "0";
-
-    sellTax.innerText = "0";
-
-    sellNet.innerText = "0";
-
-    setStatus(
-      "Sell successful",
-      "success"
-    );
-
-    updateAll();
-
-  } catch (e) {
-
-    console.error(e);
-
-    hideLoading();
-
-    setStatus(
-      "Sell failed",
-      "error"
-    );
-  }
-};
-
-// ===== CURVE =====
-async function drawCurve(
-  totalSoldBN,
-  polUsd
-) {
-
-  const canvas =
-    document.getElementById(
-      "curveCanvas"
-    );
-
-  if (!canvas || !polUsd) {
-    return;
-  }
-
-  const ctx =
-    canvas.getContext("2d");
-
-  ctx.clearRect(
-    0,
-    0,
-    canvas.width,
-    canvas.height
-  );
-
-  const unlocked =
-    await readExchange.unlockedSupply();
-
-  const unlockedSupply =
-    Number(
-      ethers.formatEther(
-        unlocked
-      )
-    );
-
-  const currentSold =
-    Number(
-      ethers.formatEther(
-        totalSoldBN
-      )
-    );
-
-  const steps = 120;
-  const markerPadding = 18;
-  const verticalPadding = 12;
-
-  const prices = [];
-
-  for (
-    let i = 0;
-    i <= steps;
-    i++
-  ) {
-
-    const sold =
-      (
-        i /
-        steps
-      ) *
-      unlockedSupply;
-
-    const x =
-      sold /
-      1_000_000_000;
-
-    const priceUsd =
-      1 +
-      14 *
-      x *
-      x;
-
-    prices.push(
-      priceUsd /
-      polUsd
-    );
-  }
-
-  const maxPrice =
-    Math.max(...prices);
-
-  const minPrice =
-    Math.min(...prices);
-
-  const priceRange =
-    maxPrice - minPrice || 1;
-
-  ctx.beginPath();
-
-  for (
-    let index = 0;
-    index < prices.length;
-    index++
-  ) {
-
-    const normalized =
-      (
-        prices[index] -
-        minPrice
-      ) /
-      priceRange;
-
-    const y =
-      canvas.height -
-      verticalPadding -
-      normalized *
-      (
-        canvas.height -
-        verticalPadding * 2
-      );
-
-    const drawX =
-      markerPadding +
-      (
-        index /
-        (prices.length - 1)
-      ) *
-      (
-        canvas.width -
-        markerPadding * 2
-      );
-
-    if (index === 0) {
-      ctx.moveTo(
-        drawX,
-        y
-      );
-    } else {
-      ctx.lineTo(
-        drawX,
-        y
-      );
-    }
-  }
-
-  ctx.strokeStyle = "#ff3b3b";
-  ctx.lineWidth = 2;
-  ctx.stroke();
-
-  const progress =
-    Math.min(
-      1,
-      Math.max(
-        0,
-        currentSold /
-        unlockedSupply
-      )
-    );
-
-  const markerX =
-    markerPadding +
-    progress *
-    (
-      canvas.width -
-      markerPadding * 2
-    );
-
-  const currentX =
-    currentSold /
-    1_000_000_000;
-
-  const currentPrice =
-    (
-      1 +
-      14 *
-      currentX *
-      currentX
-    ) /
-    polUsd;
-
-  const markerY =
-    canvas.height -
-    verticalPadding -
-    (
-      (
-        currentPrice -
-        minPrice
-      ) /
-      priceRange
-    ) *
-    (
-      canvas.height -
-      verticalPadding * 2
-    );
-
-  ctx.beginPath();
-
-  ctx.arc(
-    markerX,
-    markerY,
-    6,
-    0,
-    Math.PI * 2
-  );
-
-  ctx.fillStyle = "#4dff88";
-  ctx.fill();
-
-  ctx.shadowBlur = 0;
-  ctx.strokeStyle = "#ffffff";
-  ctx.lineWidth = 2;
-  ctx.stroke();
-}
-
-// ===== PAGE AND WALLET INITIALIZATION =====
-async function waitForLaborWallet(
-  timeoutMs = 10000
-) {
-
-  const started =
-    Date.now();
-
-  while (
-    !window.LaborWallet &&
-    Date.now() - started < timeoutMs
-  ) {
-
-    await new Promise(
-      resolve =>
-        setTimeout(
-          resolve,
-          100
-        )
-    );
-  }
-
-  return window.LaborWallet ||
-    null;
-}
-
-async function initializeExchangePage() {
-
-  const connectBtn =
-    document.getElementById(
-      "connectBtn"
-    );
-
-  connectBtn.onclick =
-    connectWallet;
-
-  initialLoad();
-
-  try {
-
-    const laborWallet =
-      await waitForLaborWallet();
-
-    if (!laborWallet) {
-
-      setGateStatus(
-        "Wallet connection system failed to load. Refresh the page.",
-        "error"
-      );
-
-      return;
-    }
-
-    const wallet =
-      await laborWallet.reconnect();
-
-    if (
-      wallet &&
-      !walletInitialized
-    ) {
-
-      await applyConnectedWallet(
-        wallet
-      );
-    }
-
-  } catch (err) {
-
-    console.error(
-      "Wallet reconnect failed:",
-      err
-    );
-
-    // A failed silent reconnect should not
-    // prevent a manual connection.
-    connectBtn.disabled = false;
-    connectBtn.innerText =
-      "Connect Wallet";
-  }
-}
-
-if (
-  document.readyState ===
-  "loading"
-) {
-
-  window.addEventListener(
-    "DOMContentLoaded",
-    initializeExchangePage,
-    {
-      once: true
-    }
-  );
-
-} else {
-
-  initializeExchangePage();
-}
+  if(document.readyState==="loading")document.addEventListener("DOMContentLoaded",initialize,{once:true});else initialize();
+})();

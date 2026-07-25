@@ -1,66 +1,76 @@
 // ===== CONFIG =====
+const SITE_CONFIG = window.LaborCoinConfig;
+const DEPLOYMENT_ACTIVE = window.LaborCoinDeployment?.isActive() === true;
+
 const GOVERNANCE_CONTRACT =
-  "0x8238105d31F6Bb26897d8Ab270a0A521FEF03E8c";
+  SITE_CONFIG?.addresses?.governance || ethers.ZeroAddress;
 
 const LABRV_TOKEN =
-  "0x833242E933c675846D8f8982048FecA95B8e435A";
+  SITE_CONFIG?.addresses?.labrv || ethers.ZeroAddress;
 
-const VERIFIER_URL =
-  "https://laborcoin-verifier.onrender.com";
-
-const RPC_URL =
-  "https://polygon-bor-rpc.publicnode.com";
-
-const ENS_RPC_URL =
-  "https://ethereum-rpc.publicnode.com";
-
+const RPC_URL = SITE_CONFIG?.rpcUrl;
+const ENS_RPC_URL = SITE_CONFIG?.ensRpcUrl;
 const MAX_TRANSFER_PERCENT = 5;
-
 const DAO_TREASURY =
-  "0x0C2e5679153593b82a84eAB5CA90895BB291Cec4";
+  SITE_CONFIG?.addresses?.daoTreasury || ethers.ZeroAddress;
 
 // ===== ABI =====
 const GOV_ABI = [
 
   "function proposalCount() view returns (uint256)",
 
-  "function executionAllowed() view returns(bool)",
+  "function governanceReady() view returns(bool)",
 
-  "function treasuryModule() view returns(address)",
+  "function executionAllowed() view returns(bool)",
 
   "function proposalPassed(uint256) view returns(bool)",
 
-  "function nonces(address) view returns(uint256)",
+  "function requiredParticipationVotes(uint256) view returns(uint256)",
 
-  "function createProposal(string,string,address,uint256,uint256,uint256,bytes)",
+  "function requiredYesVotes(uint256) view returns(uint256)",
 
-  "function vote(uint256,bool,uint256,uint256,bytes)",
+  "function proposalState(uint256) view returns(uint8)",
+
+  "function eligibleToVote(uint256,address) view returns(bool)",
+
+  "function maxProposalAmount() view returns(uint256)",
+
+  "function createProposal(string,address,uint256) returns(uint256)",
+
+  "function validateProposalDescription(string) view returns(bool)",
+
+  "function PROPOSAL_TITLE() view returns(string)",
+
+  "function vote(uint256,bool)",
 
   "function executeProposal(uint256)",
 
-  "function proposals(uint256) view returns(string title,string description,address recipient,uint256 amount,uint256 yesVotes,uint256 noVotes,uint256 startTime,uint256 endTime,bool executed)"
+  "function proposalContent(uint256) view returns(string description,bytes32 descriptionHash,address recipient,uint256 amount,address creator)",
+
+  "function proposalVoteData(uint256) view returns(uint256 yesVotes,uint256 noVotes,uint256 electorateSize,uint256 treasuryBalanceSnapshot)",
+
+  "function proposalExecutionData(uint256) view returns(uint256 startTime,uint256 endTime,bool executed,uint256 executedAt,bytes32 callId)"
 ];
 
 const LABRV_ABI = [
   "function balanceOf(address) view returns (uint256)"
 ];
 
-const readProvider =
-  new ethers.JsonRpcProvider(
-    RPC_URL
-  );
+const readProvider = DEPLOYMENT_ACTIVE
+  ? new ethers.JsonRpcProvider(RPC_URL)
+  : null;
 
-const readGovernance =
-  new ethers.Contract(
-    GOVERNANCE_CONTRACT,
-    GOV_ABI,
-    readProvider
-  );
+const readGovernance = DEPLOYMENT_ACTIVE
+  ? new ethers.Contract(
+      GOVERNANCE_CONTRACT,
+      GOV_ABI,
+      readProvider
+    )
+  : null;
 
-const ensProvider =
-  new ethers.JsonRpcProvider(
-    ENS_RPC_URL
-  );
+const ensProvider = DEPLOYMENT_ACTIVE
+  ? new ethers.JsonRpcProvider(ENS_RPC_URL)
+  : null;
 
 // ===== STATE =====
 let provider;
@@ -72,6 +82,12 @@ let labrv;
 
 let walletInitialized = false;
 let governanceVerified = false;
+
+if (!window.LaborCoinProposalTextPolicy) {
+  throw new Error(
+    "Proposal text policy failed to load."
+  );
+}
 
 // ===== ELEMENTS =====
 const govConnectBtn =
@@ -121,6 +137,14 @@ const descriptionCounter =
     "descriptionCounter"
   );
 
+const proposalPolicyStatus =
+  document.getElementById(
+    "proposalPolicyStatus"
+  );
+
+const proposalTextPolicy =
+  window.LaborCoinProposalTextPolicy;
+
 const submitProposalBtn =
   document.getElementById("submitProposalBtn");
 
@@ -139,21 +163,48 @@ const loadingText =
     "loadingText"
   );
 
+function updateProposalPolicyPreview() {
+
+  const result =
+    proposalTextPolicy.validate(
+      proposalDescription.value
+    );
+
+  descriptionCounter.innerText =
+    `${result.byteLength.toLocaleString()} / 1,000 bytes`;
+
+  if (!proposalDescription.value) {
+    proposalDescription.setCustomValidity("");
+    proposalPolicyStatus.innerText = "";
+    proposalPolicyStatus.style.color = "#999";
+    return;
+  }
+
+  if (!result.allowed) {
+    const message =
+      proposalTextPolicy.messageFor(result);
+
+    proposalDescription.setCustomValidity(message);
+    proposalPolicyStatus.innerText = message;
+    proposalPolicyStatus.style.color = "#ff4d4d";
+    return;
+  }
+
+  proposalDescription.setCustomValidity("");
+  proposalPolicyStatus.innerText =
+    "Description satisfies the local copy of the permanent content policy.";
+  proposalPolicyStatus.style.color = "#4dff88";
+}
+
 proposalDescription.addEventListener(
   "input",
-  () => {
-
-    const count =
-      proposalDescription.value.length;
-
-    descriptionCounter.innerText =
-      `${count.toLocaleString()} / 1,000 characters`
-
-  }
+  updateProposalPolicyPreview
 );
 
 // ===== INITIAL UI STATE =====
+govConnectBtn.disabled = !DEPLOYMENT_ACTIVE;
 govVerifyBtn.disabled = true;
+submitProposalBtn.disabled = !DEPLOYMENT_ACTIVE;
 
 // ===== HELPERS =====
 function setStatus(
@@ -221,6 +272,10 @@ function hideLoading() {
 
 async function displayName(address) {
 
+  if (!ensProvider) {
+    return address.slice(0, 6) + "..." + address.slice(-4);
+  }
+
   try {
 
     const ens =
@@ -246,59 +301,6 @@ async function displayName(address) {
     +
     address.slice(-4)
   );
-}
-
-async function getGovernanceSignature(action) {
-
-  const nonce =
-    await governance.nonces(
-      userAddress
-    );
-
-  const expiry =
-    Math.floor(
-      Date.now() / 1000
-    ) + 300;
-
-  const response =
-    await fetch(
-      `${VERIFIER_URL}/verify`,
-      {
-        method: "POST",
-
-        headers: {
-          "Content-Type":
-            "application/json"
-        },
-
-        body: JSON.stringify({
-          address: userAddress,
-          type: "governance",
-          action,
-          nonce: nonce.toString(),
-          expiry,
-          contract:
-            GOVERNANCE_CONTRACT
-        })
-      }
-    );
-
-  const data =
-    await response.json();
-
-  if (!data.success) {
-
-    throw new Error(
-      data.error ||
-      "Verification failed"
-    );
-  }
-
-  return {
-    nonce,
-    expiry,
-    signature: data.signature
-  };
 }
 
 async function refreshGovernanceConnection() {
@@ -336,7 +338,7 @@ async function refreshGovernanceConnection() {
         userAddress
       );
 
-    if (Number(bal) > 0) {
+    if (bal === ethers.parseEther("1")) {
 
       completeStep(
         "gov-step-labrv"
@@ -416,7 +418,7 @@ govConnectBtn.onclick = async () => {
     govConnectBtn.innerText =
       "Connect Wallet";
 
-    if (Number(bal) <= 0) {
+    if (bal !== ethers.parseEther("1")) {
 
       setStatus(
         "Wallet connected. This address has no LABRV voting rights, but it may still view proposals and execute approved proposals.",
@@ -450,10 +452,10 @@ govConnectBtn.onclick = async () => {
   }
 };
 
-// ===== VERIFY =====
+// ===== GOVERNANCE ACCESS =====
 govVerifyBtn.onclick = async () => {
 
-  if (!userAddress) {
+  if (!userAddress || !governance || !labrv) {
 
     setStatus(
       "Connect wallet first",
@@ -468,38 +470,26 @@ govVerifyBtn.onclick = async () => {
     govVerifyBtn.disabled = true;
 
     showLoading(
-      "Verifying identity..."
+      "Confirming governance membership..."
     );
 
-    const response =
-      await fetch(
-        `${VERIFIER_URL}/verify`,
-        {
-          method: "POST",
-
-          headers: {
-            "Content-Type":
-              "application/json"
-          },
-
-          body: JSON.stringify({
-            address: userAddress,
-            type: "governance"
-          })
-        }
+    const balance =
+      await labrv.balanceOf(
+        userAddress
       );
 
-    const data =
-      await response.json();
-
-    if (
-      !response.ok ||
-      !data.success
-    ) {
-
+    if (balance !== ethers.parseEther("1")) {
       throw new Error(
-        data.error ||
-        "Verification failed"
+        "This wallet does not hold the required LABRV membership token."
+      );
+    }
+
+    const ready =
+      await governance.governanceReady();
+
+    if (!ready) {
+      throw new Error(
+        "Governance V15 is not fully activated or its DAO execution permission is missing."
       );
     }
 
@@ -514,14 +504,13 @@ govVerifyBtn.onclick = async () => {
     );
 
     setStatus(
-      `Verified. Passport score: ${data.score}`,
+      "LABRV membership confirmed. Governance access enabled.",
       "success"
     );
 
     hideLoading();
 
     await loadProposalLimit();
-
     await loadProposalFeed();
 
   } catch (err) {
@@ -533,8 +522,9 @@ govVerifyBtn.onclick = async () => {
     govVerifyBtn.disabled = false;
 
     setStatus(
+      err.reason ||
       err.message ||
-      "Verification failed",
+      "Governance access check failed",
       "error"
     );
   }
@@ -579,10 +569,28 @@ async () => {
       );
     }
 
-    if (!description) {
+    const localPolicyResult =
+      proposalTextPolicy.validate(
+        description
+      );
 
+    if (!localPolicyResult.allowed) {
       throw new Error(
-        "Enter a proposal description"
+        proposalTextPolicy.messageFor(
+          localPolicyResult
+        )
+      );
+    }
+
+    const allowedOnChain =
+      await readGovernance
+        .validateProposalDescription(
+          description
+        );
+
+    if (!allowedOnChain) {
+      throw new Error(
+        "The permanent on-chain proposal-content policy rejected this description."
       );
     }
 
@@ -591,18 +599,11 @@ async () => {
         amountText
       );
 
-    const auth =
-      await getGovernanceSignature(0);
-
     const tx =
       await governance.createProposal(
-        "Treasury Transfer",
         description,
         recipient,
-        amount,
-        auth.nonce,
-        auth.expiry,
-        auth.signature
+        amount
       );
 
     await tx.wait();
@@ -611,8 +612,7 @@ async () => {
     treasuryAmount.value = "";
     proposalDescription.value = "";
     
-    descriptionCounter.innerText =
-      "0 / 1000 characters";
+    updateProposalPolicyPreview();
 
     hideLoading();
 
@@ -647,6 +647,46 @@ async () => {
 };
 
 // ===== LOAD FEED =====
+async function readProposal(
+  proposalId
+) {
+  const [
+    content,
+    voteData,
+    executionData
+  ] = await Promise.all([
+    readGovernance.proposalContent(
+      proposalId
+    ),
+    readGovernance.proposalVoteData(
+      proposalId
+    ),
+    readGovernance.proposalExecutionData(
+      proposalId
+    )
+  ]);
+
+  return {
+    description: content.description,
+    descriptionHash:
+      content.descriptionHash,
+    recipient: content.recipient,
+    amount: content.amount,
+    creator: content.creator,
+    yesVotes: voteData.yesVotes,
+    noVotes: voteData.noVotes,
+    electorateSize:
+      voteData.electorateSize,
+    treasuryBalanceSnapshot:
+      voteData.treasuryBalanceSnapshot,
+    startTime: executionData.startTime,
+    endTime: executionData.endTime,
+    executed: executionData.executed,
+    executedAt: executionData.executedAt,
+    callId: executionData.callId
+  };
+}
+
 async function loadProposalLimit() {
 
   try {
@@ -687,7 +727,7 @@ async function loadProposalLimit() {
     ) {
 
       const proposal =
-        await readGovernance.proposals(i);
+        await readProposal(i);
 
       const executed =
         proposal.executed;
@@ -862,7 +902,7 @@ async function loadProposalFeed() {
     ) {
 
 const p =
-  await readGovernance.proposals(i);
+  await readProposal(i);
 
 const recipientName =
   await displayName(
@@ -874,10 +914,19 @@ const safeRecipientName =
     recipientName
   );
 
+const safeTitle =
+  "Treasury Transfer";
+
 const safeDescription =
   escapeHtml(
     p.description
   );
+
+const participationRequired =
+  await readGovernance.requiredParticipationVotes(i);
+
+const yesRequired =
+  await readGovernance.requiredYesVotes(i);
 
 const card =
   document.createElement("div");
@@ -1015,7 +1064,7 @@ const card =
       card.innerHTML = `
 
         <h3>
-          Proposal #${i}
+          Proposal #${i}: ${safeTitle}
         </h3>
 
         <p>
@@ -1043,6 +1092,21 @@ const card =
 
           NO:
           ${Number(p.noVotes)}
+        </p>
+
+        <p>
+          Electorate Snapshot:<br>
+          ${Number(p.electorateSize)} members
+        </p>
+
+        <p>
+          Participation Required:<br>
+          ${Number(participationRequired)} votes
+        </p>
+
+        <p>
+          YES Votes Currently Required:<br>
+          ${Number(yesRequired)}
         </p>
 
         <p>
@@ -1188,7 +1252,7 @@ async (
 
       setProposalActionStatus(
         id,
-        "Connect a LABRV wallet and verify identity before voting.",
+        "Connect a wallet holding the required LABRV membership before voting.",
         "error"
       );
 
@@ -1204,18 +1268,22 @@ async (
       "Submitting vote..."
     );
 
-    const auth =
-      await getGovernanceSignature(
-        support ? 1 : 2
+    const eligible =
+      await governance.eligibleToVote(
+        id,
+        userAddress
       );
+
+    if (!eligible) {
+      throw new Error(
+        "This wallet is not eligible to vote on this proposal or has already voted."
+      );
+    }
 
     const tx =
       await governance.vote(
         id,
-        support,
-        auth.nonce,
-        auth.expiry,
-        auth.signature
+        support
       );
 
     await tx.wait();
@@ -1380,7 +1448,7 @@ async function applyReconnectedWallet(
   govConnectBtn.style.display =
     "none";
 
-  if (Number(bal) > 0) {
+  if (bal === ethers.parseEther("1")) {
 
     setStatus(
       "Wallet reconnected",
@@ -1399,6 +1467,17 @@ async function applyReconnectedWallet(
 }
 
 async function initializeGovernancePage() {
+
+  if (!DEPLOYMENT_ACTIVE) {
+    proposalFeedSection.classList.remove("hidden");
+    proposalFeed.innerHTML =
+      "<p class=\"status\" style=\"text-align:center;color:#ff4d4d;\">Revision 7 is in predeployment mode. Governance reads and transactions are disabled until final addresses are verified.</p>";
+    setStatus(
+      "Predeployment mode. Enter and verify all final addresses in protocol-config.js before enabling governance.",
+      "error"
+    );
+    return;
+  }
 
   proposalFeedSection.classList.remove(
     "hidden"

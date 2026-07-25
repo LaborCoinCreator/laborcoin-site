@@ -931,3 +931,17 @@ figure.table-figure tr:nth-child(even) td {
   }
 
 }
+/* Revision 7 deployment gate */
+.deployment-gate-banner {
+  position: relative;
+  z-index: 10000;
+  width: 100%;
+  box-sizing: border-box;
+  padding: 12px 18px;
+  text-align: center;
+  background: #3a1111;
+  border-bottom: 1px solid #ff4d4d;
+  color: #fff;
+  font-weight: 600;
+  line-height: 1.45;
+}

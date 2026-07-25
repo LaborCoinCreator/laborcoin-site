@@ -1,4 +1,4 @@
-const CACHE_NAME = "laborcoin-pwa-v41";
+const CACHE_NAME = "laborcoin-revision-7-predeployment-v1";
 
 const APP_SHELL = [
   "/",
@@ -16,17 +16,20 @@ const APP_SHELL = [
 
   "/style.css",
   "/manifest.json",
+  "/protocol-config.js",
   "/wallet.js",
   "/exchange.js",
   "/dao.js",
   "/governance.js",
+  "/proposal-text-policy-v1.js",
   "/donate.js",
   "/metrics.js",
   "/pwa.js",
 
   "/assets/favicon.png",
   "/assets/logo.png",
-  "/assets/banner.png"
+  "/assets/banner.png",
+  "/whitepaper.md"
 ];
 
 self.addEventListener("install", event => {

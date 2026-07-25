@@ -2,594 +2,129 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>LaborCoin (LABR)</title>
+  <title>LaborCoin</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="theme-color" content="#0d0d0d">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css">
   <link rel="manifest" href="/manifest.json">
   <link rel="icon" type="image/png" href="/assets/favicon.png">
-  <link rel="icon" sizes="64x64" href="/assets/favicon.png">
   <link rel="apple-touch-icon" href="/assets/logo.png">
   <meta name="mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-title" content="LaborCoin">
   <meta name="apple-mobile-web-app-status-bar-style" content="black">
-  
+  <script src="https://cdn.jsdelivr.net/npm/ethers@6.13.1/dist/ethers.umd.min.js"></script>
+  <script src="protocol-config.js"></script>
 </head>
-
 <body>
+<header class="hero"><img src="assets/banner.png" alt="LaborCoin Banner" class="hero-img"></header>
 
-<header class="hero">
-  <img src="assets/banner.png" alt="LaborCoin Banner" class="hero-img">
-</header>
-
-<section class="intro">
-  <p class="tagline">
-    Build shared funds. Support striking workers. Strengthen collective power.
-  </p>
-
+<section class="exchange-intro">
+  <h1>LaborCoin</h1>
+  <p class="tagline">Build shared funds. Support striking workers. Strengthen collective power.</p>
   <div class="cta-row">
-
-    <a href="onboarding.html" class="cta-button">
-      Get Started
-    </a>
-
-    <a href="organizations.html" class="cta-button secondary">
-      Worker Orgs
-    </a>
-
-    <a href="exchange.html" class="cta-button">
-      Buy LABR
-    </a>
-
-    <a href="dao.html" class="cta-button">
-      Join DAO
-    </a>
-
-    <a href="donate.html" class="cta-button secondary">
-      Donate
-    </a>
-
-    <button
-      id="installAppBtn"
-      class="cta-button hidden"
-    >
-      Install App
-    </button>
-
-    <a href="onboarding.html#install-app" class="cta-button secondary">
-      Install Instructions
-    </a>
-
+    <a href="exchange.html" class="cta-button">Exchange</a>
+    <a href="dao.html" class="cta-button secondary">Register</a>
+    <a href="governance.html" class="cta-button secondary">Governance</a>
   </div>
 </section>
-
 <section>
-  <h2>What It Is</h2>
-  <p>
-    LaborCoin is a system for building a shared treasury that can support workers during strikes and collective action.
-  </p>
-  <p>
-    The strategy is simple: contribute regularly, grow a common fund, and deploy it when workers need support.
-  </p>
+  <div class="info-box">
+    <h2>What This Is</h2>
+    <p>LaborCoin is a system for building a shared treasury that can support workers during strikes and collective action.</p>
+    <p>The strategy is simple: contribute regularly, grow a common fund, and deploy it when workers need support.</p>
+  </div>
 </section>
-
 <section>
-  <h2>How It Works</h2>
-
-  <ol>
-    <li>Use POL to buy LABR through the bonding curve</li>
-    <li>Register to receive LABRV voting rights</li>
-    <li>Vote on how funds are allocated</li>
-    <li>DAO executes support for workers</li>
-  </ol>
-
+  <div class="info-box">
+    <h2>Revision 7 equal-holder candidate</h2>
+    <p>The Revision 7 contracts are a precompilation source candidate and have not been deployed. Interactive pages remain disabled until all seven contracts are compiled, tested, deployed, and verified against their final runtime commitments.</p>
+    <p>The existing Aragon DAO continues to hold treasury POL. The prior V4/V7/V13 deployment remains a historical record until the coordinated Revision 7 cutover is complete.</p>
+  </div>
 </section>
-
 <section>
-  <h2>LaborCoin System Overview</h2>
-  <ul>
-    <li>Total Supply: 1,000,000,000 LABR</li>
-    <li>Initial Supply: 100,000,000 LABR</li>
-    <li>Bonding curve pricing</li>
-    <li>12-hour transaction cooldown</li>
-    <li>Exchange Wallet Limit: 10,000 LABR</li>
-    <li>Exchange Transaction Limit: 5,000 LABR</li>
-    <li>10% total tax on sales:</li>
-    <li>5% sales tax to DAO Treasury</li>
-    <li>5% of each sale is distributed among eligible LABR holders</li>
-    <li>10% of each LABR purchase goes to DAO Treasury</li>
-    
-  </ul>
+  <div class="info-box">
+    <h2>How the system works</h2>
+    <ol>
+      <li>Verify a direct Polygon wallet once through the immutable Identity Registry using a Human Passport score of at least 15.</li>
+      <li>Acquire or sell LABR through identity-gated Exchange V6 using an exact LABR amount and a deterministic POL quote.</li>
+      <li>Receive one equal dividend share while verified and holding at least 1 LABR, regardless of the number of LABR held.</li>
+      <li>Optionally register for governance and receive exactly one nontransferable LABRV membership token.</li>
+      <li>Create and vote on fixed Treasury Transfer proposals.</li>
+      <li>Execute successful proposals as one native-POL transfer through the existing Aragon DAO.</li>
+    </ol>
+  </div>
 </section>
-
 <section>
-  <h2>Transparency</h2>
-
-  <p>
-    LaborCoin operates fully on-chain on Polygon.
-  </p>
-
-  <ul>
-
-    <li>
-      <strong>LABR Token:</strong><br>
-      <a href="https://polygonscan.com/address/0x460DD873A1D2a41e77410B125cD3027C5FEd2f78" target="_blank"
-     rel="noopener noreferrer"> 
-        0x460DD873A1D2a41e77410B125cD3027C5FEd2f78
-      </a>
-    </li>
-
-    <li>
-      <strong>LaborCoin Exchange V4:</strong><br>
-      <a href="https://polygonscan.com/address/0x4Cf18cB39203B678f5C26f2338a10a79f9684749" target="_blank"
-     rel="noopener noreferrer">
-        0x4Cf18cB39203B678f5C26f2338a10a79f9684749
-      </a>
-    </li>
-
-    <li>
-      <strong>LaborVote (LABRV) V7:</strong><br>
-      <a href="https://polygonscan.com/address/0x833242E933c675846D8f8982048FecA95B8e435A" target="_blank"
-     rel="noopener noreferrer">
-        0x833242E933c675846D8f8982048FecA95B8e435A
-      </a>
-    </li>
-
-    <li>
-      <strong>LaborCoin Registration V4:</strong><br>
-      <a href="https://polygonscan.com/address/0xd1CD6C0B6f1F709A52908B40C07D3C54649e323C" target="_blank"
-     rel="noopener noreferrer">
-        0xd1CD6C0B6f1F709A52908B40C07D3C54649e323C
-      </a>
-    </li>
-
-    <li>
-      <strong>LaborCoin Treasury Module V1:</strong><br>
-      <a href="https://polygonscan.com/address/0x10F2798ef055950B897AF4B3A8ae90dE34f6C56C" target="_blank"
-     rel="noopener noreferrer">
-        0x10F2798ef055950B897AF4B3A8ae90dE34f6C56C
-      </a>
-    </li>
-
-    <li>
-      <strong>LaborCoin Governance V13:</strong><br>
-      <a href="https://polygonscan.com/address/0x8238105d31F6Bb26897d8Ab270a0A521FEF03E8c" target="_blank"
-     rel="noopener noreferrer">
-        0x8238105d31F6Bb26897d8Ab270a0A521FEF03E8c
-      </a>
-    </li>
-
-  </ul>
-
-  <p>
-    All LaborCoin smart contracts are publicly verifiable on Polygonscan and operate using immutable, transparent rules. Following final launch, ownership has been renounced or permanently delegated where applicable, and governance operates through the LaborCoin DAO.
-  </p>
+  <div class="info-box">
+    <h2>Final candidate components</h2>
+    <p><strong>Identity Registry V1:</strong> permanent score-15 EIP-712 verification shared by the Exchange, dividend system, and governance registration.</p>
+    <p><strong>LABR V3:</strong> fixed supply, strict wallet and transaction limits, official-exchange cooldown, and one equal dividend unit per verified holder with at least 1 LABR.</p>
+    <p><strong>Exchange V6:</strong> identity-gated integral POL-denominated bonding curve, reserve accounting, treasury contributions, and the permanent official-exchange whale bar.</p>
+    <p><strong>Registration V6:</strong> one-time governance registration using the shared immutable identity status and a minimum balance of 1 LABR.</p>
+    <p><strong>LaborVote V9:</strong> one nontransferable membership unit per registered participant.</p>
+    <p><strong>Proposal Text Policy V1.0.1:</strong> immutable on-chain description screening.</p>
+    <p><strong>Governance V15:</strong> electorate snapshots, one-member-one-vote, fixed thresholds, and direct Aragon DAO execution.</p>
+  </div>
 </section>
-
 <section>
-  <h2>Trust & Safety</h2>
-
-  <ul>
-    <li>On-chain governance with one verified participant per LABRV</li>
-    <li>Non-transferable voting tokens prevent accumulation of control</li>
-    <li>Governance proposals are restricted to treasury transfers only</li>
-    <li>Deterministic USD-denominated bonding curve pricing with Chainlink POL/USD conversion</li>
-    <li>Public, verifiable smart contracts on Polygon</li>
-  </ul>
-
-  <p>
-    The system is designed to minimize trust requirements and maximize transparency.
-  </p>
+  <div class="info-box">
+    <h2>Permanent economic rules</h2>
+    <ul>
+      <li>1,000,000,000 LABR fixed supply.</li>
+      <li>10,000 LABR maximum wallet.</li>
+      <li>5,000 LABR maximum transaction.</li>
+      <li>12-hour trade cooldown.</li>
+      <li>Official buying and selling require permanent score-15 identity verification.</li>
+      <li>Wallets holding more than 10,000 LABR cannot buy or sell through the official exchange.</li>
+      <li>10% of purchase input goes to the DAO.</li>
+      <li>Sales allocate 5% to the DAO and 5% equally among verified holders with at least 1 LABR.</li>
+      <li>Holding more LABR does not increase a participant's dividend share.</li>
+    </ul>
+  </div>
 </section>
-
-<section class="center-status">
-
-  <h2>
-    LaborCoin Network
-  </h2>
-
-  <p>
-    <strong>DAO Treasury:</strong>
-    <span id="homeTreasuryDepth">
-      Loading...
-    </span>
-  </p>
-
-  <p>
-    <strong>Support Distributed:</strong><br>
-    <span id="homeTotalDistributed">
-      Loading...
-    </span>
-  </p>
-
-  <p>
-    <strong>Registered Members:</strong>
-    <span id="homeMemberCount">
-      Loading...
-    </span>
-  </p>
-
-  <p>
-    <strong>Total Proposals:</strong>
-    <span id="homeProposalCount">
-      Loading...
-    </span>
-  </p>
-
-</section>
-
 <section>
-
-  <h2>
-    Get Started
-  </h2>
-
-  <p style="text-align:center;">
-
-    New to LaborCoin?
-
-    Start with the onboarding guide,
-    review common questions, and
-    understand the risks before
-    participating.
-
-  </p>
-
+  <div class="info-box">
+    <h2>Governance rules</h2>
+    <ul>
+      <li>Activation at 50 registered members.</li>
+      <li>14-day voting period and 7-day execution window.</li>
+      <li>25% participation and 67% approval, both rounded upward.</li>
+      <li>Maximum transfer of 5% of the DAO's current POL balance.</li>
+      <li>One active proposal per member and one vote per eligible member.</li>
+      <li>No tokenomics changes, upgrades, arbitrary calls, or administrative overrides.</li>
+    </ul>
+  </div>
+</section>
+<section>
+  <div class="info-box">
+    <h2>Network metrics</h2>
+    <p><strong>DAO treasury:</strong> <span id="homeTreasuryDepth">Loading...</span></p>
+    <p><strong>Distribution record:</strong> <span id="homeTotalDistributed">Loading...</span></p>
+    <p><strong>Registered members:</strong> <span id="homeMemberCount">Loading...</span></p>
+    <p><strong>Proposals:</strong> <span id="homeProposalCount">Loading...</span></p>
+  </div>
+</section>
+<section>
   <div class="cta-row">
-
-    <a
-      href="onboarding.html"
-      class="cta-button"
-    >
-      Onboarding Guide
-    </a>
-
-    <a
-      href="faq.html"
-      class="cta-button secondary"
-    >
-      FAQ
-    </a>
-
-    <a
-      href="disclaimer.html"
-      class="cta-button secondary"
-    >
-      Disclaimer
-    </a>
-
+    <a href="whitepaper.html" class="cta-button">Technical Whitepaper</a>
+    <a href="organizations.html" class="cta-button secondary">Worker Organizations</a>
+    <a href="donate.html" class="cta-button secondary">Donate POL</a>
   </div>
-
 </section>
-
-<!-- FIRST VISIT MODAL -->
-
-<div
-  id="welcomeModal"
-  class="modal hidden"
->
-
-<div class="modal-content">
-
-  <!-- SCREEN 1 -->
-
-  <div id="modalScreen1">
-
-    <h2>
-      Welcome to LaborCoin
-    </h2>
-
-    <p>
-
-      LaborCoin uses four separate credentials
-      that serve different purposes.
-
-    </p>
-
-    <div class="warning-box">
-
-      <p>
-        <strong>Human Passport (formerly Gitcoin Passport)</strong><br>
-        Identity verification used to access LaborCoin systems.
-      </p>
-
-      <p>
-        <strong>POL</strong><br>
-        Polygon network token used to purchase LABR through the exchange.
-      </p>
-
-      <p>
-        <strong>LABR</strong><br>
-        Transferable token used within the LaborCoin ecosystem.
-      </p>
-
-      <p>
-        <strong>LABRV</strong><br>
-        Non-transferable governance voting rights received through DAO registration.
-      </p>
-
-    </div>
-
-    <p>
-
-      Before using LaborCoin, users must
-      complete Human Passport verification.
-
-    </p>
-
-    <div class="cta-row">
-
-      <a
-        href="https://app.passport.xyz/"
-        target="_blank"
-        rel="noopener noreferrer"
-        class="cta-button"
-      >
-        Human Passport
-      </a>
-
-      <a
-        href="onboarding.html"
-        class="cta-button secondary"
-      >
-        Onboarding Guide
-      </a>
-
-    </div>
-
-    <div class="center-button">
-
-      <button
-        id="nextModalScreen"
-        class="cta-button"
-      >
-        How LaborCoin Works →
-      </button>
-
-    </div>
-
-  </div>
-
-  <!-- SCREEN 2 -->
-
-  <div
-    id="modalScreen2"
-    class="hidden"
-  >
-
-    <h2>
-      How LaborCoin Works
-    </h2>
-
-    <div class="onboarding-step">
-
-      <h3>
-        1. Buy LABR
-      </h3> 
-
-      <p>
-        Hold POL on Polygon.
-      </p>
-
-      <p>
-        Complete Passport verification.
-      </p>
-
-      <p>
-        DAO registration is NOT required to buy LABR.
-      </p>
-
-      <p>
-
-        LABR is purchased using POL.
-
-        Make sure your wallet contains POL
-        on Polygon before using the exchange.
-
-      </p>
-
-    </div>
-
-    <div class="onboarding-step">
-
-      <h3>
-        2. Join the DAO
-      </h3>
-
-      <p>
-        Hold at least 1 LABR.
-      </p>
-
-      <p>
-        Register to receive LABRV voting rights.
-      </p>
-
-    </div>
-
-    <div class="onboarding-step">
-
-      <h3>
-        3. Participate in Governance
-      </h3>
-
-      <p>
-        Create proposals.
-      </p>
-
-      <p>
-        Vote on treasury allocations.
-      </p>
-
-      <p>
-        Execute approved proposals.
-      </p>
-
-    </div>
-
-    <div class="cta-row">
-
-      <button
-        id="backModalScreen"
-        class="cta-button secondary"
-      >
-        ← Back
-      </button>
-
-      <button
-        id="closeWelcomeModal"
-        class="cta-button"
-      >
-        Continue to LaborCoin
-      </button>
-
-    </div>
-
-  </div>
-
-</div>
-
-</div>
 
 <footer>
-
-  <p>
-
-    <a href="onboarding.html">
-      Onboarding
-    </a>
-
-    &nbsp;&nbsp;
-
-    <a href="faq.html">
-      FAQ
-    </a>
-
-    &nbsp;&nbsp;
-
-    <a href="disclaimer.html">
-      Disclaimer
-    </a>
-
-    &nbsp;&nbsp;
-
-    <a href="whitepaper.html">
-      Whitepaper
-    </a>
-
-  </p>
-
-  <p>
-    © LaborCoin
-  </p>
-
+  <div class="cta-row">
+    <a href="index.html">Home</a>
+    <a href="onboarding.html">Onboarding</a>
+    <a href="faq.html">FAQ</a>
+    <a href="disclaimer.html">Disclaimer</a>
+    <a href="whitepaper.html">Whitepaper</a>
+  </div>
+  <p>© LaborCoin</p>
 </footer>
-
-<script>
-
-document.addEventListener(
-  "DOMContentLoaded",
-  () => {
-
-    const modal =
-      document.getElementById(
-        "welcomeModal"
-      );
-
-    const screen1 =
-      document.getElementById(
-        "modalScreen1"
-      );
-
-    const screen2 =
-      document.getElementById(
-        "modalScreen2"
-      );
-
-    const nextBtn =
-      document.getElementById(
-        "nextModalScreen"
-      );
-
-    const backBtn =
-      document.getElementById(
-        "backModalScreen"
-      );
-
-    const closeBtn =
-      document.getElementById(
-        "closeWelcomeModal"
-      );
-
-    if (
-      !localStorage.getItem(
-        "laborcoinWelcomeSeen"
-      )
-    ) {
-
-      modal.classList.remove(
-        "hidden"
-      );
-
-    }
-
-    nextBtn.addEventListener(
-      "click",
-      () => {
-
-        screen1.classList.add(
-          "hidden"
-        );
-
-        screen2.classList.remove(
-          "hidden"
-        );
-
-      }
-    );
-
-    backBtn.addEventListener(
-      "click",
-      () => {
-
-        screen2.classList.add(
-          "hidden"
-        );
-
-        screen1.classList.remove(
-          "hidden"
-        );
-
-      }
-    );
-
-    closeBtn.addEventListener(
-      "click",
-      () => {
-
-        localStorage.setItem(
-          "laborcoinWelcomeSeen",
-          "true"
-        );
-
-        modal.classList.add(
-          "hidden"
-        );
-
-      }
-    );
-
-  }
-);
-
-</script>
-
-<script src="https://cdn.jsdelivr.net/npm/ethers@6.13.1/dist/ethers.umd.min.js"></script>
-
 <script src="metrics.js"></script>
-
 <script src="pwa.js"></script>
-
 </body>
 </html>

@@ -1,0 +1,208 @@
+{
+  "package": "laborcoin-site-replacement",
+  "release": "Revision 7 source candidate",
+  "status": "PRECOMPILATION",
+  "file_count": 40,
+  "files": [
+    {
+      "path": "CHANGELOG-CANDIDATE.md",
+      "size": 1257,
+      "sha256": "9d609a24eceafae6b1bd1cdeed62b0e00ef6eae5ce08129233f94f9ab1b37a9f"
+    },
+    {
+      "path": "DEPLOYMENT-CUTOVER.md",
+      "size": 680,
+      "sha256": "1b23b657135c459c72d96ade6d541380507a7cce651d80d1945960c4ee10f084"
+    },
+    {
+      "path": "FILES-ADDED-MODIFIED-REMOVED.md",
+      "size": 899,
+      "sha256": "cb3cd5534d73f9d83db93f15d8983c923fd731c23f55952cfa3bde2f7ebd47d2"
+    },
+    {
+      "path": "LOCAL-REPLACEMENT-INSTRUCTIONS.md",
+      "size": 336,
+      "sha256": "706a42d29c295a3dfa7d1cf14d7fae575b90120388a2cfa079a515990e243c74"
+    },
+    {
+      "path": "MIGRATION-CHECKLIST.md",
+      "size": 323,
+      "sha256": "9778664fe961a61d9576e7f11dfc1ea043d6e666d22473c629baf550b90ff8ca"
+    },
+    {
+      "path": "README.md",
+      "size": 1746,
+      "sha256": "388542ef28ae0e308f4dce0bb40df64c774db04dd4a745a65e44339e726d5c8a"
+    },
+    {
+      "path": "RECOMMENDED-COMMIT-SEQUENCE.md",
+      "size": 314,
+      "sha256": "6a7cf74586d1cdd30916947e0493e076008787fa64c17a5d1265ba6c5f0488c2"
+    },
+    {
+      "path": "REMOVED-PATHS.txt",
+      "size": 36,
+      "sha256": "4b0e5502c91cba4459126934cfbd33d71ffd41d23edb4f9db940634c90b5f8a9"
+    },
+    {
+      "path": "TEST-STATUS.md",
+      "size": 511,
+      "sha256": "e22b996c315a6b6ade67a29e3883b76a9726ac9563cafb62eca6ab2378667a76"
+    },
+    {
+      "path": "VALIDATION-OUTPUT.txt",
+      "size": 653,
+      "sha256": "0d2bedb1e473d2c488dc4b4774c2b98591b74e5e1248232e1fc698a3c2e2bfa7"
+    },
+    {
+      "path": "assets/banner.png",
+      "size": 75917,
+      "sha256": "6069e0d66338275d9eb0829af7dd622f5b51478aa82ecfaf8e9db3fa1b41d32d"
+    },
+    {
+      "path": "assets/favicon.png",
+      "size": 6623,
+      "sha256": "dd197bbc0439fd9af9c682bf7307f8fe7ccfc94f6147f527c1fcef6da7702c9e"
+    },
+    {
+      "path": "assets/logo.png",
+      "size": 1113341,
+      "sha256": "41b59e4e39ea8e08220901d16fd2f1dee58cb5ee28edc122aed0215f7de1becb"
+    },
+    {
+      "path": "attestation.pdf",
+      "size": 114351,
+      "sha256": "3c330df0584be7684aebc6adfaa1c0010def2c8c07c316f3b43a7bcab4ab8c70"
+    },
+    {
+      "path": "dao.html",
+      "size": 6176,
+      "sha256": "a67ab4dd7b272a601daf46bbbc2c3d0676f0c7fa72f7f57ede5c99ad3f593053"
+    },
+    {
+      "path": "dao.js",
+      "size": 20118,
+      "sha256": "ce62e8a80a5586d1ffb6bb451eec11ebb96eb7e4c36d77e657b7f6f53b67af3e"
+    },
+    {
+      "path": "disclaimer.html",
+      "size": 3142,
+      "sha256": "701404e5a8ca8c6d51f07ddf73da8bbe1bd1da8a96e45b13096383cc27ceebe0"
+    },
+    {
+      "path": "donate.html",
+      "size": 4067,
+      "sha256": "2a8e201caab8b1f36a15fcb60a837b59d92cc8cd3f1a3079a7ee2c60a126aa82"
+    },
+    {
+      "path": "donate.js",
+      "size": 3094,
+      "sha256": "61e7a6bf510c7f4f239e2a27fad447e40d3bf443c8ca4db795d2e1155782e09b"
+    },
+    {
+      "path": "exchange.html",
+      "size": 7412,
+      "sha256": "c6a135c09cd385bc9ce0d1f993b5b4e79507ac2b501a32305d3bf54a10fd57f1"
+    },
+    {
+      "path": "exchange.js",
+      "size": 17677,
+      "sha256": "1531dcfb46d4cdab1ea2ef960281709587db6bb28a359d66883825b6686aba4f"
+    },
+    {
+      "path": "faq.html",
+      "size": 6475,
+      "sha256": "f5497245f8e698bf65a45436439e3106c4f98d8596c1351ff32eec7781d2d3d5"
+    },
+    {
+      "path": "governance.html",
+      "size": 6971,
+      "sha256": "00202da1e4c3800e7d71f3e92ba9e75605a92eda5073c2430fd7b037e9b77037"
+    },
+    {
+      "path": "governance.js",
+      "size": 26975,
+      "sha256": "bbc501b6ec9908b58cbd1b33ac07a43b7f6eaffc17974e8191c7edb90821ef61"
+    },
+    {
+      "path": "index.html",
+      "size": 3864,
+      "sha256": "2a508d535ce8b76bbd2385b638561d19b618202733f711bd70be1f9aefebd978"
+    },
+    {
+      "path": "manifest.json",
+      "size": 639,
+      "sha256": "5dcef788feabc27db6245cbca82254df9dcb90f621f2c266b694e13bc8f61557"
+    },
+    {
+      "path": "metrics.js",
+      "size": 2005,
+      "sha256": "9c219dea2988a7c2dd35e882dcad036952c26fcde9a9753c63cc89dce88adce3"
+    },
+    {
+      "path": "onboarding.html",
+      "size": 4927,
+      "sha256": "d1933bbbda4fdf6279289ab3b03be89b7e671866b0561ce29ca6794325ccca79"
+    },
+    {
+      "path": "organizations.html",
+      "size": 8146,
+      "sha256": "8fbcfe98aeb9485a3ef95011b5b7bcbbadd5d4ccb958a16484b15d4bfdf5fff8"
+    },
+    {
+      "path": "proposal-text-policy-v1.js",
+      "size": 15740,
+      "sha256": "5b6f768cecf7efe1900f5a7061d0314d38d763e653ac54fac7580a5de9bf51db"
+    },
+    {
+      "path": "protocol-config.js",
+      "size": 2763,
+      "sha256": "8e17af451f5627653f16b556aebc22f3c1d7b95585b61d5784575de6e006fb84"
+    },
+    {
+      "path": "pwa.js",
+      "size": 1475,
+      "sha256": "9fb77a551b165b4a37de46d8eb2485a90010e8e42b11d2f6bca4486970b1e17b"
+    },
+    {
+      "path": "scripts/validate-site.ps1",
+      "size": 125,
+      "sha256": "4c8a3c991b134c5fff300ebd1ec0ff86a5ae4cf6b573ce0dfe10eb795db8fff7"
+    },
+    {
+      "path": "scripts/validate-site.py",
+      "size": 1773,
+      "sha256": "3ac57b278db3768fad66bb5be8ab95b980b7645a0f97cad937675374a64a07b6"
+    },
+    {
+      "path": "service-worker.js",
+      "size": 1285,
+      "sha256": "92009c0ef1831e5986bc53a7d069da7ee1ea4b072717e62297ba1af04540781f"
+    },
+    {
+      "path": "style.css",
+      "size": 13428,
+      "sha256": "d14f72913aa4d3c637e517d3a02531cbd16e914acb42c3172f9e71cb69212f34"
+    },
+    {
+      "path": "wallet.js",
+      "size": 15896,
+      "sha256": "9a97356639481ee3371f8383b60ead6a50f9d0536520ebc92247ef7e65615f4f"
+    },
+    {
+      "path": "whitepaper.html",
+      "size": 127832,
+      "sha256": "86d6d42ce96e0c1bc586311dd3fa52b62255de354197a465ce7875c1ebe66f7e"
+    },
+    {
+      "path": "whitepaper.md",
+      "size": 77848,
+      "sha256": "192cbed9f5241a59ab9f6fa33b9081f03156b94ab3def45e98c4c8350908d20f"
+    },
+    {
+      "path": "whitepaper.pdf",
+      "size": 165019,
+      "sha256": "67a5d1c4622ec7209195838360dd9bb3fbe9f1c61085835312b83d9e88ac7d64"
+    }
+  ]
+}
