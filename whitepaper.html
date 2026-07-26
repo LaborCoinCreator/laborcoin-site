@@ -559,7 +559,7 @@ deployed<br />
 <h2>Disclaimer</h2>
 <p>LaborCoin is experimental public infrastructure intended to support
 working-class mutual aid and collective action. This paper explains the
-project’s intended social function, the current source candidate, the
+project's intended social function, the current source candidate, the
 proposed deployment procedure, and the fixed economic and governance
 rules that would govern the system after launch.</p>
 <p>LaborCoin does not promise financial returns, price stability,
@@ -580,7 +580,16 @@ legal, investment, tax, or financial advice.</p>
 <p>Workers have power when they act together, but collective action is
 difficult to sustain when employers can immediately cut off wages and
 workers still have to pay for food, housing, healthcare, transportation,
-childcare, and other necessities. Economic retaliation turns a labor
+childcare, and other necessities. Striking workers are barred from
+receiving federally funded welfare benefits such as SNAP and Medicaid,
+as well as state benefits such as Unemployment Insurance. The
+retaliation is built into the system itself, with eligibility rules that
+dissuade sustained direct action.</p>
+<p>When people do push back, they often find out that fiat networks
+themselves can be controlled, monitored, and shut down. Many activists
+and journalists have recently found themselves barred from major banks,
+demonstrating the system's ability to take retribution on you personally
+if they disagree with one's work. Economic retaliation turns a labor
 dispute into a test of who can survive without income the longest. In
 most cases, the employer begins with far greater reserves.</p>
 <p>At the same time, people outside a workplace may strongly support a
@@ -608,7 +617,7 @@ can make that judgment together.</p>
 <p>LaborCoin is therefore a vehicle for solidarity, not technology for
 its own sake. The blockchain records balances, rules, votes,
 permissions, and transfers so that the system does not have to depend on
-a private administrator’s promises. The technology matters only to the
+a private administrator's promises. The technology matters only to the
 extent that it helps people pool resources, coordinate support, resist
 unilateral control, and sustain action that would otherwise be broken by
 economic pressure.</p>
@@ -625,7 +634,7 @@ participation grows to that level.</p>
 <blockquote>
 <p>Every verified participant holding at least 1 LABR receives exactly
 one equal dividend share. Holding more LABR does not increase that
-participant’s dividend weight.</p>
+participant's dividend weight.</p>
 </blockquote>
 <p>This prevents the holder distribution from turning wealth into
 greater recurring income. A verified eligible wallet holding 1 LABR, 100
@@ -698,7 +707,8 @@ may have broad support and a legitimate demand but still be forced back
 to work because the immediate cost of continuing becomes unbearable.</p>
 <p>LaborCoin begins from a simple premise: collective action becomes
 more sustainable when people taking the risk are not left to absorb the
-economic retaliation alone.</p>
+economic retaliation alone. LaborCoin is a digital bridge to
+solidarity.</p>
 </section>
 <section id="the-solidarity-gap" class="level2">
 <h2>2.2 The solidarity gap</h2>
@@ -719,7 +729,7 @@ material conditions.</p>
 </section>
 <section id="theory-of-change" class="level2">
 <h2>2.3 Theory of change</h2>
-<p>LaborCoin’s theory of change follows a direct path:</p>
+<p>LaborCoin's theory of change follows a direct path:</p>
 <ol type="1">
 <li>Economic retaliation makes strikes and other collective action
 difficult to sustain.</li>
@@ -826,8 +836,8 @@ to control income and decision-making. Revision 7 therefore places the
 equality rules in the contracts rather than leaving them as website
 promises.</p>
 <p>Dividend weight is one binary unit for each verified eligible wallet,
-not the wallet’s LABR balance. Governance weight is one nontransferable
-LABRV membership unit, not the participant’s LABR holdings. More tokens
+not the wallet's LABR balance. Governance weight is one nontransferable
+LABRV membership unit, not the participant's LABR holdings. More tokens
 do not create more votes and do not create a larger percentage of holder
 dividends.</p>
 <p>This does not make every participant economically equal. People may
@@ -840,7 +850,7 @@ be used to multiply governance or holder-dividend power.</p>
 </section>
 <section id="design-principles" class="level1">
 <h1>3. Design Principles</h1>
-<p>The design principles translate the project’s social purpose into
+<p>The design principles translate the project's social purpose into
 rules that can be inspected and tested. They are intended to prevent the
 system from reproducing the same concentration of power it is meant to
 resist.</p>
@@ -901,7 +911,7 @@ rule honestly rather than claiming perfect identity.</p>
 The technology is justified only where it serves a practical
 working-class purpose: keeping public records, constraining authority,
 making treasury activity visible, enforcing equal voting rules, and
-allowing approved aid to move without relying on a private custodian’s
+allowing approved aid to move without relying on a private custodian's
 discretion.</p>
 <p>The success of the project must therefore be judged by whether it
 helps people organize solidarity and sustain material support, not by
@@ -952,10 +962,10 @@ to the DAO.</p>
 <h2>4.3 Identity layer</h2>
 <p>Human Passport supplies a score under a fixed scorer. The verifier
 signs a narrow authorization, and Identity Registry checks that
-authorization on-chain before permanently recording the wallet’s
+authorization on-chain before permanently recording the wallet's
 status.</p>
 <p>The verifier cannot hold user funds, trade for a participant,
-register the participant, or vote on the participant’s behalf. Its
+register the participant, or vote on the participant's behalf. Its
 authority is limited to signing qualifying identity authorizations.</p>
 </section>
 <section id="membership-layer" class="level2">
@@ -969,7 +979,7 @@ additional LABR does not create additional memberships.</p>
 <h2>4.5 Governance layer</h2>
 <p>Governance is the decision-making path for treasury aid. It uses
 Registration and LABRV state, a fixed proposal-text policy, fixed voting
-thresholds, and the existing Aragon DAO’s execute permission. A
+thresholds, and the existing Aragon DAO's execute permission. A
 successful proposal can execute only one native-POL transfer with empty
 calldata to the approved recipient.</p>
 <p>Governance cannot operate the Exchange, rewrite token rules, or use
@@ -1135,7 +1145,7 @@ system.</p>
 <section id="atomic-dividend-synchronization" class="level2">
 <h2>5.8 Atomic dividend synchronization</h2>
 <p>A wallet may receive LABR before it verifies through a direct
-transfer. When verification succeeds, Registry calls LABR’s eligibility
+transfer. When verification succeeds, Registry calls LABR's eligibility
 synchronization in the same transaction. A wallet already holding at
 least 1 LABR enters the equal-holder set immediately without a second
 manual transaction.</p>
@@ -1144,14 +1154,14 @@ manual transaction.</p>
 <h2>5.9 Permanence and compromise</h2>
 <p>There is no revocation. If the verifier key signs an unauthorized
 wallet, that status is permanent. If Human Passport later reduces the
-wallet’s score, status remains. This limits ongoing external dependence
+wallet's score, status remains. This limits ongoing external dependence
 but makes prelaunch key security and scorer validation critical.</p>
 </section>
 <section id="accessibility-and-sybil-tradeoff" class="level2">
 <h2>5.10 Accessibility and Sybil tradeoff</h2>
 <p>A threshold of 15 is selected because people creating a new wallet
 may have limited on-chain history and may not reach higher default
-thresholds. The scorer’s credential deduplication makes reused
+thresholds. The scorer's credential deduplication makes reused
 qualifying credentials less effective across multiple wallets.
 Nevertheless, independent credential sets, coordinated persons, or
 changes in provider behavior can still permit multiple wallets. The
@@ -1319,7 +1329,7 @@ LABR validates the trader as a verified direct wallet, applies the
 wallet and transaction limits, enforces the cooldown, updates dividend
 eligibility after the balance change, and records the trade
 timestamp.</p>
-<p>The token is the authoritative cooldown source used by Exchange’s
+<p>The token is the authoritative cooldown source used by Exchange's
 <code>canTrade</code> and <code>nextTradeTime</code> views.</p>
 <hr />
 </section>
@@ -1374,7 +1384,7 @@ deposits made before entry.</p>
 <li>Alice and Bob are eligible when 20 POL is deposited. Each earns 10
 POL.</li>
 <li>Carol then verifies and reaches 1 LABR.</li>
-<li>Carol’s entry correction excludes the previous 20 POL.</li>
+<li>Carol's entry correction excludes the previous 20 POL.</li>
 <li>A later 30 POL deposit is split three ways. Alice, Bob, and Carol
 each earn 10 POL from that deposit.</li>
 </ul>
@@ -1440,7 +1450,7 @@ proof.</p>
 <section id="deposit-source" class="level2">
 <h2>7.9 Deposit source</h2>
 <p>Only official Exchange may call <code>depositDividends</code>. The 5%
-holder share from each sale is deposited after the seller’s LABR balance
+holder share from each sale is deposited after the seller's LABR balance
 and eligibility have been updated. A seller who exits below 1 LABR does
 not share in the dividend generated by that same sale.</p>
 </section>
@@ -1461,7 +1471,7 @@ may sweep residue.</p>
 <section id="claim-gate" class="level2">
 <h2>7.12 Claim gate</h2>
 <p><code>claimDividends</code> requires the verified direct wallet. This
-expresses the project’s policy that equal-holder distributions belong to
+expresses the project's policy that equal-holder distributions belong to
 verified participants. Since verification is permanent, claims do not
 depend on a fresh Passport API response.</p>
 </section>
@@ -1487,7 +1497,7 @@ pre-funded wallet is handled atomically.</p>
 during eligible periods from deposits made before entry or during
 absence. The contract never needs to retain an array of all holders or
 iterate over the eligible set. The global count is used only as the
-denominator for a new deposit; the correction records each account’s
+denominator for a new deposit; the correction records each account's
 entry and exit boundaries.</p>
 <p>The following conservation relationship should hold apart from
 bounded integer residue:</p>
@@ -1513,10 +1523,10 @@ denominator or account weight.</p>
 <section id="scenario-b-entry-after-a-distribution" class="level3">
 <h3>Scenario B: entry after a distribution</h3>
 <p>Alice is the only eligible holder when 8 POL arrives, so Alice
-accrues 8 POL. Bob then verifies while holding 2 LABR. Bob’s entry
+accrues 8 POL. Bob then verifies while holding 2 LABR. Bob's entry
 correction excludes the earlier accumulator. A later 10 POL deposit is
-divided between Alice and Bob. Alice’s cumulative accrual becomes 13 POL
-and Bob’s becomes 5 POL.</p>
+divided between Alice and Bob. Alice's cumulative accrual becomes 13 POL
+and Bob's becomes 5 POL.</p>
 </section>
 <section id="scenario-c-temporary-exit-and-re-entry" class="level3">
 <h3>Scenario C: temporary exit and re-entry</h3>
@@ -1603,7 +1613,7 @@ contributes to the shared system: the fixed buy allocation sends a
 portion of incoming POL to the DAO, and the fixed sell allocation sends
 portions to the DAO and equal-holder dividends.</p>
 <p>The Exchange is not intended as a speculative marketplace detached
-from the project’s purpose. Its role is to apply the published pricing
+from the project's purpose. Its role is to apply the published pricing
 and limit rules while helping build the common treasury and preserve a
 defined redemption path.</p>
 <p>Direct transfers and third-party markets may exist, but they are not
@@ -1631,7 +1641,7 @@ tests, interface, FAQ, and whitepaper.</p>
 <h2>8.4 Direct POL denomination</h2>
 <p>Exchange uses POL directly. There is no Chainlink feed and no USD
 conversion. This removes oracle freshness and conversion failure, but
-the fiat value of every price changes with POL’s external market
+the fiat value of every price changes with POL's external market
 value.</p>
 </section>
 <section id="marginal-price" class="level2">
@@ -1671,7 +1681,7 @@ DAO contribution = ceil(reserve contribution / 9)</code></pre>
 10% goes to the DAO.</p>
 <p>The buyer provides an exact token amount, maximum POL input,
 deadline, and required <code>msg.value</code>. Excess above the exact
-required input is refunded within the user’s maximum.</p>
+required input is refunded within the user's maximum.</p>
 </section>
 <section id="sell-allocation" class="level2">
 <h2>8.8 Sell allocation</h2>
@@ -1771,13 +1781,13 @@ supply, and reserve.</li>
 <li>Reduce sold supply and accounted reserve.</li>
 <li>Transfer LABR back to Exchange, causing token eligibility
 synchronization.</li>
-<li>Deposit the holder share after the seller’s new eligibility is
+<li>Deposit the holder share after the seller's new eligibility is
 known.</li>
 <li>Send DAO contribution and seller proceeds.</li>
 <li>Recheck accounting invariants.</li>
 </ol>
 <p>This order prevents a seller who exits below 1 LABR from receiving a
-share of the same sale’s dividend deposit. A seller remaining above the
+share of the same sale's dividend deposit. A seller remaining above the
 threshold stays in the eligible set and receives the same one unit as
 every other eligible holder.</p>
 </section>
@@ -1791,7 +1801,7 @@ a convenience and safety layer, not the source of authorization.</p>
 <p>The protocol cannot prevent independent markets from accepting LABR
 under different rules. A person may transfer LABR directly or trade
 through an unrelated venue if one exists. Such activity does not use
-official curve reserves and does not alter the official Exchange’s
+official curve reserves and does not alter the official Exchange's
 published access rules. The project should avoid claiming control over
 all secondary activity.</p>
 <p>An unverified wallet may receive LABR through a permitted direct
@@ -1802,8 +1812,8 @@ transferred LABR.</p>
 </section>
 <section id="economic-stress-conditions" class="level2">
 <h2>8.17 Economic stress conditions</h2>
-<p>The official curve is denominated in POL. A large change in POL’s
-external purchasing power does not alter the contract’s POL price
+<p>The official curve is denominated in POL. A large change in POL's
+external purchasing power does not alter the contract's POL price
 function. It can materially change the fiat value of LABR, the DAO
 treasury, holder distributions, and redemptions.</p>
 <p>Heavy selling reduces sold supply and reserve liability along the
@@ -1827,7 +1837,7 @@ into an optional democratic role without allowing additional LABR to
 create additional votes.</p>
 <section id="shared-identity" class="level2">
 <h2>9.1 Shared identity</h2>
-<p>Registration reuses the wallet’s permanent Identity Registry status.
+<p>Registration reuses the wallet's permanent Identity Registry status.
 A participant does not need to complete a second Passport check or
 obtain another verifier signature in order to join governance.</p>
 <p>This keeps economic and governance onboarding consistent while
@@ -1854,7 +1864,7 @@ finalized Registration as its sole minter.</p>
 <p>The member-number timestamp index supports a bounded binary-search
 view that returns how many members registered strictly before a
 specified timestamp. Governance uses this historical count to determine
-each proposal’s final electorate at its voting deadline without
+each proposal's final electorate at its voting deadline without
 iterating over members.</p>
 <p>Registration cannot be revoked. A participant who later transfers or
 sells all LABR keeps LABRV and governance membership under this
@@ -1944,7 +1954,7 @@ Governance V15.1.</p>
 The proposal title is fixed as <code>Treasury Transfer</code>. The
 description must pass Policy. Recipient cannot be zero, the DAO, the
 current protocol contracts, or listed superseded protocol addresses.
-Amount must be positive and at most 5% of the DAO’s current native-POL
+Amount must be positive and at most 5% of the DAO's current native-POL
 balance.</p>
 <p>The proposal records:</p>
 <ul>
@@ -1969,7 +1979,7 @@ deadline.</p>
 before the proposal end time. Registration V6.1 reconstructs that count
 from its permanent member-number timestamp index through bounded binary
 search. Registrations at or after the deadline cannot vote and cannot
-change the closed proposal’s denominator, result, or executability.</p>
+change the closed proposal's denominator, result, or executability.</p>
 <p>While voting is active, the interface reports the current electorate
 and a provisional participation requirement. Both may increase as new
 members register. At the deadline, the historical electorate becomes
@@ -2068,7 +2078,7 @@ needed to execute an approved transfer.</p>
 </section>
 <section id="execute-permission" class="level2">
 <h2>12.2 Execute permission</h2>
-<p>Governance requires Aragon’s <code>EXECUTE_PERMISSION_ID</code>. The
+<p>Governance requires Aragon's <code>EXECUTE_PERMISSION_ID</code>. The
 permission must be granted only after deployed runtime verification and
 fork rehearsal. Old Governance and Treasury Module permissions must be
 revoked after the new path is proven.</p>
@@ -2190,8 +2200,8 @@ deployment.</li>
 </section>
 <section id="runtime-commitments-versus-addresses" class="level2">
 <h2>13.8 Runtime commitments versus addresses</h2>
-<p>A runtime hash answers: “What exact executable code is present?” An
-address answers: “Where is that code and state located?” Both are
+<p>A runtime hash answers: "What exact executable code is present?" An
+address answers: "Where is that code and state located?" Both are
 required. Two contracts can share a runtime hash but have different
 storage configuration, balances, permissions, or histories.
 Constructor-independent runtime design improves precommitment but does
@@ -2323,7 +2333,7 @@ blockchain transactions.</p>
 </section>
 <section id="scorer-dependence" class="level2">
 <h2>15.3 Scorer dependence</h2>
-<p>The scorer’s composition and external provider behavior may change
+<p>The scorer's composition and external provider behavior may change
 even though the on-chain threshold and scorer hash do not. The verifier
 must verify it is querying the intended scorer. Provider outages stop
 new verification.</p>
@@ -2645,7 +2655,7 @@ equal-holder set. Official sales contribute a fixed holder share, and
 each eligible wallet receives one equal dividend unit regardless of
 whether it holds 1, 100, or 10,000 LABR.</p>
 <p>The Exchange page shows eligibility, the current eligible-holder
-count, and withdrawable POL. Claims are made from the participant’s
+count, and withdrawable POL. Claims are made from the participant's
 verified wallet.</p>
 </section>
 <section id="selling" class="level2">
@@ -2905,7 +2915,7 @@ one-member-one-vote proposals;</li>
 <li>treasury authority is narrow, transparent, and limited to approved
 native-POL transfers;</li>
 <li>core economic constants are not adjustable after launch;</li>
-<li>deployment evidence is part of the protocol’s public
+<li>deployment evidence is part of the protocol's public
 accountability.</li>
 </ul>
 <p>These rules are intended to keep the technology subordinate to the
@@ -2938,7 +2948,7 @@ and independent review is complete.</p>
 system is intended to operate without a founder, administrator, or
 upgrade authority. The political standard is equally important: the
 infrastructure should be judged by whether it expands the working
-class’s ability to organize solidarity, withstand retaliation, and
+class's ability to organize solidarity, withstand retaliation, and
 sustain collective action.</p>
 <hr />
 </section>
@@ -3420,7 +3430,7 @@ class="level1">
 repository together with the separate
 <code>LaborCoin-Compilation-Records</code>, site, and verifier
 repositories. Human Passport integration should be checked against the
-provider’s official current documentation immediately before production
+provider's official current documentation immediately before production
 deployment. Polygon and Aragon interactions should be checked against
 their official current documentation and actual deployed contracts.</p>
 </section>

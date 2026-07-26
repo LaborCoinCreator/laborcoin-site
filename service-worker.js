@@ -1,4 +1,4 @@
-const CACHE_NAME = "laborcoin-revision-7-1-predeployment-v3";
+const CACHE_NAME = "laborcoin-revision-7-1-predeployment-v4";
 
 const APP_SHELL = [
   "/",

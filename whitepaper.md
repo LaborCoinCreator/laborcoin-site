@@ -20,7 +20,9 @@ Revision 7.1 has not yet been compiled under the frozen profile, completed every
 
 # 1. Executive Summary
 
-Workers have power when they act together, but collective action is difficult to sustain when employers can immediately cut off wages and workers still have to pay for food, housing, healthcare, transportation, childcare, and other necessities. Economic retaliation turns a labor dispute into a test of who can survive without income the longest. In most cases, the employer begins with far greater reserves.
+Workers have power when they act together, but collective action is difficult to sustain when employers can immediately cut off wages and workers still have to pay for food, housing, healthcare, transportation, childcare, and other necessities. Striking workers are barred from receiving federally funded welfare benefits such as SNAP and Medicaid, as well as state benefits such as Unemployment Insurance. The retaliation is built into the system itself, with eligibility rules that dissuade sustained direct action. 
+
+When people do push back, they often find out that fiat networks themselves can be controlled, monitored, and shut down. Many activists and journalists have recently found themselves barred from major banks, demonstrating the system's ability to take retribution on you personally if they disagree with one's work. Economic retaliation turns a labor dispute into a test of who can survive without income the longest. In most cases, the employer begins with far greater reserves.
 
 At the same time, people outside a workplace may strongly support a strike or organizing campaign but have no clear, durable, and accountable way to help. Support is often scattered across temporary fundraisers, separate organizations, private accounts, and social-media posts that disappear from public attention. The public may want to stand with workers but still lack a common place to build resources, see what is available, evaluate requests, and decide where aid should go.
 
@@ -66,7 +68,7 @@ A strike can stop production, disrupt distribution, and force an employer to neg
 
 This imbalance is not incidental. The threat of missed pay, discipline, termination, benefit loss, or prolonged uncertainty is one of the main ways collective action is discouraged and defeated. A group may have broad support and a legitimate demand but still be forced back to work because the immediate cost of continuing becomes unbearable.
 
-LaborCoin begins from a simple premise: collective action becomes more sustainable when people taking the risk are not left to absorb the economic retaliation alone.
+LaborCoin begins from a simple premise: collective action becomes more sustainable when people taking the risk are not left to absorb the economic retaliation alone. LaborCoin is a digital bridge to solidarity.
 
 ## 2.2 The solidarity gap
 
@@ -74,7 +76,7 @@ Public sympathy does not automatically become material support. People may see a
 
 Existing strike funds, unions, worker centers, mutual-aid networks, and public fundraisers remain essential. LaborCoin is not designed to displace them. It is intended to add a common, transparent layer through which the broader public can accumulate resources over time and direct them through a published democratic process.
 
-The system is meant to serve as a bridge between people who want to help and people who are directly fighting to improve working-class material conditions.
+The system is meant to serve as a bridge between people who want to help and people who are directly fighting to improve working-class material conditions. 
 
 ## 2.3 Theory of change
 
