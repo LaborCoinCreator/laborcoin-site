@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>LaborCoin Technical Whitepaper v3.0 Candidate</title>
+  <title>LaborCoin Technical Whitepaper v3.1 Candidate</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="theme-color" content="#0d0d0d">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
@@ -37,13 +37,14 @@
 <main class="whitepaper-page">
 <nav id="TOC" role="doc-toc"><h2>Contents</h2>
 <ul>
-<li><a href="#laborcoin-technical-whitepaper-v3.0-candidate"
-id="toc-laborcoin-technical-whitepaper-v3.0-candidate">LaborCoin
-Technical Whitepaper v3.0 Candidate</a>
+<li><a href="#laborcoin-technical-whitepaper-v3.1-candidate"
+id="toc-laborcoin-technical-whitepaper-v3.1-candidate">LaborCoin
+Technical Whitepaper v3.1 Candidate</a>
 <ul>
-<li><a href="#revision-7-equal-holder-architecture"
-id="toc-revision-7-equal-holder-architecture">Revision 7 equal-holder
-architecture</a></li>
+<li><a
+href="#revision-7.1-equal-holder-and-deadline-electorate-architecture"
+id="toc-revision-7.1-equal-holder-and-deadline-electorate-architecture">Revision
+7.1 equal-holder and deadline-electorate architecture</a></li>
 <li><a href="#disclaimer" id="toc-disclaimer">Disclaimer</a></li>
 </ul></li>
 <li><a href="#executive-summary" id="toc-executive-summary">1. Executive
@@ -257,9 +258,9 @@ Exchange scope and bypass boundaries</a></li>
 id="toc-economic-stress-conditions">8.17 Economic stress
 conditions</a></li>
 </ul></li>
-<li><a href="#registration-v6-and-laborvote-v9"
-id="toc-registration-v6-and-laborvote-v9">9. Registration V6 and
-LaborVote V9</a>
+<li><a href="#registration-v6.1-and-laborvote-v9.1"
+id="toc-registration-v6.1-and-laborvote-v9.1">9. Registration V6.1 and
+LaborVote V9.1</a>
 <ul>
 <li><a href="#shared-identity" id="toc-shared-identity">9.1 Shared
 identity</a></li>
@@ -281,16 +282,16 @@ properties</a></li>
 <li><a href="#limitations" id="toc-limitations">10.3
 Limitations</a></li>
 </ul></li>
-<li><a href="#governance-v15" id="toc-governance-v15">11. Governance
-V15</a>
+<li><a href="#governance-v15.1" id="toc-governance-v15.1">11. Governance
+V15.1</a>
 <ul>
 <li><a href="#one-member-one-vote" id="toc-one-member-one-vote">11.1
 One-member-one-vote</a></li>
 <li><a href="#activation" id="toc-activation">11.2 Activation</a></li>
 <li><a href="#proposal-creation" id="toc-proposal-creation">11.3
 Proposal creation</a></li>
-<li><a href="#electorate-snapshot" id="toc-electorate-snapshot">11.4
-Electorate snapshot</a></li>
+<li><a href="#deadline-electorate" id="toc-deadline-electorate">11.4
+Deadline electorate</a></li>
 <li><a href="#participation-threshold"
 id="toc-participation-threshold">11.5 Participation threshold</a></li>
 <li><a href="#approval-threshold" id="toc-approval-threshold">11.6
@@ -299,8 +300,11 @@ Approval threshold</a></li>
 <li><a href="#execution" id="toc-execution">11.8 Execution</a></li>
 <li><a href="#narrow-authority" id="toc-narrow-authority">11.9 Narrow
 authority</a></li>
+<li><a href="#open-enrollment-tradeoff"
+id="toc-open-enrollment-tradeoff">11.10 Open-enrollment
+tradeoff</a></li>
 <li><a href="#repeated-proposal-risk"
-id="toc-repeated-proposal-risk">11.10 Repeated-proposal risk</a></li>
+id="toc-repeated-proposal-risk">11.11 Repeated-proposal risk</a></li>
 </ul></li>
 <li><a href="#treasury-and-aragon-permission-architecture"
 id="toc-treasury-and-aragon-permission-architecture">12. Treasury and
@@ -448,7 +452,10 @@ id="toc-historical-deployed-stack">18.1 Historical deployed
 stack</a></li>
 <li><a href="#superseded-revision-6" id="toc-superseded-revision-6">18.2
 Superseded Revision 6</a></li>
-<li><a href="#migration-principles" id="toc-migration-principles">18.3
+<li><a href="#superseded-revision-7.0-creation-snapshot-candidate"
+id="toc-superseded-revision-7.0-creation-snapshot-candidate">18.3
+Superseded Revision 7.0 creation-snapshot candidate</a></li>
+<li><a href="#migration-principles" id="toc-migration-principles">18.4
 Migration principles</a></li>
 </ul></li>
 <li><a href="#risks-and-limitations" id="toc-risks-and-limitations">19.
@@ -501,7 +508,7 @@ Constants</a></li>
 <li><a href="#appendix-b.-address-registry"
 id="toc-appendix-b.-address-registry">Appendix B. Address Registry</a>
 <ul>
-<li><a href="#revision-7" id="toc-revision-7">Revision 7</a></li>
+<li><a href="#revision-7.1" id="toc-revision-7.1">Revision 7.1</a></li>
 <li><a href="#existing-infrastructure"
 id="toc-existing-infrastructure">Existing infrastructure</a></li>
 <li><a href="#historical-evidence"
@@ -535,11 +542,13 @@ id="toc-appendix-i.-references-and-repository-records">Appendix I.
 References and Repository Records</a></li>
 </ul>
 </nav>
-<section id="laborcoin-technical-whitepaper-v3.0-candidate"
+<section id="laborcoin-technical-whitepaper-v3.1-candidate"
 class="level1">
-<h1>LaborCoin Technical Whitepaper v3.0 Candidate</h1>
-<section id="revision-7-equal-holder-architecture" class="level2">
-<h2>Revision 7 equal-holder architecture</h2>
+<h1>LaborCoin Technical Whitepaper v3.1 Candidate</h1>
+<section
+id="revision-7.1-equal-holder-and-deadline-electorate-architecture"
+class="level2">
+<h2>Revision 7.1 equal-holder and deadline-electorate architecture</h2>
 <p><strong>Status:</strong> Precompilation source candidate, not
 deployed<br />
 <strong>Network:</strong> Polygon mainnet, chain ID 137<br />
@@ -558,7 +567,7 @@ liquidity, uninterrupted availability, favorable legal or tax treatment,
 successful labor outcomes, identity-provider availability, or freedom
 from smart-contract, network, governance, interface, key-management, and
 operational risk.</p>
-<p>Revision 7 has not yet been compiled under the frozen profile,
+<p>Revision 7.1 has not yet been compiled under the frozen profile,
 completed every unit, fuzz, invariant, fork, integration, and
 independent-review requirement, or been deployed. All replacement
 addresses and runtime commitments are pending. Nothing in this paper is
@@ -646,16 +655,16 @@ accounting.</li>
 <li><strong>LaborCoin Exchange V6.0.0</strong>, which provides
 identity-gated exact-token buying and selling through a direct-POL
 integral bonding curve.</li>
-<li><strong>LaborVote V9.0.0</strong>, which provides one permanent
+<li><strong>LaborVote V9.1.0</strong>, which provides one permanent
 nontransferable LABRV membership unit per registrant.</li>
-<li><strong>LaborCoin Registration V6.0.0</strong>, which reuses the
-shared identity status and mints membership after a 1 LABR
-threshold.</li>
+<li><strong>LaborCoin Registration V6.1.0</strong>, which reuses the
+shared identity status, records historical member-count checkpoints, and
+mints membership after a 1 LABR threshold.</li>
 <li><strong>Proposal Text Policy V1.0.1</strong>, which applies fixed
 proposal-description rules.</li>
-<li><strong>LaborCoin Governance V15.0.0</strong>, which provides
-one-member-one-vote native-POL treasury allocation through the existing
-Aragon DAO.</li>
+<li><strong>LaborCoin Governance V15.1.0</strong>, which lets every
+member registered before a proposal deadline vote while voting is active
+and fixes final participation against that deadline electorate.</li>
 </ol>
 <p>The existing Aragon DAO remains the treasury custodian. Governance
 does not hold proposal funds. A successful proposal can request exactly
@@ -663,10 +672,11 @@ one native-POL transfer from the DAO to the approved recipient.
 Governance cannot change tokenomics, mint LABR, alter thresholds, pause
 trading, execute arbitrary calldata, upgrade contracts, or recover
 recipient funds.</p>
-<p>Revision 7 is a replacement source candidate. The historical
-V4/V7/V13 deployment and the superseded Revision 6 candidate remain
-preserved for transparency. Neither is represented as the final
-replacement system.</p>
+<p>Revision 7.1 is a replacement source candidate. The historical
+V4/V7/V13 deployment, superseded Revision 6 candidate, and uncompiled
+Revision 7.0 creation-snapshot candidate remain preserved for
+transparency. Neither is represented as the final replacement
+system.</p>
 <hr />
 </section>
 <section id="problem-purpose-scope-and-non-objectives" class="level1">
@@ -914,7 +924,7 @@ LaborCoin verifier -- EIP-712 --&gt; Identity Registry V1
         |                              |
         |                              +--&gt; Exchange V6 access
         |                              +--&gt; LABR V3 dividend eligibility/claims
-        |                              +--&gt; Registration V6
+        |                              +--&gt; Registration V6.1
         v
    no custody
 
@@ -923,9 +933,9 @@ POL --&gt; Exchange V6 --&gt; LABR V3 inventory and curve reserve
              |                 +--&gt; equal-holder dividend accounting
              +--&gt; Aragon DAO treasury
 
-Registration V6 --&gt; LaborVote V9 --&gt; Governance V15
-Proposal Text Policy V1 ---------&gt; Governance V15
-Governance V15 --&gt; Aragon DAO --&gt; approved recipient</code></pre>
+Registration V6.1 --&gt; LaborVote V9.1 --&gt; Governance V15.1
+Proposal Text Policy V1 ---------&gt; Governance V15.1
+Governance V15.1 --&gt; Aragon DAO --&gt; approved recipient</code></pre>
 </section>
 <section id="economic-layer" class="level2">
 <h2>4.2 Economic layer</h2>
@@ -1014,13 +1024,13 @@ reach or use those contracts.</p>
 </tr>
 <tr class="even">
 <td>LaborVote</td>
-<td>V9.0.0</td>
+<td>V9.1.0</td>
 <td><code>DEPLOYMENT_PENDING</code></td>
 <td>Registration only may mint</td>
 </tr>
 <tr class="odd">
 <td>Registration</td>
-<td>V6.0.0</td>
+<td>V6.1.0</td>
 <td><code>DEPLOYMENT_PENDING</code></td>
 <td>None</td>
 </tr>
@@ -1032,7 +1042,7 @@ reach or use those contracts.</p>
 </tr>
 <tr class="odd">
 <td>Governance</td>
-<td>V15.0.0</td>
+<td>V15.1.0</td>
 <td><code>DEPLOYMENT_PENDING</code></td>
 <td>Aragon execute permission only</td>
 </tr>
@@ -1809,8 +1819,8 @@ capacity. It does not change total supply or curve mathematics.</p>
 <hr />
 </section>
 </section>
-<section id="registration-v6-and-laborvote-v9" class="level1">
-<h1>9. Registration V6 and LaborVote V9</h1>
+<section id="registration-v6.1-and-laborvote-v9.1" class="level1">
+<h1>9. Registration V6.1 and LaborVote V9.1</h1>
 <p>Registration is the step through which a verified participant chooses
 to become a permanent governance member. It turns economic participation
 into an optional democratic role without allowing additional LABR to
@@ -1838,8 +1848,14 @@ finalized Registration as its sole minter.</p>
 <li>registered status;</li>
 <li>sequential member number;</li>
 <li>registration timestamp;</li>
+<li>registration timestamp indexed by member number;</li>
 <li>total member count.</li>
 </ul>
+<p>The member-number timestamp index supports a bounded binary-search
+view that returns how many members registered strictly before a
+specified timestamp. Governance uses this historical count to determine
+each proposal’s final electorate at its voting deadline without
+iterating over members.</p>
 <p>Registration cannot be revoked. A participant who later transfers or
 sells all LABR keeps LABRV and governance membership under this
 candidate. The 1 LABR requirement is an admission threshold, not an
@@ -1901,12 +1917,12 @@ new Aragon permission migration.</p>
 <hr />
 </section>
 </section>
-<section id="governance-v15" class="level1">
-<h1>11. Governance V15</h1>
-<p>Governance V15 has one narrow purpose: allow registered participants
-to decide whether the Aragon DAO should send a specified amount of POL
-to a specified recipient. It is not a general protocol administration
-system.</p>
+<section id="governance-v15.1" class="level1">
+<h1>11. Governance V15.1</h1>
+<p>Governance V15.1 has one narrow purpose: allow registered
+participants to decide whether the Aragon DAO should send a specified
+amount of POL to a specified recipient. It is not a general protocol
+administration system.</p>
 <section id="one-member-one-vote" class="level2">
 <h2>11.1 One-member-one-vote</h2>
 <p>A wallet is eligible when it holds exactly one LABRV and has a
@@ -1920,7 +1936,7 @@ increase voting weight.</p>
 members exist. This prevents the final treasury-transfer process from
 being activated by a very small founding group and creates a minimum
 community base before collective funds can be directed through
-Governance V15.</p>
+Governance V15.1.</p>
 </section>
 <section id="proposal-creation" class="level2">
 <h2>11.3 Proposal creation</h2>
@@ -1930,10 +1946,10 @@ description must pass Policy. Recipient cannot be zero, the DAO, the
 current protocol contracts, or listed superseded protocol addresses.
 Amount must be positive and at most 5% of the DAO’s current native-POL
 balance.</p>
-<p>The proposal snapshots:</p>
+<p>The proposal records:</p>
 <ul>
-<li>electorate size;</li>
-<li>treasury balance;</li>
+<li>creation-time member count for transparency;</li>
+<li>treasury balance at creation;</li>
 <li>creator;</li>
 <li>recipient;</li>
 <li>amount;</li>
@@ -1942,18 +1958,32 @@ balance.</p>
 <li>deterministic call ID.</li>
 </ul>
 </section>
-<section id="electorate-snapshot" class="level2">
-<h2>11.4 Electorate snapshot</h2>
-<p>A member registering after proposal creation cannot vote on that
-proposal. Governance uses member number relative to the stored
-electorate size to enforce the snapshot.</p>
+<section id="deadline-electorate" class="level2">
+<h2>11.4 Deadline electorate</h2>
+<p>Every registered LABRV member may vote while the proposal remains
+active, including a participant who verifies, acquires LABR, registers,
+and receives LABRV after proposal creation. The member must register
+strictly before the voting deadline and must cast the vote before that
+deadline.</p>
+<p>The final electorate is the number of members registered strictly
+before the proposal end time. Registration V6.1 reconstructs that count
+from its permanent member-number timestamp index through bounded binary
+search. Registrations at or after the deadline cannot vote and cannot
+change the closed proposal’s denominator, result, or executability.</p>
+<p>While voting is active, the interface reports the current electorate
+and a provisional participation requirement. Both may increase as new
+members register. At the deadline, the historical electorate becomes
+permanent without requiring a separate finalization transaction.</p>
 </section>
 <section id="participation-threshold" class="level2">
 <h2>11.5 Participation threshold</h2>
 <p>Required participation is:</p>
-<pre class="text"><code>ceil(electorateSize * 25 / 100)</code></pre>
-<p>At 50 members, required participation is 13, not 12. At 51 members,
-it is also 13.</p>
+<pre class="text"><code>ceil(deadlineElectorateSize * 25 / 100)</code></pre>
+<p>At 50 members, required participation is 13, not 12. If a proposal
+begins with 50 members and 50 more register before the deadline, the
+final electorate is 100 and required participation is 25. Every person
+included in that final denominator had an opportunity to vote while the
+proposal was active.</p>
 </section>
 <section id="approval-threshold" class="level2">
 <h2>11.6 Approval threshold</h2>
@@ -1965,8 +1995,10 @@ required.</p>
 </section>
 <section id="timing" class="level2">
 <h2>11.7 Timing</h2>
-<p>Voting lasts 14 days. A successful proposal may execute for 7 days
-after voting ends. After the execution window, it expires.</p>
+<p>Voting lasts 14 days. A participant who registers at any point before
+the deadline may vote during the remaining active period. A successful
+proposal may execute for 7 days after voting ends. After the execution
+window, it expires.</p>
 </section>
 <section id="execution" class="level2">
 <h2>11.8 Execution</h2>
@@ -1975,7 +2007,7 @@ mechanical. Governance rechecks:</p>
 <ul>
 <li>proposal is not executed;</li>
 <li>voting has ended;</li>
-<li>thresholds passed;</li>
+<li>the final deadline electorate and thresholds passed;</li>
 <li>execution window remains open;</li>
 <li>current DAO balance covers amount;</li>
 <li>amount remains at most 5% of current DAO balance;</li>
@@ -1986,7 +2018,8 @@ mechanical. Governance rechecks:</p>
 value = approved POL amount
 data = empty</code></pre>
 <p>The DAO performs the transfer. Governance records execution and
-cannot execute the proposal again.</p>
+cannot execute the proposal again. Later registrations cannot change the
+final electorate or invalidate a completed vote.</p>
 </section>
 <section id="narrow-authority" class="level2">
 <h2>11.9 Narrow authority</h2>
@@ -1994,8 +2027,23 @@ cannot execute the proposal again.</p>
 upgrades, permission changes, or multiple actions. It has no owner,
 pause, setter, or recovery function.</p>
 </section>
+<section id="open-enrollment-tradeoff" class="level2">
+<h2>11.10 Open-enrollment tradeoff</h2>
+<p>An active proposal may motivate supporters or opponents to complete
+permanent identity verification and governance registration. This can be
+understood as democratic organizing or as coordinated bloc recruitment.
+The contracts cannot distinguish motive. The fixed score gate, permanent
+membership, nontransferable LABRV, 14-day public period, 25%
+participation requirement, 67% approval requirement, and 5% transfer cap
+limit but do not eliminate coordinated influence.</p>
+<p>The chosen policy treats proposal-driven participation as legitimate
+because each qualifying participant becomes a permanent equal member
+rather than borrowing or purchasing temporary voting power. The final
+denominator grows with every member admitted before the deadline, so
+recruitment also raises the participation requirement.</p>
+</section>
 <section id="repeated-proposal-risk" class="level2">
-<h2>11.10 Repeated-proposal risk</h2>
+<h2>11.11 Repeated-proposal risk</h2>
 <p>The 5% cap is per proposal, not per week, month, or year. Repeated
 approved proposals can spend a substantial fraction of treasury. The
 protocol relies on member participation and judgment rather than an
@@ -2201,9 +2249,9 @@ Network: Polygon mainnet, chain ID 137</code></pre>
 <li>Identity Registry V1.0.0</li>
 <li>Exchange V6.0.0</li>
 <li>LABR V3.0.0</li>
-<li>LaborVote V9.0.0</li>
-<li>Registration V6.0.0</li>
-<li>Governance V15.0.0</li>
+<li>LaborVote V9.1.0</li>
+<li>Registration V6.1.0</li>
+<li>Governance V15.1.0</li>
 </ol>
 </section>
 <section id="deploy-and-finalize-identityeconomic-cycle" class="level2">
@@ -2319,10 +2367,13 @@ legitimacy, fraud, coercion, or legal compliance.</p>
 <section id="governance-capture" class="level2">
 <h2>15.9 Governance capture</h2>
 <p>One-member-one-vote reduces wealth weighting but does not prevent
-coordinated capture, low turnout, bribery, coercion, or a
-verifier-admitted Sybil population. The 50-member activation threshold
-and 25% participation requirement are fixed safeguards, not
-guarantees.</p>
+coordinated capture, low turnout, bribery, coercion, proposal-driven
+recruitment, or a verifier-admitted Sybil population. Members who
+register before an active proposal deadline may vote, and their
+admission also increases the final participation denominator. The
+50-member activation threshold, permanent membership, 25% participation
+requirement, 67% approval requirement, and 5% transfer cap are fixed
+safeguards, not guarantees.</p>
 </section>
 <section id="permission-migration" class="level2">
 <h2>15.10 Permission migration</h2>
@@ -2487,14 +2538,18 @@ no stale Revision 6 active references.</p>
 <section id="unit-tests" class="level2">
 <h2>16.2 Unit tests</h2>
 <p>Every public and external function, error branch, finalization state,
-eligibility transition, quote boundary, and proposal transition requires
-deterministic tests.</p>
+eligibility transition, quote boundary, historical member-count
+boundary, and proposal transition requires deterministic tests.
+Governance tests must prove that members joining before a deadline can
+vote, registrations at or after the deadline are excluded, and later
+registrations cannot change a closed result.</p>
 </section>
 <section id="fuzz-tests" class="level2">
 <h2>16.3 Fuzz tests</h2>
 <p>Fuzz token amounts, supply points, wallet balances, holder counts,
-deposit sizes, entry/exit sequences, vote counts, electorate sizes, and
-treasury balances.</p>
+deposit sizes, entry/exit sequences, registration timestamps, repeated
+same-block timestamps, proposal deadlines, vote counts, electorate
+sizes, and treasury balances.</p>
 </section>
 <section id="stateful-invariants" class="level2">
 <h2>16.4 Stateful invariants</h2>
@@ -2511,6 +2566,11 @@ redirections as defined;</li>
 <li>unverified accounts never accrue or claim;</li>
 <li>LABRV supply equals successful registrations;</li>
 <li>each registered wallet holds one LABRV;</li>
+<li>every registered LABRV member may vote before an active proposal
+deadline;</li>
+<li>final electorate equals members registered strictly before the
+deadline;</li>
+<li>registrations after the deadline cannot alter a closed result;</li>
 <li>executed proposals cannot execute again.</li>
 </ul>
 </section>
@@ -2612,7 +2672,11 @@ on-chain Registration record is authoritative.</p>
 <h2>17.8 Proposing and voting on aid</h2>
 <p>After 50 members, eligible participants may create treasury-transfer
 proposals and vote. A proposal identifies one recipient, one POL amount,
-and a public description that passes the fixed text policy.</p>
+and a public description that passes the fixed text policy. A person who
+learns about an active proposal may complete verification, acquire at
+least 1 LABR, register, receive LABRV, and vote before the voting
+deadline. The provisional participation target may rise as new members
+join, and the final electorate is fixed when voting closes.</p>
 <p>Before voting, members are expected to investigate whether the
 recipient represents the affected workers or cause, whether the address
 is controlled safely, and whether the proposed distribution plan is
@@ -2650,11 +2714,23 @@ commitments, but LABR V2.1 implemented token-balance-weighted dividends.
 That economic model was not the intended LaborCoin design. Revision 6 is
 permanently superseded and must not be deployed as final.</p>
 </section>
+<section id="superseded-revision-7.0-creation-snapshot-candidate"
+class="level2">
+<h2>18.3 Superseded Revision 7.0 creation-snapshot candidate</h2>
+<p>Revision 7.0 restored equal-holder dividends and shared identity, but
+Governance V15.0 limited each proposal to members who were already
+registered at creation. That policy was rejected before compilation
+because it prevented a proposal from motivating new permanent members to
+join and vote while the proposal remained active. Revision 7.1 replaces
+it with a deadline electorate that permits voting by every member
+registered before the close while preventing post-deadline registration
+from changing the result.</p>
+</section>
 <section id="migration-principles" class="level2">
-<h2>18.3 Migration principles</h2>
+<h2>18.4 Migration principles</h2>
 <ul>
 <li>Preserve historical source and deployment evidence.</li>
-<li>Never relabel an old address as a Revision 7 component.</li>
+<li>Never relabel an old address as a Revision 7.1 component.</li>
 <li>Recompile every dependent contract after source changes.</li>
 <li>Grant new DAO permission only after runtime verification.</li>
 <li>Revoke obsolete permission only after successful rehearsal.</li>
@@ -2709,7 +2785,10 @@ account-abstraction recovery.</p>
 <h2>19.7 Governance outcomes</h2>
 <p>Members may approve ineffective, controversial, or fraudulent
 transfers. Fixed thresholds do not ensure wise decisions or fair
-geographic distribution.</p>
+geographic distribution. Open enrollment during an active proposal can
+mobilize legitimate participation and can also facilitate coordinated
+recruitment; every admitted member permanently joins the electorate and
+raises the final participation denominator.</p>
 </section>
 <section id="treasury-depletion" class="level2">
 <h2>19.8 Treasury depletion</h2>
@@ -2849,7 +2928,7 @@ problem: economic retaliation can break collective action, while public
 support is often fragmented and difficult to direct. LaborCoin provides
 one possible bridge between those who want to help and those taking the
 risk.</p>
-<p>Revision 7 is ready for compilation review only when the source
+<p>Revision 7.1 is ready for compilation review only when the source
 package, documentation, site, verifier, and compilation-record scaffold
 agree. It is ready for deployment only after the seven contracts compile
 exactly, all runtime commitments are sealed, the equal-holder accounting
@@ -2866,6 +2945,10 @@ sustain collective action.</p>
 <section id="appendix-a.-fixed-constants" class="level1">
 <h1>Appendix A. Fixed Constants</h1>
 <table>
+<colgroup>
+<col style="width: 42%" />
+<col style="width: 57%" />
+</colgroup>
 <thead>
 <tr class="header">
 <th>Constant</th>
@@ -2946,22 +3029,28 @@ sustain collective action.</p>
 <td style="text-align: right;">14 days</td>
 </tr>
 <tr class="odd">
+<td>Electorate cutoff</td>
+<td style="text-align: right;">Registration timestamp strictly before
+proposal end time</td>
+</tr>
+<tr class="even">
 <td>Execution window</td>
 <td style="text-align: right;">7 days</td>
 </tr>
-<tr class="even">
-<td>Participation</td>
-<td style="text-align: right;">ceiling 25%</td>
-</tr>
 <tr class="odd">
+<td>Participation</td>
+<td style="text-align: right;">ceiling 25% of members registered before
+the voting deadline</td>
+</tr>
+<tr class="even">
 <td>Approval</td>
 <td style="text-align: right;">ceiling 67% of votes cast</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td>Proposal transfer cap</td>
 <td style="text-align: right;">5% of current DAO POL balance</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td>Description maximum</td>
 <td style="text-align: right;">1,000 bytes</td>
 </tr>
@@ -2970,8 +3059,8 @@ sustain collective action.</p>
 </section>
 <section id="appendix-b.-address-registry" class="level1">
 <h1>Appendix B. Address Registry</h1>
-<section id="revision-7" class="level2">
-<h2>Revision 7</h2>
+<section id="revision-7.1" class="level2">
+<h2>Revision 7.1</h2>
 <p>All seven replacement addresses are
 <code>DEPLOYMENT_PENDING</code>.</p>
 </section>
@@ -3029,13 +3118,13 @@ Treasury Module V1:    0x0B018E45E4cB71E222C345a5341BdbaeE519c623</code></pre>
 <td><code>PENDING_COMPILATION</code></td>
 </tr>
 <tr class="even">
-<td>LaborVote V9</td>
+<td>LaborVote V9.1</td>
 <td>Candidate</td>
 <td>Pending</td>
 <td><code>PENDING_COMPILATION</code></td>
 </tr>
 <tr class="odd">
-<td>Registration V6</td>
+<td>Registration V6.1</td>
 <td>Candidate</td>
 <td>Pending</td>
 <td><code>PENDING_COMPILATION</code></td>
@@ -3043,11 +3132,11 @@ Treasury Module V1:    0x0B018E45E4cB71E222C345a5341BdbaeE519c623</code></pre>
 <tr class="even">
 <td>Text Policy V1.0.1</td>
 <td>Candidate source preserved</td>
-<td>Must be re-recorded in Revision 7 manifest</td>
+<td>Must be re-recorded in Revision 7.1 manifest</td>
 <td><code>PENDING_COMPILATION_RECORD</code></td>
 </tr>
 <tr class="odd">
-<td>Governance V15</td>
+<td>Governance V15.1</td>
 <td>Candidate</td>
 <td>Pending</td>
 <td><code>PENDING_FINAL_IMMUTABLE_VALUES</code></td>
@@ -3163,9 +3252,12 @@ Ineligible -&gt; balance reaches &gt;=1 -&gt; Eligible without missed history</c
 </section>
 <section id="proposal" class="level2">
 <h2>Proposal</h2>
-<pre class="text"><code>Nonexistent -&gt; Active -&gt; Defeated
-                    \-&gt; Succeeded -&gt; Executed
-                                  \-&gt; Expired</code></pre>
+<pre class="text"><code>Nonexistent
+  -&gt; Active (current electorate may grow as members register)
+  -&gt; Voting deadline (final historical electorate fixed)
+  -&gt; Defeated
+  \-&gt; Succeeded -&gt; Executed
+                 \-&gt; Expired</code></pre>
 </section>
 </section>
 <section id="appendix-f.-threat-model-matrix" class="level1">
@@ -3223,12 +3315,19 @@ Ineligible -&gt; balance reaches &gt;=1 -&gt; Eligible without missed history</c
 <td>Obsolete executor remains active</td>
 </tr>
 <tr class="odd">
+<td>Proposal-driven bloc recruitment</td>
+<td>Permanent identity and membership, growing deadline quorum, 67%
+approval, 5% cap</td>
+<td>Registration and vote events</td>
+<td>Coordinated influence remains possible</td>
+</tr>
+<tr class="even">
 <td>Bad recipient</td>
 <td>Member diligence and fixed proposal record</td>
 <td>Public proposal and transfer</td>
 <td>Irreversible fund loss</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td>Site compromise</td>
 <td>Fail-closed config and address display</td>
 <td>Repository and deployment comparison</td>
@@ -3241,6 +3340,9 @@ Ineligible -&gt; balance reaches &gt;=1 -&gt; Eligible without missed history</c
 <h1>Appendix G. Glossary</h1>
 <p><strong>Accounted reserve:</strong> POL recorded as liability for
 official curve redemptions.<br />
+<strong>Deadline electorate:</strong> All members registered strictly
+before a proposal voting deadline; this becomes the final participation
+denominator.<br />
 <strong>Direct wallet:</strong> EOA with no code, calling without a
 relay.<br />
 <strong>Dividend unit:</strong> Binary accounting weight of one for each
@@ -3281,6 +3383,12 @@ and differential tests pass.</label></li>
 pass.</label></li>
 <li><label><input type="checkbox" />Identity EIP-712 parity tests
 pass.</label></li>
+<li><label><input type="checkbox" />Historical member-count
+binary-search tests pass at zero, exact timestamps, repeated timestamps,
+and large membership counts.</label></li>
+<li><label><input type="checkbox" />Governance tests prove pre-deadline
+joiners can vote and post-deadline registrations cannot change a closed
+result.</label></li>
 <li><label><input type="checkbox" />Membership and governance tests
 pass.</label></li>
 <li><label><input type="checkbox" />Polygon-fork deployment rehearsal

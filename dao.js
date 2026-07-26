@@ -1,4 +1,4 @@
-// ===== REVISION 7 SHARED IDENTITY + REGISTRATION =====
+// ===== REVISION 7.1 SHARED IDENTITY + REGISTRATION =====
 const SITE_CONFIG = window.LaborCoinConfig;
 const DEPLOYMENT_ACTIVE = window.LaborCoinDeployment?.isActive() === true;
 const LABR_TOKEN = SITE_CONFIG?.addresses?.labr || ethers.ZeroAddress;
@@ -36,7 +36,7 @@ const loadingOverlay=document.getElementById("loadingOverlay");
 const loadingText=document.getElementById("loadingText");
 
 connectBtn.disabled=!DEPLOYMENT_ACTIVE; verifyBtn.disabled=true; attestBtn.disabled=true; registerBtn.disabled=true;
-if(!DEPLOYMENT_ACTIVE){daoStatus.innerText="Revision 7 is in predeployment mode. Registration is disabled until all seven final contract addresses and runtime commitments are verified.";daoStatus.style.color="#ff4d4d";}
+if(!DEPLOYMENT_ACTIVE){daoStatus.innerText="Revision 7.1 is in predeployment mode. Registration is disabled until all seven final contract addresses and runtime commitments are verified.";daoStatus.style.color="#ff4d4d";}
 function setStatus(msg,type=""){daoStatus.innerText=msg;daoStatus.style.color=type==="error"?"#ff4d4d":type==="success"?"#4dff88":"#ccc";}
 function completeStep(id,complete=true){document.getElementById(id)?.classList.toggle("complete",Boolean(complete));}
 function showLoading(text){if(loadingText)loadingText.innerText=text;loadingOverlay?.classList.remove("hidden");}

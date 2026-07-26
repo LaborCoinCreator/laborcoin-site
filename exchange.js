@@ -218,7 +218,7 @@
     els.connectBtn.onclick=connectWallet; els.identityVerifyBtn.onclick=verifyIdentity; els.exchangeVerifyBtn.onclick=checkAccess;
     els.buyAmount.addEventListener("input",quoteBuy); els.sellAmount.addEventListener("input",quoteSell);
     els.buyBtn.onclick=buy; els.sellBtn.onclick=sell; els.claimDividendsBtn.onclick=claimDividends;
-    if(!active){for(const b of [els.connectBtn,els.identityVerifyBtn,els.exchangeVerifyBtn,els.buyBtn,els.sellBtn,els.claimDividendsBtn])b.disabled=true;setGate("Predeployment mode. Enter and verify all seven final addresses and runtime hashes in protocol-config.js before enabling interactions.","error");setStatus("Revision 7 is a source candidate and has not been compiled or deployed.");drawCurve(0n);return;}
+    if(!active){for(const b of [els.connectBtn,els.identityVerifyBtn,els.exchangeVerifyBtn,els.buyBtn,els.sellBtn,els.claimDividendsBtn])b.disabled=true;setGate("Predeployment mode. Enter and verify all seven final addresses and runtime hashes in protocol-config.js before enabling interactions.","error");setStatus("Revision 7.1 is a source candidate and has not been compiled or deployed.");drawCurve(0n);return;}
     await loadMarket();
     try { if(!window.LaborWallet)return; wallet=await window.LaborWallet.reconnect(); if(wallet){els.connectBtn.style.display="none";await refreshWallet();} } catch(error){console.error("Wallet reconnect failed",error);}
   }

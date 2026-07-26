@@ -1,0 +1,8 @@
+REVISION 7.1 SITE VALIDATION: PASS
+
+- Governance ABI exposes creation and deadline electorate values.
+- Active proposals display a provisional electorate and participation target.
+- Closed proposals display the final deadline electorate.
+- Predeployment gating remains enabled and all seven replacement addresses remain blank.
+- Whitepaper HTML, Markdown, and US Letter PDF are synchronized.
+- Certificate and attestation files are unchanged.

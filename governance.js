@@ -47,7 +47,7 @@ const GOV_ABI = [
 
   "function proposalContent(uint256) view returns(string description,bytes32 descriptionHash,address recipient,uint256 amount,address creator)",
 
-  "function proposalVoteData(uint256) view returns(uint256 yesVotes,uint256 noVotes,uint256 electorateSize,uint256 treasuryBalanceSnapshot)",
+  "function proposalVoteData(uint256) view returns(uint256 yesVotes,uint256 noVotes,uint256 creationElectorateSize,uint256 deadlineElectorateSize,uint256 treasuryBalanceSnapshot)",
 
   "function proposalExecutionData(uint256) view returns(uint256 startTime,uint256 endTime,bool executed,uint256 executedAt,bytes32 callId)"
 ];
@@ -489,7 +489,7 @@ govVerifyBtn.onclick = async () => {
 
     if (!ready) {
       throw new Error(
-        "Governance V15 is not fully activated or its DAO execution permission is missing."
+        "Governance V15.1 is not fully activated or its DAO execution permission is missing."
       );
     }
 
@@ -675,8 +675,10 @@ async function readProposal(
     creator: content.creator,
     yesVotes: voteData.yesVotes,
     noVotes: voteData.noVotes,
-    electorateSize:
-      voteData.electorateSize,
+    creationElectorateSize:
+      voteData.creationElectorateSize,
+    deadlineElectorateSize:
+      voteData.deadlineElectorateSize,
     treasuryBalanceSnapshot:
       voteData.treasuryBalanceSnapshot,
     startTime: executionData.startTime,
@@ -1095,9 +1097,16 @@ const card =
         </p>
 
         <p>
-          Electorate Snapshot:<br>
-          ${Number(p.electorateSize)} members
+          Members at Creation:<br>
+          ${Number(p.creationElectorateSize)} members
         </p>
+
+        <p>
+          ${status === "ACTIVE" ? "Current Electorate (Provisional)" : "Final Deadline Electorate"}:<br>
+          ${Number(p.deadlineElectorateSize)} members
+        </p>
+
+        ${status === "ACTIVE" ? `<p class="status">The electorate and participation target may increase as new members register before the voting deadline.</p>` : ""}
 
         <p>
           Participation Required:<br>
@@ -1471,7 +1480,7 @@ async function initializeGovernancePage() {
   if (!DEPLOYMENT_ACTIVE) {
     proposalFeedSection.classList.remove("hidden");
     proposalFeed.innerHTML =
-      "<p class=\"status\" style=\"text-align:center;color:#ff4d4d;\">Revision 7 is in predeployment mode. Governance reads and transactions are disabled until final addresses are verified.</p>";
+      "<p class=\"status\" style=\"text-align:center;color:#ff4d4d;\">Revision 7.1 is in predeployment mode. Governance reads and transactions are disabled until final addresses are verified.</p>";
     setStatus(
       "Predeployment mode. Enter and verify all final addresses in protocol-config.js before enabling governance.",
       "error"

@@ -12,7 +12,7 @@
       set("homeMemberCount", "Pending deployment");
       set("homeProposalCount", "Pending deployment");
       set("homeTreasuryDepth", "Read from existing DAO");
-      set("homeTotalDistributed", "Direct DAO execution in Governance V15");
+      set("homeTotalDistributed", "Direct DAO execution in Governance V15.1");
       return;
     }
 

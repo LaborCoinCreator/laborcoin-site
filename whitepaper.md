@@ -1,6 +1,6 @@
-# LaborCoin Technical Whitepaper v3.0 Candidate
+# LaborCoin Technical Whitepaper v3.1 Candidate
 
-## Revision 7 equal-holder architecture
+## Revision 7.1 equal-holder and deadline-electorate architecture
 
 **Status:** Precompilation source candidate, not deployed  
 **Network:** Polygon mainnet, chain ID 137  
@@ -14,7 +14,7 @@ LaborCoin is experimental public infrastructure intended to support working-clas
 
 LaborCoin does not promise financial returns, price stability, liquidity, uninterrupted availability, favorable legal or tax treatment, successful labor outcomes, identity-provider availability, or freedom from smart-contract, network, governance, interface, key-management, and operational risk.
 
-Revision 7 has not yet been compiled under the frozen profile, completed every unit, fuzz, invariant, fork, integration, and independent-review requirement, or been deployed. All replacement addresses and runtime commitments are pending. Nothing in this paper is legal, investment, tax, or financial advice.
+Revision 7.1 has not yet been compiled under the frozen profile, completed every unit, fuzz, invariant, fork, integration, and independent-review requirement, or been deployed. All replacement addresses and runtime commitments are pending. Nothing in this paper is legal, investment, tax, or financial advice.
 
 ---
 
@@ -47,14 +47,14 @@ The candidate consists of seven custom contracts:
 1. **LaborCoin Identity Registry V1.0.0**, which records one-time score-15 verification.
 2. **LABR V3.0.0**, which fixes token supply, transfer restrictions, launch finalization, and equal-holder dividend accounting.
 3. **LaborCoin Exchange V6.0.0**, which provides identity-gated exact-token buying and selling through a direct-POL integral bonding curve.
-4. **LaborVote V9.0.0**, which provides one permanent nontransferable LABRV membership unit per registrant.
-5. **LaborCoin Registration V6.0.0**, which reuses the shared identity status and mints membership after a 1 LABR threshold.
+4. **LaborVote V9.1.0**, which provides one permanent nontransferable LABRV membership unit per registrant.
+5. **LaborCoin Registration V6.1.0**, which reuses the shared identity status, records historical member-count checkpoints, and mints membership after a 1 LABR threshold.
 6. **Proposal Text Policy V1.0.1**, which applies fixed proposal-description rules.
-7. **LaborCoin Governance V15.0.0**, which provides one-member-one-vote native-POL treasury allocation through the existing Aragon DAO.
+7. **LaborCoin Governance V15.1.0**, which lets every member registered before a proposal deadline vote while voting is active and fixes final participation against that deadline electorate.
 
 The existing Aragon DAO remains the treasury custodian. Governance does not hold proposal funds. A successful proposal can request exactly one native-POL transfer from the DAO to the approved recipient. Governance cannot change tokenomics, mint LABR, alter thresholds, pause trading, execute arbitrary calldata, upgrade contracts, or recover recipient funds.
 
-Revision 7 is a replacement source candidate. The historical V4/V7/V13 deployment and the superseded Revision 6 candidate remain preserved for transparency. Neither is represented as the final replacement system.
+Revision 7.1 is a replacement source candidate. The historical V4/V7/V13 deployment, superseded Revision 6 candidate, and uncompiled Revision 7.0 creation-snapshot candidate remain preserved for transparency. Neither is represented as the final replacement system.
 
 ---
 
@@ -200,7 +200,7 @@ LaborCoin verifier -- EIP-712 --> Identity Registry V1
         |                              |
         |                              +--> Exchange V6 access
         |                              +--> LABR V3 dividend eligibility/claims
-        |                              +--> Registration V6
+        |                              +--> Registration V6.1
         v
    no custody
 
@@ -209,9 +209,9 @@ POL --> Exchange V6 --> LABR V3 inventory and curve reserve
              |                 +--> equal-holder dividend accounting
              +--> Aragon DAO treasury
 
-Registration V6 --> LaborVote V9 --> Governance V15
-Proposal Text Policy V1 ---------> Governance V15
-Governance V15 --> Aragon DAO --> approved recipient
+Registration V6.1 --> LaborVote V9.1 --> Governance V15.1
+Proposal Text Policy V1 ---------> Governance V15.1
+Governance V15.1 --> Aragon DAO --> approved recipient
 ```
 
 ## 4.2 Economic layer
@@ -249,10 +249,10 @@ The protocol therefore distinguishes between rules enforced by deployed contract
 | Identity Registry | V1.0.0 | `DEPLOYMENT_PENDING` | None |
 | LABR | V3.0.0 | `DEPLOYMENT_PENDING` | None |
 | Exchange | V6.0.0 | `DEPLOYMENT_PENDING` | None |
-| LaborVote | V9.0.0 | `DEPLOYMENT_PENDING` | Registration only may mint |
-| Registration | V6.0.0 | `DEPLOYMENT_PENDING` | None |
+| LaborVote | V9.1.0 | `DEPLOYMENT_PENDING` | Registration only may mint |
+| Registration | V6.1.0 | `DEPLOYMENT_PENDING` | None |
 | Text Policy | V1.0.1 | `DEPLOYMENT_PENDING` | None |
-| Governance | V15.0.0 | `DEPLOYMENT_PENDING` | Aragon execute permission only |
+| Governance | V15.1.0 | `DEPLOYMENT_PENDING` | Aragon execute permission only |
 | Aragon DAO | Existing | `0x0C2e5679153593b82a84eAB5CA90895BB291Cec4` | DAO permission registry |
 
 ---
@@ -773,7 +773,7 @@ The tranche mechanism limits how much inventory is distributable at a time but d
 
 ---
 
-# 9. Registration V6 and LaborVote V9
+# 9. Registration V6.1 and LaborVote V9.1
 
 Registration is the step through which a verified participant chooses to become a permanent governance member. It turns economic participation into an optional democratic role without allowing additional LABR to create additional votes.
 
@@ -794,7 +794,10 @@ Registration stores:
 - registered status;
 - sequential member number;
 - registration timestamp;
+- registration timestamp indexed by member number;
 - total member count.
+
+The member-number timestamp index supports a bounded binary-search view that returns how many members registered strictly before a specified timestamp. Governance uses this historical count to determine each proposal's final electorate at its voting deadline without iterating over members.
 
 Registration cannot be revoked. A participant who later transfers or sells all LABR keeps LABRV and governance membership under this candidate. The 1 LABR requirement is an admission threshold, not an ongoing wealth test for voting.
 
@@ -836,9 +839,9 @@ A fixed policy can produce false positives, false negatives, and future linguist
 
 ---
 
-# 11. Governance V15
+# 11. Governance V15.1
 
-Governance V15 has one narrow purpose: allow registered participants to decide whether the Aragon DAO should send a specified amount of POL to a specified recipient. It is not a general protocol administration system.
+Governance V15.1 has one narrow purpose: allow registered participants to decide whether the Aragon DAO should send a specified amount of POL to a specified recipient. It is not a general protocol administration system.
 
 ## 11.1 One-member-one-vote
 
@@ -846,16 +849,16 @@ A wallet is eligible when it holds exactly one LABRV and has a matching Registra
 
 ## 11.2 Activation
 
-Proposal creation remains unavailable until at least 50 registered members exist. This prevents the final treasury-transfer process from being activated by a very small founding group and creates a minimum community base before collective funds can be directed through Governance V15.
+Proposal creation remains unavailable until at least 50 registered members exist. This prevents the final treasury-transfer process from being activated by a very small founding group and creates a minimum community base before collective funds can be directed through Governance V15.1.
 
 ## 11.3 Proposal creation
 
 A registered direct wallet may have one active proposal at a time. The proposal title is fixed as `Treasury Transfer`. The description must pass Policy. Recipient cannot be zero, the DAO, the current protocol contracts, or listed superseded protocol addresses. Amount must be positive and at most 5% of the DAO's current native-POL balance.
 
-The proposal snapshots:
+The proposal records:
 
-- electorate size;
-- treasury balance;
+- creation-time member count for transparency;
+- treasury balance at creation;
 - creator;
 - recipient;
 - amount;
@@ -863,19 +866,23 @@ The proposal snapshots:
 - start and end time;
 - deterministic call ID.
 
-## 11.4 Electorate snapshot
+## 11.4 Deadline electorate
 
-A member registering after proposal creation cannot vote on that proposal. Governance uses member number relative to the stored electorate size to enforce the snapshot.
+Every registered LABRV member may vote while the proposal remains active, including a participant who verifies, acquires LABR, registers, and receives LABRV after proposal creation. The member must register strictly before the voting deadline and must cast the vote before that deadline.
+
+The final electorate is the number of members registered strictly before the proposal end time. Registration V6.1 reconstructs that count from its permanent member-number timestamp index through bounded binary search. Registrations at or after the deadline cannot vote and cannot change the closed proposal's denominator, result, or executability.
+
+While voting is active, the interface reports the current electorate and a provisional participation requirement. Both may increase as new members register. At the deadline, the historical electorate becomes permanent without requiring a separate finalization transaction.
 
 ## 11.5 Participation threshold
 
 Required participation is:
 
 ```text
-ceil(electorateSize * 25 / 100)
+ceil(deadlineElectorateSize * 25 / 100)
 ```
 
-At 50 members, required participation is 13, not 12. At 51 members, it is also 13.
+At 50 members, required participation is 13, not 12. If a proposal begins with 50 members and 50 more register before the deadline, the final electorate is 100 and required participation is 25. Every person included in that final denominator had an opportunity to vote while the proposal was active.
 
 ## 11.6 Approval threshold
 
@@ -889,7 +896,7 @@ A proposal with no votes fails. At 3 votes cast, 3 yes are required because `cei
 
 ## 11.7 Timing
 
-Voting lasts 14 days. A successful proposal may execute for 7 days after voting ends. After the execution window, it expires.
+Voting lasts 14 days. A participant who registers at any point before the deadline may vote during the remaining active period. A successful proposal may execute for 7 days after voting ends. After the execution window, it expires.
 
 ## 11.8 Execution
 
@@ -897,7 +904,7 @@ Any wallet may call execution after success because execution is mechanical. Gov
 
 - proposal is not executed;
 - voting has ended;
-- thresholds passed;
+- the final deadline electorate and thresholds passed;
 - execution window remains open;
 - current DAO balance covers amount;
 - amount remains at most 5% of current DAO balance;
@@ -911,13 +918,19 @@ value = approved POL amount
 data = empty
 ```
 
-The DAO performs the transfer. Governance records execution and cannot execute the proposal again.
+The DAO performs the transfer. Governance records execution and cannot execute the proposal again. Later registrations cannot change the final electorate or invalidate a completed vote.
 
 ## 11.9 Narrow authority
 
 Governance cannot submit arbitrary calldata, token transfers, upgrades, permission changes, or multiple actions. It has no owner, pause, setter, or recovery function.
 
-## 11.10 Repeated-proposal risk
+## 11.10 Open-enrollment tradeoff
+
+An active proposal may motivate supporters or opponents to complete permanent identity verification and governance registration. This can be understood as democratic organizing or as coordinated bloc recruitment. The contracts cannot distinguish motive. The fixed score gate, permanent membership, nontransferable LABRV, 14-day public period, 25% participation requirement, 67% approval requirement, and 5% transfer cap limit but do not eliminate coordinated influence.
+
+The chosen policy treats proposal-driven participation as legitimate because each qualifying participant becomes a permanent equal member rather than borrowing or purchasing temporary voting power. The final denominator grows with every member admitted before the deadline, so recruitment also raises the participation requirement.
+
+## 11.11 Repeated-proposal risk
 
 The 5% cap is per proposal, not per week, month, or year. Repeated approved proposals can spend a substantial fraction of treasury. The protocol relies on member participation and judgment rather than an additional cumulative cap.
 
@@ -1066,9 +1079,9 @@ Network: Polygon mainnet, chain ID 137
 2. Identity Registry V1.0.0
 3. Exchange V6.0.0
 4. LABR V3.0.0
-5. LaborVote V9.0.0
-6. Registration V6.0.0
-7. Governance V15.0.0
+5. LaborVote V9.1.0
+6. Registration V6.1.0
+7. Governance V15.1.0
 
 ## 14.3 Deploy and finalize identity/economic cycle
 
@@ -1137,7 +1150,7 @@ Governance can approve a mistaken or malicious recipient. The DAO transfer is ir
 
 ## 15.9 Governance capture
 
-One-member-one-vote reduces wealth weighting but does not prevent coordinated capture, low turnout, bribery, coercion, or a verifier-admitted Sybil population. The 50-member activation threshold and 25% participation requirement are fixed safeguards, not guarantees.
+One-member-one-vote reduces wealth weighting but does not prevent coordinated capture, low turnout, bribery, coercion, proposal-driven recruitment, or a verifier-admitted Sybil population. Members who register before an active proposal deadline may vote, and their admission also increases the final participation denominator. The 50-member activation threshold, permanent membership, 25% participation requirement, 67% approval requirement, and 5% transfer cap are fixed safeguards, not guarantees.
 
 ## 15.10 Permission migration
 
@@ -1191,11 +1204,11 @@ Before compilation, automated guards should confirm versions, constants, compati
 
 ## 16.2 Unit tests
 
-Every public and external function, error branch, finalization state, eligibility transition, quote boundary, and proposal transition requires deterministic tests.
+Every public and external function, error branch, finalization state, eligibility transition, quote boundary, historical member-count boundary, and proposal transition requires deterministic tests. Governance tests must prove that members joining before a deadline can vote, registrations at or after the deadline are excluded, and later registrations cannot change a closed result.
 
 ## 16.3 Fuzz tests
 
-Fuzz token amounts, supply points, wallet balances, holder counts, deposit sizes, entry/exit sequences, vote counts, electorate sizes, and treasury balances.
+Fuzz token amounts, supply points, wallet balances, holder counts, deposit sizes, entry/exit sequences, registration timestamps, repeated same-block timestamps, proposal deadlines, vote counts, electorate sizes, and treasury balances.
 
 ## 16.4 Stateful invariants
 
@@ -1211,6 +1224,9 @@ At all reachable states:
 - unverified accounts never accrue or claim;
 - LABRV supply equals successful registrations;
 - each registered wallet holds one LABRV;
+- every registered LABRV member may vote before an active proposal deadline;
+- final electorate equals members registered strictly before the deadline;
+- registrations after the deadline cannot alter a closed result;
 - executed proposals cannot execute again.
 
 ## 16.5 Fork tests
@@ -1271,7 +1287,7 @@ The site may generate a US Letter membership certificate, but the on-chain Regis
 
 ## 17.8 Proposing and voting on aid
 
-After 50 members, eligible participants may create treasury-transfer proposals and vote. A proposal identifies one recipient, one POL amount, and a public description that passes the fixed text policy.
+After 50 members, eligible participants may create treasury-transfer proposals and vote. A proposal identifies one recipient, one POL amount, and a public description that passes the fixed text policy. A person who learns about an active proposal may complete verification, acquire at least 1 LABR, register, receive LABRV, and vote before the voting deadline. The provisional participation target may rise as new members join, and the final electorate is fixed when voting closes.
 
 Before voting, members are expected to investigate whether the recipient represents the affected workers or cause, whether the address is controlled safely, and whether the proposed distribution plan is credible. The contract cannot perform that social verification.
 
@@ -1295,10 +1311,14 @@ The previous deployed system includes the historical LABR token, Exchange V4, La
 
 Revision 6 introduced direct-POL Exchange V5 and improved runtime commitments, but LABR V2.1 implemented token-balance-weighted dividends. That economic model was not the intended LaborCoin design. Revision 6 is permanently superseded and must not be deployed as final.
 
-## 18.3 Migration principles
+## 18.3 Superseded Revision 7.0 creation-snapshot candidate
+
+Revision 7.0 restored equal-holder dividends and shared identity, but Governance V15.0 limited each proposal to members who were already registered at creation. That policy was rejected before compilation because it prevented a proposal from motivating new permanent members to join and vote while the proposal remained active. Revision 7.1 replaces it with a deadline electorate that permits voting by every member registered before the close while preventing post-deadline registration from changing the result.
+
+## 18.4 Migration principles
 
 - Preserve historical source and deployment evidence.
-- Never relabel an old address as a Revision 7 component.
+- Never relabel an old address as a Revision 7.1 component.
 - Recompile every dependent contract after source changes.
 - Grant new DAO permission only after runtime verification.
 - Revoke obsolete permission only after successful rehearsal.
@@ -1337,7 +1357,7 @@ Smart-wallet users are excluded. This can reduce accessibility for organizations
 
 ## 19.7 Governance outcomes
 
-Members may approve ineffective, controversial, or fraudulent transfers. Fixed thresholds do not ensure wise decisions or fair geographic distribution.
+Members may approve ineffective, controversial, or fraudulent transfers. Fixed thresholds do not ensure wise decisions or fair geographic distribution. Open enrollment during an active proposal can mobilize legitimate participation and can also facilitate coordinated recruitment; every admitted member permanently joins the electorate and raises the final participation denominator.
 
 ## 19.8 Treasury depletion
 
@@ -1408,7 +1428,7 @@ At modest scale, LaborCoin may help people find and fund a strike that would oth
 
 The design does not claim to solve identity, governance, labor organization, or economic inequality in general. It addresses a specific problem: economic retaliation can break collective action, while public support is often fragmented and difficult to direct. LaborCoin provides one possible bridge between those who want to help and those taking the risk.
 
-Revision 7 is ready for compilation review only when the source package, documentation, site, verifier, and compilation-record scaffold agree. It is ready for deployment only after the seven contracts compile exactly, all runtime commitments are sealed, the equal-holder accounting survives intensive tests, the Aragon permission migration is rehearsed, and independent review is complete.
+Revision 7.1 is ready for compilation review only when the source package, documentation, site, verifier, and compilation-record scaffold agree. It is ready for deployment only after the seven contracts compile exactly, all runtime commitments are sealed, the equal-holder accounting survives intensive tests, the Aragon permission migration is rehearsed, and independent review is complete.
 
 The technical standard must remain uncompromising because the final system is intended to operate without a founder, administrator, or upgrade authority. The political standard is equally important: the infrastructure should be judged by whether it expands the working class's ability to organize solidarity, withstand retaliation, and sustain collective action.
 
@@ -1436,15 +1456,16 @@ The technical standard must remain uncompromising because the final system is in
 | Later tranche | 50,000,000 LABR |
 | Governance activation | 50 members |
 | Proposal duration | 14 days |
+| Electorate cutoff | Registration timestamp strictly before proposal end time |
 | Execution window | 7 days |
-| Participation | ceiling 25% |
+| Participation | ceiling 25% of members registered before the voting deadline |
 | Approval | ceiling 67% of votes cast |
 | Proposal transfer cap | 5% of current DAO POL balance |
 | Description maximum | 1,000 bytes |
 
 # Appendix B. Address Registry
 
-## Revision 7
+## Revision 7.1
 
 All seven replacement addresses are `DEPLOYMENT_PENDING`.
 
@@ -1475,10 +1496,10 @@ Treasury Module V1:    0x0B018E45E4cB71E222C345a5341BdbaeE519c623
 | Identity Registry V1 | Candidate | Pending | `PENDING_COMPILATION` |
 | LABR V3 | Candidate | Pending | `PENDING_COMPILATION` |
 | Exchange V6 | Candidate | Pending | `PENDING_COMPILATION` |
-| LaborVote V9 | Candidate | Pending | `PENDING_COMPILATION` |
-| Registration V6 | Candidate | Pending | `PENDING_COMPILATION` |
-| Text Policy V1.0.1 | Candidate source preserved | Must be re-recorded in Revision 7 manifest | `PENDING_COMPILATION_RECORD` |
-| Governance V15 | Candidate | Pending | `PENDING_FINAL_IMMUTABLE_VALUES` |
+| LaborVote V9.1 | Candidate | Pending | `PENDING_COMPILATION` |
+| Registration V6.1 | Candidate | Pending | `PENDING_COMPILATION` |
+| Text Policy V1.0.1 | Candidate source preserved | Must be re-recorded in Revision 7.1 manifest | `PENDING_COMPILATION_RECORD` |
+| Governance V15.1 | Candidate | Pending | `PENDING_FINAL_IMMUTABLE_VALUES` |
 
 # Appendix D. Authority Matrix
 
@@ -1517,9 +1538,12 @@ Verified + >=1 LABR + not registered -> register -> one permanent LABRV
 ## Proposal
 
 ```text
-Nonexistent -> Active -> Defeated
-                    \-> Succeeded -> Executed
-                                  \-> Expired
+Nonexistent
+  -> Active (current electorate may grow as members register)
+  -> Voting deadline (final historical electorate fixed)
+  -> Defeated
+  \-> Succeeded -> Executed
+                 \-> Expired
 ```
 
 # Appendix F. Threat Model Matrix
@@ -1532,12 +1556,14 @@ Nonexistent -> Active -> Defeated
 | Dividend history theft | Entry/exit corrections | Invariant and differential tests | Permanent accounting loss if defect exists |
 | Reserve underfunding | Integral accounting and checks | `invariantsHold`, fork tests | Sell failure or insolvency |
 | Old DAO permission | Revocation checklist | Aragon permission enumeration | Obsolete executor remains active |
+| Proposal-driven bloc recruitment | Permanent identity and membership, growing deadline quorum, 67% approval, 5% cap | Registration and vote events | Coordinated influence remains possible |
 | Bad recipient | Member diligence and fixed proposal record | Public proposal and transfer | Irreversible fund loss |
 | Site compromise | Fail-closed config and address display | Repository and deployment comparison | Users may sign malicious transactions |
 
 # Appendix G. Glossary
 
 **Accounted reserve:** POL recorded as liability for official curve redemptions.  
+**Deadline electorate:** All members registered strictly before a proposal voting deadline; this becomes the final participation denominator.  
 **Direct wallet:** EOA with no code, calling without a relay.  
 **Dividend unit:** Binary accounting weight of one for each verified eligible holder.  
 **Eligible holder:** Verified non-protocol wallet holding at least 1 LABR.  
@@ -1559,6 +1585,8 @@ Nonexistent -> Active -> Defeated
 - [ ] Equal-holder unit, fuzz, invariant, and differential tests pass.
 - [ ] Exchange curve and reserve tests pass.
 - [ ] Identity EIP-712 parity tests pass.
+- [ ] Historical member-count binary-search tests pass at zero, exact timestamps, repeated timestamps, and large membership counts.
+- [ ] Governance tests prove pre-deadline joiners can vote and post-deadline registrations cannot change a closed result.
 - [ ] Membership and governance tests pass.
 - [ ] Polygon-fork deployment rehearsal passes.
 - [ ] Governance deployed runtime reconstructed from immutables.
