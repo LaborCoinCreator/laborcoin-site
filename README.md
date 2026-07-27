@@ -1,37 +1,47 @@
-# LaborCoin Website Revision 7.1 Candidate
+# LaborCoin Website Revision 7.1
 
-This site package preserves the latest approved visual design while migrating functionality and content to the seven-contract Revision 7.1 equal-holder architecture.
+This repository is the current predeployment LaborCoin website build for the seven-contract Revision 7.1 equal-holder architecture.
 
-## Functional changes
+## Current authority
 
-- Added Identity Registry V1 configuration and verification transaction.
-- Required permanent identity verification for official buys and sells.
-- Added equal-holder dividend eligibility, holder-count display, withdrawable amount, and claim button to Exchange.
-- Updated Registration to reuse permanent Registry status and call `register()` without a second Passport signature.
-- Updated contract labels and ABIs for LABR V3, Exchange V6, LaborVote V9.1.0, Registration V6.1.0, and Governance V15.1.
-- Retained fail-closed predeployment behavior.
+The root website files in this repository are the authoritative current site sources. The deployable-file hashes are recorded in `docs/CURRENT-SOURCE-MANIFEST.json`. Subsequent approved edits should be made against this build and followed by an intentional manifest update.
 
-## Content changes
+## Functional state
 
-- Updated onboarding, FAQ, disclaimer, home page, and whitepaper.
-- Added MetaMask and Human Passport links.
-- Explicitly states that dividends are claimed on the Exchange page.
+- Identity Registry V1 verification flow
+- Identity-gated official buys, sells, dividend eligibility, and dividend claims
+- Equal-holder dividend presentation
+- Registration V6.1 using permanent Registry status
+- Governance V15.1 deadline-electorate presentation
+- Fail-closed `PREDEPLOYMENT` configuration until all seven final addresses and runtime hashes are recorded
 
-## Styling and layout disclosure
+## Preserved presentation
 
-The latest approved replacement design and `style.css` are preserved. Exchange receives additional identity and dividend status rows and buttons using existing classes. Onboarding, FAQ, home, and disclaimer content reflects Revision 7.1. No new global visual redesign is introduced.
+The approved visual design, HTML structure, CSS classes, typography, spacing, mobile layout, certificate generation, US Letter certificate configuration, images, and PWA behavior are preserved.
 
-## Files preserved without alteration
+## Checks
 
-- `attestation.pdf`
-- membership-certificate generation block in `dao.js`
-- certificate jsPDF configuration, including US Letter portrait
-- banner, logo, favicon
-- wallet and PWA interaction styling
+From Windows Command Prompt:
 
-## Status
+```bat
+scripts\run-checks.cmd
+```
 
-`protocol-config.js` remains `PREDEPLOYMENT`, all seven replacement addresses are blank, and runtime hashes are pending. Do not set `ACTIVE` until deployment records and runtime hashes are independently verified.
+Or directly:
 
+```bat
+python scripts\validate-site.py
+```
 
-Governance V15.1.0 allows every member registered before an active proposal deadline to vote. The interface displays the creation count, current provisional electorate, final deadline electorate, and participation target.
+After an intentional approved edit to a deployable file:
+
+```bat
+python scripts\update-source-manifest.py
+python scripts\validate-site.py
+```
+
+Do not update the manifest merely to hide an unexplained difference. Review every changed hash first.
+
+## Deployment status
+
+`protocol-config.js` remains `PREDEPLOYMENT`. The seven replacement addresses are blank and the runtime commitments are pending. Do not set the site to `ACTIVE` until compilation records, deployment records, runtime bytecode hashes, verifier readiness, and end-to-end tests are complete.

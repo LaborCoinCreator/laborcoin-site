@@ -1,0 +1,148 @@
+{
+  "repository": "laborcoin-site",
+  "release": "Revision 7.1",
+  "status": "PREDEPLOYMENT",
+  "purpose": "Authoritative deployable-file commitment for the current site build.",
+  "files": [
+    {
+      "path": "index.html",
+      "size_bytes": 6796,
+      "sha256": "9a14ca2c12473c517da55fd4ebc9a47570cd644981175086ed2a523a21405ed5"
+    },
+    {
+      "path": "exchange.html",
+      "size_bytes": 7412,
+      "sha256": "c6a135c09cd385bc9ce0d1f993b5b4e79507ac2b501a32305d3bf54a10fd57f1"
+    },
+    {
+      "path": "dao.html",
+      "size_bytes": 6176,
+      "sha256": "a67ab4dd7b272a601daf46bbbc2c3d0676f0c7fa72f7f57ede5c99ad3f593053"
+    },
+    {
+      "path": "governance.html",
+      "size_bytes": 6973,
+      "sha256": "4a13b8fdebe265712f7c8a863440bd4d2f18a8819592c7e71fede4960361f803"
+    },
+    {
+      "path": "onboarding.html",
+      "size_bytes": 5054,
+      "sha256": "23f3744ca8b499c8e683356f37f456660825f82b4851e3bbab87e5745ae44be9"
+    },
+    {
+      "path": "organizations.html",
+      "size_bytes": 8146,
+      "sha256": "8fbcfe98aeb9485a3ef95011b5b7bcbbadd5d4ccb958a16484b15d4bfdf5fff8"
+    },
+    {
+      "path": "faq.html",
+      "size_bytes": 6937,
+      "sha256": "c268bac1597f3c0f3128330d64d237259838d3516f53b4df5545d660d356ee23"
+    },
+    {
+      "path": "disclaimer.html",
+      "size_bytes": 3144,
+      "sha256": "6aba3f6ac6dd63cb3066c65060e06c7cda8828d92d0a6138ddf4ca13d39875f9"
+    },
+    {
+      "path": "whitepaper.html",
+      "size_bytes": 152712,
+      "sha256": "b0b9e138dda3bcb0ff0c1541c8269ad8df3c9902fd6f281a85848bbb29d246fe"
+    },
+    {
+      "path": "whitepaper.pdf",
+      "size_bytes": 300053,
+      "sha256": "20ddf7c748962424c0b00cc015e9c331bdb9a5f4b8d92fe6d2c3c1ce350e0bbf"
+    },
+    {
+      "path": "whitepaper.md",
+      "size_bytes": 101117,
+      "sha256": "52af83540b97c30948bd1fc02bd02cbe45654063fcc7744369617f358ea610c3"
+    },
+    {
+      "path": "donate.html",
+      "size_bytes": 4067,
+      "sha256": "2a8e201caab8b1f36a15fcb60a837b59d92cc8cd3f1a3079a7ee2c60a126aa82"
+    },
+    {
+      "path": "style.css",
+      "size_bytes": 13428,
+      "sha256": "d14f72913aa4d3c637e517d3a02531cbd16e914acb42c3172f9e71cb69212f34"
+    },
+    {
+      "path": "manifest.json",
+      "size_bytes": 615,
+      "sha256": "65feed336a460b560d0e68f4237f34b0484cee42eaab09f83bd35656c2a55a30"
+    },
+    {
+      "path": "protocol-config.js",
+      "size_bytes": 2769,
+      "sha256": "237e585f449d52e4d18f32684bc016a5eda433c3ded766c9bf91d7b00720075b"
+    },
+    {
+      "path": "wallet.js",
+      "size_bytes": 15896,
+      "sha256": "9a97356639481ee3371f8383b60ead6a50f9d0536520ebc92247ef7e65615f4f"
+    },
+    {
+      "path": "exchange.js",
+      "size_bytes": 17679,
+      "sha256": "2d08117dad859434bc3eba49694bb7273021e03372cdd7d2dfb266aaae6f03b4"
+    },
+    {
+      "path": "dao.js",
+      "size_bytes": 20122,
+      "sha256": "5f79455d2328c1c92ac1eaf14bcc76b70d07a8c017831ec018bb673060ec8a20"
+    },
+    {
+      "path": "governance.js",
+      "size_bytes": 27462,
+      "sha256": "5d8614f13bd185d2011b96e6021b3f5a3c8bf5512ae86f3584c1f0c412570a3a"
+    },
+    {
+      "path": "proposal-text-policy-v1.js",
+      "size_bytes": 15740,
+      "sha256": "5b6f768cecf7efe1900f5a7061d0314d38d763e653ac54fac7580a5de9bf51db"
+    },
+    {
+      "path": "donate.js",
+      "size_bytes": 3094,
+      "sha256": "61e7a6bf510c7f4f239e2a27fad447e40d3bf443c8ca4db795d2e1155782e09b"
+    },
+    {
+      "path": "metrics.js",
+      "size_bytes": 2007,
+      "sha256": "31ef8bdc890b5850e3d31dc0ac22856aad65ff6cb798437ce78995cba5d4731e"
+    },
+    {
+      "path": "pwa.js",
+      "size_bytes": 1400,
+      "sha256": "6e6588aba21c16e5a3f77bfdaca2b62626075886e615a7330c20f48422ef07b0"
+    },
+    {
+      "path": "service-worker.js",
+      "size_bytes": 1287,
+      "sha256": "edba9185323d368e4baaa4dacca518f1d4ba3891b2b99d9eae5ed2dee589d2cc"
+    },
+    {
+      "path": "attestation.pdf",
+      "size_bytes": 114351,
+      "sha256": "3c330df0584be7684aebc6adfaa1c0010def2c8c07c316f3b43a7bcab4ab8c70"
+    },
+    {
+      "path": "assets/favicon.png",
+      "size_bytes": 6623,
+      "sha256": "dd197bbc0439fd9af9c682bf7307f8fe7ccfc94f6147f527c1fcef6da7702c9e"
+    },
+    {
+      "path": "assets/logo.png",
+      "size_bytes": 1113341,
+      "sha256": "41b59e4e39ea8e08220901d16fd2f1dee58cb5ee28edc122aed0215f7de1becb"
+    },
+    {
+      "path": "assets/banner.png",
+      "size_bytes": 75917,
+      "sha256": "6069e0d66338275d9eb0829af7dd622f5b51478aa82ecfaf8e9db3fa1b41d32d"
+    }
+  ]
+}
