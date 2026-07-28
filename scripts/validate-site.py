@@ -137,7 +137,7 @@ except Exception as exc:
 
 service_worker = read("service-worker.js")
 if "laborcoin-revision-7-1" not in service_worker:
-    fail("service-worker cache name is not Revision 7.1")
+    fail("service-worker cache name is not Revision 7.2")
 for cached in re.findall(r'"(/[^"]+)"', service_worker):
     if cached == "/":
         continue
@@ -147,7 +147,7 @@ for cached in re.findall(r'"(/[^"]+)"', service_worker):
 # 5. Protocol configuration and fail-closed behavior.
 config = read("protocol-config.js")
 for marker in [
-    'release: "Revision 7.1"',
+    'release: "Revision 7.2"',
     "chainId: 137",
     "identityRegistry", "labr", "exchange", "labrv", "registration",
     "proposalTextPolicy", "governance", "daoTreasury",
@@ -195,12 +195,12 @@ for js_path in ROOT.glob("*.js"):
         if address.lower() in source.lower():
             fail(f"{js_path.name}: obsolete deployed address in executable code: {address}")
 
-# 6. Revision 7.1 functional markers.
+# 6. Revision 7.2 functional markers.
 markers_by_file = {
     "exchange.js": ["verifyParticipant", "claimDividends", "dividendEligible", "eligibleDividendHolderCount"],
     "dao.js": ["registration.register()", "identity.verifyParticipant"],
     "governance.js": ["creationElectorateSize", "deadlineElectorateSize", "The electorate and participation target may increase"],
-    "whitepaper.md": ["Revision 7.1", "equal-holder", "Identity Registry V1", "Governance V15.1"],
+    "whitepaper.md": ["Revision 7.2", "equal-holder", "Identity Registry V1", "Governance V15.1"],
 }
 for filename, markers in markers_by_file.items():
     source = read(filename)
@@ -250,8 +250,8 @@ if warnings:
     for item in warnings:
         print("-", item)
 if failures:
-    print("REVISION 7.1 SITE VALIDATION: FAIL")
+    print("REVISION 7.2 SITE VALIDATION: FAIL")
     for item in failures:
         print("-", item)
     raise SystemExit(1)
-print(f"REVISION 7.1 SITE VALIDATION: PASS ({len(entries)} deployable files verified)")
+print(f"REVISION 7.2 SITE VALIDATION: PASS ({len(entries)} deployable files verified)")

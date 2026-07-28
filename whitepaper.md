@@ -1,10 +1,10 @@
-# LaborCoin Technical Whitepaper v3.1 Candidate
+# LaborCoin Technical Whitepaper v3.2 Candidate
 
-## Revision 7.1 equal-holder and deadline-electorate architecture
+## Revision 7.2 equal-holder and deadline-electorate architecture
 
 **Status:** Precompilation source candidate, not deployed  
 **Network:** Polygon mainnet, chain ID 137  
-**Document date:** July 25, 2026
+**Document date:** July 27, 2026
 
 ---
 
@@ -14,7 +14,7 @@ LaborCoin is experimental public infrastructure intended to support working-clas
 
 LaborCoin does not promise financial returns, price stability, liquidity, uninterrupted availability, favorable legal or tax treatment, successful labor outcomes, identity-provider availability, or freedom from smart-contract, network, governance, interface, key-management, and operational risk.
 
-Revision 7.1 has not yet been compiled under the frozen profile, completed every unit, fuzz, invariant, fork, integration, and independent-review requirement, or been deployed. All replacement addresses and runtime commitments are pending. Nothing in this paper is legal, investment, tax, or financial advice.
+Revision 7.2 has not yet been compiled under the frozen profile, completed every unit, fuzz, invariant, fork, integration, and independent-review requirement, or been deployed. All replacement addresses and runtime commitments are pending. Nothing in this paper is legal, investment, tax, or financial advice.
 
 ---
 
@@ -46,17 +46,17 @@ The score gate is intended to reduce simple Sybil behavior and require every add
 
 The candidate consists of seven custom contracts:
 
-1. **LaborCoin Identity Registry V1.0.0**, which records one-time score-15 verification.
-2. **LABR V3.0.0**, which fixes token supply, transfer restrictions, launch finalization, and equal-holder dividend accounting.
-3. **LaborCoin Exchange V6.0.0**, which provides identity-gated exact-token buying and selling through a direct-POL integral bonding curve.
-4. **LaborVote V9.1.0**, which provides one permanent nontransferable LABRV membership unit per registrant.
-5. **LaborCoin Registration V6.1.0**, which reuses the shared identity status, records historical member-count checkpoints, and mints membership after a 1 LABR threshold.
+1. **LaborCoin Identity Registry V1.0.1**, which records one-time score-15 verification.
+2. **LABR V4.0.0**, which fixes token supply, transfer restrictions, launch finalization, and equal-holder dividend accounting.
+3. **LaborCoin Exchange V7.0.0**, which provides identity-gated exact-token buying and selling through a direct-POL integral bonding curve.
+4. **LaborVote V9.1.1**, which provides one permanent nontransferable LABRV membership unit per registrant.
+5. **LaborCoin Registration V6.1.1**, which reuses the shared identity status, records historical member-count checkpoints, and mints membership after a 1 LABR threshold.
 6. **Proposal Text Policy V1.0.1**, which applies fixed proposal-description rules.
-7. **LaborCoin Governance V15.1.0**, which lets every member registered before a proposal deadline vote while voting is active and fixes final participation against that deadline electorate.
+7. **LaborCoin Governance V15.1.1**, which lets every member registered before a proposal deadline vote while voting is active and fixes final participation against that deadline electorate.
 
 The existing Aragon DAO remains the treasury custodian. Governance does not hold proposal funds. A successful proposal can request exactly one native-POL transfer from the DAO to the approved recipient. Governance cannot change tokenomics, mint LABR, alter thresholds, pause trading, execute arbitrary calldata, upgrade contracts, or recover recipient funds.
 
-Revision 7.1 is a replacement source candidate. The historical V4/V7/V13 deployment, superseded Revision 6 candidate, and uncompiled Revision 7.0 creation-snapshot candidate remain preserved for transparency. Neither is represented as the final replacement system.
+Revision 7.2 is a replacement source candidate. The historical V4/V7/V13 deployment, superseded Revision 6 candidate, and uncompiled Revision 7.0 creation-snapshot candidate remain preserved for transparency. Neither is represented as the final replacement system.
 
 ---
 
@@ -200,13 +200,13 @@ Human Passport scorer
         v
 LaborCoin verifier -- EIP-712 --> Identity Registry V1
         |                              |
-        |                              +--> Exchange V6 access
-        |                              +--> LABR V3 dividend eligibility/claims
+        |                              +--> Exchange V7 access
+        |                              +--> LABR V4 dividend eligibility/claims
         |                              +--> Registration V6.1
         v
    no custody
 
-POL --> Exchange V6 --> LABR V3 inventory and curve reserve
+POL --> Exchange V7 --> LABR V4 inventory and curve reserve
              |                 |
              |                 +--> equal-holder dividend accounting
              +--> Aragon DAO treasury
@@ -218,7 +218,7 @@ Governance V15.1 --> Aragon DAO --> approved recipient
 
 ## 4.2 Economic layer
 
-LABR and Exchange provide the economic path through which participants enter, exit, and help build shared value. They implement the fixed supply, official inventory, curve reserve, direct transfers, official buys and sells, cooldown, wallet and transaction limits, fixed DAO contributions, and equal-holder dividend deposits and claims.
+LABR and Exchange provide the economic path through which participants enter, exit, and help build shared value. They implement the fixed supply, official inventory, curve reserve, protocol-only buys and sells, cooldown, wallet and transaction limits, fixed DAO contributions, and equal-holder dividend deposits and claims.
 
 The economic layer does not decide who receives treasury aid. Its role is to apply the published rules and direct the fixed treasury share to the DAO.
 
@@ -248,13 +248,13 @@ The protocol therefore distinguishes between rules enforced by deployed contract
 
 | Component | Candidate | Address | Primary authority after launch |
 |---|---|---|---|
-| Identity Registry | V1.0.0 | `DEPLOYMENT_PENDING` | None |
-| LABR | V3.0.0 | `DEPLOYMENT_PENDING` | None |
-| Exchange | V6.0.0 | `DEPLOYMENT_PENDING` | None |
-| LaborVote | V9.1.0 | `DEPLOYMENT_PENDING` | Registration only may mint |
-| Registration | V6.1.0 | `DEPLOYMENT_PENDING` | None |
+| Identity Registry | V1.0.1 | `DEPLOYMENT_PENDING` | None |
+| LABR | V4.0.0 | `DEPLOYMENT_PENDING` | None |
+| Exchange | V7.0.0 | `DEPLOYMENT_PENDING` | None |
+| LaborVote | V9.1.1 | `DEPLOYMENT_PENDING` | Registration only may mint |
+| Registration | V6.1.1 | `DEPLOYMENT_PENDING` | None |
 | Text Policy | V1.0.1 | `DEPLOYMENT_PENDING` | None |
-| Governance | V15.1.0 | `DEPLOYMENT_PENDING` | Aragon execute permission only |
+| Governance | V15.1.1 | `DEPLOYMENT_PENDING` | Aragon execute permission only |
 | Aragon DAO | Existing | `0x0C2e5679153593b82a84eAB5CA90895BB291Cec4` | DAO permission registry |
 
 ---
@@ -322,7 +322,7 @@ Verification remains disabled until LABR has also finalized the exact Exchange. 
 
 ## 5.8 Atomic dividend synchronization
 
-A wallet may receive LABR before it verifies through a direct transfer. When verification succeeds, Registry calls LABR's eligibility synchronization in the same transaction. A wallet already holding at least 1 LABR enters the equal-holder set immediately without a second manual transaction.
+When verification succeeds, Registry calls LABR's eligibility synchronization in the same transaction. Under the protocol-only transfer policy, an unverified wallet cannot acquire LABR through an ordinary transfer or official purchase, so this synchronization is normally a zero-balance safety check. It also ensures the Registry and token remain consistent if verification and token state are tested together during deployment rehearsals.
 
 ## 5.9 Permanence and compromise
 
@@ -372,7 +372,7 @@ The fixed score is an admission control, not a reputation score. A participant w
 
 ---
 
-# 6. LABR V3 Token
+# 6. LABR V4 Token
 
 ## 6.1 Fixed supply
 
@@ -386,7 +386,7 @@ The constructor mints once to the LABR contract itself. There is no external min
 
 ## 6.2 Launch ownership
 
-A temporary owner exists only to bind the exact Exchange. Before finalization, ordinary transfers and approvals are disabled. `finalizeLaunch` validates the Exchange runtime, token address, Identity Registry binding, DAO treasury, compatibility ID, and fixed allocation constants. It then records Exchange, transfers the entire supply to Exchange, enables normal operation, and sets owner to zero atomically.
+A temporary owner exists only to bind the exact Exchange. Before finalization, ordinary transfers and approvals are disabled. `finalizeLaunch` validates the Exchange runtime, token address, Identity Registry binding, DAO treasury, compatibility ID, and fixed allocation constants. It then records Exchange, transfers the entire supply to Exchange, enables protocol-only Exchange settlement, and sets owner to zero atomically.
 
 A separate early renunciation path is prohibited because it could strand the supply in LABR.
 
@@ -401,15 +401,15 @@ Minimum dividend balance: 1 LABR
 
 The official Exchange holds more than the wallet maximum because it contains inventory. No ordinary participant receives an exemption.
 
-## 6.4 Direct transfers
+## 6.4 Protocol-only transfers
 
-A user transfer must be initiated directly by the sending EOA. The recipient must have no code. A direct transfer does not require the recipient to be verified, because LABR may be given or moved before onboarding. An unverified recipient cannot use the official Exchange, accrue dividends, claim dividends, or register until verification.
+LABR is permanently non-peer-transferable after launch. A holder cannot send LABR to another wallet, an arbitrary contract, a liquidity pool, a bridge, a custodian, or the Exchange directly. Every non-mint, non-burn movement must be initiated by the immutable official Exchange and must either deliver LABR from Exchange inventory to a verified buyer or return LABR from a verified seller to Exchange inventory.
 
-The resulting recipient balance may not exceed 10,000 LABR and the transfer amount may not exceed 5,000 LABR.
+This restriction prevents a holder from moving a completed balance into additional wallets and refilling the original wallet through the official Exchange. It also prevents unofficial token settlement paths from bypassing the identity gate, wallet limit, transaction limit, cooldown, curve accounting, and fixed treasury allocations. It does not prove that one person cannot independently verify and fund more than one wallet.
 
 ## 6.5 Allowances and `transferFrom`
 
-Approvals are restricted to the official Exchange and require a verified direct wallet. Only Exchange may call `transferFrom`. This prevents general allowance-based movement and reduces third-party contract risk, at the cost of composability.
+Approvals are restricted to the official Exchange and require a verified direct wallet. Only Exchange may call `transferFrom`, and only for a sale returning LABR to Exchange inventory. This prevents general allowance-based movement, delegated transfers, wrappers, and third-party contract settlement, at the cost of composability.
 
 ## 6.6 Trade recording
 
@@ -511,7 +511,7 @@ When no eligible holder exists, LABR sends the deposit to the DAO and records th
 
 ## 7.11 Rounding
 
-Integer division may leave a small undistributed residue inside LABR. Testing must bound this residue and prove it cannot be extracted through repeated entry, exit, transfer, or claim operations. No administrator may sweep residue.
+Integer division may leave a small undistributed residue inside LABR. Testing must bound this residue and prove it cannot be extracted through repeated entry, exit, trade, or claim operations. No administrator may sweep residue.
 
 ## 7.12 Claim gate
 
@@ -561,7 +561,7 @@ Alice is the only eligible holder when 8 POL arrives, so Alice accrues 8 POL. Bo
 
 ### Scenario C: temporary exit and re-entry
 
-Alice and Bob are eligible when 10 POL arrives, earning 5 POL each. Alice transfers below 1 LABR and exits. A second 6 POL deposit goes entirely to Bob. Alice later receives enough LABR to re-enter. A third 8 POL deposit is divided equally. Final accrual is Alice 9 POL and Bob 15 POL. Alice does not receive the 6 POL deposited during absence.
+Alice and Bob are eligible when 10 POL arrives, earning 5 POL each. Alice sells below 1 LABR and exits. A second 6 POL deposit goes entirely to Bob. Alice later buys enough LABR through the official Exchange to re-enter. A third 8 POL deposit is divided equally. Final accrual is Alice 9 POL and Bob 15 POL. Alice does not receive the 6 POL deposited during absence.
 
 ### Scenario D: claim after full exit
 
@@ -569,7 +569,7 @@ Alice accrues 4 POL and then sells all LABR. The exit correction preserves her a
 
 ### Scenario E: attempted wallet splitting
 
-A participant transferring 1 LABR to nine unverified wallets does not create nine new dividend units. Those wallets have weight zero. Each additional wallet must independently complete score-15 verification. This materially raises the cost of simple Sybil replication but does not guarantee that one natural person can never qualify multiple wallets.
+A participant cannot split an existing LABR balance among nine wallets because peer transfers are disabled. Each additional wallet must independently complete score-15 verification and acquire at least 1 LABR through the official Exchange while obeying the same trade and wallet limits. This closes the direct token-splitting path but does not guarantee that one natural person can never qualify and fund multiple wallets.
 
 ## 7.15 Claim integrity and payout order
 
@@ -599,15 +599,15 @@ The policy should be evaluated by its enforceable commitment: larger LABR holdin
 
 ---
 
-# 8. Exchange V6 and Bonding Curve
+# 8. Exchange V7 and Bonding Curve
 
 ## 8.1 Official market role
 
-Exchange V6 is the official path for initial LABR distribution and redemption. It is also one of the mechanisms through which participation contributes to the shared system: the fixed buy allocation sends a portion of incoming POL to the DAO, and the fixed sell allocation sends portions to the DAO and equal-holder dividends.
+Exchange V7 is the official path for initial LABR distribution and redemption. It is also one of the mechanisms through which participation contributes to the shared system: the fixed buy allocation sends a portion of incoming POL to the DAO, and the fixed sell allocation sends portions to the DAO and equal-holder dividends.
 
 The Exchange is not intended as a speculative marketplace detached from the project's purpose. Its role is to apply the published pricing and limit rules while helping build the common treasury and preserve a defined redemption path.
 
-Direct transfers and third-party markets may exist, but they are not official Exchange activity and cannot be guaranteed or controlled by the protocol.
+LABR cannot settle through direct transfers or third-party token markets because all nonzero-address token movements are restricted to the official Exchange. Off-chain sale of wallet control, compromised keys, or informal custody arrangements remain outside what the token contract can prevent.
 
 ## 8.2 Identity gate
 
@@ -717,9 +717,11 @@ DAO and dividend payments are excluded from accounted reserve. A forced POL tran
 
 At low distribution the curve is near 14 POL per LABR. A small exact-token buy therefore requires roughly 14 POL of reserve per LABR plus the DAO contribution. As distribution grows, the quadratic term increases marginal and interval prices. Exact values must always come from the deployed `quoteBuyExactTokens` and `quoteSellExactTokens` functions because integer rounding and current `totalSold` determine execution.
 
-## 8.13 External markets
+## 8.13 Restricted market scope
 
-LABR may move through direct transfers and may appear on unofficial venues. Official wallet, cooldown, identity, and curve rules do not control an external venue. The protocol must not imply that every LABR market is identity-gated or reserve-backed by Exchange.
+LABR cannot be transferred into an unofficial venue, liquidity pool, bridge, wrapper, or custodial token market. The official Exchange is the only contract permitted to settle LABR purchases and sales. This makes the published identity, wallet, transaction, cooldown, curve, reserve, and treasury-allocation rules authoritative for every on-chain LABR movement after launch.
+
+The restriction cannot prevent sale of an entire wallet or private key, coercive custody, compromised accounts, or agreements that do not move LABR on-chain. Those residual risks must not be described as ordinary LABR transferability.
 
 ## 8.14 Amount units, rounding, and slippage controls
 
@@ -761,9 +763,9 @@ This order prevents a seller who exits below 1 LABR from receiving a share of th
 
 Identity, wallet, transaction, and cooldown rules are enforced by contracts in the official path. A participant cannot bypass them by calling Exchange directly rather than using the website. The frontend is a convenience and safety layer, not the source of authorization.
 
-The protocol cannot prevent independent markets from accepting LABR under different rules. A person may transfer LABR directly or trade through an unrelated venue if one exists. Such activity does not use official curve reserves and does not alter the official Exchange's published access rules. The project should avoid claiming control over all secondary activity.
+The protocol prevents independent on-chain LABR markets by rejecting every peer transfer and every transfer operator other than the official Exchange. An unverified wallet cannot receive LABR through an ordinary transfer or official purchase. A verified holder who wants to change wallets must sell through the official Exchange from the old wallet and later verify and buy through the new wallet.
 
-An unverified wallet may receive LABR through a permitted direct transfer, but it cannot sell those tokens into the official reserve until it verifies. This is an intentional consequence of identity-gated official exits. Participants must be told clearly before accepting transferred LABR.
+The website and documentation must state clearly that LABR is not a general payment token and cannot be sent peer to peer. Material support to workers should be distributed through approved treasury assets or direct POL contributions rather than by transferring LABR.
 
 ## 8.17 Economic stress conditions
 
@@ -1078,12 +1080,12 @@ Network: Polygon mainnet, chain ID 137
 ## 14.2 Compile order
 
 1. Proposal Text Policy V1.0.1
-2. Identity Registry V1.0.0
-3. Exchange V6.0.0
-4. LABR V3.0.0
-5. LaborVote V9.1.0
-6. Registration V6.1.0
-7. Governance V15.1.0
+2. Identity Registry V1.0.1
+3. Exchange V7.0.0
+4. LABR V4.0.0
+5. LaborVote V9.1.1
+6. Registration V6.1.1
+7. Governance V15.1.1
 
 ## 14.3 Deploy and finalize identity/economic cycle
 
@@ -1315,12 +1317,12 @@ Revision 6 introduced direct-POL Exchange V5 and improved runtime commitments, b
 
 ## 18.3 Superseded Revision 7.0 creation-snapshot candidate
 
-Revision 7.0 restored equal-holder dividends and shared identity, but Governance V15.0 limited each proposal to members who were already registered at creation. That policy was rejected before compilation because it prevented a proposal from motivating new permanent members to join and vote while the proposal remained active. Revision 7.1 replaces it with a deadline electorate that permits voting by every member registered before the close while preventing post-deadline registration from changing the result.
+Revision 7.0 restored equal-holder dividends and shared identity, but Governance V15.0 limited each proposal to members who were already registered at creation. That policy was rejected before compilation because it prevented a proposal from motivating new permanent members to join and vote while the proposal remained active. Revision 7.2 replaces it with a deadline electorate that permits voting by every member registered before the close while preventing post-deadline registration from changing the result.
 
 ## 18.4 Migration principles
 
 - Preserve historical source and deployment evidence.
-- Never relabel an old address as a Revision 7.1 component.
+- Never relabel an old address as a Revision 7.2 component.
 - Recompile every dependent contract after source changes.
 - Grant new DAO permission only after runtime verification.
 - Revoke obsolete permission only after successful rehearsal.
@@ -1387,15 +1389,15 @@ The protocol should therefore state the enforceable rule precisely: one equal sh
 
 ## 19.13 Identity-gated exit risk
 
-Revision 7 intentionally requires permanent verification before official selling. This reduces the usefulness of transferring tokens among ordinary unverified wallets to evade per-wallet limits. It also means an unverified recipient of LABR cannot redeem through the official reserve until verification succeeds.
+Revision 7.2 requires permanent verification before every official purchase or sale and permanently disables peer transfers. This prevents an existing balance from being distributed among ordinary wallets to refill the original wallet or create additional dividend-eligible balances through token movement.
 
-The one-time model limits future dependence after verification, but the initial gate can still exclude a recipient during a Passport or verifier outage. The site, FAQ, transfer warnings, and whitepaper must disclose this clearly. Direct transfers should not be presented as equivalent to buying through the official Exchange.
+The one-time model limits future dependence after verification, but the initial gate can still exclude a new participant during a Passport or verifier outage. Existing verified holders retain the ability to use the official Exchange. The site, FAQ, onboarding materials, and whitepaper must disclose the protocol-only transfer rule clearly.
 
 ## 19.14 Migration and continuity risk
 
 A new immutable deployment does not automatically replace balances, registrations, proposals, treasury permissions, site caches, verifier configuration, or community expectations from the historical system. A migration can create parallel assets or conflicting sources of truth unless every state transition is documented.
 
-This candidate intentionally does not invent a migration mechanism before it is reviewed. The final deployment plan must identify whether historical LABR remains transferable, whether any exchange inventory is moved, whether holders receive replacement tokens, how registrations are treated, and when old interface paths become inaccessible. A technically correct new stack can still fail operationally if the migration is ambiguous.
+This candidate intentionally does not invent a migration mechanism before it is reviewed. The final deployment plan must identify how historical transferable LABR is retired or distinguished from LABR V4, whether any exchange inventory is moved, whether holders receive replacement tokens, how registrations are treated, and when old interface paths become inaccessible. A technically correct new stack can still fail operationally if the migration is ambiguous.
 
 ## 19.15 Social and institutional limits
 
@@ -1430,7 +1432,7 @@ At modest scale, LaborCoin may help people find and fund a strike that would oth
 
 The design does not claim to solve identity, governance, labor organization, or economic inequality in general. It addresses a specific problem: economic retaliation can break collective action, while public support is often fragmented and difficult to direct. LaborCoin provides one possible bridge between those who want to help and those taking the risk.
 
-Revision 7.1 is ready for compilation review only when the source package, documentation, site, verifier, and compilation-record scaffold agree. It is ready for deployment only after the seven contracts compile exactly, all runtime commitments are sealed, the equal-holder accounting survives intensive tests, the Aragon permission migration is rehearsed, and independent review is complete.
+Revision 7.2 is ready for compilation review only when the source package, documentation, site, verifier, and compilation-record scaffold agree. It is ready for deployment only after the seven contracts compile exactly, all runtime commitments are sealed, the equal-holder accounting survives intensive tests, the Aragon permission migration is rehearsed, and independent review is complete.
 
 The technical standard must remain uncompromising because the final system is intended to operate without a founder, administrator, or upgrade authority. The political standard is equally important: the infrastructure should be judged by whether it expands the working class's ability to organize solidarity, withstand retaliation, and sustain collective action.
 
@@ -1467,7 +1469,7 @@ The technical standard must remain uncompromising because the final system is in
 
 # Appendix B. Address Registry
 
-## Revision 7.1
+## Revision 7.2
 
 All seven replacement addresses are `DEPLOYMENT_PENDING`.
 
@@ -1496,11 +1498,11 @@ Treasury Module V1:    0x0B018E45E4cB71E222C345a5341BdbaeE519c623
 | Contract | Source status | Compilation status | Runtime hash |
 |---|---|---|---|
 | Identity Registry V1 | Candidate | Pending | `PENDING_COMPILATION` |
-| LABR V3 | Candidate | Pending | `PENDING_COMPILATION` |
-| Exchange V6 | Candidate | Pending | `PENDING_COMPILATION` |
+| LABR V4 | Candidate | Pending | `PENDING_COMPILATION` |
+| Exchange V7 | Candidate | Pending | `PENDING_COMPILATION` |
 | LaborVote V9.1 | Candidate | Pending | `PENDING_COMPILATION` |
 | Registration V6.1 | Candidate | Pending | `PENDING_COMPILATION` |
-| Text Policy V1.0.1 | Candidate source preserved | Must be re-recorded in Revision 7.1 manifest | `PENDING_COMPILATION_RECORD` |
+| Text Policy V1.0.1 | Candidate source preserved | Must be re-recorded in Revision 7.2 manifest | `PENDING_COMPILATION_RECORD` |
 | Governance V15.1 | Candidate | Pending | `PENDING_FINAL_IMMUTABLE_VALUES` |
 
 # Appendix D. Authority Matrix
@@ -1526,8 +1528,8 @@ Unverified -> valid score authorization -> Verified permanently
 ## Dividend eligibility
 
 ```text
-Verified + balance <1 -> verified transfer/buy reaches >=1 -> Eligible
-Eligible -> transfer/sell falls below 1 -> Ineligible with accrued claim preserved
+Verified + balance <1 -> official buy reaches >=1 -> Eligible
+Eligible -> official sell falls below 1 -> Ineligible with accrued claim preserved
 Ineligible -> balance reaches >=1 -> Eligible without missed history
 ```
 

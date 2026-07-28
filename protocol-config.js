@@ -1,6 +1,6 @@
 (() => {
   const config = {
-    release: "Revision 7.1",
+    release: "Revision 7.2",
     status: "PREDEPLOYMENT",
     chainId: 137,
     rpcUrl: "https://polygon-bor-rpc.publicnode.com",
@@ -74,7 +74,7 @@
   function requireActive() {
     if (!isActive()) {
       throw new Error(
-        "LaborCoin Revision 7.1 is in predeployment mode. Contract interactions are disabled until all seven final addresses and runtime commitments are verified."
+        "LaborCoin Revision 7.2 is in predeployment mode. Contract interactions are disabled until all seven final addresses and runtime commitments are verified."
       );
     }
     return config;
@@ -94,7 +94,7 @@
     banner.className = "deployment-gate-banner";
     banner.setAttribute("role", "status");
     banner.textContent =
-      "Revision 7.1 predeployment source candidate: interactions are disabled until the seven contracts are compiled, deployed, and runtime-verified.";
+      "Revision 7.2 predeployment source candidate: interactions are disabled until the seven contracts are compiled, deployed, and runtime-verified.";
     document.body.prepend(banner);
   });
 })();

@@ -2,7 +2,7 @@
 
 ## Authoritative baseline
 
-This repository contains one current Revision 7.1 predeployment build. No superseded site folders, dated copies, backup files, or alternate active configurations are retained.
+This repository contains one current Revision 7.2 predeployment build. No superseded site folders, dated copies, backup files, or alternate active configurations are retained.
 
 ## Files intentionally retained
 

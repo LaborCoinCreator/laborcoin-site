@@ -7,7 +7,7 @@ cd /d C:\Users\clayg\Documents\GitHub\laborcoin-site
 scripts\run-checks.cmd
 ```
 
-The check verifies the exact current deployable inventory, SHA-256 commitments, local links, duplicate HTML IDs, PWA files, icon dimensions, predeployment/active configuration rules, Revision 7.1 functional markers, pinned external JavaScript versions, stale executable addresses, likely backup files, and secret-like material.
+The check verifies the exact current deployable inventory, SHA-256 commitments, local links, duplicate HTML IDs, PWA files, icon dimensions, predeployment/active configuration rules, Revision 7.2 functional markers, pinned external JavaScript versions, stale executable addresses, likely backup files, and secret-like material.
 
 ## Verify Git state separately
 

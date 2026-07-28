@@ -1,6 +1,6 @@
-# LaborCoin Website Revision 7.1
+# LaborCoin Website Revision 7.2
 
-This repository is the current predeployment LaborCoin website build for the seven-contract Revision 7.1 equal-holder architecture.
+This repository is the current predeployment LaborCoin website build for the seven-contract Revision 7.2 equal-holder architecture.
 
 ## Current authority
 

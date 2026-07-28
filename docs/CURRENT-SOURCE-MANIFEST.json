@@ -1,18 +1,18 @@
 {
   "repository": "laborcoin-site",
-  "release": "Revision 7.1",
+  "release": "Revision 7.2",
   "status": "PREDEPLOYMENT",
   "purpose": "Authoritative deployable-file commitment for the current site build.",
   "files": [
     {
       "path": "index.html",
       "size_bytes": 6796,
-      "sha256": "9a14ca2c12473c517da55fd4ebc9a47570cd644981175086ed2a523a21405ed5"
+      "sha256": "c41eabd6ea2e79b8499467f744355ebbf6f5aae1ab02fbade485367ee557c16d"
     },
     {
       "path": "exchange.html",
       "size_bytes": 7412,
-      "sha256": "c6a135c09cd385bc9ce0d1f993b5b4e79507ac2b501a32305d3bf54a10fd57f1"
+      "sha256": "e97bb2ba70efaf5bd16556d63e7042cedcf1526e675515ead142c3a2382e19c5"
     },
     {
       "path": "dao.html",
@@ -26,8 +26,8 @@
     },
     {
       "path": "onboarding.html",
-      "size_bytes": 5054,
-      "sha256": "23f3744ca8b499c8e683356f37f456660825f82b4851e3bbab87e5745ae44be9"
+      "size_bytes": 5143,
+      "sha256": "e0847d2aedc325ad78601a08654bdded4808d47ce43692492ff75f27477f8290"
     },
     {
       "path": "organizations.html",
@@ -36,28 +36,28 @@
     },
     {
       "path": "faq.html",
-      "size_bytes": 6937,
-      "sha256": "c268bac1597f3c0f3128330d64d237259838d3516f53b4df5545d660d356ee23"
+      "size_bytes": 7213,
+      "sha256": "3c3195d5d9f984d9560a9cb5b42eb49226ea8b3576cb626edb0db0a6f2bb8bd9"
     },
     {
       "path": "disclaimer.html",
       "size_bytes": 3144,
-      "sha256": "6aba3f6ac6dd63cb3066c65060e06c7cda8828d92d0a6138ddf4ca13d39875f9"
+      "sha256": "14bdb00884fe01c235154d3d678471109dba4ba2b292991680637b3e09b23594"
     },
     {
       "path": "whitepaper.html",
-      "size_bytes": 152712,
-      "sha256": "b0b9e138dda3bcb0ff0c1541c8269ad8df3c9902fd6f281a85848bbb29d246fe"
+      "size_bytes": 155013,
+      "sha256": "7333ddde043065096aed29cd20f362e7137a3a23e955eec3a8aa9d70e1d9e275"
     },
     {
       "path": "whitepaper.pdf",
-      "size_bytes": 300053,
-      "sha256": "20ddf7c748962424c0b00cc015e9c331bdb9a5f4b8d92fe6d2c3c1ce350e0bbf"
+      "size_bytes": 161919,
+      "sha256": "864f0e09e2e4a050a63f9b1e7e62e668300a6d223eb3a3cc32c7bcd79bf1d18a"
     },
     {
       "path": "whitepaper.md",
-      "size_bytes": 101117,
-      "sha256": "52af83540b97c30948bd1fc02bd02cbe45654063fcc7744369617f358ea610c3"
+      "size_bytes": 102379,
+      "sha256": "7e82d3664fd168918d7cf7db5f91cf6dead9c0203259714765869f151f3b256c"
     },
     {
       "path": "donate.html",
@@ -77,7 +77,7 @@
     {
       "path": "protocol-config.js",
       "size_bytes": 2769,
-      "sha256": "237e585f449d52e4d18f32684bc016a5eda433c3ded766c9bf91d7b00720075b"
+      "sha256": "e1ab5d650415695f0e79a4347b0cb1e13d9dc595f6b0d03a203a81f4db1878d5"
     },
     {
       "path": "wallet.js",
@@ -87,17 +87,17 @@
     {
       "path": "exchange.js",
       "size_bytes": 17679,
-      "sha256": "2d08117dad859434bc3eba49694bb7273021e03372cdd7d2dfb266aaae6f03b4"
+      "sha256": "3873ef5ce508a8fe3a59a6fcdab8d5d9c5f064d6bbb421ffb819cf3218612797"
     },
     {
       "path": "dao.js",
       "size_bytes": 20122,
-      "sha256": "5f79455d2328c1c92ac1eaf14bcc76b70d07a8c017831ec018bb673060ec8a20"
+      "sha256": "3e2ea488d329686196a0597fc7ab88bad98adf4b1670c7aebffb35dc43e528a7"
     },
     {
       "path": "governance.js",
       "size_bytes": 27462,
-      "sha256": "5d8614f13bd185d2011b96e6021b3f5a3c8bf5512ae86f3584c1f0c412570a3a"
+      "sha256": "74890f94673f608b7a0207dd0fc2e3236867da78dc03f40c2da0334359fedbb5"
     },
     {
       "path": "proposal-text-policy-v1.js",

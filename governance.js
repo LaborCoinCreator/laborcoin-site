@@ -1480,7 +1480,7 @@ async function initializeGovernancePage() {
   if (!DEPLOYMENT_ACTIVE) {
     proposalFeedSection.classList.remove("hidden");
     proposalFeed.innerHTML =
-      "<p class=\"status\" style=\"text-align:center;color:#ff4d4d;\">Revision 7.1 is in predeployment mode. Governance reads and transactions are disabled until final addresses are verified.</p>";
+      "<p class=\"status\" style=\"text-align:center;color:#ff4d4d;\">Revision 7.2 is in predeployment mode. Governance reads and transactions are disabled until final addresses are verified.</p>";
     setStatus(
       "Predeployment mode. Enter and verify all final addresses in protocol-config.js before enabling governance.",
       "error"

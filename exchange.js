@@ -128,7 +128,7 @@
       setText(els.eligibleHolderCount, Number(holders).toLocaleString());
       setText(els.invariantStatus, invariants && ready ? "Verified" : "Not ready");
       colorStatus(els.invariantStatus, invariants && ready ? "success" : "error"); drawCurve(totalSold);
-    } catch (error) { console.error(error); setStatus(error.message || "Unable to load Exchange V6.","error"); }
+    } catch (error) { console.error(error); setStatus(error.message || "Unable to load Exchange V7.","error"); }
   }
 
   async function refreshWallet() {
@@ -206,7 +206,7 @@
     catch(error){console.error(error);setStatus(error.shortMessage||error.reason||error.message||"Purchase failed.","error");}finally{hideLoading();}
   }
   async function sell() {
-    try { if(!accessReady)throw new Error("Complete the identity and Exchange access checks first."); const amount=parseLABRInput(els.sellAmount); if(amount>walletBalance)throw new Error("Insufficient LABR balance."); const [,seller]=await exchange.quoteSellExactTokens(amount); const minPOL=seller*99n/100n; const allowance=await labr.allowance(userAddress,exchangeAddress); if(allowance<amount){showLoading("Approving Exchange V6...");const approval=await labr.approve(exchangeAddress,amount);await approval.wait();} showLoading("Submitting exact-token sale..."); const tx=await exchange.sellExactTokens(amount,minPOL,deadline());await tx.wait();setStatus("Sale confirmed.","success");els.sellAmount.value="";await Promise.all([loadMarket(),refreshWallet()]);await quoteSell(); }
+    try { if(!accessReady)throw new Error("Complete the identity and Exchange access checks first."); const amount=parseLABRInput(els.sellAmount); if(amount>walletBalance)throw new Error("Insufficient LABR balance."); const [,seller]=await exchange.quoteSellExactTokens(amount); const minPOL=seller*99n/100n; const allowance=await labr.allowance(userAddress,exchangeAddress); if(allowance<amount){showLoading("Approving Exchange V7...");const approval=await labr.approve(exchangeAddress,amount);await approval.wait();} showLoading("Submitting exact-token sale..."); const tx=await exchange.sellExactTokens(amount,minPOL,deadline());await tx.wait();setStatus("Sale confirmed.","success");els.sellAmount.value="";await Promise.all([loadMarket(),refreshWallet()]);await quoteSell(); }
     catch(error){console.error(error);setStatus(error.shortMessage||error.reason||error.message||"Sale failed.","error");}finally{hideLoading();}
   }
   async function claimDividends() {
@@ -218,7 +218,7 @@
     els.connectBtn.onclick=connectWallet; els.identityVerifyBtn.onclick=verifyIdentity; els.exchangeVerifyBtn.onclick=checkAccess;
     els.buyAmount.addEventListener("input",quoteBuy); els.sellAmount.addEventListener("input",quoteSell);
     els.buyBtn.onclick=buy; els.sellBtn.onclick=sell; els.claimDividendsBtn.onclick=claimDividends;
-    if(!active){for(const b of [els.connectBtn,els.identityVerifyBtn,els.exchangeVerifyBtn,els.buyBtn,els.sellBtn,els.claimDividendsBtn])b.disabled=true;setGate("Predeployment mode. Enter and verify all seven final addresses and runtime hashes in protocol-config.js before enabling interactions.","error");setStatus("Revision 7.1 is a source candidate and has not been compiled or deployed.");drawCurve(0n);return;}
+    if(!active){for(const b of [els.connectBtn,els.identityVerifyBtn,els.exchangeVerifyBtn,els.buyBtn,els.sellBtn,els.claimDividendsBtn])b.disabled=true;setGate("Predeployment mode. Enter and verify all seven final addresses and runtime hashes in protocol-config.js before enabling interactions.","error");setStatus("Revision 7.2 is a source candidate and has not been compiled or deployed.");drawCurve(0n);return;}
     await loadMarket();
     try { if(!window.LaborWallet)return; wallet=await window.LaborWallet.reconnect(); if(wallet){els.connectBtn.style.display="none";await refreshWallet();} } catch(error){console.error("Wallet reconnect failed",error);}
   }
