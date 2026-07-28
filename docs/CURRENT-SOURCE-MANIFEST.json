@@ -122,7 +122,7 @@
     {
       "path": "service-worker.js",
       "size_bytes": 1287,
-      "sha256": "edba9185323d368e4baaa4dacca518f1d4ba3891b2b99d9eae5ed2dee589d2cc"
+      "sha256": "45981e462f7a397741954e6576d0ec39b9eef0d9c0278e243a7dd2e8b7a1534e"
     },
     {
       "path": "attestation.pdf",

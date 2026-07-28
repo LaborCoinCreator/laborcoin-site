@@ -136,7 +136,7 @@ except Exception as exc:
     fail(f"invalid manifest.json: {exc}")
 
 service_worker = read("service-worker.js")
-if "laborcoin-revision-7-1" not in service_worker:
+if "laborcoin-revision-7-2" not in service_worker:
     fail("service-worker cache name is not Revision 7.2")
 for cached in re.findall(r'"(/[^"]+)"', service_worker):
     if cached == "/":
